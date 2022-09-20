@@ -147,6 +147,7 @@ class CopsMeteo extends LocalDomain
       $requete .= ");";
 
       MySQL::wpdbQuery($requete);
+      return '';
   }
 
   public function getLastInsertFormatted()

@@ -346,9 +346,6 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
       ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
     );
     return $this->getRender($urlTemplate, $attributes);
-    $strNavigationBar = '';
-    $strNavigationBar .= $this->getNotificationsDropdown();
-    return $strNavigationBar;
   }
 
   /*
@@ -421,6 +418,7 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
     $strNotificationsDropdown .= $this->getRender($urlTemplate, $attributes);
     $strNotificationsDropdown .= '</li>';
 */
+    $strNotificationsDropdown = '';
     return $strNotificationsDropdown;
 
     /*

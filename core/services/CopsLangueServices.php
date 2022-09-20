@@ -81,7 +81,7 @@ class CopsLangueServices extends LocalServices
   {
     $Bean = new UtilitiesBean();
     $CopsLangues = $this->getCopsLangues($requestAttributes);
-    $selectHtml .= $Bean->getBalise(self::TAG_OPTION);
+    $selectHtml  = $Bean->getBalise(self::TAG_OPTION);
     foreach ($CopsLangues as $CopsLangue) {
       $selectHtml .= $Bean->getBalise(self::TAG_OPTION, $CopsLangue->getField(self::FIELD_LIBELLE), array(self::ATTR_VALUE=>$CopsLangue->getField(self::FIELD_ID)));
     }

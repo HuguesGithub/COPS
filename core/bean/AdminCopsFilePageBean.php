@@ -176,6 +176,7 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
 	if (empty($CopsEnquetes)) {
 		$strContent = '<tr><td class="text-center">Aucune enquête.<br></td></tr>';
 	} else {
+	    $strContent = '';
 		foreach ($CopsEnquetes as $CopsEnquete) {
 			$strContent .= $CopsEnquete->getBean()->getCopsEnqueteRow();
 		}

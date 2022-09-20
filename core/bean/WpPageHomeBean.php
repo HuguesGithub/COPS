@@ -18,8 +18,6 @@ class WpPageHomeBean extends WpPageBean
   public function getContentPage()
   {
     return '';
-    $Bean = new AdminCopsPageBean();
-    return $Bean->getContentPage();
   }
 
 }
