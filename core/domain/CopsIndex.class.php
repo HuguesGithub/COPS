@@ -1,0 +1,75 @@
+<?php
+if (!defined('ABSPATH')) {
+  die('Forbidden');
+}
+/**
+ * Classe CopsIndex
+ * @author Hugues
+ * @version 1.22.09.06
+ * @since 1.22.09.06
+ */
+class CopsIndex extends LocalDomain
+{
+  //////////////////////////////////////////////////
+  // ATTRIBUTES
+  //////////////////////////////////////////////////
+  /**
+   * Id technique de la donnée
+   * @var int $id
+   */
+  protected $id;
+
+  protected $nomIdx;
+  protected $natureId;
+  protected $reference;
+  protected $descriptionMJ;
+  protected $descriptionPJ;
+
+  //////////////////////////////////////////////////
+  // GETTERS & SETTERS
+  //////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////
+  // CONSTRUCT - CLASSVARS - CONVERT - BEAN
+  //////////////////////////////////////////////////
+  /**
+   * @param array $attributes
+   * @version 1.22.09.06
+   * @since 1.22.09.06
+   */
+  public function __construct($attributes=array())
+  {
+    parent::__construct($attributes);
+    $this->stringClass = 'CopsIndex';
+  }
+  /**
+   * @param array $row
+   * @return CopsIndex
+   * @version 1.22.09.06
+   * @since 1.22.09.06
+   */
+  public static function convertElement($row)
+  { return parent::convertRootElement(new CopsIndex(), $row); }
+
+  //////////////////////////////////////////////////
+  // METHODES
+  //////////////////////////////////////////////////
+
+
+  public function insertCopsIndex()
+  {
+      $requete  = "INSERT INTO wp_7_cops_index ";
+      $requete .= "(nomIdx, natureId, reference, descriptionMJ, descriptionPJ) ";
+      $requete .= "VALUES (";
+      $requete .= "'".$this->nomIdx."', ";
+      $requete .= "'".$this->natureId."', ";
+      $requete .= "'".$this->reference."', ";
+      $requete .= "'".$this->descriptionMJ."', ";
+      $requete .= "'".$this->descriptionPJ."'";
+      $requete .= ");";
+
+      MySQL::wpdbQuery($requete);
+  }
+
+
+}
