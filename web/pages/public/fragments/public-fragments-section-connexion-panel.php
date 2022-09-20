@@ -1,7 +1,7 @@
 <section class="content col-12 col-lg-4 offset-lg-4 pt-5 %1$s" style="position: absolute;">
   <div class="container-fluid">
       <div class="card card-outline card-warning">
-        <div class="card-header text-center"><b>Erreur</b></div>
+        <div class="card-header text-center"><strong>Erreur</strong></div>
         <div class="card-body">%2$s</div>
       </div>
   </div>
@@ -11,7 +11,7 @@
   <div class="container-fluid">
     <div class="login-box" style="width: inherit;">
       <div class="card card-outline card-primary">
-        <div class="card-header text-center"><b>Identification</b></div>
+        <div class="card-header text-center"><strong>Identification</strong></div>
         <div class="card-body">
           <form action="/admin/" method="post">
             <div class="input-group mb-3">

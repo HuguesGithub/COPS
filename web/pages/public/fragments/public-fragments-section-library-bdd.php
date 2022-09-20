@@ -34,7 +34,7 @@
     <h2 class="title">Principales bases de données</h2>
   </div>
   <div class="card-body">
-    <table class="table table-striped table-sm table-bordered">
+    <table class="table table-striped table-sm table-bordered" aria-describedby="Liste des BDD">
       <thead class="table-dark">
         <tr><th scope="col">SIGLE</th><th scope="col">Utilité</th><th scope="col">Nom</th></tr>
       </thead>
