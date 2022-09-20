@@ -3,7 +3,7 @@
   <head>
 <?php
   $PageBean = CopsPageBean::getPageBean();
-  define('COPS_SITE_URL', 'http://cops.jhugues.fr/');
+  define('COPS_SITE_URL', 'https://cops.jhugues.fr/');
   define('PLUGINS_MYCOMMON', COPS_SITE_URL.'wp-content/plugins/mycommon/');
   define('PLUGINS_COPS', COPS_SITE_URL.'wp-content/plugins/hj-cops/');
   date_default_timezone_set('Europe/Paris');
@@ -19,7 +19,7 @@
   <!-- overlayScrollbars -->
     <link rel="stylesheet" href="<?php echo PLUGINS_COPS; ?>web/rsc/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="http://gones.jhugues.fr/wp-content/plugins/hj-gones/web/rsc/css/admin-transverse.min.css">
+    <link rel="stylesheet" href="https://gones.jhugues.fr/wp-content/plugins/hj-gones/web/rsc/css/admin-transverse.min.css">
   </head>
   <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed"><!-- sidebar-collapse-->
     <div id="page">

@@ -9,7 +9,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/admin/" class="brand-link">
-      <img src="http://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/cops_logo.png" alt="COPS" class="brand-image" style="opacity: .8">
+      <img src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/cops_logo.png" alt="COPS" class="brand-image" style="opacity: .8">
     </a>
 
     <!-- Sidebar -->
@@ -80,7 +80,7 @@
     <div class="float-right d-none d-sm-inline-block">
       <strong>Version</strong> 1.22.04.27
     </div>
-    <script type="text/javascript">var ajaxurl = 'http://cops.jhugues.fr/wp-admin/admin-ajax.php';</script>
+    <script type="text/javascript">var ajaxurl = 'https://cops.jhugues.fr/wp-admin/admin-ajax.php';</script>
   </footer>
   <div id="sidebar-overlay"></div>
 </div>

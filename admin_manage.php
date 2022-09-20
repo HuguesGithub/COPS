@@ -4,7 +4,7 @@
  * @since 1.22.04.27
  * @version 1.22.04.27
  */
-  define('COPS_SITE_URL', 'http://cops.jhugues.fr/');
+  define('COPS_SITE_URL', 'https://cops.jhugues.fr/');
   define('PLUGINS_MYCOMMON', COPS_SITE_URL.'wp-content/plugins/mycommon/');
   define('PLUGINS_COPS', COPS_SITE_URL.'wp-content/plugins/hj-cops/');
   if (!defined('ABSPATH')) {
