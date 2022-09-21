@@ -10,11 +10,6 @@ if (!defined('ABSPATH')) {
  */
 class AdminCopsCalendarWeekPageBean extends AdminCopsCalendarPageBean
 {
-  public function __construct()
-  {
-    parent::__construct();
-  }
-
   /**
    * @since 1.22.06.09
    * @version 1.22.06.09

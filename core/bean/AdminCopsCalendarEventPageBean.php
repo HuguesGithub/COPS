@@ -64,98 +64,41 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
 
   /**
    * @since 1.22.06.09
-   * @version 1.22.06.09
+   * @version 1.22.09.21
    */
-  public function getOngletContent()
-  {
-    // TODO :
-    // On récupère la liste des événements
-    // Et on affiche chacun d'entre eux.
-    /*
-<tr>
-<td><a href="pages/examples/invoice.html">OR9842</a></td>
-<td>Call of Duty IV</td>
-<td><span class="badge badge-success">Shipped</span></td>
-<td>
-<div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-</td>
-</tr>
-<tr>
-<td><a href="pages/examples/invoice.html">OR1848</a></td>
-<td>Samsung Smart TV</td>
-<td><span class="badge badge-warning">Pending</span></td>
-<td>
-<div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-</td>
-</tr>
-<tr>
-<td><a href="pages/examples/invoice.html">OR7429</a></td>
-<td>iPhone 6 Plus</td>
-<td><span class="badge badge-danger">Delivered</span></td>
-<td>
-<div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-</td>
-</tr>
-<tr>
-<td><a href="pages/examples/invoice.html">OR7429</a></td>
-<td>Samsung Smart TV</td>
-<td><span class="badge badge-info">Processing</span></td>
-<td>
-<div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
-</td>
-</tr>
-<tr>
-<td><a href="pages/examples/invoice.html">OR1848</a></td>
-<td>Samsung Smart TV</td>
-<td><span class="badge badge-warning">Pending</span></td>
-<td>
-<div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-</td>
-</tr>
-<tr>
-<td><a href="pages/examples/invoice.html">OR7429</a></td>
-<td>iPhone 6 Plus</td>
-<td><span class="badge badge-danger">Delivered</span></td>
-<td>
-<div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-</td>
-</tr>
-<tr>
-<td><a href="pages/examples/invoice.html">OR9842</a></td>
-<td>Call of Duty IV</td>
-<td><span class="badge badge-success">Shipped</span></td>
-<td>
-<div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-</td>
-</tr>
-     */
-
-    $strContent = '';
-    $CopsEvents = $this->CopsEventServices->getCopsEvents();
-    while (!empty($CopsEvents)) {
-      $CopsEvent = array_shift($CopsEvents);
-      $strContent .= $CopsEvent->getBean()->getTableRow();
+    public function getOngletContent()
+    {
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-form-event.php';
+        ///////////////////////////////////////////////////////
+        // Contenu du formulaire
+        $attributes = array(
+            // Id du Form
+            'creerNewEvent',
+            // Affichage du form
+            'display: none;',
+        );
+        $strForm = $this->getRender($urlTemplate, $attributes);
+        ///////////////////////////////////////////////////////
+        
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-events.php';
+        ///////////////////////////////////////////////////////
+        // Contenu de la page 
+        $strContent = '';
+        $CopsEvents = $this->CopsEventServices->getCopsEvents();
+        while (!empty($CopsEvents)) {
+          $CopsEvent = array_shift($CopsEvents);
+          $strContent .= $CopsEvent->getBean()->getTableRow();
+        }
+        ///////////////////////////////////////////////////////
+    
+        $attributes = array(
+          // Les lignes à afficher
+          $strContent,
+          // Formulaire
+          $strForm,
+        );
+        return $this->getRender($urlTemplate, $attributes);
     }
-
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-form-event.php';
-    $attributes = array(
-      // Id du Form
-      'creerNewEvent',
-      // Affichage du form
-      'display: none;',
-    );
-    $strForm = $this->getRender($urlTemplate, $attributes);
-
-
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-events.php';
-    $attributes = array(
-      // Les lignes à afficher
-      $strContent,
-      // Formulaire
-      $strForm,
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
 
 
 }

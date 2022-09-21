@@ -2,7 +2,7 @@
 /**
  * @author Hugues
  * @since 1.00.00
- * @version 1.00.00
+ * @version 1.22.09.21
  */
 interface ConstantsInterface
 {
@@ -26,6 +26,7 @@ interface ConstantsInterface
   const ATTR_VALUE             = 'value';
 
   const ATTR_DATA_AJAX         = 'data-ajax';
+  const ATTR_DATA_DATE         = 'data-date';
   const ATTR_DATA_TRIGGER      = 'data-trigger';
 
   /////////////////////////////////////////////////
@@ -44,9 +45,9 @@ interface ConstantsInterface
   const CST_CAL_PARAM          = 'calendar-parameters';
   const CST_CAL_WEEK           = 'week';
   // Subonglet File
-  const CST_FILE_OPENED    = 'opened';
-  const CST_FILE_CLOSED    = 'closed';
-  const CST_FILE_COLDED    = 'colded';
+  const CST_FILE_OPENED        = 'opened';
+  const CST_FILE_CLOSED        = 'closed';
+  const CST_FILE_COLDED        = 'colded';
   // Subonglet Inbox
   const CST_FOLDER_ALERT       = 'alert';
   const CST_FOLDER_DRAFT       = 'draft';
@@ -224,7 +225,7 @@ interface ConstantsInterface
   // Onglets
   const ONGLET_ARCHIVE         = 'archive';
   const ONGLET_CALENDAR        = 'calendar';
-  const ONGLET_FILE         = 'dossier';
+  const ONGLET_FILE            = 'dossier';
   const ONGLET_INBOX           = 'inbox';
   const ONGLET_LIBRARY         = 'library';
   const ONGLET_PROFILE         = 'profile';
@@ -254,13 +255,14 @@ interface ConstantsInterface
   const TAG_SELECT             = 'select';
   const TAG_SPAN               = 'span';
   const TAG_STRONG             = 'strong';
+  const TAG_TD                 = 'td';
+  const TAG_TH                 = 'th';
   /*
   const TAG_A                  = 'a';
   const TAG_BUTTON             = 'button';
   const TAG_I                  = 'i';
   const TAG_IMG                = 'img';
   const TAG_LI                 = 'li';
-  const TAG_TD                 = 'td';
   const TAG_TR                 = 'tr';
   * */
 

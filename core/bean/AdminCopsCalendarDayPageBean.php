@@ -6,15 +6,10 @@ if (!defined('ABSPATH')) {
  * Classe AdminCopsCalendarDayPageBean
  * @author Hugues
  * @since 1.22.06.09
- * @version 1.22.06.09
+ * @version 1.22.09.21
  */
 class AdminCopsCalendarDayPageBean extends AdminCopsCalendarPageBean
 {
-  public function __construct()
-  {
-    parent::__construct();
-  }
-
   /**
    * @since 1.22.06.09
    * @version 1.22.06.09
@@ -59,32 +54,38 @@ class AdminCopsCalendarDayPageBean extends AdminCopsCalendarPageBean
 
   /**
    * @since 1.22.06.09
-   * @version 1.22.06.09
+   * @version 1.22.09.21
    */
-  public function getRowHeaders($strClass, $tsDisplay)
-  {
-    $strRowHeaders  = '<th role="columnheader" class="fc-col-header-cell fc-day '.$strClass.'" data-date="'.date('Y-m-d', $tsDisplay).'">';
-    $strRowHeaders .= ' <div class="fc-scrollgrid-sync-inner"><a class="fc-col-header-cell-cushion ">'.$this->arrFullDays[date('w', $tsDisplay)].'</a></div>';
-    $strRowHeaders .= '</th>';
-    return $strRowHeaders;
-  }
+    public function getRowHeaders($strClass, $tsDisplay)
+    {
+        $attributes = array(
+            'role'        => 'columnheader',
+            self::ATTR_CLASS     => 'fc-col-header-cell fc-day ' . $strClass,
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
+        );
+        $strContent = ' <div class="fc-scrollgrid-sync-inner"><a class="fc-col-header-cell-cushion ">'.$this->arrFullDays[date('w', $tsDisplay)].'</a></div>';
+        return $this->getBalise(self::TAG_TH, $strContent, $attributes);
+    }
 
   /**
    * @since 1.22.06.09
-   * @version 1.22.06.09
+   * @version 1.22.09.21
    */
-  public function getRowAllDay($strClass, $tsDisplay)
-  {
-    $strRowAllDay   = '<td role="gridcell" class="fc-daygrid-day fc-day '.$strClass.'" data-date="'.date('Y-m-d', $tsDisplay).'">';
-    $strRowAllDay  .= ' <div class="fc-daygrid-day-frame fc-scrollgrid-sync-inner">';
-    $strRowAllDay  .= '   <div class="fc-daygrid-day-events">';
-    $strRowAllDay  .= '     <div class="fc-daygrid-day-bottom" style="margin-top: 0px;"></div>';
-    $strRowAllDay  .= '   </div>';
-    $strRowAllDay  .= '   <div class="fc-daygrid-day-bg"></div>';
-    $strRowAllDay  .= ' </div>';
-    $strRowAllDay  .= '</td>';
-    return $strRowAllDay;
-  }
+    public function getRowAllDay($strClass, $tsDisplay)
+    {
+        $attributes = array(
+            'role'        => 'gridcell',
+            self::ATTR_CLASS     => 'fc-daygrid-day fc-day ' . $strClass,
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
+        );
+        $strContent   = ' <div class="fc-daygrid-day-frame fc-scrollgrid-sync-inner">';
+        $strContent  .= '   <div class="fc-daygrid-day-events">';
+        $strContent  .= '     <div class="fc-daygrid-day-bottom" style="margin-top: 0px;"></div>';
+        $strContent  .= '   </div>';
+        $strContent  .= '   <div class="fc-daygrid-day-bg"></div>';
+        $strContent  .= ' </div>';
+        return $this->getBalise(self::TAG_TD, $strContent, $attributes);
+    }
 
   /**
    * @since 1.22.06.09
@@ -114,14 +115,10 @@ class AdminCopsCalendarDayPageBean extends AdminCopsCalendarPageBean
 
   /**
    * @since 1.22.06.09
-   * @version 1.22.06.09
+   * @version 1.22.09.21
    */
-  public function getViewContent($strClass, $tsDisplay)
-  {
-    $strRowHoraire  = '<td role="gridcell" class="fc-timegrid-col fc-day '.$strClass.'" data-date="'.date('Y-m-d', $tsDisplay).'">';
-    $strRowHoraire .= '  <div class="fc-timegrid-col-frame">';
-    $strRowHoraire .= '    <div class="fc-timegrid-col-bg"></div>';
-    $strRowHoraire .= '    <div class="fc-timegrid-col-events">';
+    public function getViewContent($strClass, $tsDisplay)
+    {
       /*
 <div class="fc-timegrid-event-harness fc-timegrid-event-harness-inset" style="inset: 0px 0% -1199px; z-index: 1;">
   <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past" style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
@@ -137,12 +134,19 @@ class AdminCopsCalendarDayPageBean extends AdminCopsCalendarPageBean
   </a>
 </div>
        */
-    $strRowHoraire .= '    </div>';
-    $strRowHoraire .= '    <div class="fc-timegrid-col-events"></div>';
-    $strRowHoraire .= '    <div class="fc-timegrid-now-indicator-container"></div>';
-    $strRowHoraire .= '  </div>';
-    $strRowHoraire .= '</td>';
-    return $strRowHoraire;
-  }
+        $attributes = array(
+            'role'        => 'gridcell',
+            self::ATTR_CLASS     => 'fc-timegrid-col fc-day ' . $strClass,
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
+        );
+        $strContent  = '  <div class="fc-timegrid-col-frame">';
+        $strContent .= '    <div class="fc-timegrid-col-bg"></div>';
+        $strContent .= '    <div class="fc-timegrid-col-events">';
+        $strContent .= '    </div>';
+        $strContent .= '    <div class="fc-timegrid-col-events"></div>';
+        $strContent .= '    <div class="fc-timegrid-now-indicator-container"></div>';
+        $strContent .= '  </div>';
+        return $this->getBalise(self::TAG_TD, $strContent, $attributes);
+    }
 
 }

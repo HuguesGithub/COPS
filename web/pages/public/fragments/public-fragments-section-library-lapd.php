@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-body row">
                   <div class="col-12 col-md-3">
-                    <img class="mask" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
+                    <img class="mask" alt="Portrait de Firmany" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
                   </div>
                   <div class="col-12 col-md-9">
                     <h5>Chef du LAPD</h5>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="card-body row">
                   <div class="col-12 col-md-3">
-                    <img class="mask" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
+                    <img class="mask" alt="Portrait de Bronstein" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
                   </div>
                   <div class="col-12 col-md-9">
                     <h5>Capitaine III - Chef du SAD</h5>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="card-body row">
                   <div class="col-12 col-md-3">
-                    <img class="mask" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
+                    <img class="mask" alt="Portrait de Damask" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
                   </div>
                   <div class="col-12 col-md-9">
                     <h5>Détective II - <span class="badge badge-primary">SAD</span></h5>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="card-body row">
                   <div class="col-12 col-md-3">
-                    <img class="mask" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
+                    <img class="mask" alt="Portrait de Lambert" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-4.jpg">
                   </div>
                   <div class="col-12 col-md-9">
                     <h5>Détective III - <span class="badge badge-primary">PSS</span></h5>

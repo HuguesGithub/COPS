@@ -1,5 +1,5 @@
 <div class="fc-timegrid fc-timeGridWeek-view fc-view">
-  <table role="grid" class="fc-scrollgrid table-bordered fc-scrollgrid-liquid">
+  <table role="grid" class="fc-scrollgrid table-bordered fc-scrollgrid-liquid" aria-describedby="Evénements de la semaine">
     <tbody role="rowgroup">
       <!-- Entête avec les jours de la semaine -->
       <tr role="presentation" class="fc-scrollgrid-section fc-scrollgrid-section-header ">
@@ -12,9 +12,9 @@
                 </colgroup>
                 <thead role="presentation">
                   <tr role="row">
-                    <th aria-hidden="true" class="fc-timegrid-axis">
+                    <td aria-hidden="true" class="fc-timegrid-axis">
                       <div class="fc-timegrid-axis-frame"></div>
-                    </th>
+                    </td>
                     %1$s
                   </tr>
                 </thead>

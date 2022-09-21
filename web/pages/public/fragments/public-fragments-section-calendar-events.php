@@ -10,7 +10,7 @@
 
   <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table m-0">
+      <table class="table m-0" aria-describedby="Liste événements">
         <thead>
           <tr>
             <th>Titre</th>

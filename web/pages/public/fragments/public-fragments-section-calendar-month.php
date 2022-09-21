@@ -1,11 +1,11 @@
 <div class="fc-daygrid fc-dayGridMonth-view fc-view">
-  <table class="fc-scrollgrid table-bordered fc-scrollgrid-liquid">
+  <table class="fc-scrollgrid table-bordered fc-scrollgrid-liquid" aria-describedby="Evénements du mois">
     <thead>
       <tr class="fc-scrollgrid-section fc-scrollgrid-section-header ">
-        <td>
+        <th>
           <div class="fc-scroller-harness">
             <div class="fc-scroller" style="overflow: hidden;">
-              <table class="fc-col-header">
+              <table class="fc-col-header" aria-describedby="Entête de colonnes du mois">
                 <colgroup></colgroup>
                 <tbody>
                   <tr>
@@ -21,7 +21,7 @@
               </table>
             </div>
           </div>
-        </td>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -30,7 +30,7 @@
           <div class="fc-scroller-harness fc-scroller-harness-liquid">
             <div class="fc-scroller fc-scroller-liquid-absolute" style="overflow: hidden auto;">
               <div class="fc-daygrid-body fc-daygrid-body-unbalanced" style="height:498px;">
-                <table class="fc-scrollgrid-sync-table" style="height:498px;">
+                <table class="fc-scrollgrid-sync-table" style="height:498px;" aria-describedby="Affichage des événements du mois">
                   <colgroup></colgroup>
                   <tbody>
                     %1$s
