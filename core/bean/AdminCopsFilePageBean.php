@@ -74,33 +74,45 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
      */
     public function getOngletContent()
     {
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes.php';
+        
         /////////////////////////////////////////
         // Construction du panneau de droite
         switch ($this->subOnglet) {
             case self::CST_FOLDER_READ :
-                // TODO
+                $strRightPanel   = $this->getReadEnqueteBlock();
+                $attributes = array (
+                    self::ATTR_HREF  => $this->urlOnglet,
+                    self::ATTR_CLASS => 'btn btn-primary btn-block mb-3',
+                );
+                $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             break;
             case self::CST_FOLDER_WRITE :
                 $strRightPanel   = $this->getWriteEnqueteBlock();
-                $strButtonRetour = '<a href="'.$this->urlOnglet.'" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> Retour</a>';
+                $attributes = array (
+                    self::ATTR_HREF  => $this->urlOnglet,
+                    self::ATTR_CLASS => 'btn btn-primary btn-block mb-3',
+                );
+                $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             break;
             default :
                 $strRightPanel   = $this->getFolderEnquetesList();
-                $strButtonRetour = '<a href="'.$this->urlSubOnglet.'write" class="btn btn-primary btn-block mb-3">Ouvrir une enquête</a>';
+                $attributes = array (
+                    self::ATTR_HREF  => $this->urlSubOnglet.self::CST_FOLDER_WRITE,
+                    self::ATTR_CLASS => 'btn btn-primary btn-block mb-3',
+                );
+                $strContent = 'Ouvrir une enquête';
             break;
         }
         /////////////////////////////////////////
 
-        $strLeftPanel = $this->getFolderBlock();
-
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes.php';
         $attributes = array(
             // Contenu du panneau latéral gauche
-            $strLeftPanel,
+            $this->getFolderBlock(),
             // Contenu du panneau principal
             $strRightPanel,
             // Eventuel bouton de retour si on est en train de lire ou rédiger un message
-            $strButtonRetour,
+            $this->getBalise(self::TAG_A, $strContent, $attributes),
         );
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -155,7 +167,7 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
 		    break;
 		    case self::CST_FILE_COLDED :
 			    $attributes = array(self::SQL_WHERE_FILTERS => array(
-				    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CASECLOSE,
+				    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED,
 			    ));
      		break;
 	    	case self::CST_FILE_OPENED :
@@ -212,6 +224,11 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
         return $this->getRender($urlTemplate, $attributes);
     }
 
+    public function getReadEnqueteBlock()
+    {
+        return '';
+    }
+        
 	public function updateEnquete()
 	{
 		

@@ -75,7 +75,7 @@ interface ConstantsInterface
   // Subonglet Enquête
   const CST_ENQUETE_OPENED     = 1;
   const CST_ENQUETE_CLOSED     = 2;
-  const CST_ENQUETE_CASECLOSE  = 0;
+  const CST_ENQUETE_COLDED     = 0;
 
   const CST_ONGLET             = 'onglet';
   const CST_SUBONGLET          = 'subOnglet';
@@ -211,11 +211,14 @@ interface ConstantsInterface
 
   const FIELD_OCCURRENCE       = 'occurrence';
   const FIELD_JOUEUR_ID        = 'joueur_id';
+  */
 
   /////////////////////////////////////////////////
   // Icons
-  const I_EDIT                 = 'edit';
+  //const I_EDIT                 = 'edit';
+  const I_BACKWARD             = 'backward';
 
+  /*
   /////////////////////////////////////////////////
   // Page d'administration
   const PAGE_ADMIN_CALENDRIER  = 'calendrier';
@@ -250,6 +253,7 @@ interface ConstantsInterface
 
   /////////////////////////////////////////////////
   // Tags
+  const TAG_A                  = 'a';
   const TAG_DIV                = 'div';
   const TAG_OPTION             = 'option';
   const TAG_SELECT             = 'select';
@@ -258,7 +262,6 @@ interface ConstantsInterface
   const TAG_TD                 = 'td';
   const TAG_TH                 = 'th';
   /*
-  const TAG_A                  = 'a';
   const TAG_BUTTON             = 'button';
   const TAG_I                  = 'i';
   const TAG_IMG                = 'img';

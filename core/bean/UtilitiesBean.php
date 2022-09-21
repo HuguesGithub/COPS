@@ -69,15 +69,20 @@ class UtilitiesBean implements ConstantsInterface
   public function getRender($urlTemplate, $args=array())
   { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
 
-  public function getIcon($tag)
-  {
-    switch ($tag) {
-      case self::I_EDIT :
-        $prefix = 'fas fa-';
-      break;
+    public function getIcon($tag)
+    {
+        switch ($tag) {
+            case self::I_BACKWARD :
+                $prefix = 'fa-solid fa-';
+            break;
+            default :
+                $prefix = 'fa-solid fa-biohazard';
+                $tag = '';
+            break;
+        }
+        return $this->getBalise(self::TAG_I, '', array(self::ATTR_CLASS=>$prefix.$tag));
     }
-    return $this->getBalise(self::TAG_I, '', array(self::ATTR_CLASS=>$prefix.$tag));
-  }
+    
   static public function getCopsDate($format)
 {
 		$str_copsDate = get_option('cops_date');
