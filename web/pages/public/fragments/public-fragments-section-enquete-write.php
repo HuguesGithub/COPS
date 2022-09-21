@@ -70,11 +70,11 @@
                 <div class="col-6">
                   <label for="rapportFid" class="form-label">Rapport FID</label>
                   %8$s
-                </div>            
+                </div>
                 <div class="col-6">
                   <label for="autopsie" class="form-label">Autopsie</label>
                   %9$s
-                </div>            
+                </div>
             </div>
         </div>
         <div id="pistesDemarchesTab" class="note-editor note-frame card" style="display: none;">

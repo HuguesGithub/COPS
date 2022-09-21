@@ -73,6 +73,9 @@ class UtilitiesBean implements ConstantsInterface
     {
         switch ($tag) {
             case self::I_BACKWARD :
+            case self::I_FILE_CIRCLE_CHECK :
+            case self::I_FILE_CIRCLE_PLUS :
+            case self::I_FILE_CIRCLE_XMARK :
                 $prefix = 'fa-solid fa-';
             break;
             default :

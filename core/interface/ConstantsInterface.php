@@ -191,7 +191,10 @@ interface ConstantsInterface
   // Icons
   //const I_EDIT                 = 'edit';
   const I_BACKWARD             = 'backward';
-
+  const I_FILE_CIRCLE_PLUS     = 'file-circle-plus';
+  const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
+  const I_FILE_CIRCLE_XMARK     = 'file-circle-xmark';
+  
   /////////////////////////////////////////////////
   // Page d'administration
 

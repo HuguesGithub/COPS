@@ -26,7 +26,6 @@ class CopsEnqueteBean extends LocalBean
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-tr-enquete-row.php';
         $id          = $this->CopsEnquete->getField(self::FIELD_ID);
-        $extraUrl    = '&amp;id='.$id;
         $intSince    = $this->CopsEnquete->getField(self::FIELD_DSTART);
         $intLast     = $this->CopsEnquete->getField(self::FIELD_DLAST);
         
@@ -37,16 +36,13 @@ class CopsEnqueteBean extends LocalBean
                 break;
             case self::CST_ENQUETE_COLDED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
-                $url = $this->urlSubOnglet . self::CST_FILE_OPENED;
-                $strActionsPossibles  = '<a href="'.$url.'&amp;action='.self::CST_ENQUETE_OPENED.$extraUrl.'" class="text-white" title="Réouvrir l\'enquête"><i class="fa-solid fa-file-circle-plus"></i></a>';
+                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_OPENED, self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête");
                 break;
             case self::CST_ENQUETE_OPENED :
             default :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE;
-                $url = $this->urlSubOnglet . self::CST_FILE_CLOSED;
-                $strActionsPossibles  = '<a href="'.$url.'&amp;action='.self::CST_ENQUETE_CLOSED.$extraUrl.'" class="text-white" title="Transférer au District Attorney"><i class="fa-solid fa-file-circle-check"></i></a>';
-                $url = $this->urlSubOnglet . self::CST_FILE_COLDED;
-                $strActionsPossibles .= '&nbsp;<a href="'.$url.'&amp;action='.self::CST_ENQUETE_COLDED.$extraUrl.'" class="text-white" title="Classer l\'enquête"><i class="fa-solid fa-file-circle-xmark"></i></a>';
+                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_CLOSED, self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, "Transférer au District Attorney");
+                $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(self::CST_FILE_COLDED, self::CST_ENQUETE_COLDED, self::I_FILE_CIRCLE_XMARK, "Classer l'enquête");
                 break;
         }
 
@@ -54,7 +50,7 @@ class CopsEnqueteBean extends LocalBean
             // Id
             $id,
             // Url de vision / édition, selon le statut.
-            $urlViewEdit.$extraUrl,
+            $urlViewEdit.'&amp;id='.$id,
             // Nom de l'enquête
             $this->CopsEnquete->getField(self::FIELD_NOM_ENQUETE),
             // Date création
@@ -66,6 +62,15 @@ class CopsEnqueteBean extends LocalBean
         );
         
         return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    private function buildActionLink($subOnglet, $action, $icon, $title)
+    {
+        $id       = $this->CopsEnquete->getField(self::FIELD_ID);
+        $url      = $this->urlSubOnglet . $subOnglet;
+        $url     .= '&amp;action='.$action.'&amp;id='.$id;
+        $aContent = $this->getIcon($icon);
+        return '<a href="'.$url.'" class="text-white" title="'.$title.'">'.$aContent.'</a>';
     }
 
     /**
