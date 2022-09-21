@@ -9,20 +9,14 @@ interface ConstantsInterface
   /////////////////////////////////////////////////
   // Ajax Infos
   const AJAX_ACTION            = 'ajaxAction';
-  /*
-  const AJAX_PRESENCE          = 'ajaxPresence';
 
   /////////////////////////////////////////////////
   // Tag's Attributes
   const ATTR_ALT               = 'alt';
-  const ATTR_SRC               = 'src';
-  const ATTR_STYLE             = 'style';
-
-  const ATTR_DATA_CARD_WIDGET  = 'data-card-widget';
-  const ATTR_DATA_HREF         = 'data-href';
-  */
   const ATTR_CLASS             = 'class';
   const ATTR_HREF              = 'href';
+  const ATTR_SRC               = 'src';
+  const ATTR_STYLE             = 'style';
   const ATTR_VALUE             = 'value';
 
   const ATTR_DATA_AJAX         = 'data-ajax';
@@ -31,10 +25,6 @@ interface ConstantsInterface
 
   /////////////////////////////////////////////////
   // Constantes
-  /*
-  const CST_CLASSE             = 'classe';
-  const CST_CONTENT            = 'content';
-  */
   const CST_ACTIVE             = 'active';
   // Subonglet Calendar
   const CST_CAL_COPSDATE       = 'cops_date';
@@ -80,13 +70,9 @@ interface ConstantsInterface
   const CST_ONGLET             = 'onglet';
   const CST_SUBONGLET          = 'subOnglet';
   const CST_URL                = 'url';
-  /*
-  const CST_TDS                = 'tds';
-
 
   /////////////////////////////////////////////////
   // Fields
-  */
   const FIELD_ID               = 'id';
   const FIELD_ICON             = 'icon';
   const FIELD_FOLDER_ID        = 'folderId';
@@ -189,40 +175,23 @@ interface ConstantsInterface
   const FIELD_CATEG_COLOR        = 'categorieCouleur';
   
   // TABLE cops_enquete
-  const FIELD_NOM_ENQUETE	 	 = 'nomEnquete';
-  const FIELD_IDX_ENQUETEUR		 = 'idxEnqueteur';
-  const FIELD_IDX_DISTRICT_ATT	 = 'idxDistrictAttorney';
-  const FIELD_RESUME_FAITS		 = 'resumeFaits';
-  const FIELD_DESC_SCENE_CRIME	 = 'descSceneDeCrime';
-  const FIELD_PISTES_DEMARCHES	 = 'pistesDemarches';
-  const FIELD_NOTES_DIVERSES	 = 'notesDiverses';
-  const FIELD_STATUT_ENQUETE	 = 'statutEnquete';
+  const FIELD_NOM_ENQUETE        = 'nomEnquete';
+  const FIELD_IDX_ENQUETEUR      = 'idxEnqueteur';
+  const FIELD_IDX_DISTRICT_ATT   = 'idxDistrictAttorney';
+  const FIELD_RESUME_FAITS       = 'resumeFaits';
+  const FIELD_DESC_SCENE_CRIME   = 'descSceneDeCrime';
+  const FIELD_PISTES_DEMARCHES   = 'pistesDemarches';
+  const FIELD_NOTES_DIVERSES     = 'notesDiverses';
+  const FIELD_STATUT_ENQUETE     = 'statutEnquete';
   const FIELD_DLAST              = 'dLast';
-
-  /*
-  const FIELD_NAME             = 'name';
-  const FIELD_JOUEURID         = 'joueurId';
-  const FIELD_JOUEURNOM        = 'joueurNom';
-  const FIELD_JOUEURTEL        = 'joueurTelephone';
-  const FIELD_PRESENCEDATE     = 'presenceDate';
-
-  const FIELD_POSTID           = 'post_id';
-  const FIELD_PUBLIC           = 'public';
-
-  const FIELD_OCCURRENCE       = 'occurrence';
-  const FIELD_JOUEUR_ID        = 'joueur_id';
-  */
 
   /////////////////////////////////////////////////
   // Icons
   //const I_EDIT                 = 'edit';
   const I_BACKWARD             = 'backward';
 
-  /*
   /////////////////////////////////////////////////
   // Page d'administration
-  const PAGE_ADMIN_CALENDRIER  = 'calendrier';
-  */
 
   /////////////////////////////////////////////////
   // Onglets
@@ -254,20 +223,18 @@ interface ConstantsInterface
   /////////////////////////////////////////////////
   // Tags
   const TAG_A                  = 'a';
+  const TAG_BUTTON             = 'button';
   const TAG_DIV                = 'div';
+  const TAG_I                  = 'i';
+  const TAG_IMG                = 'img';
+  const TAG_LI                 = 'li';
   const TAG_OPTION             = 'option';
   const TAG_SELECT             = 'select';
   const TAG_SPAN               = 'span';
   const TAG_STRONG             = 'strong';
   const TAG_TD                 = 'td';
   const TAG_TH                 = 'th';
-  /*
-  const TAG_BUTTON             = 'button';
-  const TAG_I                  = 'i';
-  const TAG_IMG                = 'img';
-  const TAG_LI                 = 'li';
   const TAG_TR                 = 'tr';
-  * */
 
   /////////////////////////////////////////////////
   // Wordpress
