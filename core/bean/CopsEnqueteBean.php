@@ -18,7 +18,6 @@ class CopsEnqueteBean extends LocalBean
     }
 
     /**
-     * 
      * @return string
      * @since 1.22.09.20
      * @version 1.22.09.21
@@ -27,6 +26,7 @@ class CopsEnqueteBean extends LocalBean
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-tr-enquete-row.php';
         $id          = $this->CopsEnquete->getField(self::FIELD_ID);
+        $extraUrl    = '&amp;id='.$id;
         $intSince    = $this->CopsEnquete->getField(self::FIELD_DSTART);
         $intLast     = $this->CopsEnquete->getField(self::FIELD_DLAST);
         
@@ -38,15 +38,15 @@ class CopsEnqueteBean extends LocalBean
             case self::CST_ENQUETE_COLDED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
                 $url = $this->urlSubOnglet . self::CST_FILE_OPENED;
-                $strActionsPossibles  = '<a href="'.$url.'&amp;action='.self::CST_ENQUETE_OPENED.'&amp;id='.$id.'" class="text-white" title="Réouvrir l\'enquête"><i class="fa-solid fa-file-circle-plus"></i></a>';
+                $strActionsPossibles  = '<a href="'.$url.'&amp;action='.self::CST_ENQUETE_OPENED.$extraUrl.'" class="text-white" title="Réouvrir l\'enquête"><i class="fa-solid fa-file-circle-plus"></i></a>';
                 break;
             case self::CST_ENQUETE_OPENED :
             default :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE;
                 $url = $this->urlSubOnglet . self::CST_FILE_CLOSED;
-                $strActionsPossibles  = '<a href="'.$url.'&amp;action='.self::CST_ENQUETE_CLOSED.'&amp;id='.$id.'" class="text-white" title="Transférer au District Attorney"><i class="fa-solid fa-file-circle-check"></i></a>';
+                $strActionsPossibles  = '<a href="'.$url.'&amp;action='.self::CST_ENQUETE_CLOSED.$extraUrl.'" class="text-white" title="Transférer au District Attorney"><i class="fa-solid fa-file-circle-check"></i></a>';
                 $url = $this->urlSubOnglet . self::CST_FILE_COLDED;
-                $strActionsPossibles .= '&nbsp;<a href="'.$url.'&amp;action='.self::CST_ENQUETE_COLDED.'&amp;id='.$id.'" class="text-white" title="Classer l\'enquête"><i class="fa-solid fa-file-circle-xmark"></i></a>';
+                $strActionsPossibles .= '&nbsp;<a href="'.$url.'&amp;action='.self::CST_ENQUETE_COLDED.$extraUrl.'" class="text-white" title="Classer l\'enquête"><i class="fa-solid fa-file-circle-xmark"></i></a>';
                 break;
         }
 
@@ -54,7 +54,7 @@ class CopsEnqueteBean extends LocalBean
             // Id
             $id,
             // Url de vision / édition, selon le statut.
-            $urlViewEdit.'&amp;id='.$id,
+            $urlViewEdit.$extraUrl,
             // Nom de l'enquête
             $this->CopsEnquete->getField(self::FIELD_NOM_ENQUETE),
             // Date création
@@ -69,7 +69,6 @@ class CopsEnqueteBean extends LocalBean
     }
 
     /**
-     * 
      * @param integer $intDate
      * @return string
      * @since 1.22.09.20
@@ -79,15 +78,15 @@ class CopsEnqueteBean extends LocalBean
     {
        $tsNow = UtilitiesBean::getCopsDate('tsnow');
        $tsDiff = $tsNow-$intDate;
-       $strReturned = '';
+       $strReturned = "Il y a ";
        if ($tsDiff<60) {
            $strReturned = "À l'instant";
        } elseif ($tsDiff<60*60) {
-           $strReturned = "Il y a ".round($tsDiff/60)."min";
+           $strReturned .= round($tsDiff/60)."min";
        } elseif ($tsDiff<60*60*24) {
-           $strReturned = "Il y a ".round($tsDiff/(60*60))."hrs";
+           $strReturned .= round($tsDiff/(60*60))."hrs";
        } else {
-           $strReturned = "Il y a ".round($tsDiff/(60*60*24))."j";
+           $strReturned .= round($tsDiff/(60*60*24))."j";
        }
        return $strReturned;
     }
@@ -122,9 +121,9 @@ class CopsEnqueteBean extends LocalBean
             // Scène de crime
             $this->CopsEnquete->getField(self::FIELD_DESC_SCENE_CRIME),
             // Rapports FCID
-            '', 
+            '',
             // Autopsies
-            '', 
+            '',
             // Pistes & Démarches
             $this->CopsEnquete->getField(self::FIELD_PISTES_DEMARCHES),
             // Notes diverses
