@@ -81,20 +81,26 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
    * Créé, Edite, Supprime une Entrée
    * @since 1.0.00
    */
-  protected function createEditDeleteEntry($requete, $arrParams=array()) {
+  protected function createEditDeleteEntry($requete, $arrParams=array())
+  {
     $sql = MySQL::wpdbPrepare($requete, $arrParams);
     MySQL::wpdbQuery($sql);
   }
 
-  public function prepObject($Obj, $isUpdate=false) {
+  public function prepObject($Obj, $isUpdate=false)
+  {
     $arr = array();
     $vars = $Obj->getClassVars();
-    if ( !empty($vars) ) {
-      foreach ( $vars as $key=>$value ) {
-        if ( $key=='id' || $key=='stringClass' ) { continue; }
+    if (!empty($vars)) {
+      foreach ($vars as $key => $value) {
+        if ($key=='id' || $key=='stringClass') {
+            continue;
+        }
         $arr[] = $Obj->getField($key);
       }
-      if ( $isUpdate ) { $arr[] = $Obj->getField('id'); }
+      if ($isUpdate) {
+          $arr[] = $Obj->getField('id');
+      }
     }
     return $arr;
   }

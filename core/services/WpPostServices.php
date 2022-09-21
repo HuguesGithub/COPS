@@ -1,6 +1,6 @@
 <?php
-if ( !defined( 'ABSPATH') ) {
-    die( 'Forbidden' );
+if (!defined('ABSPATH')) {
+    die('Forbidden');
 }
 /**
  * Classe WpPostServices
@@ -10,7 +10,8 @@ if ( !defined( 'ABSPATH') ) {
  */
 class WpPostServices extends GlobalServices {
 
-  public function __construct() { }
+  public function __construct()
+  { }
 
   public function getPosts($attributes)
   {
@@ -22,15 +23,15 @@ class WpPostServices extends GlobalServices {
       'post_status'=>'publish',
       'suppress_filters'=>TRUE
     );
-    if ( !empty($attributes) ) {
-      foreach ( $attributes as $key=>$value ) {
+    if (!empty($attributes)) {
+      foreach ($attributes as $key => $value) {
         $args[$key] = $value;
       }
     }
     $posts_array = get_posts($args);
     $WpPosts = array();
-    if ( !empty($posts_array) ) {
-      foreach ( $posts_array as $post ) {
+    if (!empty($posts_array)) {
+      foreach ($posts_array as $post) {
         $WpPosts[] = WpPost::convertElement($post);
       }
     }

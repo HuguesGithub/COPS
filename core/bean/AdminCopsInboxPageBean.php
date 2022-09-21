@@ -71,7 +71,7 @@ class AdminCopsInboxPageBean extends AdminCopsPageBean implements ConstantsInter
         $id = array_shift($ids);
         $CopsMailJoint = $this->CopsMailServices->getMailJoint($id);
         // On vérifie que l'id est existant, qu'il appartient bien au folder actuel et que le user actuel en est bien le destinataire
-        if (/*$CopsMailJoint->getField('folderId')==$this->subOnglet && */$CopsMailJoint->getField(self::FIELD_TO_ID)==2) {
+        if ($CopsMailJoint->getField(self::FIELD_TO_ID)==2) { /*$CopsMailJoint->getField('folderId')==$this->subOnglet && */
           if ($this->subOnglet!=self::CST_FOLDER_TRASH) {
             // Si les contrôles sont okay, on déplace le message vers le folder trash.
             $CopsMailJoint->setField(self::FIELD_FOLDER_ID, 6);

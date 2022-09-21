@@ -1,5 +1,7 @@
 <?php
-if ( !defined( 'ABSPATH') ) die( 'Forbidden' );
+if (!defined( 'ABSPATH')) {
+    die('Forbidden');
+}
 /**
  * Classe MySQL
  * Classe d'accès à la base de données.
@@ -7,14 +9,16 @@ if ( !defined( 'ABSPATH') ) die( 'Forbidden' );
  * @since 1.0.00
  * @author Hugues
  */
-class MySQL {
+class MySQL
+{
 	/**
 	 * Prepare une requête avant de l'exécuter
 	 * @param $requete
 	 * @param $args
 	 * @return Resource
 	 */
-	public static function wpdbPrepare($requete, $args=array()) {
+	public static function wpdbPrepare($requete, $args=array())
+	{
 		global $wpdb;
 		return $wpdb->prepare($requete, $args);
 	}
@@ -23,7 +27,8 @@ class MySQL {
 	 * @param $requete
 	 * @return
 	 */
-	public static function wpdbQuery($requete) {
+	public static function wpdbQuery($requete)
+	{
 		global $wpdb;
 		return $wpdb->query($requete);
 	}
@@ -32,7 +37,8 @@ class MySQL {
 	 * @param $requete
 	 * @return ResultSet
 	 */
-	public static function wpdbSelect($requete) {
+	public static function wpdbSelect($requete)
+	{
 		global $wpdb;
 		return $wpdb->get_results($requete);
 	}
@@ -43,7 +49,8 @@ class MySQL {
 	 * @param $where
 	 * @return result
 	 */
-	public static function wpdbUpdate($table, $data, $where) {
+	public static function wpdbUpdate($table, $data, $where)
+	{
 		global $wpdb;
 		return $wpdb->update($table, $data, $where);
 	}
@@ -53,7 +60,8 @@ class MySQL {
 	 * @param $data
 	 * @return integer
 	 */
-	public static function wpdbInsert($table, $data) {
+	public static function wpdbInsert($table, $data)
+	{
 		global $wpdb;
 		$wpdb->insert($table, $data);
 		return $wpdb->insert_id;
@@ -63,7 +71,8 @@ class MySQL {
 	 * @param $table
 	 * @param $data
 	 */
-	public static function wpdbReplace($table, $data) {
+	public static function wpdbReplace($table, $data)
+	{
 		global $wpdb;
 		$wpdb->replace($table, $data);
 	}
@@ -73,7 +82,8 @@ class MySQL {
 	 * @param $where
 	 * @return integer
 	 */
-	public static function wpdbDelete($table, $where) {
+	public static function wpdbDelete($table, $where)
+	{
 		global $wpdb;
 		$requete = "DELETE FROM $table WHERE $where";
 		return $wpdb->query($requete);
@@ -82,7 +92,8 @@ class MySQL {
 	 * Retourne la dernière requête exécutée.
 	 * @return string
 	 */
-	public static function wpdbLastQuery() {
+	public static function wpdbLastQuery()
+	{
 		global $wpdb;
 		return $wpdb->last_query;
 	}
@@ -92,7 +103,8 @@ class MySQL {
 	 *
 	 * @return int
 	 */
-	public static function getLastInsertId() {
+	public static function getLastInsertId()
+	{
 		global $wpdb;
 		return $wpdb->insert_id;
 	}

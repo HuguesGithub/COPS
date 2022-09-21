@@ -1,8 +1,12 @@
 <?php
+if (!defined('ABSPATH')) {
+  die('Forbidden');
+}
 /**
  * WpPost
  */
-class WpPost extends LocalDomain {
+class WpPost extends LocalDomain
+{
   protected $ID;
   protected $post_author;
   protected $post_date;
@@ -30,25 +34,37 @@ class WpPost extends LocalDomain {
 
   public function __construct() {}
 
-  public function getClassVars() { return get_class_vars('WpPost'); }
+  public function getClassVars()
+  { return get_class_vars('WpPost'); }
 
   public static function convertElement($row)
   {
     return parent::convertRootElement(new WpPost(), $row);
   }
 
-  public function getID() { return $this->ID; }
-  public function getPostDate() { return $this->post_date; }
-  public function getPostContent() { return $this->post_content; }
-  public function getPostTitle() { return $this->post_title; }
-  public function getPostStatus() { return $this->post_status; }
-  public function getPostName() { return $this->post_name; }
-  public function getPostParent() { return $this->post_parent; }
-  public function getGuid() { return $this->guid; }
-  public function getMenuOrder() { return $this->menu_order; }
+  public function getID()
+  { return $this->ID; }
+  public function getPostDate()
+  { return $this->post_date; }
+  public function getPostContent()
+  { return $this->post_content; }
+  public function getPostTitle()
+  { return $this->post_title; }
+  public function getPostStatus()
+  { return $this->post_status; }
+  public function getPostName()
+  { return $this->post_name; }
+  public function getPostParent()
+  { return $this->post_parent; }
+  public function getGuid()
+  { return $this->guid; }
+  public function getMenuOrder()
+  { return $this->menu_order; }
 
-  public function getPostSubtype() { return $this->postSubtype; }
-  public function setPostSubtype($WpPostClass) { $this->postSubtype = $WpPostClass; }
+  public function getPostSubtype()
+  { return $this->postSubtype; }
+  public function setPostSubtype($WpPostClass)
+  { $this->postSubtype = $WpPostClass; }
 
   public static function getBean($WpPost, $catId=45)
   {
@@ -64,8 +80,11 @@ class WpPost extends LocalDomain {
     return $Bean;
   }
 
-  public function getPostMeta($key='') {
-    if ( !isset($this->metas) ) { $this->metas = get_post_meta($this->ID); }
+  public function getPostMeta($key='')
+  {
+    if (!isset($this->metas)) {
+        $this->metas = get_post_meta($this->ID);
+    }
     return $this->metas[$key][0];
   }
 
@@ -90,21 +109,26 @@ class WpPost extends LocalDomain {
   */
   public function getPermalink()
   { return get_permalink($this->getID()); }
-  public function getStrPostDate() {
+  public function getStrPostDate()
+  {
     $s = $this->post_date;
     return substr($s,8,2).'/'.substr($s,5,2).' à '.substr($s,11,2).'h'.substr($s,14,2);
   }
-  public function getStrDate() {
+  public function getStrDate()
+  {
     $arrDate = explode('-', substr($this->post_date, 0, 10));
     $arrMois = array(1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre');
     return $arrDate[2].' '.$arrMois[$arrDate[1]*1].' '.$arrDate[0];
   }
-  public function getPostMetas() {
+  public function getPostMetas()
+  {
     if ( !isset($this->metas) ) { $this->metas = get_post_meta($this->ID); }
     return $this->metas;
   }
-  public function setPostMeta($key, $value) { update_post_meta($this->ID, $key, $value); }
-  public function getImgUrl() {
+  public function setPostMeta($key, $value)
+  { update_post_meta($this->ID, $key, $value); }
+  public function getImgUrl()
+  {
     $medias = $this->getAttachedMedia('image');
     if ( !empty($medias) ) {
       $media = array_shift($medias);
@@ -114,20 +138,24 @@ class WpPost extends LocalDomain {
     }
     return '#';
   }
-  public function getAttachedMedia($type) { return get_attached_media($type, $this->ID); }
-  public function getUrlOrUri() {
+  public function getAttachedMedia($type)
+  { return get_attached_media($type, $this->ID); }
+  public function getUrlOrUri()
+  {
     $secondsperDay = 60*60*24;
     $tresholdDays = 100;
     $s = $this->getPostDate();
     $daysElapsed = (time()-mktime(0, 0, 0, substr($s,5,2), substr($s,8,2), substr($s,0,4)))/$secondsperDay;
     return ( /*$daysElapsed > $tresholdDays &&*/ self::isAdmin() ? $this->getGuid() : $this->getPostMeta('article_url') );
   }
-  public function getUrl() { return $this->getPostMeta('article_url'); }
-  public function getPdfUrl() {
+  public function getUrl()
+  { return $this->getPostMeta('article_url'); }
+  public function getPdfUrl()
+  {
     $medias = $this->getAttachedMedia('application/pdf');
-    if ( !empty($medias) ) {
+    if (!empty($medias)) {
       $media = array_shift($medias);
-      if ( $media->guid!='' ) {
+      if ($media->guid!='') {
         return $media->guid;
       }
     }

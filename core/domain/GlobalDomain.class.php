@@ -1,6 +1,6 @@
 <?php
-if ( !defined( 'ABSPATH') ) {
-  die( 'Forbidden' );
+if (!defined( 'ABSPATH')) {
+  die('Forbidden');
 }
 /**
  * Classe GlobalDomain
@@ -19,7 +19,7 @@ class GlobalDomain implements ConstantsInterface
   public function __construct($attributes=array())
   {
     if (!empty($attributes)) {
-      foreach ($attributes as $key=>$value) {
+      foreach ($attributes as $key => $value) {
         $this->setField($key, $value);
       }
     }
@@ -46,7 +46,7 @@ class GlobalDomain implements ConstantsInterface
   {
     $vars = $Obj->getClassVars();
     if (!empty($vars)) {
-      foreach ($vars as $key=>$value) {
+      foreach ($vars as $key => $value) {
         if ($key=='stringClass') {
           continue;
         }

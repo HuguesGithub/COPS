@@ -110,22 +110,22 @@ class CopsEvent extends LocalDomain
 
   public function isSeveralWeeks()
   {
-    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8),  substr($this->dateFin, 0, 4));
-    $tsDeb = mktime(0, 0, 0, substr($this->dateDebut, 5, 2), substr($this->dateDebut, 8),  substr($this->dateDebut, 0, 4));
+    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8), substr($this->dateFin, 0, 4));
+    $tsDeb = mktime(0, 0, 0, substr($this->dateDebut, 5, 2), substr($this->dateDebut, 8), substr($this->dateDebut, 0, 4));
     return (date('W', $tsDeb)!=date('W', $tsFin));
   }
 
   public function isOverThisWeek($tsDisplay)
   {
-    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8),  substr($this->dateFin, 0, 4));
+    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8), substr($this->dateFin, 0, 4));
     return (date('W', $tsDisplay)!=date('W', $tsFin));
   }
 
   public function getColSpan($tsDeb=null)
   {
-    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8),  substr($this->dateFin, 0, 4));
+    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8), substr($this->dateFin, 0, 4));
     if ($tsDeb==null) {
-      $tsDeb = mktime(0, 0, 0, substr($this->dateDebut, 5, 2), substr($this->dateDebut, 8),  substr($this->dateDebut, 0, 4));
+      $tsDeb = mktime(0, 0, 0, substr($this->dateDebut, 5, 2), substr($this->dateDebut, 8), substr($this->dateDebut, 0, 4));
     }
     return round(($tsFin-$tsDeb)/(60*60*24));
   }
@@ -185,9 +185,9 @@ class CopsEvent extends LocalDomain
         $CopsEventDate->setField('tStart', 0);
         $CopsEventDate->setField('tEnd', 24*60);
       } else {
-        list($h, $i, $s) = explode (':', $this->heureDebut);
+        list($h, $i, $s) = explode(':', $this->heureDebut);
         $CopsEventDate->setField('tStart', $i+$h*60);
-        list($h, $i, $s) = explode (':', $this->heureFin);
+        list($h, $i, $s) = explode(':', $this->heureFin);
         $CopsEventDate->setField('tEnd', $i+$h*60);
       }
       list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -222,9 +222,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField('tStart', 0);
           $CopsEventDate->setField('tEnd', 24*60);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -250,9 +250,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField('tStart', 0);
           $CopsEventDate->setField('tEnd', 24*36);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -289,9 +289,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField('tStart', 0);
           $CopsEventDate->setField('tEnd', 24*60);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -317,9 +317,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField('tStart', 0);
           $CopsEventDate->setField('tEnd', 24*36);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -356,9 +356,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField(self::FIELD_TSTART, 0);
           $CopsEventDate->setField(self::FIELD_TEND, 24*60);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -384,9 +384,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField(self::FIELD_TSTART, 0);
           $CopsEventDate->setField('tEnd', 24*36);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -423,9 +423,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField('tStart', 0);
           $CopsEventDate->setField('tEnd', 24*60);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);
@@ -451,9 +451,9 @@ class CopsEvent extends LocalDomain
           $CopsEventDate->setField('tStart', 0);
           $CopsEventDate->setField('tEnd', 24*36);
         } else {
-          list($h, $i, $s) = explode (':', $this->heureDebut);
+          list($h, $i, $s) = explode(':', $this->heureDebut);
           $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode (':', $this->heureFin);
+          list($h, $i, $s) = explode(':', $this->heureFin);
           $CopsEventDate->setField('tEnd', $i+$h*60);
         }
         list($Y, $m, $d) = explode('-', $this->dateDebut);

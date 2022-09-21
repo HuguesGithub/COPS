@@ -17,11 +17,11 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
         /////////////////////////////////////////
         // Construction du menu de l'inbox
         $this->arrSubOnglets = array(
-            self::CST_FILE_OPENED   => array(self::FIELD_ICON  => 'file',                 self::FIELD_LABEL => 'En cours'),
-            self::CST_FILE_CLOSED   => array(self::FIELD_ICON  => 'file-circle-check',  self::FIELD_LABEL => 'Classées'),
-            self::CST_FILE_COLDED   => array(self::FIELD_ICON  => 'file-circle-minus',  self::FIELD_LABEL => 'Cold Case'),
-            self::CST_FOLDER_READ   => array(self::FIELD_LABEL => 'Lire'),
-            self::CST_FOLDER_WRITE  => array(self::FIELD_LABEL => 'Rédiger'),
+            self::CST_FILE_OPENED  => array(self::FIELD_ICON  => 'file',              self::FIELD_LABEL => 'En cours'),
+            self::CST_FILE_CLOSED  => array(self::FIELD_ICON  => 'file-circle-check', self::FIELD_LABEL => 'Classées'),
+            self::CST_FILE_COLDED  => array(self::FIELD_ICON  => 'file-circle-minus', self::FIELD_LABEL => 'Cold Case'),
+            self::CST_FOLDER_READ  => array(self::FIELD_LABEL => 'Lire'),
+            self::CST_FOLDER_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
         );
         /////////////////////////////////////////
        $this->urlOnglet    = '/admin?onglet=dossier';
@@ -78,13 +78,13 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
         
         /////////////////////////////////////////
         // Construction du panneau de droite
-        $str_btnClass = 'btn btn-primary btn-block mb-3';
+        $strBtnClass = 'btn btn-primary btn-block mb-3';
         switch ($this->subOnglet) {
             case self::CST_FOLDER_READ :
                 $strRightPanel   = $this->getReadEnqueteBlock();
                 $attributes = array (
                     self::ATTR_HREF  => $this->urlOnglet,
-                    self::ATTR_CLASS => $str_btnClass,
+                    self::ATTR_CLASS => $strBtnClass,
                 );
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             break;
@@ -92,7 +92,7 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
                 $strRightPanel   = $this->getWriteEnqueteBlock();
                 $attributes = array (
                     self::ATTR_HREF  => $this->urlOnglet,
-                    self::ATTR_CLASS => $str_btnClass,
+                    self::ATTR_CLASS => $strBtnClass,
                 );
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             break;
@@ -100,7 +100,7 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
                 $strRightPanel   = $this->getFolderEnquetesList();
                 $attributes = array (
                     self::ATTR_HREF  => $this->urlSubOnglet.self::CST_FOLDER_WRITE,
-                    self::ATTR_CLASS => $str_btnClass,
+                    self::ATTR_CLASS => $strBtnClass,
                 );
                 $strContent = 'Ouvrir une enquête';
             break;

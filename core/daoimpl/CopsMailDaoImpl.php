@@ -157,7 +157,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
     // Récupération des champs de l'objet en base
     $arrFields = array();
     $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
-    foreach($rows as $row) {
+    foreach ($rows as $row) {
       $arrFields[] = $row->Field;
     }
     ////////////////////////////////////
@@ -186,7 +186,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
     // Récupération des champs de l'objet en base
     $arrFields = array();
     $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
-    foreach($rows as $row) {
+    foreach ($rows as $row) {
       if ($row->Field=='id') {
         continue;
       }
@@ -219,7 +219,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
     // Récupération des champs de l'objet en base
     $arrFields = array();
     $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach($rows as $row) {
+    foreach ($rows as $row) {
       $arrFields[] = $row->Field;
     }
     ////////////////////////////////////
@@ -249,7 +249,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
     // Récupération des champs de l'objet en base
     $arrFields = array();
     $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach($rows as $row) {
+    foreach ($rows as $row) {
       if ($row->Field=='id') {
         continue;
       }
@@ -271,16 +271,5 @@ class CopsMailDaoImpl extends LocalDaoImpl
     MySQL::wpdbQuery($sql);
     $Obj->setField(self::FIELD_ID, MySQL::getLastInsertId());
   }
-
-
-
-
-
-
-
-
-
-
-
 
 }

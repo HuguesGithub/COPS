@@ -14,7 +14,8 @@ define ('_SQL_PARAMS_ORDERBY_', '__orderby__');
  * @since 1.22.04.28
  * @version 1.22.04.28
  */
-class GlobalDaoImpl {
+class GlobalDaoImpl
+{
 
   /**
    * Limitateur

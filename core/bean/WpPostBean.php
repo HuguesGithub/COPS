@@ -2,12 +2,14 @@
 /**
  * WpPostBean
  */
-class WpPostBean extends LocalBean {
+class WpPostBean extends LocalBean
+{
 
   /**
    * Constructeur
    */
-  public function __construct($WpPost='') {
+  public function __construct($WpPost='')
+  {
     parent::__construct($services);
     $this->WpPost = $WpPost;
   }

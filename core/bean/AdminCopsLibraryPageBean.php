@@ -94,7 +94,7 @@ class AdminCopsLibraryPageBean extends AdminCopsPageBean implements ConstantsInt
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-article-onglet-menu-panel.php';
     $strContent = '';
-    foreach ($this->arrSubOnglets as $subOnglet=>$arrSubOnglet) {
+    foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
       $attributes = array(self::ONGLET_LIBRARY, $subOnglet, $arrSubOnglet[self::FIELD_LABEL], $arrSubOnglet[self::FIELD_ICON]);
       $strContent .= $this->getRender($urlTemplate, $attributes);
     }

@@ -2,12 +2,14 @@
 /**
  * WpPostSkillBean
  */
-class WpPostSkillBean extends WpPostBean {
+class WpPostSkillBean extends WpPostBean
+{
 
   /**
    * Constructeur
    */
-  public function __construct($WpPost='') {
+  public function __construct($WpPost='')
+  {
     $this->WpPost = $WpPost;
   }
 

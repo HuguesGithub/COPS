@@ -195,7 +195,7 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
         $this->breadCrumbs .= '<div class="btn-group">';
         $this->breadCrumbs .= '<button type="button" class="btn btn-sm btn-dark dropdown-toggle" data-toggle="dropdown">'.$this->arrSubOnglets[$this->subOnglet]['label'].'</button>';
         $this->breadCrumbs .= '<div class="dropdown-menu">';
-        foreach ($this->arrSubOnglets as $subOnglet=>$arrData) {
+        foreach ($this->arrSubOnglets as $subOnglet => $arrData) {
           if ($arrData['label']=='') {
             continue;
           }
@@ -279,9 +279,9 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
     */
 
     $sidebarContent = '';
-    foreach ($arrSidebarContent as $strHeader=>$arrItems) {
+    foreach ($arrSidebarContent as $strHeader => $arrItems) {
       //$sidebarContent .= '<li class="nav-header">'.$strHeader.'</li>';
-      foreach ($arrItems as $strOnglet=>$arrOnglet) {
+      foreach ($arrItems as $strOnglet => $arrOnglet) {
         $sidebarContent .= '<li class="nav-item'.(($strOnglet==$this->urlParams[self::CST_ONGLET])?' menu-open' : '').'"><a href="/admin?onglet='.$strOnglet.'" class="nav-link';
         $sidebarContent .= (($strOnglet==$this->urlParams[self::CST_ONGLET])?' active' : '').'"><i class="nav-icon '.$arrOnglet['icon'];
         $sidebarContent .= '"></i><p>'.$arrOnglet['label'];
@@ -291,7 +291,7 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
         $sidebarContent .= '</p></a>';
         if (isset($arrOnglet['children'])) {
           $sidebarContent .= '<ul class="nav nav-treeview">';
-          foreach ($arrOnglet['children'] as $strSubOnglet=>$label) {
+          foreach ($arrOnglet['children'] as $strSubOnglet => $label) {
             $extraClass = (($strSubOnglet==$this->urlParams['subOnglet'])?' active' : '');
             // Cas spéciaux :
             if ($this->urlParams['subOnglet']=='date' && $strSubOnglet=='allDates') {

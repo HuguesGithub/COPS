@@ -44,7 +44,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
 		// Récupération des champs de l'objet en base
 		$arrFields = array();
 		$rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-		foreach($rows as $row) {
+		foreach ($rows as $row) {
 		  $arrFields[] = $row->Field;
 		}
 		////////////////////////////////////
@@ -57,7 +57,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
 		$request .= "WHERE 1=1 AND statutEnquete LIKE '%s' ";
 		$request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
 		$prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
-		echo $prepRequest;
+		
 		//////////////////////////////
 		// Exécution de la requête
 		$rows = MySQL::wpdbSelect($prepRequest);
@@ -86,7 +86,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     // Récupération des champs de l'objet en base
     $arrFields = array();
     $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach($rows as $row) {
+    foreach ($rows as $row) {
       $arrFields[] = $row->Field;
     }
     ////////////////////////////////////
@@ -116,7 +116,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     // Récupération des champs de l'objet en base
     $arrFields = array();
     $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach($rows as $row) {
+    foreach ($rows as $row) {
       if ($row->Field=='id') {
         continue;
       }
