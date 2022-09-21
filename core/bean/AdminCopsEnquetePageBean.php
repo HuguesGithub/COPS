@@ -201,13 +201,13 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean implements ConstantsInt
             break;
         }
     
-        $CopsEnquetes = $this->CopsEnqueteServices->getEnquetes($attributes);
-        if (empty($CopsEnquetes)) {
+        $objsCopsEnquete = $this->CopsEnqueteServices->getEnquetes($attributes);
+        if (empty($objsCopsEnquete)) {
             $strContent = '<tr><td class="text-center">Aucune enquête.<br></td></tr>';
         } else {
             $strContent = '';
-            foreach ($CopsEnquetes as $CopsEnquete) {
-                $strContent .= $CopsEnquete->getBean()->getCopsEnqueteRow();
+            foreach ($objsCopsEnquete as $objCopsEnquete) {
+                $strContent .= $objCopsEnquete->getBean()->getCopsEnqueteRow();
             }
         }
         /////////////////////////////////////////
@@ -258,13 +258,13 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean implements ConstantsInt
         // Selon que c'est une mise à jour ou une création, on a un traitement légèrement différent.
         if ($this->urlParams[self::FIELD_ID]!='') {
             $attributes[self::FIELD_ID] = $this->urlParams[self::FIELD_ID];
-            $CopsEnquete = new CopsEnquete($attributes);
-            $this->CopsEnqueteServices->updateEnquete($CopsEnquete);
+            $objCopsEnquete = new CopsEnquete($attributes);
+            $this->CopsEnqueteServices->updateEnquete($objCopsEnquete);
         } else {
             $attributes[self::FIELD_DSTART] = UtilitiesBean::getCopsDate('tsnow');
             $attributes[self::FIELD_STATUT_ENQUETE] = self::CST_ENQUETE_OPENED;
-            $CopsEnquete = new CopsEnquete($attributes);
-            $this->CopsEnqueteServices->insertEnquete($CopsEnquete);
+            $objCopsEnquete = new CopsEnquete($attributes);
+            $this->CopsEnqueteServices->insertEnquete($objCopsEnquete);
         }
         ////////////////////////////////////////////
         

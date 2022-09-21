@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe CopsEnqueteDaoImpl
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.22.09.16
+ * @version 1.22.09.21
  */
 class CopsEnqueteDaoImpl extends LocalDaoImpl
 {
@@ -43,74 +43,83 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
         $prepSql  = MySQL::wpdbPrepare($request, $prepObject);
         return MySQL::wpdbSelect($prepSql);
     }
-  
+
+    /**
+     * @param boolean
+     * @return array
+     * @since 1.22.09.21
+     * @version 1.22.09.21
+     */
+    private function getTableFields($blnSkipId=false)
+    {
+        ////////////////////////////////////
+        // Récupération des champs de l'objet en base
+        $arrFields = array();
+        $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
+        foreach ($rows as $row) {
+            if ($blnSkipId && $row->Field=='id') {
+                continue;
+            }
+            $arrFields[] = $row->Field;
+        }
+        ////////////////////////////////////
+        return $arrFields;
+    }
+    
+    
   /**
    * @param array $attributes
    * @return array [CopsEnquete]
    * @since 1.22.09.20
-   * @version 1.22.09.20
+   * @version 1.22.09.21
    */
-	public function getEnquetes($attributes)
-	{
-		////////////////////////////////////
-		// Récupération des champs de l'objet en base
-		$arrFields = array();
-		$rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-		foreach ($rows as $row) {
-		  $arrFields[] = $row->Field;
-		}
-		////////////////////////////////////
+    public function getEnquetes($attributes)
+    {
+        $arrFields = $this->getTableFields();
 
-		$request  = "SELECT ";
-		foreach ($arrFields as $field) {
-		  $request .= $field.", ";
-		}
-		$request = substr($request, 0, -2)." FROM ".$this->dbTable." ";
-		$request .= "WHERE 1=1 AND statutEnquete LIKE '%s' ";
-		$request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
-		$prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
-		
-		//////////////////////////////
-		// Exécution de la requête
-		$rows = MySQL::wpdbSelect($prepRequest);
-		//////////////////////////////
+        $request  = "SELECT ";
+        foreach ($arrFields as $field) {
+          $request .= $field.", ";
+        }
+        $request = substr($request, 0, -2)." FROM ".$this->dbTable." ";
+        $request .= "WHERE 1=1 AND statutEnquete LIKE '%s' ";
+        $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
+        $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
+        
+        //////////////////////////////
+        // Exécution de la requête
+        $rows = MySQL::wpdbSelect($prepRequest);
+        //////////////////////////////
 
-		//////////////////////////////
-		// Construction du résultat
-		$Items = array();
-		if (!empty($rows)) {
-			foreach ($rows as $row) {
-				$Items[] = CopsEnquete::convertElement($row);
-			}
-		}
-		return $Items;
-		//////////////////////////////
-	}
-	
+        //////////////////////////////
+        // Construction du résultat
+        $objsItem = array();
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $objsItem[] = CopsEnquete::convertElement($row);
+            }
+        }
+        return $objsItem;
+        //////////////////////////////
+    }
+    
 
   /**
    * @since 1.22.05.10
-   * @version 1.22.05.10
+   * @version 1.22.09.21
    */
-  public function updateEnquete($Obj)
+  public function updateEnquete($objStd)
   {
-    ////////////////////////////////////
-    // Récupération des champs de l'objet en base
-    $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach ($rows as $row) {
-      $arrFields[] = $row->Field;
-    }
-    ////////////////////////////////////
+      $arrFields = $this->getTableFields();
 
     $prepObject = array();
     $request  = "UPDATE ".$this->dbTable." SET ";
     foreach ($arrFields as $field) {
       $request .= $field."='%s', ";
-      $prepObject[] = $Obj->getField($field);
+      $prepObject[] = $objStd->getField($field);
     }
     $request = substr($request, 0, -2)." WHERE id = '%s';";
-    $prepObject[] = $Obj->getField(self::FIELD_ID);
+    $prepObject[] = $objStd->getField(self::FIELD_ID);
 
     $sql = MySQL::wpdbPrepare($request, $prepObject);
     MySQL::wpdbQuery($sql);
@@ -119,21 +128,11 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
 
   /**
    * @since 1.22.05.10
-   * @version 1.22.05.10
+   * @version 1.22.09.21
    */
-  public function insertEnquete(&$Obj)
+  public function insertEnquete(&$objStd)
   {
-    ////////////////////////////////////
-    // Récupération des champs de l'objet en base
-    $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach ($rows as $row) {
-      if ($row->Field=='id') {
-        continue;
-      }
-      $arrFields[] = $row->Field;
-    }
-    ////////////////////////////////////
+      $arrFields = $this->getTableFields(true);
 
     $prepObject = array();
     $request  = "INSERT INTO ".$this->dbTable." (";
@@ -141,15 +140,15 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     foreach ($arrFields as $field) {
       $request        .= $field.", ";
       $requestValues  .= "'%s', ";
-      $prepObject[] = $Obj->getField($field);
+      $prepObject[] = $objStd->getField($field);
     }
     $request = substr($request, 0, -2).") VALUES (".substr($requestValues, 0, -2).");";
 
     $sql = MySQL::wpdbPrepare($request, $prepObject);
     MySQL::wpdbQuery($sql);
-    $Obj->setField(self::FIELD_ID, MySQL::getLastInsertId());
+    $objStd->setField(self::FIELD_ID, MySQL::getLastInsertId());
   }
 
 
-	
+    
 }

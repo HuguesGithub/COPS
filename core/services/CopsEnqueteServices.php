@@ -63,8 +63,8 @@ class CopsEnqueteServices extends LocalServices
    */
   public function getEnquetes($attributes)
   {
-	  $this->initFilters($attributes);
-	  return $this->Dao->getEnquetes($attributes);
+      $this->initFilters($attributes);
+      return $this->Dao->getEnquetes($attributes);
   }
   
   
@@ -81,9 +81,9 @@ class CopsEnqueteServices extends LocalServices
         return new CopsEnquete($row[0]);
     }
   
-	public function updateEnquete($CopsEnquete)
-	{ $this->Dao->updateEnquete($CopsEnquete); }
-	
-	public function insertEnquete($CopsEnquete)
-	{ $this->Dao->insertEnquete($CopsEnquete); }
+    public function updateEnquete($objCopsEnquete)
+    { $this->Dao->updateEnquete($objCopsEnquete); }
+    
+    public function insertEnquete($objCopsEnquete)
+    { $this->Dao->insertEnquete($objCopsEnquete); }
 }
