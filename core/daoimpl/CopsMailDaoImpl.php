@@ -234,7 +234,6 @@ class CopsMailDaoImpl extends LocalDaoImpl
     $prepObject[] = $Obj->getField(self::FIELD_ID);
 
     $sql = MySQL::wpdbPrepare($request, $prepObject);
-    echo "[[$sql]]";
     MySQL::wpdbQuery($sql);
   }
   ////////////////////////////////////

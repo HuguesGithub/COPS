@@ -66,7 +66,21 @@ class CopsEnqueteServices extends LocalServices
 	  $this->initFilters($attributes);
 	  return $this->Dao->getEnquetes($attributes);
   }
-
+  
+  
+    /**
+     * @param integer
+     * @return CopsEnquete
+     * @since 1.22.09.21
+     * @version 1.22.09.21
+     */
+    public function getEnquete($enqueteId=-1)
+    {
+        $attributes = array($enqueteId);
+        $row = $this->Dao->getEnquete($attributes);
+        return new CopsEnquete($row[0]);
+    }
+  
 	public function updateEnquete($CopsEnquete)
 	{ $this->Dao->updateEnquete($CopsEnquete); }
 	

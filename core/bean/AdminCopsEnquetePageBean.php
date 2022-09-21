@@ -3,12 +3,12 @@ if (!defined('ABSPATH')) {
     die('Forbidden');
 }
 /**
- * Classe AdminCopsFilePageBean
+ * Classe AdminCopsEnquetePageBean
  * @author Hugues
  * @since 1.22.09.20
  * @version 1.22.09.21
  */
-class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterface
+class AdminCopsEnquetePageBean extends AdminCopsPageBean implements ConstantsInterface
 {
     public function __construct()
     {
@@ -17,15 +17,15 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
         /////////////////////////////////////////
         // Construction du menu de l'inbox
         $this->arrSubOnglets = array(
-            self::CST_FILE_OPENED  => array(self::FIELD_ICON  => 'file',              self::FIELD_LABEL => 'En cours'),
+            self::CST_FILE_OPENED  => array(self::FIELD_ICON  => 'file-circle-plus', self::FIELD_LABEL => 'En cours'),
             self::CST_FILE_CLOSED  => array(self::FIELD_ICON  => 'file-circle-check', self::FIELD_LABEL => 'Classées'),
-            self::CST_FILE_COLDED  => array(self::FIELD_ICON  => 'file-circle-minus', self::FIELD_LABEL => 'Cold Case'),
+            self::CST_FILE_COLDED  => array(self::FIELD_ICON  => 'file-circle-xmark', self::FIELD_LABEL => 'Cold Case'),
             self::CST_FOLDER_READ  => array(self::FIELD_LABEL => 'Lire'),
             self::CST_FOLDER_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
         );
         /////////////////////////////////////////
-       $this->urlOnglet    = '/admin?onglet=dossier';
-       $this->urlSubOnglet = $this->urlOnglet.'&amp;subOnglet=';
+        $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_ENQUETE;
+       $this->urlSubOnglet = $this->urlOnglet.'&amp;'.self::CST_SUBONGLET.'=';
 
         /////////////////////////////////////////
         // Définition des services
@@ -40,12 +40,34 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
     public function getBoard()
     {
         $this->subOnglet = (isset($this->urlParams[self::CST_SUBONGLET]) && isset($this->arrSubOnglets[$this->urlParams[self::CST_SUBONGLET]]) ? $this->urlParams[self::CST_SUBONGLET] : self::CST_FILE_OPENED);
-        $this->buildBreadCrumbs('Enquêtes', self::ONGLET_FILE, true);
+        $this->buildBreadCrumbs('Enquêtes', self::ONGLET_ENQUETE, true);
     
+        // On récupère l'enquête associée à l'id.
+        $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
         ////////////////////////////////////////////////////////
-       // Insertion / Mise à jour de l'enquête saisie.
-        if (isset($this->urlParams['writeAction']) && $this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
-           $this->updateEnquete();
+        if (isset($this->urlParams['writeAction'])) {
+            // Insertion / Mise à jour de l'enquête saisie.
+            // Mais seulement si le nom de l'enquête a été saisi.
+            if ($this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
+                $this->updateEnquete();
+            }
+        } elseif (isset($this->urlParams['action'])) {
+            // Si elle existe, on effectue le traitement qui va bien.
+            $intStatut = $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE);
+            if ($this->CopsEnquete->getField(self::FIELD_ID)==$this->urlParams[self::FIELD_ID]
+                && $intStatut!=self::CST_ENQUETE_CLOSED
+                && ($intStatut==self::CST_ENQUETE_OPENED
+                    || $intStatut==self::CST_ENQUETE_COLDED && $this->urlParams['action']==self::CST_ENQUETE_OPENED)) {
+                        // Si l'enquête existe.
+                        // Si l'enquête n'est pas déjà transférée au DA.
+                        // Si l'enquête est coldcase, elle ne peut pas être transférée au DA
+                
+                        // Si tout est bon,
+                        // on classe une enquête, on la réouvre ou on la transfère au DA
+                        $this->CopsEnquete->setField(self::FIELD_STATUT_ENQUETE, $this->urlParams['action']);
+                        $this->CopsEnquete->setField(self::FIELD_DLAST, self::getCopsDate('tsnow'));
+                        $this->CopsEnqueteServices->updateEnquete($this->CopsEnquete);
+            }
         }
         ////////////////////////////////////////////////////////
 
@@ -81,7 +103,7 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
         $strBtnClass = 'btn btn-primary btn-block mb-3';
         switch ($this->subOnglet) {
             case self::CST_FOLDER_READ :
-                $strRightPanel   = $this->getReadEnqueteBlock();
+                $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
                 $attributes = array (
                     self::ATTR_HREF  => $this->urlOnglet,
                     self::ATTR_CLASS => $strBtnClass,
@@ -89,7 +111,7 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             break;
             case self::CST_FOLDER_WRITE :
-                $strRightPanel   = $this->getWriteEnqueteBlock();
+                $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
                 $attributes = array (
                     self::ATTR_HREF  => $this->urlOnglet,
                     self::ATTR_CLASS => $strBtnClass,
@@ -156,7 +178,7 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
      */
     public function getFolderEnquetesList()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-file-enquetes.php';
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes-list.php';
         /////////////////////////////////////////
         // Construction du panneau de droite
         // Liste des dossiers pour une catégorie spécifique (En cours, Classées, Cold Case...)
@@ -206,52 +228,34 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
-
+    
     /**
      * @since 1.22.09.20
-     * @version 1.22.09.20
+     * @version 1.22.09.21
      */
-    public function getWriteEnqueteBlock()
-    {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-file-write.php';
-        /////////////////////////////////////////
-        // Construction du panneau de droite
-        // Gestion d'édition (création ou modification) d'un dossier d'enquête
-
-        $attributes = array(
-          '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-        );
-        /////////////////////////////////////////
-        return $this->getRender($urlTemplate, $attributes);
-    }
-
-    public function getReadEnqueteBlock()
-    {
-        return '';
-    }
-        
     public function updateEnquete()
     {
-        
+        ////////////////////////////////////////////
+        // On récupère les données passées en paramètres spécifiques à l'objet Enquete
         $attributes = array(
             // Le nom de l'enquête
-            self::FIELD_NOM_ENQUETE            => $this->urlParams[self::FIELD_NOM_ENQUETE],
+            self::FIELD_NOM_ENQUETE      => $this->urlParams[self::FIELD_NOM_ENQUETE],
             // L'id du premier enquêteur
-            self::FIELD_IDX_ENQUETEUR        => $this->urlParams[self::FIELD_IDX_ENQUETEUR],
+            self::FIELD_IDX_ENQUETEUR    => $this->urlParams[self::FIELD_IDX_ENQUETEUR],
             // L'id du District Attorney
-            self::FIELD_IDX_DISTRICT_ATT    => $this->urlParams[self::FIELD_IDX_DISTRICT_ATT],
+            self::FIELD_IDX_DISTRICT_ATT => $this->urlParams[self::FIELD_IDX_DISTRICT_ATT],
             // Le résyumé des faits
-            self::FIELD_RESUME_FAITS         => $this->urlParams[self::FIELD_RESUME_FAITS],
+            self::FIELD_RESUME_FAITS     => $this->urlParams[self::FIELD_RESUME_FAITS],
             // La description de la scène de crime
-            self::FIELD_DESC_SCENE_CRIME    => $this->urlParams[self::FIELD_DESC_SCENE_CRIME],
+            self::FIELD_DESC_SCENE_CRIME => $this->urlParams[self::FIELD_DESC_SCENE_CRIME],
             // Les pistes et les démarches
-            self::FIELD_PISTES_DEMARCHES    => $this->urlParams[self::FIELD_PISTES_DEMARCHES],
+            self::FIELD_PISTES_DEMARCHES => $this->urlParams[self::FIELD_PISTES_DEMARCHES],
             // Les notes diverses
-            self::FIELD_NOTES_DIVERSES        => $this->urlParams[self::FIELD_NOTES_DIVERSES],
+            self::FIELD_NOTES_DIVERSES   => $this->urlParams[self::FIELD_NOTES_DIVERSES],
             // La date de dernière modification
-            self::FIELD_DLAST                => UtilitiesBean::getCopsDate('tsnow'),
+            self::FIELD_DLAST            => UtilitiesBean::getCopsDate('tsnow'),
         );
-
+        // Selon que c'est une mise à jour ou une création, on a un traitement légèrement différent.
         if ($this->urlParams[self::FIELD_ID]!='') {
             $attributes[self::FIELD_ID] = $this->urlParams[self::FIELD_ID];
             $CopsEnquete = new CopsEnquete($attributes);
@@ -262,5 +266,14 @@ class AdminCopsFilePageBean extends AdminCopsPageBean implements ConstantsInterf
             $CopsEnquete = new CopsEnquete($attributes);
             $this->CopsEnqueteServices->insertEnquete($CopsEnquete);
         }
+        ////////////////////////////////////////////
+        
+        // TODO :
+        // Gérer les données relatives aux tables annexes.
+        // Enquêtes de personnalité
+        // Témoins / Suspects
+        // Chronologie
+        // Autopsie
+        // Analyse de scène de crime
     }
 }

@@ -82,11 +82,11 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
         
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-events.php';
         ///////////////////////////////////////////////////////
-        // Contenu de la page 
+        // Contenu de la page
         $strContent = '';
-        $CopsEvents = $this->CopsEventServices->getCopsEvents();
-        while (!empty($CopsEvents)) {
-          $CopsEvent = array_shift($CopsEvents);
+        $objsCopsEvent = $this->CopsEventServices->getCopsEvents();
+        while (!empty($objsCopsEvent)) {
+            $CopsEvent = array_shift($objsCopsEvent);
           $strContent .= $CopsEvent->getBean()->getTableRow();
         }
         ///////////////////////////////////////////////////////

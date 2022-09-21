@@ -7,8 +7,8 @@
         <div class="mailbox-controls">
           <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa-solid fa-square"></i></button>
           <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm" data-action="trash"><i class="fa-solid fa-trash-alt"></i></button>
           <!--
+            <button type="button" class="btn btn-default btn-sm" data-action="trash"><i class="fa-solid fa-trash-alt"></i></button>
             <button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-reply"></i></button>
             <button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-share"></i></button>
           -->
@@ -40,8 +40,8 @@
         <div class="mailbox-controls">
           <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa-solid fa-square"></i></button>
           <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-trash-alt"></i></button>
           <!--
+            <button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-trash-alt"></i></button>
             <button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-reply"></i></button>
             <button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-share"></i></button>
           -->

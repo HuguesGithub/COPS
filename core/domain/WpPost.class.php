@@ -63,8 +63,8 @@ class WpPost extends LocalDomain
 
   public function getPostSubtype()
   { return $this->postSubtype; }
-  public function setPostSubtype($WpPostClass)
-  { $this->postSubtype = $WpPostClass; }
+  public function setPostSubtype($objWpPostClass)
+  { $this->postSubtype = $objWpPostClass; }
 
   public static function getBean($WpPost, $catId=45)
   {

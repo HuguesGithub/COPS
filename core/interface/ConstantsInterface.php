@@ -66,7 +66,9 @@ interface ConstantsInterface
   const CST_ENQUETE_OPENED     = 1;
   const CST_ENQUETE_CLOSED     = 2;
   const CST_ENQUETE_COLDED     = 0;
-
+  const CST_ENQUETE_READ       = 'read';
+  const CST_ENQUETE_WRITE      = 'write';
+  
   const CST_ONGLET             = 'onglet';
   const CST_SUBONGLET          = 'subOnglet';
   const CST_URL                = 'url';
@@ -197,7 +199,7 @@ interface ConstantsInterface
   // Onglets
   const ONGLET_ARCHIVE         = 'archive';
   const ONGLET_CALENDAR        = 'calendar';
-  const ONGLET_FILE            = 'dossier';
+  const ONGLET_ENQUETE         = 'enquete';
   const ONGLET_INBOX           = 'inbox';
   const ONGLET_LIBRARY         = 'library';
   const ONGLET_PROFILE         = 'profile';

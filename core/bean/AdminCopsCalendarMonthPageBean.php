@@ -90,14 +90,6 @@ class AdminCopsCalendarMonthPageBean extends AdminCopsCalendarPageBean
           $strContent .= '</tr>';
         }
     
-        // On récupère le rang du jour dans la semaine
-        // N : 1 (pour Lundi) à 7 (pour Dimanche)
-        $N = date('N', mktime(1, 0, 0, $m, $d, $Y));
-        // On s'appuie dessus pour définir le premier jour de la semaine
-        list($fd, $fY) = explode(' ', date('d Y', mktime(1, 0, 0, $m, $d+1-$N, $Y)));
-    
-        // La sixième ligne peut contenir 7 jours du mois suivant.
-    
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-month.php';
         $attributes = array(
           // Les lignes à afficher

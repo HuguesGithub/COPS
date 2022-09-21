@@ -63,7 +63,8 @@ class AdminCopsCalendarDayPageBean extends AdminCopsCalendarPageBean
             self::ATTR_CLASS     => 'fc-col-header-cell fc-day ' . $strClass,
             self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
         );
-        $strContent = ' <div class="fc-scrollgrid-sync-inner"><a class="fc-col-header-cell-cushion ">'.$this->arrFullDays[date('w', $tsDisplay)].'</a></div>';
+        $strContent  = ' <div class="fc-scrollgrid-sync-inner"><a class="fc-col-header-cell-cushion ">';
+        $strContent .= $this->arrFullDays[date('w', $tsDisplay)].'</a></div>';
         return $this->getBalise(self::TAG_TH, $strContent, $attributes);
     }
 

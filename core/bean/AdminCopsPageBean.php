@@ -134,8 +134,8 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
           $Bean = new AdminCopsProfilePageBean();
           $returned = $Bean->getBoard();
         break;
-        case self::ONGLET_FILE :
-          $Bean = new AdminCopsFilePageBean();
+        case self::ONGLET_ENQUETE :
+          $Bean = new AdminCopsEnquetePageBean();
           $returned = $Bean->getBoard();
         break;
         case self::ONGLET_DESK   :
@@ -178,7 +178,7 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
 
   /*
    * @since 1.22.06.09
-   * @version 1.22.06.09
+   * @version 1.22.06.21
    */
   public function buildBreadCrumbs($label, $slug=null, $hasDropdown=false)
   {
@@ -196,7 +196,7 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
         $this->breadCrumbs .= '<button type="button" class="btn btn-sm btn-dark dropdown-toggle" data-toggle="dropdown">'.$this->arrSubOnglets[$this->subOnglet]['label'].'</button>';
         $this->breadCrumbs .= '<div class="dropdown-menu">';
         foreach ($this->arrSubOnglets as $subOnglet => $arrData) {
-          if ($arrData['label']=='') {
+          if ($arrData['label']=='' || !isset($arrData[self::FIELD_ICON])) {
             continue;
           }
           $url = '/admin?onglet='.$slug.'&subOnglet='.$subOnglet.(isset($arrData['url']) ? '&'.$arrData['url'] : '');
@@ -242,7 +242,7 @@ class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
             self::FIELD_ICON  => 'fa-solid fa-envelope',
             self::FIELD_LABEL => 'Messagerie',
           ),
-          self::ONGLET_FILE => array(
+            self::ONGLET_ENQUETE => array(
             self::FIELD_ICON  => 'fa-solid fa-file-lines',
             self::FIELD_LABEL => 'Enquêtes',
           ),

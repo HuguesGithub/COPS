@@ -31,7 +31,19 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
   //////////////////////////////////////////////////
   // METHODS
   //////////////////////////////////////////////////
-
+    /**
+     * @since 1.22.09.21
+     * @version 1.22.09.21
+     */
+    public function getEnquete($prepObject)
+    {
+        $request  = $this->getSelect($this->dbTable);
+        $request .= "FROM ".$this->dbTable." ";
+        $request .= "WHERE id = '%s';";
+        $prepSql  = MySQL::wpdbPrepare($request, $prepObject);
+        return MySQL::wpdbSelect($prepSql);
+    }
+  
   /**
    * @param array $attributes
    * @return array [CopsEnquete]
@@ -101,7 +113,6 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     $prepObject[] = $Obj->getField(self::FIELD_ID);
 
     $sql = MySQL::wpdbPrepare($request, $prepObject);
-    echo "[[$sql]]";
     MySQL::wpdbQuery($sql);
   }
   ////////////////////////////////////
@@ -135,7 +146,6 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     $request = substr($request, 0, -2).") VALUES (".substr($requestValues, 0, -2).");";
 
     $sql = MySQL::wpdbPrepare($request, $prepObject);
-    echo "[[$sql]]";
     MySQL::wpdbQuery($sql);
     $Obj->setField(self::FIELD_ID, MySQL::getLastInsertId());
   }

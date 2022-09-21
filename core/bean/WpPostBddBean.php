@@ -8,9 +8,9 @@ class WpPostBddBean extends WpPostBean
   /**
    * Constructeur
    */
-  public function __construct($WpPost='')
+  public function __construct($objWpPost='')
   {
-    $this->WpPost = $WpPost;
+    $this->WpPost = $objWpPost;
   }
 
   public function getContentDisplay()
