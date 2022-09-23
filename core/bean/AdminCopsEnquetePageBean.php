@@ -39,7 +39,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
      */
     public function getBoard()
     {
-        $this->subOnglet = (isset($this->urlParams[self::CST_SUBONGLET]) && isset($this->arrSubOnglets[$this->urlParams[self::CST_SUBONGLET]]) ? $this->urlParams[self::CST_SUBONGLET] : self::CST_FILE_OPENED);
+        $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_FILE_OPENED);
         $this->buildBreadCrumbs('Enquêtes', self::ONGLET_ENQUETE, true);
     
         // On récupère l'enquête associée à l'id.

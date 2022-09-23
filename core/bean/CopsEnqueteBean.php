@@ -12,7 +12,7 @@ class CopsEnqueteBean extends CopsBean
 {
     public function __construct($objStd=null)
     {
-		parent::__construct();
+        parent::__construct();
         $this->obj          = ($objStd==null ? new CopsEnquete() : $objStd);
         $this->urlOnglet   .= self::ONGLET_ENQUETE;
         $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
@@ -37,15 +37,16 @@ class CopsEnqueteBean extends CopsBean
                 break;
             case self::CST_ENQUETE_COLDED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
-                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_OPENED, 
-                    self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête");
+                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_OPENED,
+                self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête");
                 break;
             case self::CST_ENQUETE_OPENED :
             default :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE;
-                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_CLOSED, 
-                    self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, "Transférer au District Attorney");
-                $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(self::CST_FILE_COLDED, 
+                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_CLOSED,
+                    self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, "Transférer au District Attorney"
+                );
+                $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(self::CST_FILE_COLDED,
                     self::CST_ENQUETE_COLDED, self::I_FILE_CIRCLE_XMARK, "Classer l'enquête");
                 break;
         }

@@ -57,17 +57,17 @@ class UtilitiesBean implements ConstantsInterface
         $y = substr($strCopsDate, 15);
         $dmy = substr($strCopsDate, 9);
         $tsCops = mktime($h, $i, $s, $m, $d, $y);
-		$objUtilitiesBean = new UtilitiesBean();
-		
+        $objUtilitiesBean = new UtilitiesBean();
+        
         switch ($format) {
             case 'strJour' :
-				$attributes = array(
-					$objUtilitiesBean->arrFullDays[date('N', $tsCops)], $d,
-					$objUtilitiesBean->arrFullMonths[$m*1], $y);
+                $attributes = array(
+                    $objUtilitiesBean->arrFullDays[date('N', $tsCops)], $d,
+                    $objUtilitiesBean->arrFullMonths[$m*1], $y);
                 $formatted = implode(' ', $attributes);
                 break;
             case 'strSbDown' :
-                $formatted = $objUtilitiesBean->$arrShortDays[date('N', $tsCops)].' '.$dmy.'<br>'.$his;
+                $formatted = $objUtilitiesBean->arrShortDays[date('N', $tsCops)].' '.$dmy.'<br>'.$his;
                 break;
             case 'tsnow' :
                 $formatted = mktime($h, $i, $s, $m, $d, $y);
@@ -162,7 +162,7 @@ class UtilitiesBean implements ConstantsInterface
             // Sousmenu - 2
             $strSubmenu,
         );
-        return '';//$this->getRender($urlTemplate, $args);
+        return $this->getRender($urlTemplate, $args);
     }
 
     /**
