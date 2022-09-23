@@ -46,11 +46,7 @@ class LocalDaoImpl extends GlobalDaoImpl implements ConstantsInterface
   {
     ////////////////////////////////////
     // Récupération des champs de l'objet en base
-    $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach ($rows as $row) {
-      $arrFields[] = $row->Field;
-    }
+    $arrFields = $this->getFields();
     ////////////////////////////////////
 
     ////////////////////////////////////
@@ -73,10 +69,6 @@ class LocalDaoImpl extends GlobalDaoImpl implements ConstantsInterface
     ////////////////////////////////////
   }
 
-  public function getObjs()
-  {
-  }
-
   public function getSelect($dbTable)
   {
     ////////////////////////////////////
@@ -88,5 +80,15 @@ class LocalDaoImpl extends GlobalDaoImpl implements ConstantsInterface
     }
     ////////////////////////////////////
     return "SELECT ".implode(', ', $arrFields)." ";
+  }
+  
+  public function getFields()
+  {
+      $arrFields = array();
+      $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
+      foreach ($rows as $row) {
+          $arrFields[] = $row->Field;
+      }
+      return $arrFields;
   }
 }
