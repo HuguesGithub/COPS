@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.27
  * @version 1.22.05.30
  */
-class AdminCopsPageBean extends UtilitiesBean implements ConstantsInterface
+class AdminCopsPageBean extends UtilitiesBean
 {
   /**
    * Class Constructor

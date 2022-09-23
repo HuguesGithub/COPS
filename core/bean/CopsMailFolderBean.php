@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.05.02
  * @version 1.22.05.02
  */
-class CopsMailFolderBean extends LocalBean
+class CopsMailFolderBean extends UtilitiesBean
 {
   /**
    * Class constructor

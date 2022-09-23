@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.29
  * @version 1.22.04.30
  */
-class CopsMailBean extends LocalBean
+class CopsMailBean extends UtilitiesBean
 {
   public function __construct($Obj=null)
   {

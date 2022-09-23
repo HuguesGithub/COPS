@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.06.13
  * @version 1.22.06.13
  */
-class CopsEventDateBean extends LocalBean
+class CopsEventDateBean extends UtilitiesBean
 {
   public function __construct($Obj=null)
   {

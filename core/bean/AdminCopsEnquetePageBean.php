@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.09.20
  * @version 1.22.09.21
  */
-class AdminCopsEnquetePageBean extends AdminCopsPageBean implements ConstantsInterface
+class AdminCopsEnquetePageBean extends AdminCopsPageBean
 {
     public function __construct()
     {

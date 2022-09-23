@@ -6,14 +6,15 @@ if (!defined('ABSPATH')) {
  * CopsEnqueteBean
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.22.09.21
+ * @version 1.22.09.23
  */
-class CopsEnqueteBean extends LocalBean
+class CopsEnqueteBean extends CopsBean
 {
     public function __construct($objStd=null)
     {
-        $this->CopsEnquete = ($objStd==null ? new CopsEnquete() : $objStd);
-        $this->urlOnglet    = '/admin?' . self::CST_ONGLET . '=' . self::ONGLET_ENQUETE;
+		parent::__construct();
+        $this->obj          = ($objStd==null ? new CopsEnquete() : $objStd);
+        $this->urlOnglet   .= self::ONGLET_ENQUETE;
         $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
     }
 
@@ -25,11 +26,11 @@ class CopsEnqueteBean extends LocalBean
     public function getCopsEnqueteRow()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-tr-enquete-row.php';
-        $id          = $this->CopsEnquete->getField(self::FIELD_ID);
-        $intSince    = $this->CopsEnquete->getField(self::FIELD_DSTART);
-        $intLast     = $this->CopsEnquete->getField(self::FIELD_DLAST);
+        $id          = $this->obj->getField(self::FIELD_ID);
+        $intSince    = $this->obj->getField(self::FIELD_DSTART);
+        $intLast     = $this->obj->getField(self::FIELD_DLAST);
         
-        switch ($this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)) {
+        switch ($this->obj->getField(self::FIELD_STATUT_ENQUETE)) {
             case self::CST_ENQUETE_CLOSED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
                 $strActionsPossibles = '';
@@ -55,7 +56,7 @@ class CopsEnqueteBean extends LocalBean
             // Url de vision / édition, selon le statut.
             $urlViewEdit.'&amp;id='.$id,
             // Nom de l'enquête
-            $this->CopsEnquete->getField(self::FIELD_NOM_ENQUETE),
+            $this->obj->getField(self::FIELD_NOM_ENQUETE),
             // Date création
             $this->displayNiceDateSince($intSince),
             // Date dernière modification
@@ -69,7 +70,7 @@ class CopsEnqueteBean extends LocalBean
     
     private function buildActionLink($subOnglet, $action, $icon, $title)
     {
-        $id       = $this->CopsEnquete->getField(self::FIELD_ID);
+        $id       = $this->obj->getField(self::FIELD_ID);
         $url      = $this->urlSubOnglet . $subOnglet;
         $url     .= '&amp;action='.$action.'&amp;id='.$id;
         $aContent = $this->getIcon($icon);
@@ -115,27 +116,27 @@ class CopsEnqueteBean extends LocalBean
         
         $attributes = array(
             // Id de l'enquête, s'il existe
-            $this->CopsEnquete->getField(self::FIELD_ID),
+            $this->obj->getField(self::FIELD_ID),
             // Url pour Annuler
             '/admin?onglet=enquete',
             // Nom de l'enquête
-            $this->CopsEnquete->getField(self::FIELD_NOM_ENQUETE),
+            $this->obj->getField(self::FIELD_NOM_ENQUETE),
             // Select pour premier enquêteur
             '',
             // Select pour DA
             '',
             // Résumé des faits
-            $this->CopsEnquete->getField(self::FIELD_RESUME_FAITS),
+            $this->obj->getField(self::FIELD_RESUME_FAITS),
             // Scène de crime
-            $this->CopsEnquete->getField(self::FIELD_DESC_SCENE_CRIME),
+            $this->obj->getField(self::FIELD_DESC_SCENE_CRIME),
             // Rapports FCID
             '',
             // Autopsies
             '',
             // Pistes & Démarches
-            $this->CopsEnquete->getField(self::FIELD_PISTES_DEMARCHES),
+            $this->obj->getField(self::FIELD_PISTES_DEMARCHES),
             // Notes diverses
-            $this->CopsEnquete->getField(self::FIELD_NOTES_DIVERSES),
+            $this->obj->getField(self::FIELD_NOTES_DIVERSES),
             // TODO :
             // Enquêtes Personnalités
             // Témoins / Suspects

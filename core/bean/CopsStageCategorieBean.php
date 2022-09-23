@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.06.02
  * @version 1.22.06.03
  */
-class CopsStageCategorieBean extends LocalBean
+class CopsStageCategorieBean extends UtilitiesBean
 {
   public function __construct($Obj=null)
   {

@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.27
  * @version 1.22.04.27
  */
-class AdminCopsPlayerPageBean extends AdminCopsPageBean implements ConstantsInterface
+class AdminCopsPlayerPageBean extends AdminCopsPageBean
 {
   /**
    * @return string
