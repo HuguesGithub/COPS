@@ -37,18 +37,19 @@ class CopsEnqueteBean extends CopsBean
                 break;
             case self::CST_ENQUETE_COLDED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
+                $attributes = array();
                 $strActionsPossibles  = $this->buildActionLink(
-                   self::CST_FILE_OPENED, self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête"
+                    self::CST_FILE_OPENED, self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête"
                 );
                 break;
             case self::CST_ENQUETE_OPENED :
             default :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE;
-                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_CLOSED,
-                   self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, "Transférer au District Attorney"
+                $strActionsPossibles  = $this->buildActionLink(
+                    self::CST_FILE_CLOSED, self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, "Transférer au District Attorney"
                 );
-                $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(self::CST_FILE_COLDED,
-                   self::CST_ENQUETE_COLDED, self::I_FILE_CIRCLE_XMARK, "Classer l'enquête"
+                $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(
+                    self::CST_FILE_COLDED, self::CST_ENQUETE_COLDED, self::I_FILE_CIRCLE_XMARK, "Classer l'enquête"
                 );
                 break;
         }
@@ -140,10 +141,12 @@ class CopsEnqueteBean extends CopsBean
             $this->obj->getField(self::FIELD_PISTES_DEMARCHES),
             // Notes diverses
             $this->obj->getField(self::FIELD_NOTES_DIVERSES),
-            // TODO :
             // Enquêtes Personnalités
+            '',
             // Témoins / Suspects
+            '',
             // Chronologie
+            '',
             
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',

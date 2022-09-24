@@ -26,27 +26,13 @@
       
       <div class="enquete-main-info row col-12">
         <ul class="nav nav-pills nav-fill col-12">
-            <li class="nav-item">
-                <a class="nav-link bg-primary" aria-current="page" href="#" data-tab="#resumeFaitsTab">Résumé des faits</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-tab="#descSceneDeCrimeTab">Scène de crime</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-tab="#pistesDemarchesTab">Pistes / Démarches</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-tab="#personnalitesTab">Enquêtes de Personnalités</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-tab="#temoignagesTab">Témoins / Suspects</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-tab="#chronologieTab">Chronologie</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-tab="#notesDiversesTab">Notes diverses</a>
-            </li>
+            <li class="nav-item"><a class="nav-link bg-primary" aria-current="page" href="#" data-tab="#resumeFaitsTab">Résumé des faits</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-tab="#descSceneDeCrimeTab">Scène de crime</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-tab="#pistesDemarchesTab">Pistes / Démarches</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-tab="#personnalitesTab">Enquêtes de Personnalités</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-tab="#temoignagesTab">Témoins / Suspects</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-tab="#chronologieTab">Chronologie</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-tab="#notesDiversesTab">Notes diverses</a></li>
         </ul>
       </div>
       
@@ -61,8 +47,8 @@
         </div>
         <div id="descSceneDeCrimeTab" class="note-editor note-frame card" style="display: none;">
           <div class="note-editing-area">
-            <textarea id="descSceneDeCrime" class="form-control" style="height: 300px; display: none;" name="compose-textarea"></textarea>
-            <div class="note-editable card-block" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
+            <textarea id="descSceneDeCrime" class="form-control" style="height: 300px; display: none;" name="descSceneDeCrime"></textarea>
+            <div class="note-editable card-block" data-input="#descSceneDeCrime" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
                 %7$s
             </div>
           </div>
@@ -79,8 +65,8 @@
         </div>
         <div id="pistesDemarchesTab" class="note-editor note-frame card" style="display: none;">
           <div class="note-editing-area">
-            <textarea id="pistesDemarches" class="form-control" style="height: 300px; display: none;" name="compose-textarea"></textarea>
-            <div class="note-editable card-block" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
+            <textarea id="pistesDemarches" class="form-control" style="height: 300px; display: none;" name="pistesDemarches"></textarea>
+            <div class="note-editable card-block" data-input="#pistesDemarches" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
                 %10$s
             </div>
           </div>
@@ -108,8 +94,8 @@
         </div>
         <div id="notesDiversesTab" class="note-editor note-frame card" style="display: none;">
           <div class="note-editing-area">
-            <textarea id="notesDiverses" class="form-control" style="height: 300px; display: none;" name="compose-textarea"></textarea>
-            <div class="note-editable card-block" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
+            <textarea id="notesDiverses" class="form-control" style="height: 300px; display: none;" name="notesDiverses"></textarea>
+            <div class="note-editable card-block" data-input="#notesDiverses" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
                 %11$s
             </div>
           </div>

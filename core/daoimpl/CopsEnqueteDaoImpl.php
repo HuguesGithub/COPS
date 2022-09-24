@@ -62,7 +62,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     public function getEnquetes($attributes)
     {
         $request  = $this->select;
-        $request .= "WHERE 1=1 AND statutEnquete LIKE '%s' ";
+        $request .= "WHERE statutEnquete LIKE '%s' ";
         $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         
@@ -131,15 +131,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
      */
     public function getEnqueteChronologies($attributes)
     {
-        $arrFields = array();
-        $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cec.";");
-        foreach ($rows as $row) {
-            $arrFields[] = $row->Field;
-        }
-        $request  = "SELECT ".implode(', ', $arrFields)." ";
-        $request .= "FROM ".$this->dbTable_cec." ";
-        $request .= "WHERE idxEnquete = %s;";
-        
+        $request = $this->buildSelectRequest($this->dbTable_cec);
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         
         //////////////////////////////
@@ -167,15 +159,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
      */
     public function getEnquetePersonnalites($attributes)
     {
-        $arrFields = array();
-        $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cep.";");
-        foreach ($rows as $row) {
-            $arrFields[] = $row->Field;
-        }
-        $request  = "SELECT ".implode(', ', $arrFields)." ";
-        $request .= "FROM ".$this->dbTable_cep." ";
-        $request .= "WHERE idxEnquete = %s;";
-        
+        $request = $this->buildSelectRequest($this->dbTable_cep);
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         
         //////////////////////////////
@@ -203,15 +187,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
      */
     public function getEnqueteTemoignages($attributes)
     {
-        $arrFields = array();
-        $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cet.";");
-        foreach ($rows as $row) {
-            $arrFields[] = $row->Field;
-        }
-        $request  = "SELECT ".implode(', ', $arrFields)." ";
-        $request .= "FROM ".$this->dbTable_cet." ";
-        $request .= "WHERE idxEnquete = %s;";
-        
+        $request = $this->buildSelectRequest($this->dbTable_cet);
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         
         //////////////////////////////
@@ -228,5 +204,18 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
             }
         }
         return $objItems;
+    }
+    
+    private function buildSelectRequest($dbTable)
+    {
+        $arrFields = array();
+        $rows = MySQL::wpdbSelect("DESCRIBE ".$dbTable.";");
+        foreach ($rows as $row) {
+            $arrFields[] = $row->Field;
+        }
+        $request  = "SELECT ".implode(', ', $arrFields)." ";
+        $request .= "FROM ".$dbTable." ";
+        $request .= "WHERE idxEnquete = %s;";
+        return $request;
     }
 }

@@ -102,7 +102,10 @@ $(document).ready(function() {
 		  }); 
 	  });
 	  $('.note-editable').on('blur', function(){
-        $($(this).data('input')).val($(this).html());
+        $($(this).data('input')).html($(this).html());
+      });
+      $('.note-editable').each(function(){
+        $($(this).data('input')).html($(this).html());
       });
   }
   

@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe AdminCopsEnquetePageBean
  * @author Hugues
  * @since 1.22.09.20
- * @version 1.22.09.21
+ * @version 1.22.09.24
  */
 class AdminCopsEnquetePageBean extends AdminCopsPageBean
 {
@@ -35,27 +35,28 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
     /**
      * @return string
      * @since 1.22.09.20
-     * @version 1.22.09.21
+     * @version 1.22.09.24
      */
     public function getBoard()
     {
         $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_FILE_OPENED);
         $this->buildBreadCrumbs('Enquêtes', self::ONGLET_ENQUETE, true);
     
-        // On récupère l'enquête associée à l'id.
-        $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
         ////////////////////////////////////////////////////////
         if (isset($this->urlParams['writeAction'])) {
-            // Insertion / Mise à jour de l'enquête saisie.
+            // Insertion / Mise à jour de l'enquête saisie via le formulare
             // Mais seulement si le nom de l'enquête a été saisi.
             if ($this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
                 if ($this->urlParams[self::FIELD_ID]!='') {
-                    CopsEnqueteActions::updateEnquete($this->urlParams);
+                    $this->CopsEnquete = CopsEnqueteActions::updateEnquete($this->urlParams);
                 } else {
-                    CopsEnqueteActions::insertEnquete($this->urlParams);
+                    $this->CopsEnquete = CopsEnqueteActions::insertEnquete($this->urlParams);
                 }
             }
         } elseif (isset($this->urlParams['action'])) {
+            // Mise à jour du statut (et donc de la dernière date de modification) sur le lien de la liste.
+            // On récupère l'enquête associée à l'id.
+            $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
             // Si elle existe, on effectue le traitement qui va bien.
             $intStatut = $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE);
             if ($this->CopsEnquete->getField(self::FIELD_ID)==$this->urlParams[self::FIELD_ID]
@@ -72,9 +73,12 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
                         $this->CopsEnquete->setField(self::FIELD_DLAST, self::getCopsDate('tsnow'));
                         $this->CopsEnqueteServices->updateEnquete($this->CopsEnquete);
             }
+        } else {
+            // On récupère l'enquête associée à l'id.
+            $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
         }
         ////////////////////////////////////////////////////////
-
+        
         $urlTemplate = 'web/pages/public/public-board.php';
         $attributes = array(
             // La sidebar
