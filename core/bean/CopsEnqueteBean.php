@@ -37,8 +37,8 @@ class CopsEnqueteBean extends CopsBean
                 break;
             case self::CST_ENQUETE_COLDED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
-                $strActionsPossibles  = $this->buildActionLink(self::CST_FILE_OPENED,
-                   self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête"
+                $strActionsPossibles  = $this->buildActionLink(
+                   self::CST_FILE_OPENED, self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête"
                 );
                 break;
             case self::CST_ENQUETE_OPENED :

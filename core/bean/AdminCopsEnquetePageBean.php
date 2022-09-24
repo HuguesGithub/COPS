@@ -25,11 +25,11 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
         );
         /////////////////////////////////////////
         $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_ENQUETE;
-       $this->urlSubOnglet = $this->urlOnglet.'&amp;'.self::CST_SUBONGLET.'=';
+        $this->urlSubOnglet = $this->urlOnglet.'&amp;'.self::CST_SUBONGLET.'=';
 
         /////////////////////////////////////////
         // Définition des services
-       $this->CopsEnqueteServices = new CopsEnqueteServices();
+        $this->CopsEnqueteServices = new CopsEnqueteServices();
     }
     
     /**
@@ -49,7 +49,11 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             // Insertion / Mise à jour de l'enquête saisie.
             // Mais seulement si le nom de l'enquête a été saisi.
             if ($this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
-                $this->updateEnquete();
+                if ($this->urlParams[self::FIELD_ID]!='') {
+                    CopsEnqueteActions::updateEnquete($this->urlParams);
+                } else {
+                    CopsEnqueteActions::insertEnquete($this->urlParams);
+                }
             }
         } elseif (isset($this->urlParams['action'])) {
             // Si elle existe, on effectue le traitement qui va bien.
@@ -228,52 +232,5 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
-    
-    /**
-     * @since 1.22.09.20
-     * @version 1.22.09.21
-     */
-    public function updateEnquete()
-    {
-        ////////////////////////////////////////////
-        // On récupère les données passées en paramètres spécifiques à l'objet Enquete
-        $attributes = array(
-            // Le nom de l'enquête
-            self::FIELD_NOM_ENQUETE      => $this->urlParams[self::FIELD_NOM_ENQUETE],
-            // L'id du premier enquêteur
-            self::FIELD_IDX_ENQUETEUR    => $this->urlParams[self::FIELD_IDX_ENQUETEUR],
-            // L'id du District Attorney
-            self::FIELD_IDX_DISTRICT_ATT => $this->urlParams[self::FIELD_IDX_DISTRICT_ATT],
-            // Le résyumé des faits
-            self::FIELD_RESUME_FAITS     => $this->urlParams[self::FIELD_RESUME_FAITS],
-            // La description de la scène de crime
-            self::FIELD_DESC_SCENE_CRIME => $this->urlParams[self::FIELD_DESC_SCENE_CRIME],
-            // Les pistes et les démarches
-            self::FIELD_PISTES_DEMARCHES => $this->urlParams[self::FIELD_PISTES_DEMARCHES],
-            // Les notes diverses
-            self::FIELD_NOTES_DIVERSES   => $this->urlParams[self::FIELD_NOTES_DIVERSES],
-            // La date de dernière modification
-            self::FIELD_DLAST            => UtilitiesBean::getCopsDate('tsnow'),
-        );
-        // Selon que c'est une mise à jour ou une création, on a un traitement légèrement différent.
-        if ($this->urlParams[self::FIELD_ID]!='') {
-            $attributes[self::FIELD_ID] = $this->urlParams[self::FIELD_ID];
-            $objCopsEnquete = new CopsEnquete($attributes);
-            $this->CopsEnqueteServices->updateEnquete($objCopsEnquete);
-        } else {
-            $attributes[self::FIELD_DSTART] = UtilitiesBean::getCopsDate('tsnow');
-            $attributes[self::FIELD_STATUT_ENQUETE] = self::CST_ENQUETE_OPENED;
-            $objCopsEnquete = new CopsEnquete($attributes);
-            $this->CopsEnqueteServices->insertEnquete($objCopsEnquete);
-        }
-        ////////////////////////////////////////////
-        
-        // TODO :
-        // Gérer les données relatives aux tables annexes.
-        // Enquêtes de personnalité
-        // Témoins / Suspects
-        // Chronologie
-        // Autopsie
-        // Analyse de scène de crime
-    }
+
 }

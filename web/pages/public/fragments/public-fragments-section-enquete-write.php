@@ -53,8 +53,8 @@
       <div class="form-group">
         <div id="resumeFaitsTab" class="note-editor note-frame card">
           <div class="note-editing-area">
-            <textarea id="resumeFaits" class="form-control" style="height: 300px; display: none;" name="compose-textarea"></textarea>
-            <div class="note-editable card-block" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
+            <textarea id="resumeFaits" class="form-control" style="height: 300px; display: none;" name="resumeFaits"></textarea>
+            <div class="note-editable card-block" data-input="#resumeFaits" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" autocorrect="true">
                 %6$s
             </div>
           </div>

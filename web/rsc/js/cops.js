@@ -101,6 +101,9 @@ $(document).ready(function() {
 			  }
 		  }); 
 	  });
+	  $('.note-editable').on('blur', function(){
+        $($(this).data('input')).val($(this).html());
+      });
   }
   
   if ($('textarea[data-resize="auto"]').length!=0) {
