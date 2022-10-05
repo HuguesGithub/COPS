@@ -72,6 +72,9 @@ class UtilitiesBean implements ConstantsInterface
             case 'tsnow' :
                 $formatted = mktime($h, $i, $s, $m, $d, $y);
                 break;
+            case 'Y-m-d' :
+                $formatted = date('Y-m-d', mktime($h, $i, $s, $m, $d, $y));
+                break;
             default :
                 $formatted = $format;
                 break;

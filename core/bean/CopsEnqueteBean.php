@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * CopsEnqueteBean
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.22.09.23
+ * @version 1.22.10.04
  */
 class CopsEnqueteBean extends CopsBean
 {
@@ -107,7 +107,7 @@ class CopsEnqueteBean extends CopsBean
     /**
      * @return string
      * @since 1.22.09.20
-     * @version 1.22.09.21
+     * @version 1.22.10.04
      */
     public function getWriteEnqueteBlock()
     {
@@ -117,7 +117,29 @@ class CopsEnqueteBean extends CopsBean
         // Gestion d'édition (création ou modification) d'un dossier d'enquête
         // On récupère l'objet CopsEnquete en fonction de l'id.
         // Attention, si CopsEnquete n'est pas ouvert, on doit rediriger vers une simple vision.
-        
+		
+		$strSelectDistrictAttorneys = '';
+		
+		$strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
+		$strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
+		$strSQL .= "INNER JOIN wp_7_cops_index AS ci ON cbp.idxId=ci.id ";
+		$strSQL .= "WHERE dateDebut<='".self::getCopsDate('Y-m-d')."' ";
+		$strSQL .= "AND (dateFin>='".self::getCopsDate('Y-m-d')."' OR dateFin IS NULL) ";
+		$strSQL .= "ORDER BY nomIdx ASC;";
+		$rows = MySQL::wpdbSelect($strSQL);
+		$sel = $this->obj->getField(self::FIELD_IDX_DISTRICT_ATT);
+		while (!empty($rows)) {
+			$row = array_shift($rows);
+			$args = array(self::ATTR_VALUE=>$row->cbpId);
+			if ($sel==$row->cbpId) {
+			    $args[self::CST_SELECTED] = self::CST_SELECTED;
+			}
+			$strSelectDistrictAttorneys .= $this->getBalise(self::TAG_OPTION, $row->nomIdx, $args);
+		}
+		
+		$strRapportFCID = 'Aucun rapport disponible';
+		$strRapportAutopsie = 'Aucun rapport disponible';
+		
         $attributes = array(
             // Id de l'enquête, s'il existe
             $this->obj->getField(self::FIELD_ID),
@@ -128,15 +150,15 @@ class CopsEnqueteBean extends CopsBean
             // Select pour premier enquêteur
             '',
             // Select pour DA
-            '',
+            $strSelectDistrictAttorneys,
             // Résumé des faits
             $this->obj->getField(self::FIELD_RESUME_FAITS),
             // Scène de crime
             $this->obj->getField(self::FIELD_DESC_SCENE_CRIME),
             // Rapports FCID
-            '',
+            $strRapportFCID,
             // Autopsies
-            '',
+            $strRapportAutopsie,
             // Pistes & Démarches
             $this->obj->getField(self::FIELD_PISTES_DEMARCHES),
             // Notes diverses

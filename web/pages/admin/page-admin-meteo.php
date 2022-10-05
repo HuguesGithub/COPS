@@ -53,5 +53,4 @@
   </div>
 </div>
 
-<div class="main-body">
-</div>
+<div class="main-body">%4$s</div>

@@ -48,7 +48,7 @@ class CopsMeteo extends LocalDomain
     $this->stringClass = 'CopsMeteo';
 
     // Pattern des données issues du site web extérieur
-    $this->pattern = "/th>([0-9:]*).*title=\"([a-zA-Z\. ]*).*wt-([0-9]*).*>([0-9]*)&nbsp;°.*>(N\/A|No wind|[0-9]* km\/h)<.*comp sa([0-9]*)\".*>([0-9]*)%.*>([0-9]*) mbar.*>(N\/A|([0-9]*)&nbsp;km).*</";
+    $this->pattern = "/th>([0-9:]*).*title=\"([a-zA-Z\. ]*).*wt-([0-9]*).*>([0-9]*)&nbsp;°.*>(N\/A|No wind|[0-9]* km\/h)<.*comp sa([0-9]*)\".*>([0-9]*)%.*>(N\/A|([0-9]*) mbar).*>(N\/A|([0-9]*)&nbsp;km).*</";
   }
   /**
    * @param array $row

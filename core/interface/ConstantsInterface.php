@@ -70,6 +70,7 @@ interface ConstantsInterface
   const CST_ENQUETE_WRITE      = 'write';
   
   const CST_ONGLET             = 'onglet';
+  const CST_SELECTED           = 'selected';
   const CST_SUBONGLET          = 'subOnglet';
   const CST_URL                = 'url';
 
@@ -190,8 +191,8 @@ interface ConstantsInterface
   /////////////////////////////////////////////////
   // Icons
   //const I_EDIT                 = 'edit';
-  const I_BACKWARD             = 'backward';
-  const I_FILE_CIRCLE_PLUS     = 'file-circle-plus';
+  const I_BACKWARD              = 'backward';
+  const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
   const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
   const I_FILE_CIRCLE_XMARK     = 'file-circle-xmark';
   
