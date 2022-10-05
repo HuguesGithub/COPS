@@ -295,13 +295,6 @@ border-color: #4b545c;
     top: 3px;
 }
 
-#weather .section .prec canvas, #weather .section div {
-    left: 0;
-    position: absolute;
-    text-align: center;
-    width: 100%;
-    z-index: 1;
-}
 
 .wicon {
     background-position: 50%;
@@ -353,13 +346,6 @@ border-color: #4b545c;
     width: 40px;
 }
 
-#weather .section .prec canvas, #weather .section div {
-    left: 0;
-    position: absolute;
-    text-align: center;
-    width: 100%;
-    z-index: 1;
-}
 #weather .wind {
     border-top: 1px solid #ddd;
     border-top: 1px solid hsla(0,0%,8%,.1);

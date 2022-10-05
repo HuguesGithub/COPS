@@ -21,7 +21,7 @@ class CopsEnqueteBean extends CopsBean
     /**
      * @return string
      * @since 1.22.09.20
-     * @version 1.22.09.21
+     * @version 1.22.10.05
      */
     public function getCopsEnqueteRow()
     {
@@ -45,8 +45,9 @@ class CopsEnqueteBean extends CopsBean
             case self::CST_ENQUETE_OPENED :
             default :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE;
+                $label = "Transférer au District Attorney";
                 $strActionsPossibles  = $this->buildActionLink(
-                    self::CST_FILE_CLOSED, self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, "Transférer au District Attorney"
+                    self::CST_FILE_CLOSED, self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, $label
                 );
                 $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(
                     self::CST_FILE_COLDED, self::CST_ENQUETE_COLDED, self::I_FILE_CIRCLE_XMARK, "Classer l'enquête"
