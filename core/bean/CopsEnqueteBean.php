@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * CopsEnqueteBean
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.22.10.04
+ * @version 1.22.10.06
  */
 class CopsEnqueteBean extends CopsBean
 {
@@ -21,7 +21,7 @@ class CopsEnqueteBean extends CopsBean
     /**
      * @return string
      * @since 1.22.09.20
-     * @version 1.22.10.05
+     * @version 1.22.10.06
      */
     public function getCopsEnqueteRow()
     {
@@ -29,7 +29,7 @@ class CopsEnqueteBean extends CopsBean
         $id          = $this->obj->getField(self::FIELD_ID);
         $intSince    = $this->obj->getField(self::FIELD_DSTART);
         $intLast     = $this->obj->getField(self::FIELD_DLAST);
-        
+
         switch ($this->obj->getField(self::FIELD_STATUT_ENQUETE)) {
             case self::CST_ENQUETE_CLOSED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
@@ -37,9 +37,8 @@ class CopsEnqueteBean extends CopsBean
                 break;
             case self::CST_ENQUETE_COLDED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
-                $attributes = array();
                 $strActionsPossibles  = $this->buildActionLink(
-                    self::CST_FILE_OPENED, self::CST_ENQUETE_OPENED, self::I_FILE_CIRCLE_PLUS, "Réouvrir l'enquête"
+                    self::CST_FILE_OPENED, self::CST_ENQUETE_OPENED, self::I_FILE_OPENED, "Réouvrir l'enquête"
                 );
                 break;
             case self::CST_ENQUETE_OPENED :
@@ -47,10 +46,10 @@ class CopsEnqueteBean extends CopsBean
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE;
                 $label = "Transférer au District Attorney";
                 $strActionsPossibles  = $this->buildActionLink(
-                    self::CST_FILE_CLOSED, self::CST_ENQUETE_CLOSED, self::I_FILE_CIRCLE_CHECK, $label
+                    self::CST_FILE_CLOSED, self::CST_ENQUETE_CLOSED, self::I_FILE_CLOSED, $label
                 );
                 $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(
-                    self::CST_FILE_COLDED, self::CST_ENQUETE_COLDED, self::I_FILE_CIRCLE_XMARK, "Classer l'enquête"
+                    self::CST_FILE_COLDED, self::CST_ENQUETE_COLDED, self::I_FILE_COLDED, "Classer l'enquête"
                 );
                 break;
         }
@@ -69,10 +68,10 @@ class CopsEnqueteBean extends CopsBean
             // Actions possibles
             $strActionsPossibles,
         );
-        
+
         return $this->getRender($urlTemplate, $attributes);
     }
-    
+
     private function buildActionLink($subOnglet, $action, $icon, $title)
     {
         $id       = $this->obj->getField(self::FIELD_ID);
@@ -118,34 +117,34 @@ class CopsEnqueteBean extends CopsBean
         // Gestion d'édition (création ou modification) d'un dossier d'enquête
         // On récupère l'objet CopsEnquete en fonction de l'id.
         // Attention, si CopsEnquete n'est pas ouvert, on doit rediriger vers une simple vision.
-		
-		$strSelectDistrictAttorneys = '';
-		
-		$strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
-		$strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
-		$strSQL .= "INNER JOIN wp_7_cops_index AS ci ON cbp.idxId=ci.id ";
-		$strSQL .= "WHERE dateDebut<='".self::getCopsDate('Y-m-d')."' ";
-		$strSQL .= "AND (dateFin>='".self::getCopsDate('Y-m-d')."' OR dateFin IS NULL) ";
-		$strSQL .= "ORDER BY nomIdx ASC;";
-		$rows = MySQL::wpdbSelect($strSQL);
-		$sel = $this->obj->getField(self::FIELD_IDX_DISTRICT_ATT);
-		while (!empty($rows)) {
-			$row = array_shift($rows);
-			$args = array(self::ATTR_VALUE=>$row->cbpId);
-			if ($sel==$row->cbpId) {
-			    $args[self::CST_SELECTED] = self::CST_SELECTED;
-			}
-			$strSelectDistrictAttorneys .= $this->getBalise(self::TAG_OPTION, $row->nomIdx, $args);
-		}
-		
-		$strRapportFCID = 'Aucun rapport disponible';
-		$strRapportAutopsie = 'Aucun rapport disponible';
-		
+
+    $strSelectDistrictAttorneys = '';
+
+    $strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
+    $strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
+    $strSQL .= "INNER JOIN wp_7_cops_index AS ci ON cbp.idxId=ci.id ";
+    $strSQL .= "WHERE dateDebut<='".self::getCopsDate('Y-m-d')."' ";
+    $strSQL .= "AND (dateFin>='".self::getCopsDate('Y-m-d')."' OR dateFin IS NULL) ";
+    $strSQL .= "ORDER BY nomIdx ASC;";
+    $rows = MySQL::wpdbSelect($strSQL);
+    $sel = $this->obj->getField(self::FIELD_IDX_DISTRICT_ATT);
+    while (!empty($rows)) {
+      $row = array_shift($rows);
+      $args = array(self::ATTR_VALUE=>$row->cbpId);
+      if ($sel==$row->cbpId) {
+          $args[self::CST_SELECTED] = self::CST_SELECTED;
+      }
+      $strSelectDistrictAttorneys .= $this->getBalise(self::TAG_OPTION, $row->nomIdx, $args);
+    }
+
+    $strRapportSID = 'Aucun rapport disponible';
+    $strRapportAutopsie = 'Aucun rapport disponible';
+
         $attributes = array(
             // Id de l'enquête, s'il existe
             $this->obj->getField(self::FIELD_ID),
             // Url pour Annuler
-            '/admin?onglet=enquete',
+            $this->urlOnglet,
             // Nom de l'enquête
             $this->obj->getField(self::FIELD_NOM_ENQUETE),
             // Select pour premier enquêteur
@@ -157,7 +156,7 @@ class CopsEnqueteBean extends CopsBean
             // Scène de crime
             $this->obj->getField(self::FIELD_DESC_SCENE_CRIME),
             // Rapports FCID
-            $strRapportFCID,
+            $strRapportSID,
             // Autopsies
             $strRapportAutopsie,
             // Pistes & Démarches
@@ -170,17 +169,71 @@ class CopsEnqueteBean extends CopsBean
             '',
             // Chronologie
             '',
-            
+
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
         );
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
-    
+
+    /**
+     * @return string
+     * @since 1.22.10.06
+     * @version 1.22.10.06
+     */
     public function getReadEnqueteBlock()
     {
-        return '';
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquete-read.php';
+        /////////////////////////////////////////
+        // Construction du panneau de droite
+        // On récupère l'objet CopsEnquete en fonction de l'id.
+        $strRapportSID = 'Aucun rapport disponible';
+        $strRapportAutopsie = 'Aucun rapport disponible';
+
+        $strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
+        $strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
+        $strSQL .= "INNER JOIN wp_7_cops_index AS ci ON cbp.idxId=ci.id ";
+        $strSQL .= "WHERE cbp.id = ".$this->obj->getField(self::FIELD_IDX_DISTRICT_ATT).";";
+        $rows = MySQL::wpdbSelect($strSQL);
+        if (!empty($rows)) {
+          $row = array_shift($rows);
+          $strSelectDistrictAttorneys = $row->nomIdx;
+        } else {
+          $strSelectDistrictAttorneys = '';
+        }
+
+        $attributes = array(
+            // Nom de l'enquête
+            $this->obj->getField(self::FIELD_NOM_ENQUETE),
+            // Select pour premier enquêteur
+            '',
+            // Select pour DA
+            $strSelectDistrictAttorneys,
+            // Résumé des faits
+            $this->obj->getField(self::FIELD_RESUME_FAITS),
+            // Scène de crime
+            $this->obj->getField(self::FIELD_DESC_SCENE_CRIME),
+            // Rapports FCID
+            $strRapportSID,
+            // Autopsies
+            $strRapportAutopsie,
+            // Pistes & Démarches
+            $this->obj->getField(self::FIELD_PISTES_DEMARCHES),
+            // Enquêtes Personnalités
+            '',
+            // Témoins / Suspects
+            '',
+            // Chronologie
+            '',
+            // Notes diverses
+            $this->obj->getField(self::FIELD_NOTES_DIVERSES),
+
+            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+        );
+        /////////////////////////////////////////
+        return $this->getRender($urlTemplate, $attributes);
     }
-    
+
 }

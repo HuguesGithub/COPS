@@ -136,80 +136,82 @@ class AdminPageMeteoBean extends AdminPageBean
         $m = substr($strDateMeteo, 4, 2)*1;
         for ($i=0; $i<$nbDays; $i++) {
             $n = date('w', mktime(0, 0, 0, $m, $i+1, $y));
-    
             for ($j=0; $j<4; $j++) {
-                // on récupère les données du jour entre deux créneaux horaires.
-                $strSql  = "SELECT * FROM wp_7_cops_meteo ";
-                $strSql .= "WHERE dateMeteo = '$strDateMeteo".str_pad(1+$i, 2, '0', STR_PAD_LEFT);
-                $strSql .= "' AND heureMeteo BETWEEN '".str_pad($j*6, 2, '0', STR_PAD_LEFT);
-                $strSql .= ":00' AND '".str_pad(($j+1)*6, 2, '0', STR_PAD_LEFT).":00' ORDER BY heureMeteo ASC;";
-                $rows = MySQL::wpdbSelect($strSql);
-              
-                $maxDayT = -100;
-                $minDayT = 100;
-                $sumForceVent = 0;
-                $nbMesures = 0;
-                $arrWeather = array();
-                while (!empty($rows)) {
-                    $row = array_shift($rows);
-                    $temperature = $row->temperature;
-                    $maxDayT = max($maxDayT, $temperature);
-                    $minDayT = min($minDayT, $temperature);
-                    $sumForceVent += $row->forceVent;
-                    $nbMesures++;
-                    if (isset($arrWeather[$row->weatherId])) {
-                        $arrWeather[$row->weatherId]++;
-                    } else {
-                        $arrWeather[$row->weatherId] = 1;
-                    }
-                }
-                arsort($arrWeather);
-                $weatherId = array_key_first($arrWeather);
-                if ($weatherId=='') {
-                    $weatherId = 36;
-                }
-                
-                $decalMin = 2;
-                $decalMax = 4.5;
-                
-                $posMin = 270-($decalMin+$minDayT-$minT)*$height/3;
-                $posMax = 270-($decalMax+$maxDayT-$minT)*$height/3;
-                $posLog = $posMax-50;
-                if ($weatherId==36) {
-                    $posLog = 80;
-                    $posMax = 120;
-                }
-              
-                $attributes = array(
-                    // L'identifiant
-                    $i*4+$j,
-                    // La date 'jeu 1 sep'
-                    $this->arrShortDays[$n].' '.($i+1).' '.$this->arrShortMonths[$m],
-                    // Position Texte pour t° minimale
-                    $posMin,
-                    // Température minimale
-                    $minDayT,
-                    // L'heure du début du créneau
-                    str_pad($j*6, 2, '0', STR_PAD_LEFT),
-                    // Le type du logo
-                    $weatherId,
-                    // La position du Logo
-                    $posLog,
-                    // Position texte pour t° maximale
-                    $posMax,
-                    // Température maximale
-                    $maxDayT,
-                    // Rotation pour sens du vent
-                    '',
-                    // Force du vent
-                    ($nbMesures==0 ? 0 : round($sumForceVent/$nbMesures, 0)),
-                );
-                $strSectionColumns .= $this->getRender($this->urlTemplateGrapheMeteoColumn, $attributes);
+                $strSectionColumns .= $this->dealWithAQuarterOfDay($strDateMeteo, $i, $j, $n, $m, $minT, $height);
             }
         }
     }
 
-
+    private function dealWithAQuarterOfDay($strDateMeteo, $i, $j, $n, $m, $minT, $height)
+    {
+        // on récupère les données du jour entre deux créneaux horaires.
+        $strSql  = "SELECT * FROM wp_7_cops_meteo ";
+        $strSql .= "WHERE dateMeteo = '$strDateMeteo".str_pad(1+$i, 2, '0', STR_PAD_LEFT);
+        $strSql .= "' AND heureMeteo BETWEEN '".str_pad($j*6, 2, '0', STR_PAD_LEFT);
+        $strSql .= ":00' AND '".str_pad(($j+1)*6, 2, '0', STR_PAD_LEFT).":00' ORDER BY heureMeteo ASC;";
+        $rows = MySQL::wpdbSelect($strSql);
+        
+        $maxDayT = -100;
+        $minDayT = 100;
+        $sumForceVent = 0;
+        $nbMesures = 0;
+        $arrWeather = array();
+        while (!empty($rows)) {
+            $row = array_shift($rows);
+            $temperature = $row->temperature;
+            $maxDayT = max($maxDayT, $temperature);
+            $minDayT = min($minDayT, $temperature);
+            $sumForceVent += $row->forceVent;
+            $nbMesures++;
+            if (isset($arrWeather[$row->weatherId])) {
+                $arrWeather[$row->weatherId]++;
+            } else {
+                $arrWeather[$row->weatherId] = 1;
+            }
+        }
+        arsort($arrWeather);
+        $weatherId = array_key_first($arrWeather);
+        if ($weatherId=='') {
+            $weatherId = 36;
+        }
+        
+        $decalMin = 2;
+        $decalMax = 4.5;
+        
+        $posMin = 270-($decalMin+$minDayT-$minT)*$height/3;
+        $posMax = 270-($decalMax+$maxDayT-$minT)*$height/3;
+        $posLog = $posMax-50;
+        if ($weatherId==36) {
+            $posLog = 80;
+            $posMax = 120;
+        }
+        
+        $attributes = array(
+            // L'identifiant
+            $i*4+$j,
+            // La date 'jeu 1 sep'
+            $this->arrShortDays[$n].' '.($i+1).' '.$this->arrShortMonths[$m],
+            // Position Texte pour t° minimale
+            $posMin,
+            // Température minimale
+            $minDayT,
+            // L'heure du début du créneau
+            str_pad($j*6, 2, '0', STR_PAD_LEFT),
+            // Le type du logo
+            $weatherId,
+            // La position du Logo
+            $posLog,
+            // Position texte pour t° maximale
+            $posMax,
+            // Température maximale
+            $maxDayT,
+            // Rotation pour sens du vent
+            '',
+            // Force du vent
+            ($nbMesures==0 ? 0 : round($sumForceVent/$nbMesures, 0)),
+        );
+        return $this->getRender($this->urlTemplateGrapheMeteoColumn, $attributes);
+    }
 
 
 }

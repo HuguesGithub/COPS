@@ -54,7 +54,7 @@
           </div>
             <div class="col-12 input-group mb-3">
                 <div class="col-6">
-                  <label for="rapportFid" class="form-label">Rapport FID</label>
+                  <label for="rapportFid" class="form-label">Rapport SID</label>
                   %8$s
                 </div>
                 <div class="col-6">

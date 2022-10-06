@@ -6,14 +6,14 @@ if (!defined('ABSPATH')) {
  * Classe AdminCopsPageBean
  * @author Hugues
  * @since 1.22.04.27
- * @version 1.22.05.30
+ * @version 1.22.10.06
  */
 class AdminCopsPageBean extends UtilitiesBean
 {
   /**
    * Class Constructor
    * @since 1.22.04.27
-   * @version 1.22.04.29
+   * @version 1.22.10.06
    */
   public function __construct()
   {
@@ -28,16 +28,11 @@ class AdminCopsPageBean extends UtilitiesBean
         self::FIELD_MATRICULE => $_POST[self::FIELD_MATRICULE],
         self::FIELD_PASSWORD  => ($_POST[self::FIELD_PASSWORD]=='' ? '' : md5($_POST[self::FIELD_PASSWORD])),
       );
-      $CopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-      if (!empty($CopsPlayers)) {
-        $this->CopsPlayer = array_shift($CopsPlayers);
+      $objsCopsPlayer = $this->CopsPlayerServices->getCopsPlayers($attributes);
+      if (!empty($objsCopsPlayer)) {
+        $this->CopsPlayer = array_shift($objsCopsPlayer);
         $_SESSION[self::FIELD_MATRICULE] = $_POST[self::FIELD_MATRICULE];
       } else {
-        /*
-        $CopsPlayer = new CopsPlayer($attributes[self::SQL_WHERE_FILTERS]);
-        $this->CopsPlayerServices->insert($CopsPlayer);
-        $this->CopsPlayer = $CopsPlayer;
-        */
         $_SESSION[self::FIELD_MATRICULE] = 'err_login';
       }
     } elseif (isset($_GET['logout'])) {
@@ -84,7 +79,7 @@ class AdminCopsPageBean extends UtilitiesBean
   /**
    * @return string
    * @since 1.22.04.27
-   * @version 1.22.05.30
+   * @version 1.22.10.06
    */
   public function getContentPage()
   {
@@ -92,19 +87,16 @@ class AdminCopsPageBean extends UtilitiesBean
       // Soit on n'est pas loggué et on affiche la mire d'identification.
       // Celle-ci est invisible et passe visible en cas de souris qui bouge ou touche cliquée.
       $urlTemplate = 'web/pages/public/fragments/public-fragments-section-connexion-panel.php';
-      if (isset($_SESSION[self::FIELD_MATRICULE])) {
-        switch ($_SESSION[self::FIELD_MATRICULE]) {
-          case 'err_login' :
-            $strNotification  = "Une erreur est survenue lors de la saisie de votre identifiant et de votre mot de passe.<br>";
-            $strNotification .= "L'un des champs était vide, ou les deux ne correspondaient pas à une valeur attendue.<br>";
-            $strNotification .= "Veuillez réessayer ou contacter un administrateur.<br><br>";
-            unset($_SESSION[self::FIELD_MATRICULE]);
-          break;
-          default :
-            $strNotification = '';
-          break;
-        }
+      if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]=='err_login') {
+        $strNotification  = "Une erreur est survenue lors de la saisie de votre identifiant et de votre ";
+        $strNotification .= "mot de passe.<br>L'un des champs était vide, ou les deux ne correspondaient";
+        $strNotification .= " pas à une valeur attendue.<br>Veuillez réessayer ou contacter un ";
+        $strNotification .=  "administrateur.<br><br>";
+        unset($_SESSION[self::FIELD_MATRICULE]);
+      } else {
+        $strNotification = '';
       }
+
       $attributes = array(
         ($strNotification=='' ? 'd-none' : ''),
         $strNotification,
@@ -115,28 +107,28 @@ class AdminCopsPageBean extends UtilitiesBean
     try {
       switch ($this->urlParams[self::CST_ONGLET]) {
         case self::ONGLET_CALENDAR :
-          $Bean = AdminCopsCalendarPageBean::getCalendarBean($this->urlParams[self::CST_SUBONGLET]);
-          $returned = $Bean->getBoard();
+          $objBean = AdminCopsCalendarPageBean::getCalendarBean($this->urlParams[self::CST_SUBONGLET]);
+          $returned = $objBean->getBoard();
         break;
         case self::ONGLET_INBOX :
-          $Bean = new AdminCopsInboxPageBean();
-          $returned = $Bean->getBoard();
+          $objBean = new AdminCopsInboxPageBean();
+          $returned = $objBean->getBoard();
         break;
         case self::ONGLET_LIBRARY :
-          $Bean = new AdminCopsLibraryPageBean();
-          $returned = $Bean->getBoard();
+          $objBean = new AdminCopsLibraryPageBean();
+          $returned = $objBean->getBoard();
         break;
         case 'player' :
-          $Bean = new AdminCopsPlayerPageBean();
-          $returned = $Bean->getBoard();
+          $objBean = new AdminCopsPlayerPageBean();
+          $returned = $objBean->getBoard();
         break;
         case self::ONGLET_PROFILE :
-          $Bean = new AdminCopsProfilePageBean();
-          $returned = $Bean->getBoard();
+          $objBean = new AdminCopsProfilePageBean();
+          $returned = $objBean->getBoard();
         break;
         case self::ONGLET_ENQUETE :
-          $Bean = new AdminCopsEnquetePageBean();
-          $returned = $Bean->getBoard();
+          $objBean = new AdminCopsEnquetePageBean();
+          $returned = $objBean->getBoard();
         break;
         case self::ONGLET_DESK   :
         default       :
@@ -170,6 +162,10 @@ class AdminCopsPageBean extends UtilitiesBean
       $this->CopsPlayer->getFullName(),
       // La barre de navigation
       $this->getNavigationBar(),
+      // Header
+      '',
+      // Version
+      self::VERSION,
 
       '', '', '', '', '', '', '', '', '', '', '',
     );
@@ -178,145 +174,167 @@ class AdminCopsPageBean extends UtilitiesBean
 
   /*
    * @since 1.22.06.09
-   * @version 1.22.06.21
+   * @version 1.22.10.06
    */
   public function buildBreadCrumbs($label, $slug=null, $hasDropdown=false)
   {
-    $this->breadCrumbs  = '<div class="btn-group float-sm-right">';
     // Le lien vers la Home
-    $this->breadCrumbs .= '<button type="button" class="btn btn-sm btn-dark"><a class="text-white" href="/admin/"><i class="fa-solid fa-desktop"></i></a></button>';
+    $aContent = $this->getIcon('desktop');
+    $aAttributes = array(self::ATTR_HREF=>'/admin/', self::ATTR_CLASS=>'text-white');
+    $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+    $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
+    $breadCrumbsContent = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+
     // Le lien intermédiaire ou final si slug vaut null
     if ($slug==null) {
-      $this->breadCrumbs .= '<button type="button" class="btn btn-sm btn-dark disabled">'.$label.'</button>';
+      $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
+      $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
     } else {
-      $this->breadCrumbs .= '<button type="button" class="btn btn-sm btn-dark"><a class="text-white" href="/admin?onglet='.$slug.'">'.$label.'</a></button>';
+      $aAttributes = array(self::ATTR_HREF=>'/admin?onglet='.$slug, self::ATTR_CLASS=>'text-white');
+      $buttonContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
+      $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
+      $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+
       // Le lien ou le dropdown selon le type de mixed
       if ($hasDropdown===true) {
-        $this->breadCrumbs .= '<div class="btn-group">';
-        $this->breadCrumbs .= '<button type="button" class="btn btn-sm btn-dark dropdown-toggle" data-toggle="dropdown">'.$this->arrSubOnglets[$this->subOnglet]['label'].'</button>';
-        $this->breadCrumbs .= '<div class="dropdown-menu">';
+        $breadCrumbsContent .= '<div class="btn-group">';
+        $buttonContent = $this->arrSubOnglets[$this->subOnglet][self::FIELD_LABEL];
+        $buttonAttributes = array(
+          'type'           => self::TAG_BUTTON,
+          self::ATTR_CLASS => 'btn btn-sm btn-dark dropdown-toggle',
+          'data-toggle'    => 'dropdown',
+        );
+        $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+        $breadCrumbsContent .= '<div class="dropdown-menu">';
         foreach ($this->arrSubOnglets as $subOnglet => $arrData) {
-          if ($arrData['label']=='' || !isset($arrData[self::FIELD_ICON])) {
+          if ($arrData[self::FIELD_LABEL]=='' || !isset($arrData[self::FIELD_ICON])) {
             continue;
           }
           $url = '/admin?onglet='.$slug.'&subOnglet='.$subOnglet.(isset($arrData['url']) ? '&'.$arrData['url'] : '');
-          $this->breadCrumbs .= '<a class="dropdown-item btn-sm" href="'.$url.'">'.$arrData['label'].'</a>';
+          $breadCrumbsContent .= '<a class="dropdown-item btn-sm" href="'.$url.'">'.$arrData[self::FIELD_LABEL].'</a>';
         }
-        $this->breadCrumbs .= '</div>';
-        $this->breadCrumbs .= '</div>';
+        $breadCrumbsContent .= '</div>';
+        $breadCrumbsContent .= '</div>';
       } elseif ($hasDropdown!==false) {
-        $this->breadCrumbs .= '<button type="button" class="btn btn-sm btn-dark disabled">'.$hasDropdown.'</button>';
+        $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
+        $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $hasDropdown, $buttonAttributes);
       }
     }
-    $this->breadCrumbs .= '</div>';
+
+    $divAttributes = array(self::ATTR_CLASS=>'btn-group float-sm-right');
+    $this->breadCrumbs = $this->getBalise(self::TAG_DIV, $breadCrumbsContent, $divAttributes);
   }
 
   /*
    * @since 1.22.04.27
-   * @version 1.22.05.30
+   * @version 1.22.10.06
    */
   protected function getSideBar()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-sidebar.php';
-    if ($_SESSION[self::FIELD_MATRICULE]=='Guest') {
-      $arrSidebarContent = array(
-        'COPS' => array(
-          self::ONGLET_DESK => array(
-            self::FIELD_ICON  => 'fa-solid fa-desktop',
-            self::FIELD_LABEL => 'Bureau',
-          ),
-          self::ONGLET_LIBRARY => array(
-            self::FIELD_ICON  => 'fa-solid fa-book',
-            self::FIELD_LABEL => 'Bibliothèque',
-          ),
+    $arrSidebarContent = array(
+        self::ONGLET_DESK => array(
+          self::FIELD_ICON  => 'desktop',
+          self::FIELD_LABEL => 'Bureau',
         ),
-      );
-    } else {
+        self::ONGLET_LIBRARY => array(
+          self::FIELD_ICON  => 'book',
+          self::FIELD_LABEL => 'Bibliothèque',
+        ),
+    );
+    if ($_SESSION[self::FIELD_MATRICULE]!='Guest') {
       $arrSidebarContent = array(
-        'COPS' => array(
           self::ONGLET_DESK => array(
-            self::FIELD_ICON  => 'fa-solid fa-desktop',
+            self::FIELD_ICON  => 'desktop',
             self::FIELD_LABEL => 'Bureau',
           ),
           self::ONGLET_INBOX => array(
-            self::FIELD_ICON  => 'fa-solid fa-envelope',
+            self::FIELD_ICON  => 'envelope',
             self::FIELD_LABEL => 'Messagerie',
           ),
             self::ONGLET_ENQUETE => array(
-            self::FIELD_ICON  => 'fa-solid fa-file-lines',
+            self::FIELD_ICON  => self::I_FILE_CATEGORY,
             self::FIELD_LABEL => 'Enquêtes',
           ),
           self::ONGLET_CALENDAR => array(
-            self::FIELD_ICON  => 'fa-solid fa-calendar-days',
-            self::FIELD_LABEL => 'Calendrier',
-            'children'        => array(
+            self::FIELD_ICON   => 'calendar-days',
+            self::FIELD_LABEL  => 'Calendrier',
+            self::CST_CHILDREN => array(
               self::CST_CAL_MONTH  => 'Calendrier',
               self::CST_CAL_EVENT  => 'Événements',
               self::CST_CAL_PARAM  => 'Paramètres',
             ),
           ),
           self::ONGLET_ARCHIVE => array(
-            self::FIELD_ICON  => 'fa-solid fa-box-archive',
+            self::FIELD_ICON  => 'box-archive',
             self::FIELD_LABEL => 'Archives',
           ),
           self::ONGLET_LIBRARY => array(
-            self::FIELD_ICON  => 'fa-solid fa-book',
+            self::FIELD_ICON  => 'book',
             self::FIELD_LABEL => 'Bibliothèque',
           ),
-        ),
+          'player' => array(
+            self::FIELD_ICON   => 'user',
+            self::FIELD_LABEL  => 'Personnage',
+            self::CST_CHILDREN => array(
+              'player-carac'  => 'Caractéristiques',
+              'player-comps'  => 'Compétences',
+              'player-story'  => 'Background',
+            ),
+          ),
       );
     }
-    /*
-        'player' => array(
-          'icon' => 'fa-solid fa-user',
-          'label' => 'Personnage',
-          'children' => array(
-            'player-carac' => 'Caractéristiques',
-            'player-comps' => 'Compétences',
-            'player-story' => 'Background',
-          ),
-        ),
-    */
 
     $sidebarContent = '';
-    foreach ($arrSidebarContent as $strHeader => $arrItems) {
-      //$sidebarContent .= '<li class="nav-header">'.$strHeader.'</li>';
-      foreach ($arrItems as $strOnglet => $arrOnglet) {
-        $sidebarContent .= '<li class="nav-item'.(($strOnglet==$this->urlParams[self::CST_ONGLET])?' menu-open' : '').'"><a href="/admin?onglet='.$strOnglet.'" class="nav-link';
-        $sidebarContent .= (($strOnglet==$this->urlParams[self::CST_ONGLET])?' active' : '').'"><i class="nav-icon '.$arrOnglet['icon'];
-        $sidebarContent .= '"></i><p>'.$arrOnglet['label'];
-        if (isset($arrOnglet['children'])) {
-          $sidebarContent .= '<i class="fas fa-angle-left right"></i>';
-        }
-        $sidebarContent .= '</p></a>';
-        if (isset($arrOnglet['children'])) {
-          $sidebarContent .= '<ul class="nav nav-treeview">';
-          foreach ($arrOnglet['children'] as $strSubOnglet => $label) {
-            $extraClass = (($strSubOnglet==$this->urlParams['subOnglet'])?' active' : '');
-            // Cas spéciaux :
-            if ($this->urlParams['subOnglet']=='date' && $strSubOnglet=='allDates') {
-              $extraClass = ' active';
-            }
-            $sidebarContent .= '<li class="nav-item"><a href="/admin?onglet='.$strOnglet.'&amp;subOnglet='.$strSubOnglet.'" class="nav-link'.$extraClass.'"><i class="far fa-circle nav-icon"></i><p>'.$label.'</p></a></li>';
-          }
-          $sidebarContent .= '</ul>';
-        }
-        $sidebarContent .= '</li>';
-      }
-    }
+      foreach ($arrSidebarContent as $strOnglet => $arrOnglet) {
+        $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
+        $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
 
-    $str_copsDate = get_option('cops_date');
-    $his = substr($str_copsDate, 0, 8);
-    $d = substr($str_copsDate, 9, 2);
-    $m = substr($str_copsDate, 12, 2);
-    $y = substr($str_copsDate, 15, 4);
+        // Construction du label
+        $pContent  = $arrOnglet[self::FIELD_LABEL];
+        $pContent .= ($hasChildren ? $this->getIcon(self::I_ANGLE_LEFT, 'right') : '');
+
+        // Construction du lien
+        $aContent  = $this->getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
+        $aContent .= $this->getBalise(self::TAG_P, $pContent);
+        $aAttributes = array(
+          self::ATTR_HREF  => '/admin?onglet='.$strOnglet,
+          self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' active' : ''),
+        );
+        $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+
+        // S'il a des enfants, on enrichit
+        if ($hasChildren) {
+          $ulContent = '';
+          foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
+            if ($strSubOnglet==$this->urlParams[self::CST_SUBONGLET] ||
+                $this->urlParams[self::CST_SUBONGLET]=='date' && $strSubOnglet=='allDates') {
+              $extraClass = ' active';
+            } else {
+              $extraClass = '';
+            }
+            $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
+            $aAttributes = array(
+              self::ATTR_HREF  => '/admin?onglet='.$strOnglet.'&amp;subOnglet='.$strSubOnglet,
+              self::ATTR_CLASS => 'nav-link'.$extraClass,
+            );
+            $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+            $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
+          }
+          $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, array(self::ATTR_CLASS=>'nav nav-treeview'));
+        }
+
+        // Construction de l'élément de la liste
+        $liAttributes = array(self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : ''));
+        $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
+      }
 
     $attributes = array(
       $sidebarContent,
       // La date
-      date('D m-d-Y', mktime(1, 0, 0, $m, $d, $y)),
+      self::getCopsDate('D m-d-Y'),
       // L'heure
-      $his,
+      self::getCopsDate('H:i:s'),
     );
     return $this->getRender($urlTemplate, $attributes);
   }
@@ -440,23 +458,6 @@ class AdminCopsPageBean extends UtilitiesBean
         </div>
     */
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   /**

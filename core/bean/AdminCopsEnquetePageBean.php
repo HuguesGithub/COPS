@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe AdminCopsEnquetePageBean
  * @author Hugues
  * @since 1.22.09.20
- * @version 1.22.09.24
+ * @version 1.22.10.06
  */
 class AdminCopsEnquetePageBean extends AdminCopsPageBean
 {
@@ -17,9 +17,9 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
         /////////////////////////////////////////
         // Construction du menu de l'inbox
         $this->arrSubOnglets = array(
-            self::CST_FILE_OPENED  => array(self::FIELD_ICON  => 'file-circle-plus', self::FIELD_LABEL => 'En cours'),
-            self::CST_FILE_CLOSED  => array(self::FIELD_ICON  => 'file-circle-check', self::FIELD_LABEL => 'Classées'),
-            self::CST_FILE_COLDED  => array(self::FIELD_ICON  => 'file-circle-xmark', self::FIELD_LABEL => 'Cold Case'),
+            self::CST_FILE_OPENED  => array(self::FIELD_ICON  => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'),
+            self::CST_FILE_CLOSED  => array(self::FIELD_ICON  => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'),
+            self::CST_FILE_COLDED  => array(self::FIELD_ICON  => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'),
             self::CST_FOLDER_READ  => array(self::FIELD_LABEL => 'Lire'),
             self::CST_FOLDER_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
         );
@@ -31,20 +31,20 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
         // Définition des services
         $this->CopsEnqueteServices = new CopsEnqueteServices();
     }
-    
+
     /**
      * @return string
      * @since 1.22.09.20
-     * @version 1.22.09.24
+     * @version 1.22.10.06
      */
     public function getBoard()
     {
         $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_FILE_OPENED);
         $this->buildBreadCrumbs('Enquêtes', self::ONGLET_ENQUETE, true);
-    
+
         ////////////////////////////////////////////////////////
-        if (isset($this->urlParams['writeAction'])) {
-            // Insertion / Mise à jour de l'enquête saisie via le formulare
+        if (isset($this->urlParams[self::CST_WRITE_ACTION])) {
+            // Insertion / Mise à jour de l'enquête saisie via le formulaire
             // Mais seulement si le nom de l'enquête a été saisi.
             if ($this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
                 if ($this->urlParams[self::FIELD_ID]!='') {
@@ -53,7 +53,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
                     $this->CopsEnquete = CopsEnqueteActions::insertEnquete($this->urlParams);
                 }
             }
-        } elseif (isset($this->urlParams['action'])) {
+        } elseif (isset($this->urlParams[self::CST_ACTION])) {
             // Mise à jour du statut (et donc de la dernière date de modification) sur le lien de la liste.
             // On récupère l'enquête associée à l'id.
             $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
@@ -62,14 +62,14 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             if ($this->CopsEnquete->getField(self::FIELD_ID)==$this->urlParams[self::FIELD_ID]
                 && $intStatut!=self::CST_ENQUETE_CLOSED
                 && ($intStatut==self::CST_ENQUETE_OPENED
-                    || $intStatut==self::CST_ENQUETE_COLDED && $this->urlParams['action']==self::CST_ENQUETE_OPENED)) {
+                    || $intStatut==self::CST_ENQUETE_COLDED && $this->urlParams[self::CST_ACTION]==self::CST_ENQUETE_OPENED)) {
                         // Si l'enquête existe.
                         // Si l'enquête n'est pas déjà transférée au DA.
                         // Si l'enquête est coldcase, elle ne peut pas être transférée au DA
-                
+
                         // Si tout est bon,
                         // on classe une enquête, on la réouvre ou on la transfère au DA
-                        $this->CopsEnquete->setField(self::FIELD_STATUT_ENQUETE, $this->urlParams['action']);
+                        $this->CopsEnquete->setField(self::FIELD_STATUT_ENQUETE, $this->urlParams[self::CST_ACTION]);
                         $this->CopsEnquete->setField(self::FIELD_DLAST, self::getCopsDate('tsnow'));
                         $this->CopsEnqueteServices->updateEnquete($this->CopsEnquete);
             }
@@ -78,7 +78,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             $this->CopsEnquete = $this->CopsEnqueteServices->getEnquete($this->urlParams[self::FIELD_ID]);
         }
         ////////////////////////////////////////////////////////
-        
+
         $urlTemplate = 'web/pages/public/public-board.php';
         $attributes = array(
             // La sidebar
@@ -93,6 +93,8 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             $this->getNavigationBar(),
             // Le content header
             $this->getContentHeader(),
+            // Version
+            self::VERSION,
             '', '', '', '', '', '', '', '', '', '', '',
         );
         return $this->getRender($urlTemplate, $attributes);
@@ -100,17 +102,17 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
 
     /**
      * @since 1.22.09.20
-     * @version 1.22.09.21
+     * @version 1.22.10.06
      */
     public function getOngletContent()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes.php';
-        
+
         /////////////////////////////////////////
         // Construction du panneau de droite
         $strBtnClass = 'btn btn-primary btn-block mb-3';
         switch ($this->subOnglet) {
-            case self::CST_FOLDER_READ :
+            case self::CST_ENQUETE_READ :
                 $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
                 $attributes = array (
                     self::ATTR_HREF  => $this->urlOnglet,
@@ -118,8 +120,13 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
                 );
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             break;
-            case self::CST_FOLDER_WRITE :
-                $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
+            case self::CST_ENQUETE_WRITE :
+                if ($this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)!=self::CST_ENQUETE_OPENED) {
+                    // Si on est sur une enquête non ouverte, on ne peut pas l'éditer.
+                    $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
+                } else {
+                    $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
+                }
                 $attributes = array (
                     self::ATTR_HREF  => $this->urlOnglet,
                     self::ATTR_CLASS => $strBtnClass,
@@ -179,7 +186,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
        /////////////////////////////////////////
        return $strLeftPanel;
     }
-  
+
     /**
      * @since 1.22.09.20
      * @version 1.22.09.20
@@ -208,7 +215,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
                 ));
             break;
         }
-    
+
         $objsCopsEnquete = $this->CopsEnqueteServices->getEnquetes($attributes);
         if (empty($objsCopsEnquete)) {
             $strContent = '<tr><td class="text-center">Aucune enquête.<br></td></tr>';
@@ -222,7 +229,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
         // Gestion de la pagination
         $strPagination = '';
         /////////////////////////////////////////
-    
+
         $attributes = array(
             // Titre du dossier affiché
             $this->arrSubOnglets[$this->subOnglet][self::FIELD_LABEL],

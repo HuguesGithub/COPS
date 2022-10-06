@@ -58,7 +58,7 @@ class UtilitiesBean implements ConstantsInterface
         $dmy = substr($strCopsDate, 9);
         $tsCops = mktime($h, $i, $s, $m, $d, $y);
         $objUtilitiesBean = new UtilitiesBean();
-        
+
         switch ($format) {
             case 'strJour' :
                 $attributes = array(
@@ -72,8 +72,10 @@ class UtilitiesBean implements ConstantsInterface
             case 'tsnow' :
                 $formatted = mktime($h, $i, $s, $m, $d, $y);
                 break;
-            case 'Y-m-d' :
-                $formatted = date('Y-m-d', mktime($h, $i, $s, $m, $d, $y));
+            case 'H:i:s'   :
+            case 'D m-d-Y' :
+            case 'Y-m-d'   :
+                $formatted = date($format, mktime($h, $i, $s, $m, $d, $y));
                 break;
             default :
                 $formatted = $format;
@@ -81,7 +83,7 @@ class UtilitiesBean implements ConstantsInterface
         }
         return $formatted;
     }
-     
+
     /**
      * @param array $attributes
      * @return array
@@ -96,7 +98,7 @@ class UtilitiesBean implements ConstantsInterface
         }
         return $extraAttributes;
     }
-  
+
     /**
      * @param string $balise
      * @param string $label
@@ -115,22 +117,37 @@ class UtilitiesBean implements ConstantsInterface
     /**
      * @param string
      * @return string
+     * @version 1.22.10.06
      */
-    public function getIcon($tag)
+    public function getIcon($tag, $prefix='', $label='')
     {
+      if ($prefix!='') {
+        $prefix .= ' ';
+      }
         switch ($tag) {
             case self::I_BACKWARD :
+            case self::I_CIRCLE :
+            case self::I_FILE_CATEGORY :
+            case self::I_FILE_OPENED :
+            case self::I_FILE_CLOSED :
+            case self::I_FILE_COLDED :
             case self::I_FILE_CIRCLE_CHECK :
             case self::I_FILE_CIRCLE_PLUS :
             case self::I_FILE_CIRCLE_XMARK :
-                $prefix = 'fa-solid fa-';
+            case 'desktop' :
+            case 'envelope' :
+            case 'calendar-days' :
+            case 'box-archive' :
+            case 'book' :
+            case self::I_ANGLE_LEFT :
+                $prefix .= 'fa-solid fa-';
             break;
             default :
-                $prefix = 'fa-solid fa-biohazard';
+                $prefix .= 'fa-solid fa-biohazard';
                 $tag = '';
             break;
         }
-        return $this->getBalise(self::TAG_I, '', array(self::ATTR_CLASS=>$prefix.$tag));
+        return $this->getBalise(self::TAG_I, $label, array(self::ATTR_CLASS=>$prefix.$tag));
     }
     /**
      * @param string $id
@@ -147,7 +164,7 @@ class UtilitiesBean implements ConstantsInterface
         }
         return $default;
     }
-    
+
     /**
      * @return string
      */
@@ -183,3 +200,4 @@ class UtilitiesBean implements ConstantsInterface
     }
 
 }
+
