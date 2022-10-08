@@ -20,7 +20,8 @@ class AdminCopsPageBean extends UtilitiesBean
     $this->analyzeUri();
     $this->CopsPlayerServices = new CopsPlayerServices();
     $this->CopsMailServices   = new CopsMailServices();
-
+    $this->urlOnglet = '/admin/?'.self::CST_ONGLET.'=';
+    
     if (isset($_POST[self::FIELD_MATRICULE])) {
       // On cherche a priori à se logguer
       $attributes[self::SQL_WHERE_FILTERS] = array(
@@ -130,6 +131,10 @@ class AdminCopsPageBean extends UtilitiesBean
           $objBean = new AdminCopsEnquetePageBean();
           $returned = $objBean->getBoard();
         break;
+        case self::ONGLET_AUTOPSIE :
+            $objBean = new AdminCopsAutopsiePageBean();
+            $returned = $objBean->getBoard();
+            break;
         case self::ONGLET_DESK   :
         default       :
           $returned = $this->getBoard();
@@ -190,7 +195,7 @@ class AdminCopsPageBean extends UtilitiesBean
       $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
       $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
     } else {
-      $aAttributes = array(self::ATTR_HREF=>'/admin?onglet='.$slug, self::ATTR_CLASS=>'text-white');
+      $aAttributes = array(self::ATTR_HREF=>$this->urlOnglet.$slug, self::ATTR_CLASS=>'text-white');
       $buttonContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
       $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
       $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
@@ -210,7 +215,7 @@ class AdminCopsPageBean extends UtilitiesBean
           if ($arrData[self::FIELD_LABEL]=='' || !isset($arrData[self::FIELD_ICON])) {
             continue;
           }
-          $url = '/admin?onglet='.$slug.'&subOnglet='.$subOnglet.(isset($arrData['url']) ? '&'.$arrData['url'] : '');
+          $url = $this->urlOnglet.$slug.'&subOnglet='.$subOnglet.(isset($arrData['url']) ? '&'.$arrData['url'] : '');
           $breadCrumbsContent .= '<a class="dropdown-item btn-sm" href="'.$url.'">'.$arrData[self::FIELD_LABEL].'</a>';
         }
         $breadCrumbsContent .= '</div>';
@@ -298,7 +303,7 @@ class AdminCopsPageBean extends UtilitiesBean
         $aContent  = $this->getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
         $aContent .= $this->getBalise(self::TAG_P, $pContent);
         $aAttributes = array(
-          self::ATTR_HREF  => '/admin?onglet='.$strOnglet,
+            self::ATTR_HREF  => $this->urlOnglet.$strOnglet,
           self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' active' : ''),
         );
         $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
@@ -315,7 +320,7 @@ class AdminCopsPageBean extends UtilitiesBean
             }
             $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
             $aAttributes = array(
-              self::ATTR_HREF  => '/admin?onglet='.$strOnglet.'&amp;subOnglet='.$strSubOnglet,
+                self::ATTR_HREF  => $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet,
               self::ATTR_CLASS => 'nav-link'.$extraClass,
             );
             $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);

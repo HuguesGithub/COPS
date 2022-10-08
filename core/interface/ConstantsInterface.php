@@ -202,6 +202,7 @@ interface ConstantsInterface
   /////////////////////////////////////////////////
   // Onglets
   const ONGLET_ARCHIVE         = 'archive';
+  const ONGLET_AUTOPSIE        = 'autopsie';
   const ONGLET_CALENDAR        = 'calendar';
   const ONGLET_ENQUETE         = 'enquete';
   const ONGLET_INBOX           = 'inbox';

@@ -17,11 +17,11 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
         /////////////////////////////////////////
         // Construction du menu de l'inbox
         $this->arrSubOnglets = array(
-            self::CST_FILE_OPENED  => array(self::FIELD_ICON  => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'),
-            self::CST_FILE_CLOSED  => array(self::FIELD_ICON  => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'),
-            self::CST_FILE_COLDED  => array(self::FIELD_ICON  => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'),
-            self::CST_FOLDER_READ  => array(self::FIELD_LABEL => 'Lire'),
-            self::CST_FOLDER_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
+            self::CST_FILE_OPENED => array(self::FIELD_ICON => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'),
+            self::CST_FILE_CLOSED => array(self::FIELD_ICON => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'),
+            self::CST_FILE_COLDED => array(self::FIELD_ICON => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'),
+            self::CST_ENQUETE_READ => array(self::FIELD_LABEL => 'Lire'),
+            self::CST_ENQUETE_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
         );
         /////////////////////////////////////////
         $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_ENQUETE;
@@ -62,7 +62,8 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             if ($this->CopsEnquete->getField(self::FIELD_ID)==$this->urlParams[self::FIELD_ID]
                 && $intStatut!=self::CST_ENQUETE_CLOSED
                 && ($intStatut==self::CST_ENQUETE_OPENED
-                    || $intStatut==self::CST_ENQUETE_COLDED && $this->urlParams[self::CST_ACTION]==self::CST_ENQUETE_OPENED)) {
+                    || $intStatut==self::CST_ENQUETE_COLDED
+                    && $this->urlParams[self::CST_ACTION]==self::CST_ENQUETE_OPENED)) {
                         // Si l'enquête existe.
                         // Si l'enquête n'est pas déjà transférée au DA.
                         // Si l'enquête est coldcase, elle ne peut pas être transférée au DA

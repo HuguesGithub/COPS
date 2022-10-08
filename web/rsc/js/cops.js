@@ -141,9 +141,9 @@ $(document).ready(function() {
 });
 
 function stretchColspanEvents() {
-  var tdWidth = $('.fc-scrollgrid-sync-table td:first').width();
+  let tdWidth = $('.fc-scrollgrid-sync-table td:first').width();
   $('.fc-daygrid-event-harness[data-colspan!="0"]').each(function(){
-    var nbDays = $(this).data('colspan');
+    let nbDays = $(this).data('colspan');
     $(this).css('right', -1*nbDays*(tdWidth+2));
   });
 }
@@ -166,7 +166,7 @@ function closeModal(id) {
 }
 
 function enableMailboxControls() {
-  var checkeds = $('.mailbox-messages input[type=\'checkbox\']:checked').length;
+  let checkeds = $('.mailbox-messages input[type=\'checkbox\']:checked').length;
   if (checkeds>1) {
     $('.mailbox-controls .fa-trash-alt').parent().removeClass('disabled');
     $('.mailbox-controls .fa-reply').parent().addClass('disabled');
@@ -185,9 +185,9 @@ function enableMailboxControls() {
 
 
 function ajaxActionChange(obj) {
-  var id = obj.attr('id');
-  var actions = obj.data('ajax').split(',');
-  for (i=0; i<actions.length; i++) {
+  let id = obj.attr('id');
+  let actions = obj.data('ajax').split(',');
+  for (var i=0; i<actions.length; i++) {
     switch (actions[i]) {
       case 'saveData' :
         saveData(obj);
@@ -202,7 +202,7 @@ function ajaxActionChange(obj) {
           if (id=='carac-carrure') {
             $('#carac-health-points').val(20+3*obj.val());
           } else if (id=='carac-charme' || id=='carac-education') {
-            var maxValue = ($('#carac-charme').val()>$('#carac-education').val() ? $('#carac-charme').val() : $('#carac-education').val());
+            let maxValue = ($('#carac-charme').val()>$('#carac-education').val() ? $('#carac-charme').val() : $('#carac-education').val());
             $('#card-langues select').each(function(idx) {
               if (idx<maxValue) {
                 $(this).show();
@@ -223,7 +223,7 @@ function ajaxActionChange(obj) {
 }
 
 function saveData(obj) {
-  var data = {'action': 'dealWithAjax', 'ajaxAction': 'saveData', 'field': obj.attr('id'), 'value': obj.val(), 'id': obj.data('objid')};
+  let data = {'action': 'dealWithAjax', 'ajaxAction': 'saveData', 'field': obj.attr('id'), 'value': obj.val(), 'id': obj.data('objid')};
 
   // On a un appel ajax pour rechercher les équivalences au numéro
   $.post(
@@ -246,7 +246,7 @@ function saveData(obj) {
 }
 
 function checkLangues() {
-  var bln_cardLangue_OK = true;
+  let bln_cardLangue_OK = true;
   $('#card-langues select').each(function(){
     if ($(this).is(':visible') && $(this).val()=='') {
       bln_cardLangue_OK = false;
@@ -272,7 +272,7 @@ function checkCaracFormulaire() {
 }
 
 function checkCaracteristiques() {
-  var sumCaracPoints = 0;
+  let sumCaracPoints = 0;
   $('#card-caracs input').each(function(){
     sumCaracPoints += $(this).val()*1;
   });
@@ -289,8 +289,8 @@ function checkCaracteristiques() {
 }
 
 function checkCaracteristique(id) {
-  var bln_OK = true;
-  var value = $('#'+id).val();
+  let bln_OK = true;
+  let value = $('#'+id).val();
   // On va vérifier que la caractéristique est supérieure ou égale à 2 et inférieure ou égale à 5
   if (value<2) {
     displayToast('<div class="toast show bg-warning"><div class="toast-header"><i class="fas fa-exclamation-circle mr-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Une caractéristique ne peut pas être plus basse que 2.</div></div>');
@@ -323,7 +323,7 @@ function displayToast(value) {
 //////////////////////////////////////////////////////////////////////////////
 // Fonction d'entrée pour rediriger vers le bon contrôle
 function controlerFormulaire(formId) {
-  var blnOk = false;
+  let blnOk = false;
   switch (formId) {
     case '#creerNewEvent' :
       blnOk = controlerFormulaireCreerNewEvent();
@@ -334,7 +334,7 @@ function controlerFormulaire(formId) {
 // Fonction de contrôler pour création d'un nouvel événement
 function controlerFormulaireCreerNewEvent() {
   $('#creerNewEvent .border-danger').removeClass('border-danger');
-  var blnOk = true;
+  let blnOk = true;
   if (estVide('#eventLibelle')) {
     $('#eventLibelle').addClass('border-danger');
     blnOk = false;
@@ -378,15 +378,15 @@ function estVide(target) {
 }
 // La valeur de l'objet passé en paramètre est-il une date
 function estDateValide(target) {
-  var blnOk = true;
+  let blnOk = true;
   if (estVide(target)) {
     blnOk = false;
   } else {
-    var datas = $(target).val().trim().split('/');
+    let datas = $(target).val().trim().split('/');
     if (datas.length!=3) {
       blnOk = false;
     } else {
-      var d = new Date(datas[2], datas[1], datas[0]);
+      let d = new Date(datas[2], datas[1], datas[0]);
       blnOk = (d.getDate()==datas[0]*1 && d.getMonth()==datas[1]*1);
     }
   }
@@ -394,16 +394,16 @@ function estDateValide(target) {
 }
 // La première date est-elle supérieure à la deuxième
 function estDateSuperieure(dStart, dEnd) {
-  var dataStart = $(dStart).val().trim().split('/');
-  var dateStart = new Date(dataStart[2], dataStart[1], dataStart[0]);
-  var dataEnd   = $(dEnd).val().trim().split('/');
-  var dateEnd   = new Date(dataEnd[2], dataEnd[1], dataEnd[0]);
+  let dataStart = $(dStart).val().trim().split('/');
+  let dateStart = new Date(dataStart[2], dataStart[1], dataStart[0]);
+  let dataEnd   = $(dEnd).val().trim().split('/');
+  let dateEnd   = new Date(dataEnd[2], dataEnd[1], dataEnd[0]);
   return (dateStart>dateEnd);
 }
 // La première date est-elle égale à la deuxième
 function estDateEgale(dStart, dEnd) {
-  var dataStart = $(dStart).val().trim().split('/');
-  var dataEnd   = $(dEnd).val().trim().split('/');
+  let dataStart = $(dStart).val().trim().split('/');
+  let dataEnd   = $(dEnd).val().trim().split('/');
   console.log(dataStart);
   console.log(dataEnd);
   return (dataStart[2]==dataEnd[2] && dataStart[1]==dataEnd[1] && dataStart[0]==dataEnd[0]);

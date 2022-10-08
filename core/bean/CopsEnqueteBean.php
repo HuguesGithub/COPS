@@ -16,6 +16,7 @@ class CopsEnqueteBean extends CopsBean
         $this->obj          = ($objStd==null ? new CopsEnquete() : $objStd);
         $this->urlOnglet   .= self::ONGLET_ENQUETE;
         $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
+        $this->strNoRapportDisponible = 'Aucun rapport disponible';
     }
 
     /**
@@ -137,8 +138,8 @@ class CopsEnqueteBean extends CopsBean
       $strSelectDistrictAttorneys .= $this->getBalise(self::TAG_OPTION, $row->nomIdx, $args);
     }
 
-    $strRapportSID = 'Aucun rapport disponible';
-    $strRapportAutopsie = 'Aucun rapport disponible';
+    $strRapportSID = $this->strNoRapportDisponible;
+    $strRapportAutopsie = $this->strNoRapportDisponible;
 
         $attributes = array(
             // Id de l'enquête, s'il existe
@@ -188,8 +189,8 @@ class CopsEnqueteBean extends CopsBean
         /////////////////////////////////////////
         // Construction du panneau de droite
         // On récupère l'objet CopsEnquete en fonction de l'id.
-        $strRapportSID = 'Aucun rapport disponible';
-        $strRapportAutopsie = 'Aucun rapport disponible';
+        $strRapportSID = $this->strNoRapportDisponible;
+        $strRapportAutopsie = $this->strNoRapportDisponible;
 
         $strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
         $strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
