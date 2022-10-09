@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe AdminCopsPageBean
  * @author Hugues
  * @since 1.22.04.27
- * @version 1.22.10.06
+ * @version 1.22.10.09
  */
 class AdminCopsPageBean extends UtilitiesBean
 {
@@ -481,7 +481,38 @@ class AdminCopsPageBean extends UtilitiesBean
     return $this->getRender($urlTemplate, $attributes);
   }
 
-
+  
+  /**
+   * @since 1.22.10.09
+   * @version 1.22.10.09
+   */
+    public function getFolderBlock()
+    {
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-li-menu-folder.php';
+        /////////////////////////////////////////
+        // Construction du panneau de gauche
+        $strLeftPanel = '';
+        foreach ($this->arrSubOnglets as $slug => $subOnglet) {
+            // On exclu les sous onglets sans icones
+            if (!isset($subOnglet[self::FIELD_ICON])) {
+                continue;
+            }
+            // On construit l'entrée de l'onglet/
+            $attributes = array(
+                // Menu sélectionné ou pas ?
+                ($slug==$this->subOnglet ? ' '.self::CST_ACTIVE : ''),
+                // L'url du folder
+                $this->baseUrl.$this->urlSubOnglet.$slug,
+                // L'icône
+                $subOnglet[self::FIELD_ICON],
+                // Le libellé
+                $subOnglet[self::FIELD_LABEL],
+            );
+            $strLeftPanel .= $this->getRender($urlTemplate, $attributes);
+        }
+        /////////////////////////////////////////
+        return $strLeftPanel;
+    }
 
 
 }

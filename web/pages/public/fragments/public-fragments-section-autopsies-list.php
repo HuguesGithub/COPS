@@ -17,7 +17,7 @@
         </div>
 
         <div class="table-responsive mailbox-messages">
-          <table class="table table-hover table-striped">
+          <table class="table table-hover table-striped" aria-describedby="Liste des autopsies">
             <tbody>
               %3$s
             </tbody>

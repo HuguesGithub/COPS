@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe AdminCopsAutopsiePageBean
  * @author Hugues
  * @since 1.22.10.08
- * @version 1.22.10.08
+ * @version 1.22.10.09
  */
 class AdminCopsAutopsiePageBean extends AdminCopsPageBean
 {
@@ -15,20 +15,34 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
         parent::__construct();
 
         /////////////////////////////////////////
-        $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_AUTOPSIE;
-        $this->urlSubOnglet = $this->urlOnglet.'&amp;'.self::CST_SUBONGLET.'=';
+        // Construction du menu
+        $this->arrSubOnglets = array(
+            self::CST_AUTOPSIE_ARCHIVE => array(self::FIELD_ICON => 'box-archive', self::FIELD_LABEL => 'Archive'),
+            self::CST_ENQUETE_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
+        );
+        /////////////////////////////////////////
+        $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'=';
+        $this->baseUrl      = $this->urlOnglet.self::ONGLET_AUTOPSIE;
+        $this->urlSubOnglet = '&amp;'.self::CST_SUBONGLET.'=';
+        
+        /////////////////////////////////////////
+        // Définition des services
+        $this->CopsAutopsieServices = new CopsAutopsieServices();
     }
 
     /**
      * @return string
      * @since 1.22.10.08
-     * @version 1.22.10.08
+     * @version 1.22.10.09
      */
     public function getBoard()
     {
-        $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_FILE_OPENED);
+        $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_AUTOPSIE_ARCHIVE);
         $this->buildBreadCrumbs('Autopsies', self::ONGLET_AUTOPSIE, true);
 
+        // On récupère l'autopsie associée à l'id.
+        $this->CopsAutopsie = $this->CopsAutopsieServices->getAutopsie($this->urlParams[self::FIELD_ID]);
+        
         ////////////////////////////////////////////////////////
         $urlTemplate = 'web/pages/public/public-board.php';
         $attributes = array(
@@ -62,17 +76,35 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
         /////////////////////////////////////////
         // Construction du panneau de droite
         $strBtnClass = 'btn btn-primary btn-block mb-3';
-        $strRightPanel   = $this->getFolderAutopsiesList();
-        $attributes = array (
-            self::ATTR_HREF  => $this->urlSubOnglet.self::CST_FOLDER_WRITE,
-            self::ATTR_CLASS => $strBtnClass,
-        );
-        $strContent = 'Débuter une autopsie';
+        if ($this->subOnglet==self::CST_ENQUETE_WRITE) {
+            /*
+        }
+            if ($this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)!=self::CST_ENQUETE_OPENED) {
+                // Si on est sur une enquête non ouverte, on ne peut pas l'éditer.
+                $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
+            } else {
+                $strRightPanel   = ;
+            }
+            */
+            $strRightPanel   = $this->CopsAutopsie->getBean()->getWriteAutopsieBlock();
+            $attributes = array (
+                self::ATTR_HREF  => $this->baseUrl,
+                self::ATTR_CLASS => $strBtnClass,
+            );
+            $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
+        } else {
+            $strRightPanel   = $this->getFolderAutopsiesList();
+            $attributes = array (
+                self::ATTR_HREF  => $this->baseUrl.$this->urlSubOnglet.self::CST_FOLDER_WRITE,
+                self::ATTR_CLASS => $strBtnClass,
+            );
+            $strContent = 'Débuter une autopsie';
+        }
         /////////////////////////////////////////
 
         $attributes = array(
             // Contenu du panneau latéral gauche
-            '',
+            $this->getFolderBlock(),
             // Contenu du panneau principal
             $strRightPanel,
             // Eventuel bouton de retour si on est en train de lire ou rédiger un message
@@ -80,12 +112,21 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
         );
         return $this->getRender($urlTemplate, $attributes);
     }
+    
+    /**
+     * @since 1.22.10.09
+     * @version 1.22.10.09
+     */
+    public function getWriteAutopsieBlock()
+    {
+        
+    }
 
     /**
      * @since 1.22.10.08
      * @version 1.22.10.08
      */
-    public function getFolderEnquetesList()
+    public function getFolderAutopsiesList()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-autopsies-list.php';
         /////////////////////////////////////////

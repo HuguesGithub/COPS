@@ -24,8 +24,8 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             self::CST_ENQUETE_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
         );
         /////////////////////////////////////////
-        $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_ENQUETE;
-        $this->urlSubOnglet = $this->urlOnglet.'&amp;'.self::CST_SUBONGLET.'=';
+        $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'=';
+        $this->urlSubOnglet = '&amp;'.self::CST_SUBONGLET.'=';
 
         /////////////////////////////////////////
         // Définition des services
@@ -116,7 +116,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             case self::CST_ENQUETE_READ :
                 $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
                 $attributes = array (
-                    self::ATTR_HREF  => $this->urlOnglet,
+                    self::ATTR_HREF  => $this->urlOnglet.self::ONGLET_ENQUETE,
                     self::ATTR_CLASS => $strBtnClass,
                 );
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
@@ -129,7 +129,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
                     $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
                 }
                 $attributes = array (
-                    self::ATTR_HREF  => $this->urlOnglet,
+                    self::ATTR_HREF  => $this->urlOnglet.self::ONGLET_ENQUETE,
                     self::ATTR_CLASS => $strBtnClass,
                 );
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
@@ -137,7 +137,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             default :
                 $strRightPanel   = $this->getFolderEnquetesList();
                 $attributes = array (
-                    self::ATTR_HREF  => $this->urlSubOnglet.self::CST_FOLDER_WRITE,
+                    self::ATTR_HREF  => self::ONGLET_ENQUETE.$this->urlSubOnglet.self::CST_FOLDER_WRITE,
                     self::ATTR_CLASS => $strBtnClass,
                 );
                 $strContent = 'Ouvrir une enquête';
@@ -154,38 +154,6 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             $this->getBalise(self::TAG_A, $strContent, $attributes),
         );
         return $this->getRender($urlTemplate, $attributes);
-    }
-
-    /**
-     * @since 1.22.09.20
-     * @version 1.22.09.21
-     */
-    public function getFolderBlock()
-    {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-li-menu-folder.php';
-        /////////////////////////////////////////
-        // Construction du panneau de gauche
-        $strLeftPanel = '';
-        foreach ($this->arrSubOnglets as $slug => $subOnglet) {
-            // On exclu les sous onglets sans icones
-            if (!isset($subOnglet[self::FIELD_ICON])) {
-                continue;
-            }
-            // On construit l'entrée de l'onglet/
-            $attributes = array(
-                // Menu sélectionné ou pas ?
-                ($slug==$this->subOnglet ? ' '.self::CST_ACTIVE : ''),
-                // L'url du folder
-                $this->urlSubOnglet.$slug,
-                // L'icône
-                $subOnglet[self::FIELD_ICON],
-                // Le libellé
-                $subOnglet[self::FIELD_LABEL],
-            );
-            $strLeftPanel .= $this->getRender($urlTemplate, $attributes);
-       }
-       /////////////////////////////////////////
-       return $strLeftPanel;
     }
 
     /**

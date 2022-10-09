@@ -6,6 +6,7 @@
  */
 interface ConstantsInterface
 {
+    const VERSION              = 'v1.22.10.09';
   /////////////////////////////////////////////////
   // Ajax Infos
   const AJAX_ACTION            = 'ajaxAction';
@@ -68,12 +69,17 @@ interface ConstantsInterface
   const CST_ENQUETE_COLDED     = 0;
   const CST_ENQUETE_READ       = 'read';
   const CST_ENQUETE_WRITE      = 'write';
+  // Subonglet Autopsie
+  const CST_AUTOPSIE_ARCHIVE   = 'archive';
   
+  const CST_ACTION             = 'action';
+  const CST_CHILDREN           = 'children';
   const CST_ONGLET             = 'onglet';
   const CST_SELECTED           = 'selected';
   const CST_SUBONGLET          = 'subOnglet';
   const CST_URL                = 'url';
-
+  const CST_WRITE_ACTION       = 'writeAction';
+  
   /////////////////////////////////////////////////
   // Fields
   const FIELD_ID               = 'id';
@@ -190,11 +196,18 @@ interface ConstantsInterface
 
   /////////////////////////////////////////////////
   // Icons
+  const I_CIRCLE                = 'circle';
   //const I_EDIT                 = 'edit';
   const I_BACKWARD              = 'backward';
+  const I_FILE_CATEGORY         = 'folder-tree';
   const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
   const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
   const I_FILE_CIRCLE_XMARK     = 'file-circle-xmark';
+  const I_FILE_OPENED           = 'folder-open';
+  const I_FILE_CLOSED           = 'folder-closed';
+  const I_FILE_COLDED           = 'folder';
+  const I_ANGLE_LEFT            = 'angle-left';
+  const I_ANGLE_RIGHT           = 'angle-right';
   
   /////////////////////////////////////////////////
   // Page d'administration
@@ -236,13 +249,15 @@ interface ConstantsInterface
   const TAG_IMG                = 'img';
   const TAG_LI                 = 'li';
   const TAG_OPTION             = 'option';
+  const TAG_P                  = 'p';
   const TAG_SELECT             = 'select';
   const TAG_SPAN               = 'span';
   const TAG_STRONG             = 'strong';
   const TAG_TD                 = 'td';
   const TAG_TH                 = 'th';
   const TAG_TR                 = 'tr';
-
+  const TAG_UL                 = 'ul';
+  
   /////////////////////////////////////////////////
   // Wordpress
   const WP_CAT                 = 'cat';

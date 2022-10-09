@@ -187,7 +187,7 @@ function enableMailboxControls() {
 function ajaxActionChange(obj) {
   let id = obj.attr('id');
   let actions = obj.data('ajax').split(',');
-  for (var i=0; i<actions.length; i++) {
+  for (let i=0; i<actions.length; i++) {
     switch (actions[i]) {
       case 'saveData' :
         saveData(obj);
