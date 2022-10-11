@@ -1,0 +1,89 @@
+<?php
+if (!defined('ABSPATH')) {
+  die('Forbidden');
+}
+/**
+ * CopsAutopsieActions
+ * @author Hugues
+ * @since 1.22.10.10
+ * @version 1.22.10.10
+ */
+class CopsAutopsieActions extends LocalActions
+{
+    //////////////////////////////////////////////////
+    // CONSTRUCT
+    //////////////////////////////////////////////////
+    /**
+     * @since 1.22.10.10
+     * @version 1.22.10.10
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->CopsAutopsieServices = new CopsAutopsieServices();
+    }
+
+    /**
+     * @since 1.22.10.10
+     * @version 1.22.10.10
+     */
+    public static function insertAutopsie($urlParams)
+    {
+        ////////////////////////////////////////////
+        // On créé le Service
+        $objCopsAutopsieServices = new CopsAutopsieServices();
+        // On créé l'objet
+        $objCopsAutopsie = new CopsAutopsie();
+        // On récupère les données passées en paramètres spécifiques à l'objet Autopsie
+        $objCopsAutopsie->setField(self::FIELD_IDX_ENQUETE, $urlParams[self::FIELD_IDX_ENQUETE]);
+        // On nettoie les données indésirables dans le champ data
+        unset($urlParams[self::CST_ONGLET]);
+        unset($urlParams[self::CST_SUBONGLET]);
+        unset($urlParams[self::CST_WRITE_ACTION]);
+        unset($urlParams[self::FIELD_ID]);
+        unset($urlParams[self::FIELD_IDX_ENQUETE]);
+        ////////////////////////////////////////////
+        $objCopsAutopsie->setField(self::FIELD_DATA, serialize($urlParams));
+        // On définit le timestamp du jeu
+        $tsNow = UtilitiesBean::getCopsDate('tsnow');
+        $objCopsAutopsie->setField(self::FIELD_DSTART, $tsNow);
+        ////////////////////////////////////////////
+        
+        ////////////////////////////////////////////
+        // On insère l'objet
+        $objCopsAutopsieServices->insertAutopsie($objCopsAutopsie);
+        return $objCopsAutopsie;
+    }
+    
+    /**
+     * @since 1.22.10.10
+     * @version 1.22.10.10
+     */
+    public static function updateAutopsie($urlParams)
+    {
+        ////////////////////////////////////////////
+        // On créé le Service
+        $objCopsAutopsieServices = new CopsAutopsieServices();
+        // On créé l'objet
+        $objCopsAutopsie = $objCopsAutopsieServices->getAutopsie($urlParams[self::FIELD_ID]);
+        // On définit le timestamp du jeu
+        $tsNow = UtilitiesBean::getCopsDate('tsnow');
+        ////////////////////////////////////////////
+        
+        ////////////////////////////////////////////
+        // On récupère les données passées en paramètres spécifiques à l'objet Autopsie
+        $objCopsAutopsie->setField(self::FIELD_IDX_ENQUETE, $urlParams['idxEnquete']);
+        // On nettoie quand même le _POST avant.
+        unset($urlParams['idxEnquete']);
+        $objCopsAutopsie->setField(self::FIELD_DATA, serialize($urlParams));
+        // Et on les enrichit de données supplémentaires.
+        $objCopsAutopsie->setField(self::FIELD_DLAST, $tsNow);
+        ////////////////////////////////////////////
+        
+        ////////////////////////////////////////////
+        // On insère l'objet
+        //$objCopsAutopsieServices->updateAutopsie($objCopsAutopsie);
+        return $objCopsAutopsie;
+    }
+    
+}

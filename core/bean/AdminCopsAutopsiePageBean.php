@@ -40,8 +40,17 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
         $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_AUTOPSIE_ARCHIVE);
         $this->buildBreadCrumbs('Autopsies', self::ONGLET_AUTOPSIE, true);
 
-        // On récupère l'autopsie associée à l'id.
-        $this->CopsAutopsie = $this->CopsAutopsieServices->getAutopsie($this->urlParams[self::FIELD_ID]);
+        if (isset($this->urlParams[self::CST_WRITE_ACTION])) {
+            // Insertion / Mise à jour de l'autopsie saisie via le formulaire
+            if ($this->urlParams[self::FIELD_ID]!='') {
+                $this->objCopsAutopsie = CopsAutopsieActions::updateAutopsie($this->urlParams);
+            } else {
+                $this->objCopsAutopsie = CopsAutopsieActions::insertAutopsie($this->urlParams);
+            }
+        } else {
+            // On récupère l'autopsie associée à l'id.
+            $this->objCopsAutopsie = $this->CopsAutopsieServices->getAutopsie($this->urlParams[self::FIELD_ID]);
+        }
         
         ////////////////////////////////////////////////////////
         $urlTemplate = 'web/pages/public/public-board.php';
@@ -77,16 +86,7 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
         // Construction du panneau de droite
         $strBtnClass = 'btn btn-primary btn-block mb-3';
         if ($this->subOnglet==self::CST_ENQUETE_WRITE) {
-            /*
-        }
-            if ($this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)!=self::CST_ENQUETE_OPENED) {
-                // Si on est sur une enquête non ouverte, on ne peut pas l'éditer.
-                $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
-            } else {
-                $strRightPanel   = ;
-            }
-            */
-            $strRightPanel   = $this->CopsAutopsie->getBean()->getWriteAutopsieBlock();
+            $strRightPanel   = $this->objCopsAutopsie->getBean()->getWriteAutopsieBlock();
             $attributes = array (
                 self::ATTR_HREF  => $this->baseUrl,
                 self::ATTR_CLASS => $strBtnClass,
@@ -111,15 +111,6 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
             $this->getBalise(self::TAG_A, $strContent, $attributes),
         );
         return $this->getRender($urlTemplate, $attributes);
-    }
-    
-    /**
-     * @since 1.22.10.09
-     * @version 1.22.10.09
-     */
-    public function getWriteAutopsieBlock()
-    {
-        
     }
 
     /**

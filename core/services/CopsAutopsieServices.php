@@ -76,16 +76,16 @@ class CopsAutopsieServices extends LocalServices
     }
   
     /**
-     * @since 1.22.09.24
-     * @version 1.22.09.24
+     * @since 1.22.10.10
+     * @version 1.22.10.10
      */
-    public function updateEnquete($objCopsEnquete)
-    { $this->Dao->updateEnquete($objCopsEnquete); }
+    public function updateAutopsie($objCopsAutopsie)
+    { $this->Dao->updateAutopsie($objCopsAutopsie); }
     
     /**
-     * @since 1.22.09.24
-     * @version 1.22.09.24
+     * @since 1.22.10.10
+     * @version 1.22.10.10
      */
-    public function insertEnquete(&$objCopsEnquete)
-    { $this->Dao->insertEnquete($objCopsEnquete); }
+    public function insertAutopsie(&$objCopsAutopsie)
+    { $this->Dao->insertAutopsie($objCopsAutopsie); }
 }

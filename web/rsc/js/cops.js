@@ -187,8 +187,8 @@ function enableMailboxControls() {
 function ajaxActionChange(obj) {
   let id = obj.attr('id');
   let actions = obj.data('ajax').split(',');
-  for (let i=0; i<actions.length; i++) {
-    switch (actions[i]) {
+	for (let oneAction of actions) {
+    switch (oneAction) {
       case 'saveData' :
         saveData(obj);
       break;
@@ -216,7 +216,7 @@ function ajaxActionChange(obj) {
         }
       break;
       default :
-        console.log(actions[i]+" n'est pas prévu comme valeur d'action Ajax.");
+        console.log(oneAction+" n'est pas prévu comme valeur d'action Ajax.");
       break;
     }
   }

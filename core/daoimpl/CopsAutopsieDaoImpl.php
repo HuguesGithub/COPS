@@ -54,13 +54,9 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
      * @since 1.22.10.09
      * @version 1.22.10.09
      */
-    public function getEnqueteAutopsies($attributes)
+    public function getAutopsies($attributes)
     {
-        $arrFields = array();
-        $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-        foreach ($rows as $row) {
-            $arrFields[] = $row->Field;
-        }
+        $arrFields  = $this->getFields();
         $request  = "SELECT ".implode(', ', $arrFields)." ";
         $request .= "FROM ".$this->dbTable." ";
         $request .= "WHERE idxEnquete LIKE %s ";
@@ -82,6 +78,45 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
             }
         }
         return $objItems;
+    }
+    
+    /**
+     * @since 1.22.10.10
+     * @version 1.22.10.10
+     */
+    public function updateAutopsie($objStd)
+    {
+        $request  = $this->update."WHERE id = '%s';";
+        
+        $prepObject = array();
+        $arrFields  = $this->getFields();
+        array_shift($arrFields);
+        foreach ($arrFields as $field) {
+            $prepObject[] = $objStd->getField($field);
+        }
+        $prepObject[] = $objStd->getField(self::FIELD_ID);
+        
+        $sql = MySQL::wpdbPrepare($request, $prepObject);
+        MySQL::wpdbQuery($sql);
+    }
+    
+    /**
+     * @since 1.22.10.10
+     * @version 1.22.10.10
+     */
+    public function insertAutopsie(&$objStd)
+    {
+        $request  = $this->insert;
+        
+        $prepObject = array();
+        $arrFields  = $this->getFields();
+        array_shift($arrFields);
+        foreach ($arrFields as $field) {
+            $prepObject[] = $objStd->getField($field);
+        }
+        $sql = MySQL::wpdbPrepare($request, $prepObject);
+        MySQL::wpdbQuery($sql);
+        $objStd->setField(self::FIELD_ID, MySQL::getLastInsertId());
     }
     
 }

@@ -194,10 +194,14 @@ interface ConstantsInterface
   const FIELD_STATUT_ENQUETE     = 'statutEnquete';
   const FIELD_DLAST              = 'dLast';
 
+  // TABLE cops_autopsie
+  const FIELD_IDX_ENQUETE        = 'idxEnquete';
+  const FIELD_DATA               = 'data';
+  
   /////////////////////////////////////////////////
   // Icons
   const I_CIRCLE                = 'circle';
-  //const I_EDIT                 = 'edit';
+  const I_EDIT                  = 'edit';
   const I_BACKWARD              = 'backward';
   const I_FILE_CATEGORY         = 'folder-tree';
   const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';

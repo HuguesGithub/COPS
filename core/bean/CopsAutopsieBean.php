@@ -115,38 +115,74 @@ class CopsAutopsieBean extends CopsBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-autopsie-write.php';
         /////////////////////////////////////////
         // Construction du panneau de droite
+        
+        // On récupère les infos relatives à l'id.
+        // On doit avoir les droits pour pouvoir éditer l'autopsie
+        
+        $data = unserialize($this->obj->getField(self::FIELD_DATA));
 
+        $strMaxilliaireG = '';
+        $strMaxilliaireD = '';
+        $strMandibuleG   = '';
+        $strMandibuleD   = '';
+        /*
+                      <input type="text" class="form-control col-1">
+                      <input type="text" class="form-control col-1">
+                      <input type="text" class="form-control col-1">
+                      <input type="text" class="form-control col-1">
+                      <input type="text" class="form-control col-1">
+                      <input type="text" class="form-control col-1">
+                      <input type="text" class="form-control col-1">
+         */
+        
         $attributes = array(
-            /*
-            // Id de l'enquête, s'il existe
-            $this->obj->getField(self::FIELD_ID),
-            // Url pour Annuler
-            $this->urlOnglet,
-            // Nom de l'enquête
-            $this->obj->getField(self::FIELD_NOM_ENQUETE),
-            // Select pour premier enquêteur
+            $data['numDossier'],
+            $data['dateHeureExamen'],
+            $data['praticiensMedicoLegaux'],
+            $data['nomPrenomVictime'],
+            $data['ageApparent'],
+            $data['circDecouverte'],
+            $data['dateHeureDeces'],
+            // Médico-légal
+            $data['poidsCoeur'],
+            $data['poidsRate'],
+            $data['poidsEncephale'],
+            $data['poidsFoie'],
+            $data['poidsPoumonG'],
+            $data['poidsReinG'],
+            $data['poidsPoumonD'],
+            $data['poidsReinD'],
+            // Photo
             '',
-            // Select pour DA
-            $strSelectDistrictAttorneys,
-            // Résumé des faits
-            $this->obj->getField(self::FIELD_RESUME_FAITS),
-            // Scène de crime
-            $this->obj->getField(self::FIELD_DESC_SCENE_CRIME),
-            // Rapports FCID
-            $strRapportSID,
-            // Autopsies
-            $strRapportAutopsie,
-            // Pistes & Démarches
-            $this->obj->getField(self::FIELD_PISTES_DEMARCHES),
-            // Notes diverses
-            $this->obj->getField(self::FIELD_NOTES_DIVERSES),
-            // Enquêtes Personnalités
-            '',
-            // Témoins / Suspects
-            '',
-            // Chronologie
-            '',
-*/
+            // Constatations
+            $data['constatations'],
+            // Ondotologie
+            $strMaxilliaireG,
+            $strMaxilliaireD,
+            $strMandibuleG,
+            $strMandibuleD,
+            // - 22
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            $data['a'],
+            
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
         );
