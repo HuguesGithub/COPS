@@ -1,16 +1,16 @@
 <form method="post" action="#">
     <div class="col-12 row">
         <div class="col-6">
-		<!-- Card Dossier -->
+        <!-- Card Dossier -->
             <div class="col-12">
 %3$s
-			</div>
-		<!-- / Fin Card Dossier -->
-		<!-- Card Médico-légal -->
+            </div>
+        <!-- / Fin Card Dossier -->
+        <!-- Card Médico-légal -->
             <div class="col-12">
 %4$s
             </div>
-		<!-- / Fin Card Médico-légal -->
+        <!-- / Fin Card Médico-légal -->
         </div>
         <div class="col-6">
             <div class="col-12">
@@ -134,12 +134,12 @@
             </div>
         </div>
     </div>
-	<div class="card-footer">
-		<input type="hidden" name="writeAction"/>
-		<input type="hidden" name="id" value="%1$s"/>
-    	<div class="float-right">
-      		<button type="submit" class="btn btn-primary" data-action="send"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
-    	</div>
-    	<a href="/admin?onglet=autopsie" class="text-white"><button type="reset" class="btn btn-default" data-action="cancel"><i class="fa-solid fa-times"></i> Annuler</button></a>
-	</div>
+    <div class="card-footer">
+        <input type="hidden" name="writeAction"/>
+        <input type="hidden" name="id" value="%1$s"/>
+        <div class="float-right">
+              <button type="submit" class="btn btn-primary" data-action="send"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
+        </div>
+        <a href="/admin?onglet=autopsie" class="text-white"><button type="reset" class="btn btn-default" data-action="cancel"><i class="fa-solid fa-times"></i> Annuler</button></a>
+    </div>
 </form>

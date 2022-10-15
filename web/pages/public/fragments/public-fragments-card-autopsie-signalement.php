@@ -27,37 +27,37 @@
                             </div>
                         </div>
     
-						<h5>Yeux</h5>
-						<div class="row">
-							<div class="col-6">
-								<div class="form-floating mb-3">
-									<input type="text" class="form-control" id="yeux_couleur" name="yeux_couleur"/>
-									<label for="yeux_couleur" class="col-form-label col-form-label-sm">Couleur</label>
-								</div>
-							</div>
-							<div class="col-6">
-								<div class="form-floating mb-3">
-									<input type="text" class="form-control" id="yeux_particularite" name="yeux_particularite"/>
-									<label for="yeux_particularite" class="col-form-label col-form-label-sm">Particularités</label>
-								</div>
-							</div>
-						</div>
-						<div class="input-group row mb-3">
-							<span class="col-form-label-sm col-3">Lunettes</span>
-							<div class="input-group-text form-control col-1">
-								<input class="form-check-input mt-0" type="checkbox" value="" name="lunettes" style="margin-left: 0px;">
-							</div>
-							<span class="col-1">&nbsp;</span>
-							<span class="col-form-label-sm col-3 offset-1">Forme</span>
-							<input type="text" class="form-control col-4" name="formeLunettes" value="">
-						</div>
-						<div class="input-group row mb-3">
-						  <span class="col-form-label-sm col-3">Lentilles</span>
-						  <div class="input-group-text form-control col-1">
-							<input class="form-check-input mt-0" type="checkbox" value="" name="lentilles" style="margin-left: 0px;">
-						  </div>
-						  <div class="col-8">&nbsp;</div>
-						</div>
+                        <h5>Yeux</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="yeux_couleur" name="yeux_couleur"/>
+                                    <label for="yeux_couleur" class="col-form-label col-form-label-sm">Couleur</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="yeux_particularite" name="yeux_particularite"/>
+                                    <label for="yeux_particularite" class="col-form-label col-form-label-sm">Particularités</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group row mb-3">
+                            <span class="col-form-label-sm col-3">Lunettes</span>
+                            <div class="input-group-text form-control col-1">
+                                <input class="form-check-input mt-0" type="checkbox" value="" name="lunettes" style="margin-left: 0px;">
+                            </div>
+                            <span class="col-1">&nbsp;</span>
+                            <span class="col-form-label-sm col-3 offset-1">Forme</span>
+                            <input type="text" class="form-control col-4" name="formeLunettes" value="">
+                        </div>
+                        <div class="input-group row mb-3">
+                          <span class="col-form-label-sm col-3">Lentilles</span>
+                          <div class="input-group-text form-control col-1">
+                            <input class="form-check-input mt-0" type="checkbox" value="" name="lentilles" style="margin-left: 0px;">
+                          </div>
+                          <div class="col-8">&nbsp;</div>
+                        </div>
     
                         <fieldset>
                             <legend>Cheveux</legend>

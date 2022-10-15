@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * CopsAutopsieBean
@@ -28,12 +28,12 @@ class CopsAutopsieBean extends CopsBean
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-tr-autopsie-row.php';
         $id          = $this->obj->getField(self::FIELD_ID);
-		$data        = unserialize($this->obj->getField(self::FIELD_DATA));
-		
+        $data        = unserialize($this->obj->getField(self::FIELD_DATA));
+        
         $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE . '&amp;id=' . $id;
-		$numDossier  = $data['numDossier'];
-		$objCopsEnquete = $this->obj->getCopsEnquete();
-		
+        $numDossier  = $data['numDossier'];
+        $objCopsEnquete = $this->obj->getCopsEnquete();
+        
         $attributes = array(
             // Id
             $id,
@@ -46,39 +46,6 @@ class CopsAutopsieBean extends CopsBean
         );
 
         return $this->getRender($urlTemplate, $attributes);
-    }
-
-/*
-    private function buildActionLink($subOnglet, $action, $icon, $title)
-    {
-        $id       = $this->obj->getField(self::FIELD_ID);
-        $url      = $this->urlSubOnglet . $subOnglet;
-        $url     .= '&amp;action='.$action.'&amp;id='.$id;
-        $aContent = $this->getIcon($icon);
-        return '<a href="'.$url.'" class="text-white" title="'.$title.'">'.$aContent.'</a>';
-    }
-*/
-    /**
-     * @param integer $intDate
-     * @return string
-     * @since 1.22.09.20
-     * @version 1.22.09.21
-     *
-    public function displayNiceDateSince($intDate)
-    {
-       $tsNow = UtilitiesBean::getCopsDate('tsnow');
-       $tsDiff = $tsNow-$intDate;
-       $strReturned = "Il y a ";
-       if ($tsDiff<60) {
-           $strReturned = "À l'instant";
-       } elseif ($tsDiff<60*60) {
-           $strReturned .= round($tsDiff/60)."min";
-       } elseif ($tsDiff<60*60*24) {
-           $strReturned .= round($tsDiff/(60*60))."hrs";
-       } else {
-           $strReturned .= round($tsDiff/(60*60*24))."j";
-       }
-       return $strReturned;
     }
 
     /**
@@ -98,24 +65,24 @@ class CopsAutopsieBean extends CopsBean
         $this->data = unserialize($this->obj->getField(self::FIELD_DATA));
 
         $attributes = array(
-			// L'id de l'autopsie
-			$this->obj->getField(self::FIELD_ID),
-			// Le Numéro de dossier qui est répété sur la 2è page
-			$this->data['numDossier'],
-			// La Card du Dossier
-			$this->getCardDossier(),
-			// La Card du Médico-légal
-			$this->getCardMedicoLegal(),
-			// La Card de l'enquête
-			$this->getCardEnquete(),
+            // L'id de l'autopsie
+            $this->obj->getField(self::FIELD_ID),
+            // Le Numéro de dossier qui est répété sur la 2è page
+            $this->data['numDossier'],
+            // La Card du Dossier
+            $this->getCardDossier(),
+            // La Card du Médico-légal
+            $this->getCardMedicoLegal(),
+            // La Card de l'enquête
+            $this->getCardEnquete(),
             // Photo
             '',
             // Constatations
             $this->data['constatations'],
-			// La Card de l'ondotologie
-			$this->getCardOdontologie(),
-			// La Card du Signalement
-			$this->getCardSignalement(),
+            // La Card de l'ondotologie
+            $this->getCardOdontologie(),
+            // La Card du Signalement
+            $this->getCardSignalement(),
             
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -133,65 +100,65 @@ class CopsAutopsieBean extends CopsBean
      * @since 1.22.10.14
      * @version 1.22.10.14
      */
-	public function getCardSignalement()
-	{
+    public function getCardSignalement()
+    {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-signalement.php';
-		
-		/////////////////////////////////////////////
-		// Corpulence
-		$strCorpulence = '';
-		$arrCorpulence = array(
-			'1' => 'Maigre',
-			'2' => 'Mince',
-			'3' => 'Moyenne',
-			'4' => 'Forte',
-			'5' => 'Athlétique',
-		);
-		foreach ($arrCorpulence as $value=>$label) {
-			$attributes = array(
-				self::ATTR_VALUE => $value,
-			);
-			if ($value==$this->data['corpulence']) {
-				$attributes['selected'] = 'selected';
-			}
-			$strCorpulence .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
-		}
-		/////////////////////////////////////////////
-		
-		$attributes = array(
-			// Général
-			$this->data['sexe'],
-			$this->data['ethnie'],
-			$this->data['taille'],
-			$this->data['poids'],
-			// Corpulence
-			$strCorpulence,
-			// Yeux
-			// Cheveux
-			// Pilosité
-			// Signes particuliers
+        
+        /////////////////////////////////////////////
+        // Corpulence
+        $strCorpulence = '';
+        $arrCorpulence = array(
+            '1' => 'Maigre',
+            '2' => 'Mince',
+            '3' => 'Moyenne',
+            '4' => 'Forte',
+            '5' => 'Athlétique',
+        );
+        foreach ($arrCorpulence as $value => $label) {
+            $attributes = array(
+                self::ATTR_VALUE => $value,
+            );
+            if ($value==$this->data['corpulence']) {
+                $attributes['selected'] = 'selected';
+            }
+            $strCorpulence .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
+        }
+        /////////////////////////////////////////////
+        
+        $attributes = array(
+            // Général
+            $this->data['sexe'],
+            $this->data['ethnie'],
+            $this->data['taille'],
+            $this->data['poids'],
+            // Corpulence
+            $strCorpulence,
+            // Yeux
+            // Cheveux
+            // Pilosité
+            // Signes particuliers
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-		);
+        );
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
-	}
-	
+    }
+    
     /**
      * @return string
      * @since 1.22.10.14
      * @version 1.22.10.14
      */
-	public function getCardOdontologie()
-	{
+    public function getCardOdontologie()
+    {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-odontologie.php';
-		
+        
         $strMaxilliaireG = '';
         $strMaxilliaireD = '';
         $strMandibuleG   = '';
         $strMandibuleD   = '';
-		
-		$strModele = '<input type="text" class="form-control col-1 offset-2 teeth text-center">
+        
+        $strModele = '<input type="text" class="form-control col-1 offset-2 teeth text-center">
                       <input type="text" class="form-control col-1 teeth text-center">
                       <input type="text" class="form-control col-1 teeth text-center">
                       <input type="text" class="form-control col-1 teeth text-center">
@@ -205,25 +172,25 @@ class CopsAutopsieBean extends CopsBean
         $strMaxilliaireD = $strModele;
         $strMandibuleG   = $strModele;
         $strMandibuleD   = $strModele;
-		
-		$attributes = array(
+        
+        $attributes = array(
             $strMaxilliaireG,
             $strMaxilliaireD,
             $strMandibuleG,
             $strMandibuleD,
-		);
+        );
         return $this->getRender($urlTemplate, $attributes);
-	}
-	
+    }
+    
     /**
      * @return string
      * @since 1.22.10.14
      * @version 1.22.10.14
      */
-	public function getCardDossier()
-	{
+    public function getCardDossier()
+    {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-dossier.php';
-		$attributes = array(
+        $attributes = array(
             stripslashes($this->data['numDossier']),
             stripslashes($this->data['dateHeureExamen']),
             stripslashes($this->data['praticiensMedicoLegaux']),
@@ -231,19 +198,19 @@ class CopsAutopsieBean extends CopsBean
             stripslashes($this->data['ageApparent']),
             stripslashes($this->data['circDecouverte']),
             stripslashes($this->data['dateHeureDeces']),
-		);
+        );
         return $this->getRender($urlTemplate, $attributes);
-	}
+    }
 
     /**
      * @return string
      * @since 1.22.10.14
      * @version 1.22.10.14
      */
-	public function getCardMedicoLegal()
-	{
+    public function getCardMedicoLegal()
+    {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-medicolegal.php';
-		$attributes = array(
+        $attributes = array(
             stripslashes($this->data['poidsCoeur']),
             stripslashes($this->data['poidsRate']),
             stripslashes($this->data['poidsEncephale']),
@@ -255,39 +222,39 @@ class CopsAutopsieBean extends CopsBean
             stripslashes($this->data['toxicologie']),
             stripslashes($this->data['serologie']),
             stripslashes($this->data['anapath']),
-		);
+        );
         return $this->getRender($urlTemplate, $attributes);
-	}
-	
+    }
+    
     /**
      * @return string
      * @since 1.22.10.14
      * @version 1.22.10.14
      */
-	public function getCardEnquete()
-	{
+    public function getCardEnquete()
+    {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-enquete.php';
-		
-		$objServices = new CopsEnqueteServices();
-		$objsCopsEnquete = $objServices->getEnquetes(array());
-		
-		$strContent = '';
-		while (!empty($objsCopsEnquete)) {
-			$objCopsEnquete = array_shift($objsCopsEnquete);
-			$attributes = array(
-				self::ATTR_VALUE => $objCopsEnquete->getField(self::FIELD_ID),
-			);
-			if ($objCopsEnquete->getField(self::FIELD_ID)==$this->obj->getField(self::FIELD_IDX_ENQUETE)) {
-				$attributes['selected'] = 'selected';
-			}
-			$strContent .= $this->getBalise(self::TAG_OPTION, $objCopsEnquete->getField(self::FIELD_NOM_ENQUETE), $attributes);
-		}
-		
-		$attributes = array(
-			$strContent,
-		);
+        
+        $objServices = new CopsEnqueteServices();
+        $objsCopsEnquete = $objServices->getEnquetes(array());
+        
+        $strContent = '';
+        while (!empty($objsCopsEnquete)) {
+            $objCopsEnquete = array_shift($objsCopsEnquete);
+            $attributes = array(
+                self::ATTR_VALUE => $objCopsEnquete->getField(self::FIELD_ID),
+            );
+            if ($objCopsEnquete->getField(self::FIELD_ID)==$this->obj->getField(self::FIELD_IDX_ENQUETE)) {
+                $attributes['selected'] = 'selected';
+            }
+            $strContent .= $this->getBalise(self::TAG_OPTION, $objCopsEnquete->getField(self::FIELD_NOM_ENQUETE), $attributes);
+        }
+        
+        $attributes = array(
+            $strContent,
+        );
         return $this->getRender($urlTemplate, $attributes);
-	}
+    }
 
     /**
      * @return string

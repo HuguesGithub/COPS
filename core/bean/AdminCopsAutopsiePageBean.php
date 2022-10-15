@@ -122,9 +122,8 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-autopsies-list.php';
         /////////////////////////////////////////
         // Construction du panneau de droite
-		$attributes = array();
+        $attributes = array();
         $objsCopsAutopsie = $this->CopsAutopsieServices->getAutopsies($attributes);
-		echo "[".MySQL::wpdbLastQuery()."]";
         if (empty($objsCopsAutopsie)) {
             $strContent = '<tr><td class="text-center">Aucune autopsie.<br></td></tr>';
         } else {

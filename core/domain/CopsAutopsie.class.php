@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe CopsAutopsie
@@ -39,7 +39,7 @@ class CopsAutopsie extends LocalDomain
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsAutopsie';
-	$this->objCopsEnqueteServices = new CopsEnqueteServices();
+    $this->objCopsEnqueteServices = new CopsEnqueteServices();
   }
   /**
    * @param array $row

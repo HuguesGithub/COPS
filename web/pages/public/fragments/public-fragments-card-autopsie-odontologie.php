@@ -1,7 +1,7 @@
 <style>
 #odontologyCard input.teeth {
-	padding-left: 6px;
-	padding-right: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 </style>
                 <div id="odontologyCard" class="card">
