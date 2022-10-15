@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * CopsAutopsieActions
  * @author Hugues
  * @since 1.22.10.10
- * @version 1.22.10.10
+ * @version 1.22.10.14
  */
 class CopsAutopsieActions extends LocalActions
 {
@@ -56,8 +56,8 @@ class CopsAutopsieActions extends LocalActions
     }
     
     /**
-     * @since 1.22.10.10
-     * @version 1.22.10.10
+     * @since 1.22.10.14
+     * @version 1.22.10.14
      */
     public static function updateAutopsie($urlParams)
     {
@@ -66,23 +66,21 @@ class CopsAutopsieActions extends LocalActions
         $objCopsAutopsieServices = new CopsAutopsieServices();
         // On créé l'objet
         $objCopsAutopsie = $objCopsAutopsieServices->getAutopsie($urlParams[self::FIELD_ID]);
-        // On définit le timestamp du jeu
-        $tsNow = UtilitiesBean::getCopsDate('tsnow');
-        ////////////////////////////////////////////
-        
-        ////////////////////////////////////////////
         // On récupère les données passées en paramètres spécifiques à l'objet Autopsie
-        $objCopsAutopsie->setField(self::FIELD_IDX_ENQUETE, $urlParams['idxEnquete']);
-        // On nettoie quand même le _POST avant.
-        unset($urlParams['idxEnquete']);
+        $objCopsAutopsie->setField(self::FIELD_IDX_ENQUETE, $urlParams[self::FIELD_IDX_ENQUETE]);
+        // On nettoie les données indésirables dans le champ data
+        unset($urlParams[self::CST_ONGLET]);
+        unset($urlParams[self::CST_SUBONGLET]);
+        unset($urlParams[self::CST_WRITE_ACTION]);
+        unset($urlParams[self::FIELD_ID]);
+        unset($urlParams[self::FIELD_IDX_ENQUETE]);
+        ////////////////////////////////////////////
         $objCopsAutopsie->setField(self::FIELD_DATA, serialize($urlParams));
-        // Et on les enrichit de données supplémentaires.
-        $objCopsAutopsie->setField(self::FIELD_DLAST, $tsNow);
         ////////////////////////////////////////////
         
         ////////////////////////////////////////////
-        // On insère l'objet
-        //$objCopsAutopsieServices->updateAutopsie($objCopsAutopsie);
+        // On update l'objet
+        $objCopsAutopsieServices->updateAutopsie($objCopsAutopsie);
         return $objCopsAutopsie;
     }
     

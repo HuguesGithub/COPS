@@ -5,8 +5,8 @@ if (!defined('ABSPATH')) {
 /**
  * Classe CopsAutopsie
  * @author Hugues
- * @version 1.22.10.09
  * @since 1.22.10.09
+ * @version 1.22.10.14
  */
 class CopsAutopsie extends LocalDomain
 {
@@ -32,13 +32,14 @@ class CopsAutopsie extends LocalDomain
   //////////////////////////////////////////////////
   /**
    * @param array $attributes
-   * @version 1.22.10.09
    * @since 1.22.10.09
+   * @version 1.22.10.14
    */
   public function __construct($attributes=array())
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsAutopsie';
+	$this->objCopsEnqueteServices = new CopsEnqueteServices();
   }
   /**
    * @param array $row
@@ -60,5 +61,13 @@ class CopsAutopsie extends LocalDomain
   //////////////////////////////////////////////////
   // METHODES
   //////////////////////////////////////////////////
+
+  /**
+   * @return CopsEnquete
+   * @version 1.22.10.14
+   * @since 1.22.10.14
+   */
+  public function getCopsEnquete()
+  { return $this->objCopsEnqueteServices->getEnquete($this->idxEnquete); }
 
 }

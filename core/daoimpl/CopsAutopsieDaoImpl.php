@@ -59,7 +59,7 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
         $arrFields  = $this->getFields();
         $request  = "SELECT ".implode(', ', $arrFields)." ";
         $request .= "FROM ".$this->dbTable." ";
-        $request .= "WHERE idxEnquete LIKE %s ";
+        $request .= "WHERE idxEnquete LIKE '%s' ";
         $request .= "ORDER BY dStart DESC;";
         
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);

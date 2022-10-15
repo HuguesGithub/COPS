@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe AdminCopsAutopsiePageBean
  * @author Hugues
  * @since 1.22.10.08
- * @version 1.22.10.09
+ * @version 1.22.10.14
  */
 class AdminCopsAutopsiePageBean extends AdminCopsPageBean
 {
@@ -115,14 +115,25 @@ class AdminCopsAutopsiePageBean extends AdminCopsPageBean
 
     /**
      * @since 1.22.10.08
-     * @version 1.22.10.08
+     * @version 1.22.10.14
      */
     public function getFolderAutopsiesList()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-autopsies-list.php';
         /////////////////////////////////////////
         // Construction du panneau de droite
-        $strContent = '<tr><td class="text-center">Aucune autopsies.<br></td></tr>';
+		$attributes = array();
+        $objsCopsAutopsie = $this->CopsAutopsieServices->getAutopsies($attributes);
+		echo "[".MySQL::wpdbLastQuery()."]";
+        if (empty($objsCopsAutopsie)) {
+            $strContent = '<tr><td class="text-center">Aucune autopsie.<br></td></tr>';
+        } else {
+            $strContent = '';
+            foreach ($objsCopsAutopsie as $objCopsAutopsie) {
+                $strContent .= $objCopsAutopsie->getBean()->getCopsAutopsieRow();
+            }
+        }
+        /////////////////////////////////////////
 
         /////////////////////////////////////////
         // Gestion de la pagination
