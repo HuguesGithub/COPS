@@ -73,6 +73,7 @@ interface ConstantsInterface
   const CST_AUTOPSIE_ARCHIVE   = 'archive';
   
   const CST_ACTION             = 'action';
+  const CST_CHECKED            = 'checked';
   const CST_CHILDREN           = 'children';
   const CST_ONGLET             = 'onglet';
   const CST_SELECTED           = 'selected';

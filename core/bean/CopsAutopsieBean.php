@@ -26,12 +26,13 @@ class CopsAutopsieBean extends CopsBean
      */
     public function getCopsAutopsieLi()
     {
-		$data = unserialize($this->obj->getField(self::FIELD_DATA));
-		$url = $this->urlSubOnglet.'read&amp;id='.$this->obj->getField(self::FIELD_ID);
-		$labelLi = $this->getBalise(self::TAG_A, $data['numDossier'], array(self::ATTR_HREF=>$url, self::ATTR_CLASS=>'text-white'));
-		return $this->getBalise(self::TAG_LI, $labelLi);
-	}
-	
+        $data = unserialize($this->obj->getField(self::FIELD_DATA));
+        $url = $this->urlSubOnglet.'read&amp;id='.$this->obj->getField(self::FIELD_ID);
+        $attributesLi = array(self::ATTR_HREF=>$url, self::ATTR_CLASS=>'text-white');
+        $labelLi = $this->getBalise(self::TAG_A, $data['numDossier'], $attributesLi);
+        return $this->getBalise(self::TAG_LI, $labelLi);
+    }
+    
     /**
      * @return string
      * @since 1.22.10.14
@@ -132,7 +133,7 @@ class CopsAutopsieBean extends CopsBean
                 self::ATTR_VALUE => $value,
             );
             if ($value==$this->data['corpulence']) {
-                $attributes['selected'] = 'selected';
+                $attributes['selected'] = self::CST_SELECTED;
             }
             $strCorpulence .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
@@ -152,7 +153,7 @@ class CopsAutopsieBean extends CopsBean
                 self::ATTR_VALUE => $value,
             );
             if ($value==$this->data['cheveux_longueur']) {
-                $attributes['selected'] = 'selected';
+                $attributes['selected'] = self::CST_SELECTED;
             }
             $strLongueurCheveux .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
@@ -168,7 +169,7 @@ class CopsAutopsieBean extends CopsBean
                 self::ATTR_VALUE => $value,
             );
             if ($value==$this->data['cheveux_coiffure']) {
-                $attributes['selected'] = 'selected';
+                $attributes['selected'] = self::CST_SELECTED;
             }
             $strCoiffureCheveux .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
@@ -185,9 +186,9 @@ class CopsAutopsieBean extends CopsBean
             // Yeux 6 à 10
             $this->data['yeux_couleur'],
             $this->data['yeux_particularite'],
-            isset($this->data['lunettes']) ? ' checked' : '',
+            isset($this->data['lunettes']) ? ' '.self::CST_CHECKED : '',
             $this->data['formeLunettes'],
-            isset($this->data['lentilles']) ? ' checked' : '',
+            isset($this->data['lentilles']) ? ' '.self::CST_CHECKED : '',
             // Cheveux 11 à 14
             $this->data['cheveux_couleur'],
             $this->data['cheveux_particularite'],
@@ -196,8 +197,8 @@ class CopsAutopsieBean extends CopsBean
             // Pilosité 15 à 18
             $this->data['pilosite_couleur'],
             $this->data['pilosite_particularite'],
-            isset($this->data['barbe']) ? ' checked' : '',
-            isset($this->data['moustache']) ? ' checked' : '',
+            isset($this->data['barbe']) ? ' '.self::CST_CHECKED : '',
+            isset($this->data['moustache']) ? ' '.self::CST_CHECKED : '',
             // Signes particuliers
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',

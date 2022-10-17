@@ -33,18 +33,18 @@
                             <input type="text" class="form-control col-3" id="yeux_particularite" name="yeux_particularite" value="%7$s"/>
                         </div>
                         <div class="input-group row mb-3">
-                        	<label for="lunettes" class="col-form-label-sm form-control col-3">Lunettes</label>
+                            <label for="lunettes" class="col-form-label-sm form-control col-3">Lunettes</label>
                             <div class="input-group-text form-control col-1">
                                 <input class="form-check-input mt-0" type="checkbox" value="hasLunettes" id="lunettes" name="lunettes" style="margin-left: 0px;"%8$s>
                             </div>
                             <label for="formeLunettes" class="col-form-label-sm form-control col-3">Forme</label>
-		                    <input type="text" class="form-control col-5" id="formeLunettes" name="formeLunettes" value="%9$s">
+                            <input type="text" class="form-control col-5" id="formeLunettes" name="formeLunettes" value="%9$s">
                         </div>
                         <div class="input-group row mb-3">
-                          	<label for="lentilles" class="col-form-label-sm form-control col-3">Lentilles</label>
-                          	<div class="input-group-text form-control col-1">
-                            	<input class="form-check-input mt-0" type="checkbox" value="hasLentilles" id="lentilles" name="lentilles" style="margin-left: 0px;"%10$s>
-                          	</div>
+                              <label for="lentilles" class="col-form-label-sm form-control col-3">Lentilles</label>
+                              <div class="input-group-text form-control col-1">
+                                <input class="form-check-input mt-0" type="checkbox" value="hasLentilles" id="lentilles" name="lentilles" style="margin-left: 0px;"%10$s>
+                              </div>
                         </div>
     
                         <h5>Cheveux</h5>
@@ -55,14 +55,14 @@
                             <input type="text" class="form-control col-3" id="cheveux_particularite" name="cheveux_particularite" value="%12$s"/>
                         </div>
                         <div class="input-group row mb-3">
-                          	<label class="col-form-label-sm form-control col-3" for="cheveux_longueur">Longueur</label>
-                          	<select class="form-control col-3" name="cheveux_longueur">
-                            	<option></option>%13$s
-                          	</select>
-                          	<label class="col-form-label-sm form-control col-3" for="cheveux_coiffure">Coiffure</label>
-                          	<select class="form-control col-3" name="cheveux_coiffure">
-                            	<option></option>%14$s
-                          	</select>
+                              <label class="col-form-label-sm form-control col-3" for="cheveux_longueur">Longueur</label>
+                              <select class="form-control col-3" name="cheveux_longueur">
+                                <option></option>%13$s
+                              </select>
+                              <label class="col-form-label-sm form-control col-3" for="cheveux_coiffure">Coiffure</label>
+                              <select class="form-control col-3" name="cheveux_coiffure">
+                                <option></option>%14$s
+                              </select>
                         </div>
     
                         <h5>Pilosité</h5>

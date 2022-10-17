@@ -17,6 +17,7 @@ class CopsEnqueteBean extends CopsBean
         $this->urlOnglet   .= self::ONGLET_ENQUETE;
         $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
 		$this->objCopsAutopsieServices = new CopsAutopsieServices();
+		$this->strNoRapportDisponible = 'Aucune rapport disponible';
     }
 
     /**
@@ -138,12 +139,13 @@ class CopsEnqueteBean extends CopsBean
       $strSelectDistrictAttorneys .= $this->getBalise(self::TAG_OPTION, $row->nomIdx, $args);
     }
 
-    $strRapportSID = 'Aucun rapport disponible';
+    $strRapportSID = $this->strNoRapportDisponible;
 		// Récupération et construction des rapports d'autopsie.
 		$objsAutopsie = $this->getCopsAutopsies();
 		if (empty($objsAutopsie)) {
-			$strRapportAutopsie = 'Aucun rapport disponible';
+		    $strRapportAutopsie = $this->strNoRapportDisponible;
 		} else {
+		    $strRapportAutopsie = '';
 			while (!empty($objsAutopsie)) {
 				$objCopsAutopsie = array_shift($objsAutopsie);
 				$strRapportAutopsie .= $objCopsAutopsie->getBean()->getCopsAutopsieLi();
@@ -197,12 +199,13 @@ class CopsEnqueteBean extends CopsBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquete-read.php';
         /////////////////////////////////////////
         // Construction du panneau de droite
-        $strRapportSID = 'Aucun rapport disponible';
+        $strRapportSID = $this->strNoRapportDisponible;
 		// Récupération et construction des rapports d'autopsie.
 		$objsAutopsie = $this->getCopsAutopsies();
 		if (empty($objsAutopsie)) {
-			$strRapportAutopsie = 'Aucun rapport disponible';
+		    $strRapportAutopsie = $this->strNoRapportDisponible;
 		} else {
+		    $strRapportAutopsie = '';
 			while (!empty($objsAutopsie)) {
 				$objCopsAutopsie = array_shift($objsAutopsie);
 				$strRapportAutopsie .= $objCopsAutopsie->getBean()->getCopsAutopsieLi();
