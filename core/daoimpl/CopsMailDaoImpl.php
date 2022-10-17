@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe CopsMailDaoImpl
  * @author Hugues
  * @since 1.22.04.29
- * @version 1.22.05.10
+ * @version 1.22.10.17
  */
 class CopsMailDaoImpl extends LocalDaoImpl
 {
@@ -30,22 +30,21 @@ class CopsMailDaoImpl extends LocalDaoImpl
     parent::__construct();
   }
 
-  ////////////////////////////////////
-  // WP_7_COPS_MAIL
-  ////////////////////////////////////
-  /**
-   * @since 1.22.04.29
-   * @version 1.22.05.04
-   */
-  public function getMail($prepObject)
-  {
-    $request  = $this->getSelect($this->dbTable);
-    $request .= "FROM ".$this->dbTable." ";
-    $request .= "WHERE id = '%s';";
-    $prepSql  = MySQL::wpdbPrepare($request, $prepObject);
-    return MySQL::wpdbSelect($prepSql);
-  }
-  ////////////////////////////////////
+	////////////////////////////////////
+	// WP_7_COPS_MAIL
+	////////////////////////////////////
+	/**
+	 * @since 1.22.04.29
+	 * @version 1.22.05.04
+	 */
+	public function getMail($prepObject)
+	{
+		$request  = $this->select;
+		$request .= "WHERE id = '%s';";
+		$prepSql  = MySQL::wpdbPrepare($request, $prepObject);
+		return MySQL::wpdbSelect($prepSql);
+	}
+	////////////////////////////////////
 
   ////////////////////////////////////
   // WP_7_COPS_MAIL_FOLDER
@@ -147,128 +146,117 @@ class CopsMailDaoImpl extends LocalDaoImpl
 
 
 
-  /**
-   * @since 1.22.04.30
-   * @version 1.22.04.30
-   */
-  public function updateMailJoint($Obj)
-  {
-    ////////////////////////////////////
-    // Récupération des champs de l'objet en base
-    $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
-    foreach ($rows as $row) {
-      $arrFields[] = $row->Field;
-    }
-    ////////////////////////////////////
+	/**
+	 * @since 1.22.04.30
+	 * @version 1.22.10.17
+	 */
+	public function updateMailJoint($objMailJoint)
+	{
+		////////////////////////////////////
+		// Récupération des champs de l'objet en base
+		$arrFields = array();
+		$rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
+		foreach ($rows as $row) {
+			$arrFields[] = $row->Field;
+		}
+		////////////////////////////////////
 
-    $prepObject = array();
-    $request  = "UPDATE ".$this->dbTable_cmj." SET ";
-    foreach ($arrFields as $field) {
-      $request .= $field."='%s', ";
-      $prepObject[] = $Obj->getField($field);
-    }
-    $request = substr($request, 0, -2)." WHERE id = '%s';";
-    $prepObject[] = $Obj->getField(self::FIELD_ID);
+		$prepObject = array();
+		$request  = "UPDATE ".$this->dbTable_cmj." SET ";
+		foreach ($arrFields as $field) {
+			$request .= $field."='%s', ";
+			$prepObject[] = $objMailJoint->getField($field);
+		}
+		$request = substr($request, 0, -2)." WHERE id = '%s';";
+		$prepObject[] = $objMailJoint->getField(self::FIELD_ID);
 
-    $sql = MySQL::wpdbPrepare($request, $prepObject);
-    MySQL::wpdbQuery($sql);
-  }
-  ////////////////////////////////////
+		$sql = MySQL::wpdbPrepare($request, $prepObject);
+		MySQL::wpdbQuery($sql);
+	}
+	////////////////////////////////////
 
-  /**
-   * @since 1.22.05.10
-   * @version 1.22.05.10
-   */
-  public function insertMailJoint(&$Obj)
-  {
-    ////////////////////////////////////
-    // Récupération des champs de l'objet en base
-    $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
-    foreach ($rows as $row) {
-      if ($row->Field=='id') {
-        continue;
-      }
-      $arrFields[] = $row->Field;
-    }
-    ////////////////////////////////////
+	/**
+	 * @since 1.22.05.10
+	 * @version 1.22.10.17
+	 */
+	public function insertMailJoint(&$objMailJoint)
+	{
+		////////////////////////////////////
+		// Récupération des champs de l'objet en base
+		$arrFields = array();
+		$rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
+		foreach ($rows as $row) {
+			if ($row->Field=='id') {
+				continue;
+			}
+			$arrFields[] = $row->Field;
+		}
+		////////////////////////////////////
 
-    $prepObject = array();
-    $request  = "INSERT INTO ".$this->dbTable_cmj." (";
-    $requestValues = '';
-    foreach ($arrFields as $field) {
-      $request        .= $field.", ";
-      $requestValues  .= "'%s', ";
-      $prepObject[] = $Obj->getField($field);
-    }
-    $request = substr($request, 0, -2).") VALUES (".substr($requestValues, 0, -2).");";
+		$prepObject = array();
+		$request  = "INSERT INTO ".$this->dbTable_cmj." (";
+		$requestValues = '';
+		foreach ($arrFields as $field) {
+			$request        .= $field.", ";
+			$requestValues  .= "'%s', ";
+			$prepObject[] = $objMailJoint->getField($field);
+		}
+		$request = substr($request, 0, -2).") VALUES (".substr($requestValues, 0, -2).");";
 
-    $sql = MySQL::wpdbPrepare($request, $prepObject);
-    MySQL::wpdbQuery($sql);
-    $Obj->setField(self::FIELD_ID, MySQL::getLastInsertId());
-  }
+		$sql = MySQL::wpdbPrepare($request, $prepObject);
+		MySQL::wpdbQuery($sql);
+		$objMailJoint->setField(self::FIELD_ID, MySQL::getLastInsertId());
+	}
 
-  /**
-   * @since 1.22.05.10
-   * @version 1.22.05.10
-   */
-  public function updateMail($Obj)
-  {
-    ////////////////////////////////////
-    // Récupération des champs de l'objet en base
-    $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach ($rows as $row) {
-      $arrFields[] = $row->Field;
-    }
-    ////////////////////////////////////
+	/**
+	 * @since 1.22.05.10
+	 * @version 1.22.10.17
+	 */
+	public function updateMail($objMail)
+	{
+		////////////////////////////////////
+		// Récupération des champs de l'objet en base
+		$arrFields = $this->getFields();
+		////////////////////////////////////
 
-    $prepObject = array();
-    $request  = "UPDATE ".$this->dbTable." SET ";
-    foreach ($arrFields as $field) {
-      $request .= $field."='%s', ";
-      $prepObject[] = $Obj->getField($field);
-    }
-    $request = substr($request, 0, -2)." WHERE id = '%s';";
-    $prepObject[] = $Obj->getField(self::FIELD_ID);
+		$prepObject = array();
+		$request  = "UPDATE ".$this->dbTable." SET ";
+		foreach ($arrFields as $field) {
+			$request .= $field."='%s', ";
+			$prepObject[] = $objMail->getField($field);
+		}
+		$request = substr($request, 0, -2)." WHERE id = '%s';";
+		$prepObject[] = $objMail->getField(self::FIELD_ID);
 
-    $sql = MySQL::wpdbPrepare($request, $prepObject);
-    MySQL::wpdbQuery($sql);
-  }
-  ////////////////////////////////////
+		$sql = MySQL::wpdbPrepare($request, $prepObject);
+		MySQL::wpdbQuery($sql);
+	}
+	////////////////////////////////////
 
-  /**
-   * @since 1.22.05.10
-   * @version 1.22.05.10
-   */
-  public function insertMail(&$Obj)
-  {
-    ////////////////////////////////////
-    // Récupération des champs de l'objet en base
-    $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
-    foreach ($rows as $row) {
-      if ($row->Field=='id') {
-        continue;
-      }
-      $arrFields[] = $row->Field;
-    }
-    ////////////////////////////////////
+	/**
+	 * @since 1.22.05.10
+	 * @version 1.22.10.17
+	 */
+	public function insertMail(&$objMail)
+	{
+		////////////////////////////////////
+		// Récupération des champs de l'objet en base
+		$arrFields = $this->getFields();
+		////////////////////////////////////
 
-    $prepObject = array();
-    $request  = "INSERT INTO ".$this->dbTable." (";
-    $requestValues = '';
-    foreach ($arrFields as $field) {
-      $request        .= $field.", ";
-      $requestValues  .= "'%s', ";
-      $prepObject[] = $Obj->getField($field);
-    }
-    $request = substr($request, 0, -2).") VALUES (".substr($requestValues, 0, -2).");";
+		$prepObject = array();
+		$request  = "INSERT INTO ".$this->dbTable." (";
+		$requestValues = '';
+		foreach ($arrFields as $field) {
+			$request        .= $field.", ";
+			$requestValues  .= "'%s', ";
+			$prepObject[] = $objMail->getField($field);
+		}
+		$request = substr($request, 0, -2).") VALUES (".substr($requestValues, 0, -2).");";
 
-    $sql = MySQL::wpdbPrepare($request, $prepObject);
-    MySQL::wpdbQuery($sql);
-    $Obj->setField(self::FIELD_ID, MySQL::getLastInsertId());
-  }
+		$sql = MySQL::wpdbPrepare($request, $prepObject);
+		MySQL::wpdbQuery($sql);
+		$objMail->setField(self::FIELD_ID, MySQL::getLastInsertId());
+	}
 
 }

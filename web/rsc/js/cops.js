@@ -80,7 +80,35 @@ $(document).ready(function() {
     // Envisager à terme l'ajout de boutons pour styler
   }
 
-
+  // Interface Compose
+  if ($('.enquete-main-info').length!=0) {
+	  $('.enquete-main-info a.nav-link').unbind().on('click', function() {
+		  let tab = $(this).data('tab');
+		  $('.enquete-main-info + div .note-frame').hide();
+		  $(tab).show();
+		  $('.enquete-main-info a.nav-link').removeClass('bg-primary');
+		  $(this).addClass('bg-primary');
+	  });
+	  $('#writeForm input').on('blur', function() {
+		  $(this).removeClass('border-danger');
+	  });
+	  
+	  $('button[type="submit"]').on('click', function() {
+		  $('#writeForm input[required]').each(function() {
+			  if ($(this).val()=='') {
+				  $(this).addClass('border-danger').focus();
+				  return false;
+			  }
+		  }); 
+	  });
+	  $('.note-editable').on('blur', function(){
+        $($(this).data('input')).html($(this).html());
+      });
+      $('.note-editable').each(function(){
+        $($(this).data('input')).html($(this).html());
+      });
+  }
+  
   if ($('textarea[data-resize="auto"]').length!=0) {
     $('textarea[data-resize="auto"]').on('keyup', function(){
       if ($(this).scrollTop()>0) {
@@ -137,7 +165,13 @@ $(document).ready(function() {
   $('.accordion-button').on('click', function(){
     $(this).toggleClass('collapsed');
   });
-
+	$('.enquete-main-info .nav a.nav-link').on('click', function(){
+		$('.enquete-main-info + div .note-editor').hide();
+		$('.enquete-main-info .nav a.nav-link').removeClass('bg-primary');
+		$(this).addClass('bg-primary');
+		$($(this).data('tab')).show();
+		$($(this).data('tab')+' .note-editable').focus();
+	});
 });
 
 function stretchColspanEvents() {
@@ -187,7 +221,7 @@ function enableMailboxControls() {
 function ajaxActionChange(obj) {
   let id = obj.attr('id');
   let actions = obj.data('ajax').split(',');
-	for (let oneAction of actions) {
+  for (let oneAction of actions) {
     switch (oneAction) {
       case 'saveData' :
         saveData(obj);

@@ -170,6 +170,7 @@ class UtilitiesBean implements ConstantsInterface
      */
     public function getPublicHeader()
     {
+        return '';
         $urlTemplate = 'web/pages/public/fragments/main-header.php';
         $strNavigation = '';
         $strSubmenu    = '';
@@ -200,4 +201,3 @@ class UtilitiesBean implements ConstantsInterface
     }
 
 }
-

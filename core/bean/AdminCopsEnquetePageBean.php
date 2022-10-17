@@ -25,6 +25,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
         );
         /////////////////////////////////////////
         $this->urlOnglet    = '/admin?'.self::CST_ONGLET.'=';
+        $this->baseUrl      = $this->urlOnglet.self::ONGLET_ENQUETE;
         $this->urlSubOnglet = '&amp;'.self::CST_SUBONGLET.'=';
 
         /////////////////////////////////////////
@@ -49,6 +50,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             if ($this->urlParams[self::FIELD_NOM_ENQUETE]!='') {
                 if ($this->urlParams[self::FIELD_ID]!='') {
                     $this->CopsEnquete = CopsEnqueteActions::updateEnquete($this->urlParams);
+                    echo "[".MySQL::wpdbLastQuery()."]";
                 } else {
                     $this->CopsEnquete = CopsEnqueteActions::insertEnquete($this->urlParams);
                 }
@@ -207,7 +209,7 @@ class AdminCopsEnquetePageBean extends AdminCopsPageBean
             // La liste des messages du dossier affiché
             $strContent,
             // Le slug du dossier affiché
-            $this->urlSubOnglet.$this->subOnglet,
+            $this->baseUrl.$this->urlSubOnglet.$this->subOnglet,
         );
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);

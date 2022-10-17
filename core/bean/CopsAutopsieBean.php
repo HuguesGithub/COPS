@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * CopsAutopsieBean
  * @author Hugues
  * @since 1.22.10.09
- * @version 1.22.10.14
+ * @version 1.22.10.17
  */
 class CopsAutopsieBean extends CopsBean
 {
@@ -19,6 +19,19 @@ class CopsAutopsieBean extends CopsBean
         $this->strNoRapportDisponible = 'Aucune autopsie disponible';
     }
 
+    /**
+     * @return string
+     * @since 1.22.10.17
+     * @version 1.22.10.17
+     */
+    public function getCopsAutopsieLi()
+    {
+		$data = unserialize($this->obj->getField(self::FIELD_DATA));
+		$url = $this->urlSubOnglet.'read&amp;id='.$this->obj->getField(self::FIELD_ID);
+		$labelLi = $this->getBalise(self::TAG_A, $data['numDossier'], array(self::ATTR_HREF=>$url, self::ATTR_CLASS=>'text-white'));
+		return $this->getBalise(self::TAG_LI, $labelLi);
+	}
+	
     /**
      * @return string
      * @since 1.22.10.14
