@@ -18,6 +18,13 @@
 
         <div class="table-responsive mailbox-messages">
           <table class="table table-hover table-striped" aria-describedby="Liste des autopsies">
+          	<thead>
+          		<tr>
+          			<th>&nbsp;</th>
+					<th scope="col" class="mailbox-name">Dossier</th>
+					<th scope="col" class="mailbox-name">Enquête</th>
+          		</tr>
+          	</thead>
             <tbody>
               %3$s
             </tbody>

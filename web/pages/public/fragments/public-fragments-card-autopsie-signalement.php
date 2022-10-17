@@ -6,131 +6,84 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="input-group row">
-                          <span class="col-form-label-sm col-4">Sexe</span>
-                          <input type="text" class="form-control col-2" name="sexe" value="%1$s">
-                          <span class="col-form-label-sm col-3">Ethnie</span>
-                          <input type="text" class="form-control col-3" name="ethnie" value="%2$s">
+                        <div class="input-group row mb-3">
+                          <label for="sexe" class="col-form-label-sm form-control col-2">Sexe</label>
+                          <input type="text" class="form-control col-3" id="sexe" name="sexe" value="%1$s">
+                          <label for="ethnie" class="col-form-label-sm form-control col-3">Ethnie</label>
+                          <input type="text" class="form-control col-4" id="ethnie" name="ethnie" value="%2$s">
                         </div>
                         <div class="input-group row mb-3">
-                          <span class="col-form-label-sm col-4">Taille</span>
-                          <input type="text" class="form-control col-2" name="taille" value="%3$s">
-                          <span class="col-form-label-sm col-4">Poids</span>
-                          <input type="text" class="form-control col-2" name="poids" value="%4$s">
+                          <label for="taille" class="col-form-label-sm form-control col-2">Taille</label>
+                          <input type="text" class="form-control col-3" id="taille" name="taille" value="%3$s">
+                          <label for="poids" class="col-form-label-sm form-control col-3">Poids</label>
+                          <input type="text" class="form-control col-4" id="poids" name="poids" value="%4$s">
                         </div>
-                        <div class="row">
-                            <div class="form-floating mb-3 col-6">
-                                <select name="corpulence" class="form-control">
-                                    <option></option>%5$s
-                                </select>
-                                <label for="corpulence" class="col-form-label col-form-label-sm">Corpulence</label>
-                            </div>
+                        <div class="input-group row mb-3">
+                          <label for="corpulence" class="col-form-label-sm form-control col-3">Corpulence</label>
+                          <select id="corpulence" name="corpulence" class="form-control col-3">
+                            <option></option>%5$s
+                          </select>
                         </div>
     
                         <h5>Yeux</h5>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="yeux_couleur" name="yeux_couleur"/>
-                                    <label for="yeux_couleur" class="col-form-label col-form-label-sm">Couleur</label>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="yeux_particularite" name="yeux_particularite"/>
-                                    <label for="yeux_particularite" class="col-form-label col-form-label-sm">Particularités</label>
-                                </div>
-                            </div>
+                        <div class="input-group row mb-3">
+                            <label for="yeux_couleur" class="col-form-label-sm form-control col-3">Couleur</label>
+                            <input type="text" class="form-control col-2" id="yeux_couleur" name="yeux_couleur" value="%6$s"/>
+                            <label for="yeux_particularite" class="col-form-label-sm form-control col-4">Particularités</label>
+                            <input type="text" class="form-control col-3" id="yeux_particularite" name="yeux_particularite" value="%7$s"/>
                         </div>
                         <div class="input-group row mb-3">
-                            <span class="col-form-label-sm col-3">Lunettes</span>
+                        	<label for="lunettes" class="col-form-label-sm form-control col-3">Lunettes</label>
                             <div class="input-group-text form-control col-1">
-                                <input class="form-check-input mt-0" type="checkbox" value="" name="lunettes" style="margin-left: 0px;">
+                                <input class="form-check-input mt-0" type="checkbox" value="hasLunettes" id="lunettes" name="lunettes" style="margin-left: 0px;"%8$s>
                             </div>
-                            <span class="col-1">&nbsp;</span>
-                            <span class="col-form-label-sm col-3 offset-1">Forme</span>
-                            <input type="text" class="form-control col-4" name="formeLunettes" value="">
+                            <label for="formeLunettes" class="col-form-label-sm form-control col-3">Forme</label>
+		                    <input type="text" class="form-control col-5" id="formeLunettes" name="formeLunettes" value="%9$s">
                         </div>
                         <div class="input-group row mb-3">
-                          <span class="col-form-label-sm col-3">Lentilles</span>
-                          <div class="input-group-text form-control col-1">
-                            <input class="form-check-input mt-0" type="checkbox" value="" name="lentilles" style="margin-left: 0px;">
-                          </div>
-                          <div class="col-8">&nbsp;</div>
+                          	<label for="lentilles" class="col-form-label-sm form-control col-3">Lentilles</label>
+                          	<div class="input-group-text form-control col-1">
+                            	<input class="form-check-input mt-0" type="checkbox" value="hasLentilles" id="lentilles" name="lentilles" style="margin-left: 0px;"%10$s>
+                          	</div>
                         </div>
     
-                        <fieldset>
-                            <legend>Cheveux</legend>
-                            <div class="col-12 row">
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="cheveux_couleur" name="cheveux_couleur"/>
-                                        <label for="cheveux_couleur" class="col-form-label col-form-label-sm">Couleur</label>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="cheveux_particularite" name="cheveux_particularite"/>
-                                        <label for="cheveux_particularite" class="col-form-label col-form-label-sm">Particularités</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 row">
-                                <div class="form-floating mb-3 col-6">
-                                  <select class="form-control">
-                                    <option selected></option>
-                                    <option value="1">Longs</option>
-                                    <option value="2">Courts</option>
-                                    <option value="3">Calvitie</option>
-                                    <option value="4">Chauve</option>
-                                  </select>
-                                  <label class="col-form-label col-form-label-sm" for="inputGroupSelect01">Longueur</label>
-                                </div>
-                                <div class="form-floating mb-3 col-6">
-                                  <select class="form-control">
-                                    <option selected></option>
-                                    <option value="1">Raides</option>
-                                    <option value="2">Ondulés</option>
-                                    <option value="3">Frisés</option>
-                                  </select>
-                                  <label class="col-form-label col-form-label-sm" for="inputGroupSelect01">Coiffure</label>
-                                </div>
-                            </div>
-                        </fieldset>
+                        <h5>Cheveux</h5>
+                        <div class="input-group row mb-3">
+                            <label for="cheveux_couleur" class="col-form-label-sm form-control col-3">Couleur</label>
+                            <input type="text" class="form-control col-2" id="cheveux_couleur" name="cheveux_couleur" value="%11$s"/>
+                            <label for="cheveux_particularite" class="col-form-label-sm form-control col-4">Particularités</label>
+                            <input type="text" class="form-control col-3" id="cheveux_particularite" name="cheveux_particularite" value="%12$s"/>
+                        </div>
+                        <div class="input-group row mb-3">
+                          	<label class="col-form-label-sm form-control col-3" for="cheveux_longueur">Longueur</label>
+                          	<select class="form-control col-3" name="cheveux_longueur">
+                            	<option></option>%13$s
+                          	</select>
+                          	<label class="col-form-label-sm form-control col-3" for="cheveux_coiffure">Coiffure</label>
+                          	<select class="form-control col-3" name="cheveux_coiffure">
+                            	<option></option>%14$s
+                          	</select>
+                        </div>
     
-                        <fieldset>
-                            <legend>Pilosité</legend>
-                            <div class="col-12 row">
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="pilosite_couleur" name="pilosite_couleur"/>
-                                        <label for="pilosite_couleur" class="col-form-label col-form-label-sm">Couleur</label>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="pilosite_particularite" name="pilosite_particularite"/>
-                                        <label for="pilosite_particularite" class="col-form-label col-form-label-sm">Particularités</label>
-                                    </div>
-                                </div>
+                        <h5>Pilosité</h5>
+                        <div class="input-group row mb-3">
+                            <label for="pilosite_couleur" class="col-form-label-sm form-control col-3">Couleur</label>
+                            <input type="text" class="form-control col-2" id="pilosite_couleur" name="pilosite_couleur" value="%15$s"/>
+                            <label for="pilosite_particularite" class="col-form-label-sm form-control col-4">Particularités</label>
+                            <input type="text" class="form-control col-3" id="pilosite_particularite" name="pilosite_particularite" value="%16$s"/>
+                        </div>
+                        <div class="input-group row mb-3">
+                            <label for="barbe" class="col-form-label-sm form-control col-3">Barbe</label>
+                            <div class="input-group-text form-control col-1">
+                                <input class="form-check-input mt-0" type="checkbox" value="hasBarbe" id="barbe" name="barbe" style="margin-left: 0px;"%17$s>
                             </div>
-                            <div class="row">
-                                <div class="form-floating mb-3 col-6">
-                                    <div class="input-group mb-3 col-12">
-                                      <div class="input-group-text">
-                                        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
-                                      </div>
-                                      <span class="input-group-text" id="inputGroup-sizing-sm">Barbe</span>
-                                    </div>
-                                    <div class="input-group mb-3 col-12">
-                                      <div class="input-group-text">
-                                        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
-                                      </div>
-                                      <span class="input-group-text" id="inputGroup-sizing-sm">Moustache</span>
-                                    </div>
-                                </div>
+                            <label for="moustache" class="col-form-label-sm form-control col-3">Moustache</label>
+                            <div class="input-group-text form-control col-1">
+                                <input class="form-check-input mt-0" type="checkbox" value="hasMoustache" id="moustache" name="moustache" style="margin-left: 0px;"%18$s>
                             </div>
-                        </fieldset>
+                        </div>
+                        
+                        <h5>Signes particuliers</h5>
     
                     signeparticulier
                         liste

@@ -6,29 +6,29 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="input-group">
-                          <span class="col-form-label-sm col-4">Coeur</span>
-                          <input type="text" class="form-control col-2" name="poidsCoeur" value="%1$s">
-                          <span class="col-form-label-sm col-4">Rate</span>
-                          <input type="text" class="form-control col-2" name="poidsRate" value="%2$s">
+                        <div class="input-group mb-1">
+                          <label for="poidsCoeur" class="col-form-label-sm form-control col-4">Coeur</label>
+                          <input type="text" class="form-control col-2" id="poidsCoeur" name="poidsCoeur" value="%1$s">
+                          <label for="poidsRate" class="col-form-label-sm form-control col-4">Rate</label>
+                          <input type="text" class="form-control col-2" id="poidsRate" name="poidsRate" value="%2$s">
                         </div>
-                        <div class="input-group">
-                          <span class="col-form-label-sm col-4">Encéphale</span>
-                          <input type="text" class="form-control col-2" name="poidsEncephale" value="%3$s">
-                          <span class="col-form-label-sm col-4">Foie</span>
-                          <input type="text" class="form-control col-2" name="poidsFoie" value="%4$s">
+                        <div class="input-group mb-1">
+                          <label for="poidsEncephale" class="col-form-label-sm form-control col-4">Encéphale</label>
+                          <input type="text" class="form-control col-2" id="poidsEncephale" name="poidsEncephale" value="%3$s">
+                          <label for="poidsFoie" class="col-form-label-sm form-control col-4">Foie</label>
+                          <input type="text" class="form-control col-2" id="poidsFoie" name="poidsFoie" value="%4$s">
                         </div>
-                        <div class="input-group">
-                          <span class="col-form-label-sm col-4">Poumon gauche</span>
-                          <input type="text" class="form-control col-2" name="poidsPoumonG" value="%5$s">
-                          <span class="col-form-label-sm col-4">Rein gauche</span>
-                          <input type="text" class="form-control col-2" name="poidsReinG" value="%6$s">
+                        <div class="input-group mb-1">
+                          <label for="poidsPoumonG" class="col-form-label-sm form-control col-4">Poumon gauche</label>
+                          <input type="text" class="form-control col-2" id="poidsPoumonG" name="poidsPoumonG" value="%5$s">
+                          <label for="poidsReinG" class="col-form-label-sm form-control col-4">Rein gauche</label>
+                          <input type="text" class="form-control col-2" id="poidsReinG" name="poidsReinG" value="%6$s">
                         </div>
                         <div class="input-group mb-3">
-                          <span class="col-form-label-sm col-4">Poumon droit</span>
-                          <input type="text" class="form-control col-2" name="poidsPoumonD" value="%7$s">
-                          <span class="col-form-label-sm col-4">Rein droit</span>
-                          <input type="text" class="form-control col-2" name="poidsReinD" value="%8$s">
+                          <label for="poidsPoumonD" class="col-form-label-sm form-control col-4">Poumon droit</label>
+                          <input type="text" class="form-control col-2" id="poidsPoumonD" name="poidsPoumonD" value="%7$s">
+                          <label for="poidsReinD" class="col-form-label-sm form-control col-4">Rein droit</label>
+                          <input type="text" class="form-control col-2" id="poidsReinD" name="poidsReinD" value="%8$s">
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="toxicologie" name="toxicologie" value="%9$s"/>

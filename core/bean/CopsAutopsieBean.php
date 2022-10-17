@@ -124,18 +124,67 @@ class CopsAutopsieBean extends CopsBean
             $strCorpulence .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
         /////////////////////////////////////////////
+
+        /////////////////////////////////////////////
+        // Cheveux
+        $strLongueurCheveux = '';
+        $arrLongueurCheveux = array(
+            '1' => 'Longs',
+            '2' => 'Courts',
+            '3' => 'Calvitie',
+            '4' => 'Chauve',
+        );
+        foreach ($arrLongueurCheveux as $value => $label) {
+            $attributes = array(
+                self::ATTR_VALUE => $value,
+            );
+            if ($value==$this->data['cheveux_longueur']) {
+                $attributes['selected'] = 'selected';
+            }
+            $strLongueurCheveux .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
+        }
+        /////////////////////////////////////////////
+        $strCoiffureCheveux = '';
+        $arrCoiffureCheveux = array(
+            '1' => 'Raides',
+            '2' => 'Ondulés',
+            '3' => 'Frisés',
+        );
+        foreach ($arrCoiffureCheveux as $value => $label) {
+            $attributes = array(
+                self::ATTR_VALUE => $value,
+            );
+            if ($value==$this->data['cheveux_coiffure']) {
+                $attributes['selected'] = 'selected';
+            }
+            $strCoiffureCheveux .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
+        }
+        /////////////////////////////////////////////
         
         $attributes = array(
-            // Général
+            // Général 1 à 4
             $this->data['sexe'],
             $this->data['ethnie'],
             $this->data['taille'],
             $this->data['poids'],
-            // Corpulence
+            // Corpulence 5
             $strCorpulence,
-            // Yeux
-            // Cheveux
-            // Pilosité
+            // Yeux 6 à 10
+            $this->data['yeux_couleur'],
+            $this->data['yeux_particularite'],
+            isset($this->data['lunettes']) ? ' checked' : '',
+            $this->data['formeLunettes'],
+            isset($this->data['lentilles']) ? ' checked' : '',
+            // Cheveux 11 à 14
+            $this->data['cheveux_couleur'],
+            $this->data['cheveux_particularite'],
+            $strLongueurCheveux,
+            $strCoiffureCheveux,
+            // Pilosité 15 à 18
+            $this->data['pilosite_couleur'],
+            $this->data['pilosite_particularite'],
+            isset($this->data['barbe']) ? ' checked' : '',
+            isset($this->data['moustache']) ? ' checked' : '',
             // Signes particuliers
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -247,7 +296,8 @@ class CopsAutopsieBean extends CopsBean
             if ($objCopsEnquete->getField(self::FIELD_ID)==$this->obj->getField(self::FIELD_IDX_ENQUETE)) {
                 $attributes['selected'] = 'selected';
             }
-            $strContent .= $this->getBalise(self::TAG_OPTION, $objCopsEnquete->getField(self::FIELD_NOM_ENQUETE), $attributes);
+            $label = $objCopsEnquete->getField(self::FIELD_NOM_ENQUETE);
+            $strContent .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
         
         $attributes = array(
