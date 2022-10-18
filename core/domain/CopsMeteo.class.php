@@ -127,7 +127,9 @@ class CopsMeteo extends LocalDomain
             $requete  = "ALTER TABLE wp_7_cops_meteo MODIFY COLUMN weather ENUM (";
             $requete .= implode(",", $arrVals).", '".$this->weather."');";
             MySQL::wpdbQuery($requete);
-            return '<strong>/!\</strong> Attention, nouvelle valeur pour le champ weather <em>'.$this->weather.'</em>.<br>';
+            $strAlert  = '<strong>/!\</strong> Attention, nouvelle valeur pour le champ weather <em>';
+            $strAlert .= $this->weather.'</em>.<br>';
+            return $strAlert;
         }
     }
 
@@ -157,7 +159,7 @@ class CopsMeteo extends LocalDomain
         $requete .= "'".$this->weather."', "; // La météo : certains ne sont peut-être pas définis dans l'enum...
         $requete .= "'".$this->weatherId."', "; // L'id météo
         $requete .= "'".$this->forceVent."', "; // La force du vent
-        $requete .= "'".$this->sensVent."', "; // La direction du vent : prefixé par "sa", class pour orienter la flèche.
+        $requete .= "'".$this->sensVent."', "; // La direction du vent : prefixé par "sa".
         $requete .= "'".$this->humidite."', "; // L'humidité
         $requete .= "'".$this->barometre."', "; // Le baromètre
         $requete .= "'".$this->visibilite."'";   // La visibilité
