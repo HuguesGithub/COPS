@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.28
  * @version 1.22.05.19
  */
-class AdminCopsProfilePageBean extends AdminCopsPageBean
+class AdminCopsProfilePageBean extends WpPageAdminBean
 {
   public function __construct()
   {

@@ -216,7 +216,8 @@ interface ConstantsInterface
   
   /////////////////////////////////////////////////
   // Page d'administration
-
+  const PAGE_ADMIN              = 'admin';
+  
   /////////////////////////////////////////////////
   // Onglets
   const ONGLET_ARCHIVE         = 'archive';

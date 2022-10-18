@@ -27,7 +27,7 @@ class CopsPageBean extends WpPageBean
   {
     switch ($this->uri) {
       case '/admin/' :
-        $Bean = new AdminCopsPageBean();
+          $Bean = new WpPageAdminBean();
         return $Bean->getContentPage();
       break;
       default :

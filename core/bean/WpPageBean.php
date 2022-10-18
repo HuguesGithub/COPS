@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * WpPageBean
  * @author Hugues
  * @since 1.22.04.27
- * @version 1.22.09.23
+ * @version 1.22.10.18
  */
 class WpPageBean extends UtilitiesBean
 {
@@ -33,7 +33,7 @@ class WpPageBean extends UtilitiesBean
 
     /**
      * @since 1.22.04.27
-     * @version 1.22.09.23
+     * @version 1.22.10.18
      */
     public static function getPageBean()
     {
@@ -44,8 +44,8 @@ class WpPageBean extends UtilitiesBean
             $arrUri = explode('/', $uri);
             if (!isset($arrUri[1])) {
                 $returned = new WpPageHomeBean();
-            } elseif ($arrUri[1]=='admin') {
-                $returned = new AdminCopsPageBean();
+            } elseif ($arrUri[1]==self::PAGE_ADMIN) {
+                $returned = new WpPageAdminBean();
             } else {
                 $returned = new WpPageHomeBean();
             }
