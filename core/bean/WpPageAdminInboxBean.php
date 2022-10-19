@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe WpPageAdminInboxBean
@@ -10,30 +10,46 @@ if (!defined('ABSPATH')) {
  */
 class WpPageAdminInboxBean extends WpPageAdminBean
 {
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
+        $this->slugPage = self::PAGE_ADMIN;
+        $this->slugOnglet = self::ONGLET_INBOX;
+        $this->slugSubOnglet = '';
+        
+        /////////////////////////////////////////
+        // Construction du menu de l'inbox
+        $this->arrSubOnglets = array(
+            self::CST_FOLDER_INBOX  => array(self::FIELD_ICON => 'inbox',         self::FIELD_LABEL => 'Réception'),
+            self::CST_FOLDER_DRAFT  => array(self::FIELD_ICON => 'file-lines',    self::FIELD_LABEL => 'Brouillons'),
+            self::CST_FOLDER_SENT   => array(self::FIELD_ICON => 'paper-plane',   self::FIELD_LABEL => 'Envoyés'),
+            self::CST_FOLDER_EVENTS => array(self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => 'Événements'),
+            self::CST_FOLDER_ALERT  => array(self::FIELD_ICON => 'bell',         self::FIELD_LABEL => 'Notifications'),
+            self::CST_FOLDER_TRASH  => array(self::FIELD_ICON => 'trash',         self::FIELD_LABEL => 'Corbeille'),
+            self::CST_FOLDER_SPAM   => array(self::FIELD_ICON => 'filter',        self::FIELD_LABEL => 'Spam'),
+            self::CST_FOLDER_READ   => array(self::FIELD_LABEL => 'Lire'),
+            self::CST_FOLDER_WRITE  => array(self::FIELD_LABEL => 'Rédiger'),
+        );
+        /////////////////////////////////////////
 
-    /////////////////////////////////////////
-    // Construction du menu de l'inbox
-    $this->arrSubOnglets = array(
-      self::CST_FOLDER_INBOX  => array(self::FIELD_ICON => 'inbox',         self::FIELD_LABEL => 'Réception'),
-      self::CST_FOLDER_DRAFT  => array(self::FIELD_ICON => 'file-lines',    self::FIELD_LABEL => 'Brouillons'),
-      self::CST_FOLDER_SENT   => array(self::FIELD_ICON => 'paper-plane',   self::FIELD_LABEL => 'Envoyés'),
-      self::CST_FOLDER_EVENTS => array(self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => 'Événements'),
-      self::CST_FOLDER_ALERT  => array(self::FIELD_ICON => 'bell',          self::FIELD_LABEL => 'Notifications'),
-      self::CST_FOLDER_TRASH  => array(self::FIELD_ICON => 'trash',         self::FIELD_LABEL => 'Corbeille'),
-      self::CST_FOLDER_SPAM   => array(self::FIELD_ICON => 'filter',        self::FIELD_LABEL => 'Spam'),
-      self::CST_FOLDER_READ   => array(self::FIELD_LABEL => 'Lire'),
-      self::CST_FOLDER_WRITE  => array(self::FIELD_LABEL => 'Rédiger'),
-    );
-    /////////////////////////////////////////
+        /////////////////////////////////////////
+        // Définition des services
+        $this->CopsMailServices = new CopsMailServices();
+    }
 
-    /////////////////////////////////////////
-    // Définition des services
-    $this->CopsMailServices = new CopsMailServices();
-
-  }
+    /**
+     * @return string
+     * @since 1.22.10.19
+     * @version 1.22.10.19
+     */
+    public function initBoard()
+    {
+        /////////////////////////////////////////
+        // Création du Breadcrumbs
+        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_FOLDER_INBOX);
+        $this->buildBreadCrumbs('Messagerie', self::ONGLET_INBOX, true);
+    }
+    
   /**
    * @return string
    * @since 1.22.04.29
@@ -41,7 +57,6 @@ class WpPageAdminInboxBean extends WpPageAdminBean
    */
   public function getBoard()
   {
-    $this->subOnglet = (isset($this->urlParams[self::CST_SUBONGLET]) && isset($this->arrSubOnglets[$this->urlParams[self::CST_SUBONGLET]]) ? $this->urlParams[self::CST_SUBONGLET] : self::CST_FOLDER_INBOX);
     $label = $this->arrSubOnglets[$this->subOnglet][self::FIELD_LABEL];
 
     // On devrait ici contrôler les actions et les effectuer
@@ -138,271 +153,255 @@ class WpPageAdminInboxBean extends WpPageAdminBean
         $this->CopsMailServices->insertMailJoint($CopsMailJoint);
       }
     }
-
-    $this->buildBreadCrumbs('Messagerie', self::ONGLET_INBOX, true);
-
-    // Soit on est loggué et on affiche le contenu du bureau du cops
-    $urlTemplate = 'web/pages/public/public-board.php';
-    $attributes = array(
-      // La sidebar
-      $this->getSideBar(),
-      // Le contenu de la page
-      $this->getOngletContent(),
-      // L'id
-      $this->CopsPlayer->getMaskMatricule(),
-      // Le nom
-      $this->CopsPlayer->getFullName(),
-      // La barre de navigation
-      $this->getNavigationBar(),
-      // Le content header
-      $this->getContentHeader(),
-      '', '', '', '', '', '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  /**
-   * @since 1.22.04.29
-   * @version 1.22.05.10
-   */
-  public function getOngletContent()
-  {
-    // Définir message précédent
-    // Définir message suivant
-
-    /////////////////////////////////////////
-    // COnstruction du panneau de droite
-    // On le fait avant le panneau de gauche, pour le cas où on afficherait un message non lu
-    // qui deviendrait lu et donc ne doit plus remonter comme tel dans les badges
-    switch ($this->subOnglet) {
-      case self::CST_FOLDER_READ :
-        $strRightPanel = $this->getReadMessageBlock();
-        $strButtonRetour = '<a href="/admin?onglet=inbox&subOnglet='.$this->Folder->getField(self::FIELD_SLUG).'" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> '.$this->Folder->getField(self::FIELD_LABEL).'</a>';
-      break;
-      case self::CST_FOLDER_WRITE :
-        $strRightPanel = $this->getWriteMessageBlock();
-        $strButtonRetour = '<a href="/admin?onglet=inbox" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> Retour</a>';
-      break;
-      default :
-        $strRightPanel = $this->getFolderMessagesList();
-        $strButtonRetour = '<a href="/admin?onglet=inbox&subOnglet=write" class="btn btn-primary btn-block mb-3">Rédiger un message</a>';
-      break;
-    }
-    /////////////////////////////////////////
-
-    $strLeftPanel = $this->getFolderBlock();
-
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox.php';
-    $attributes = array(
-      // Contenu du panneau latéral gauche
-      $strLeftPanel,
-      // Contenu du panneau principal
-      $strRightPanel,
-      // Eventuel bouton de retour si on est en train de lire ou rédiger un message
-      $strButtonRetour,
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  /**
-   * @since 1.22.05.06
-   * @version 1.22.05.06
-   */
-  public function getReadMessageBlock()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-read.php';
-
-    $CopsMail = $this->CopsMailJoint->getMail();
-    $this->Folder   = $this->CopsMailJoint->getMailFolder();
-
-    //////////////////////////////////////////////////
-    // Construction des liens pour accéder au message suivant/précédent
-    // ou retour au dossier contenant le message courant
-    $PrevMailJoint = $this->CopsMailServices->getPrevNextMailJoint($this->CopsMailJoint);
-    $prevId = $PrevMailJoint->getField(self::FIELD_ID);
-    if ($prevId=='') {
-      $url = '/admin?onglet=inbox&subOnglet='.$this->CopsMailJoint->getMailFolder()->getField(self::FIELD_SLUG);
-    } else {
-      $url = '/admin?onglet=inbox&subOnglet=read&id='.$prevId;
-    }
-    $cardTools  = '<button class="btn btn-dark btn-sm"><a href="'.$url.'" class="btn btn-tool" title="Précédent"><i class="fa-solid fa-chevron-left"></i></a></button>';
-    $NextMailJoint = $this->CopsMailServices->getPrevNextMailJoint($this->CopsMailJoint, false);
-    $nextId = $NextMailJoint->getField(self::FIELD_ID);
-    if ($nextId=='') {
-      $url = '/admin?onglet=inbox&subOnglet='.$this->CopsMailJoint->getMailFolder()->getField(self::FIELD_SLUG);
-    } else {
-      $url = '/admin?onglet=inbox&subOnglet=read&id='.$nextId;
-    }
-    $cardTools .= '<button class="btn btn-dark btn-sm"><a href="'.$url.'" class="btn btn-tool" title="Suivant"><i class="fa-solid fa-chevron-right"></i></a></button>';
-    //////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////
-    // Construction de la chaine de réception
-    $strAdress = 'De : '.$this->CopsMailJoint->getAuteur()->getField(self::FIELD_MAIL); // 'From: tintin@herge.fr<br>Cc: haddock@herge.fr'
-    //////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////
-    // Construction de la date d'envoi
-    $strDateEnvoi = $CopsMail->getDateEnvoiFormate();
-
-    $attributes = array(
-      // Titre du mail
-      $CopsMail->getField(self::FIELD_MAIL_SUBJECT),
-      // From
-      $strAdress,
-      // Date envoi
-      $strDateEnvoi,//'15 Feb. 2015 11:03 PM',
-      // Corps du message
-      $CopsMail->getField(self::FIELD_MAIL_CONTENT),
-      // Liste des pièces jointes
-      '',
-      // les Card Tools
-      $cardTools,
-      // Le lien suppression
-      '/admin?onglet=inbox&subOnglet='.$this->Folder->getField(self::FIELD_SLUG).'&trash&id='.$this->CopsMailJoint->getField(self::FIELD_ID),
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  /**
-   * @since 1.22.05.04
-   * @version 1.22.05.04
-   */
-  public function getWriteMessageBlock()
-  {
-    $CopsMail = $this->CopsMailJoint->getMail();
-    $Folder   = $this->CopsMailJoint->getMailFolder();
-    $CopsMailUser = $this->CopsMailServices->getMailUser($this->CopsMailJoint->getField(self::FIELD_TO_ID));
-
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-write.php';
-    $attributes = array(
-      // La liste des expéditeurs, visible ou non, si on est admin (liste d'options)
-      ' disabled',
-      // La liste des expéditeurs, son contenu, si on est admin (liste d'options)
-      $this->getExpediteurOptions(),
-      // Les destinataires par défaut (dans le cas d'un reply par exemple)
-      $CopsMailUser->getField(self::FIELD_MAIL),
-      // Le sujet par défaut (dans le cas d'un reply ou d'un share)
-      $CopsMail->getField(self::FIELD_MAIL_SUBJECT),
-      // Le message par défaut (dans le textarea, dans le cas d'un reply ou d'un share)
-      $CopsMail->getField(self::FIELD_MAIL_CONTENT),
-      // Le message par défaut stylisée dans le champ de saisie dans le cas d'un reply ou d'un share)
-      $CopsMail->getField(self::FIELD_MAIL_CONTENT),
-      // L'id éventuel du mail (dans le cas de la rédaction d'un draft)
-      $CopsMail->getField(self::FIELD_ID),
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  public function getExpediteurOptions()
-  {
-    $strExpediteurOptions = '';
-
-    $fromId = $this->CopsMailJoint->getField(self::FIELD_FROM_ID);
-    if ($fromId=='') {
-      $CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
-      $fromId = $CopsPlayer->getField(self::FIELD_ID);
+        return parent::getBoard();
     }
 
-    $strExpediteurOptions .= '<option value="1"'.($fromId==1 ? ' selected' : '').'>Ressources Humaines</option>';
-    $strExpediteurOptions .= '<option value="2"'.($fromId==2 ? ' selected' : '').'>COPS 101</option>';
+    /**
+     * @since 1.22.04.29
+     * @version 1.22.10.19
+     */
+    public function getOngletContent()
+    {
+        // Définir message précédent
+        // Définir message suivant
 
-    return $strExpediteurOptions;
-  }
+        /////////////////////////////////////////
+        // Construction du panneau de droite
+        // On le fait avant le panneau de gauche, pour le cas où on afficherait un message non lu
+        // qui deviendrait lu et donc ne doit plus remonter comme tel dans les badges
+        switch ($this->subOnglet) {
+            case self::CST_FOLDER_READ :
+                $strRightPanel = $this->getReadMessageBlock();
+                $strButtonRetour = '<a href="/admin?onglet=inbox&subOnglet='.$this->Folder->getField(self::FIELD_SLUG).'" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> '.$this->Folder->getField(self::FIELD_LABEL).'</a>';
+                break;
+            case self::CST_FOLDER_WRITE :
+                $strRightPanel = $this->getWriteMessageBlock();
+                $strButtonRetour = '<a href="/admin?onglet=inbox" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> Retour</a>';
+                break;
+            default :
+                $strRightPanel = $this->getFolderMessagesList();
+                $strButtonRetour = '<a href="/admin?onglet=inbox&subOnglet=write" class="btn btn-primary btn-block mb-3">Rédiger un message</a>';
+                break;
+        }
+        /////////////////////////////////////////
 
-  /**
-   * @since 1.22.05.02
-   * @version 1.22.05.04
-   */
-  public function getFolderMessagesList()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-messages.php';
-
-    ///////////////////////////////////////////////////////////////////
-    // Récupération des mails du dossier affiché pour l'utilisateur courant
-    $MailFolder = $this->CopsMailServices->getMailFolder($this->subOnglet);
-    $CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
-    switch ($this->subOnglet) {
-      case self::CST_FOLDER_DRAFT  :
-      case self::CST_FOLDER_SENT   :
-        $argRequest = array(
-          self::FIELD_FOLDER_ID => $MailFolder->getField(self::FIELD_ID),
-          self::FIELD_FROM_ID   => $CopsPlayer->getField(self::FIELD_ID),
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox.php';
+        $attributes = array(
+            // Contenu du panneau latéral gauche
+            $this->getFolderBlock(),
+            // Contenu du panneau principal
+            $strRightPanel,
+            // Eventuel bouton de retour si on est en train de lire ou rédiger un message
+            $strButtonRetour,
         );
-        $CopsMailJoints = $this->CopsMailServices->getMailJoints($argRequest);
-      break;
-      case self::CST_FOLDER_TRASH  :
-        $argRequest = array(
-          self::FIELD_FOLDER_ID => $MailFolder->getField(self::FIELD_ID),
-          self::FIELD_TO_ID     => $CopsPlayer->getField(self::FIELD_ID),
-          self::FIELD_FROM_ID   => $CopsPlayer->getField(self::FIELD_ID),
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since 1.22.05.06
+     * @version 1.22.10.19
+     */
+    public function getReadMessageBlock()
+    {
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-read.php';
+
+        $objCopsMail = $this->CopsMailJoint->getMail();
+        $this->Folder = $this->CopsMailJoint->getMailFolder();
+
+        //////////////////////////////////////////////////
+        // Construction des liens pour accéder au message suivant/précédent
+        // ou retour au dossier contenant le message courant
+        $objPrevMailJoint = $this->CopsMailServices->getPrevNextMailJoint($this->CopsMailJoint);
+        $prevId = $objPrevMailJoint->getField(self::FIELD_ID);
+        if ($prevId=='') {
+            $url = '/admin?onglet=inbox&subOnglet='.$this->CopsMailJoint->getMailFolder()->getField(self::FIELD_SLUG);
+        } else {
+            $url = '/admin?onglet=inbox&subOnglet=read&id='.$prevId;
+        }
+        $cardTools  = '<button class="btn btn-dark btn-sm"><a href="'.$url.'" class="btn btn-tool" title="Précédent">';
+        $cardTools .= '<i class="fa-solid fa-chevron-left"></i></a></button>';
+        $objNextMailJoint = $this->CopsMailServices->getPrevNextMailJoint($this->CopsMailJoint, false);
+        $nextId = $objNextMailJoint->getField(self::FIELD_ID);
+        if ($nextId=='') {
+            $url = '/admin?onglet=inbox&subOnglet='.$this->CopsMailJoint->getMailFolder()->getField(self::FIELD_SLUG);
+        } else {
+            $url = '/admin?onglet=inbox&subOnglet=read&id='.$nextId;
+        }
+        $cardTools .= '<button class="btn btn-dark btn-sm"><a href="'.$url.'" class="btn btn-tool" title="Suivant">';
+        $cardTools .= '<i class="fa-solid fa-chevron-right"></i></a></button>';
+        //////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////
+        // Construction de la chaine de réception
+        // 'From: tintin@herge.fr<br>Cc: haddock@herge.fr'
+        $strAddress = 'De : '.$this->CopsMailJoint->getAuteur()->getField(self::FIELD_MAIL);
+        //////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////
+        // Construction de la date d'envoi
+        $strDateEnvoi = $objCopsMail->getDateEnvoiFormate();
+        // Url de suppression
+        $urlRemove  = '/admin?onglet=inbox&subOnglet='.$this->Folder->getField(self::FIELD_SLUG);
+        $urlRemove .= '&trash&id='.$this->CopsMailJoint->getField(self::FIELD_ID);
+    
+
+        $attributes = array(
+            // Titre du mail
+            $objCopsMail->getField(self::FIELD_MAIL_SUBJECT),
+            // From
+            $strAddress,
+            // Date envoi
+            $strDateEnvoi,//'15 Feb. 2015 11:03 PM',
+            // Corps du message
+            $objCopsMail->getField(self::FIELD_MAIL_CONTENT),
+            // Liste des pièces jointes
+            '',
+            // les Card Tools
+            $cardTools,
+            // Le lien suppression
+            $urlRemove,
         );
-        $CopsMailJoints = $this->CopsMailServices->getMailJoints($argRequest, true);
-      break;
-      case self::CST_FOLDER_INBOX  :
-      case self::CST_FOLDER_EVENTS :
-      case self::CST_FOLDER_ALERT  :
-      case self::CST_FOLDER_SPAM   :
-      default :
-        $argRequest = array(
-          self::FIELD_FOLDER_ID => $MailFolder->getField(self::FIELD_ID),
-          self::FIELD_TO_ID     => $CopsPlayer->getField(self::FIELD_ID),
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since 1.22.05.04
+     * @version 1.22.10.19
+     */
+    public function getWriteMessageBlock()
+    {
+        $objCopsMail = $this->CopsMailJoint->getMail();
+        $objCopsMailUser = $this->CopsMailServices->getMailUser($this->CopsMailJoint->getField(self::FIELD_TO_ID));
+
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-write.php';
+        $attributes = array(
+            // La liste des expéditeurs, visible ou non, si on est admin (liste d'options)
+            ' disabled',
+            // La liste des expéditeurs, son contenu, si on est admin (liste d'options)
+            $this->getExpediteurOptions(),
+            // Les destinataires par défaut (dans le cas d'un reply par exemple)
+            $objCopsMailUser->getField(self::FIELD_MAIL),
+            // Le sujet par défaut (dans le cas d'un reply ou d'un share)
+            $objCopsMail->getField(self::FIELD_MAIL_SUBJECT),
+            // Le message par défaut (dans le textarea, dans le cas d'un reply ou d'un share)
+            $objCopsMail->getField(self::FIELD_MAIL_CONTENT),
+            // Le message par défaut stylisée dans le champ de saisie dans le cas d'un reply ou d'un share)
+            $objCopsMail->getField(self::FIELD_MAIL_CONTENT),
+            // L'id éventuel du mail (dans le cas de la rédaction d'un draft)
+            $objCopsMail->getField(self::FIELD_ID),
         );
-        $CopsMailJoints = $this->CopsMailServices->getMailJoints($argRequest);
-      break;
+        return $this->getRender($urlTemplate, $attributes);
     }
-    ///////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////
-    // TODO : Va falloir gérer la pagination ici
-    $nbMails = count($CopsMailJoints);
-    $nbMailsPerPage = 10;
-    $curPage = 1;
-    $minMail = $nbMailsPerPage*($curPage-1)+1;
-    $maxMail = min($nbMails, $nbMailsPerPage*$curPage);
-    $strPagination = '';
-    $strContent = '';
-    if ($nbMails==0) {
-      $strContent = '<tr><td class="text-center">Aucun message dans ce dossier.<br></td></tr>';
-    } else {
-      $strPagination = $minMail.'-'.$maxMail.' / '.$nbMails;
-      while (!empty($CopsMailJoints)) {
-        $CopsMailJoint = array_shift($CopsMailJoints);
-        $strContent .= $CopsMailJoint->getBean()->getInboxRow();
-      }
+    public function getExpediteurOptions()
+    {
+        $strExpediteurOptions = '';
+
+        $fromId = $this->CopsMailJoint->getField(self::FIELD_FROM_ID);
+        if ($fromId=='') {
+            $objCopsPlayer = CopsPlayer::getCurrentCopsPlayer();
+            $fromId = $objCopsPlayer->getField(self::FIELD_ID);
+        }
+
+        $strExpediteurOptions .= '<option value="1"'.($fromId==1 ? ' selected' : '').'>Ressources Humaines</option>';
+        $strExpediteurOptions .= '<option value="2"'.($fromId==2 ? ' selected' : '').'>COPS 101</option>';
+
+        return $strExpediteurOptions;
     }
-    ///////////////////////////////////////////////////////////////////
 
-    $attributes = array(
-      // Titre du dossier affiché
-      $this->arrSubOnglets[$this->subOnglet][self::FIELD_LABEL],
-      // Nombre de messages dans le dossier affiché : 1-50/200
-      $strPagination,
-      // La liste des messages du dossier affiché
-      $strContent,
-      // Le slug du dossier affiché
-      $this->subOnglet,
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
+    /**
+     * @since 1.22.05.02
+     * @version 1.22.10.19
+     */
+    public function getFolderMessagesList()
+    {
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-messages.php';
 
-  /**
-   * @since 1.22.05.02
-   * @version 1.22.05.02
-   */
-  public function getFolderBlock()
-  {
-    /////////////////////////////////////////
-    // Construction du panneau de gauche
-    $strLeftPanel = '';
-    $MailFolders = $this->CopsMailServices->getMailFolders();
+        ///////////////////////////////////////////////////////////////////
+        // Récupération des mails du dossier affiché pour l'utilisateur courant
+        $objMailFolder = $this->CopsMailServices->getMailFolder($this->subOnglet);
+        $objCopsPlayer = CopsPlayer::getCurrentCopsPlayer();
+        switch ($this->subOnglet) {
+            case self::CST_FOLDER_DRAFT  :
+            case self::CST_FOLDER_SENT   :
+                $argRequest = array(
+                    self::FIELD_FOLDER_ID => $objMailFolder->getField(self::FIELD_ID),
+                    self::FIELD_FROM_ID   => $objCopsPlayer->getField(self::FIELD_ID),
+                );
+                $objsCopsMailJoint = $this->CopsMailServices->getMailJoints($argRequest);
+                break;
+            case self::CST_FOLDER_TRASH  :
+                $argRequest = array(
+                    self::FIELD_FOLDER_ID => $objMailFolder->getField(self::FIELD_ID),
+                    self::FIELD_TO_ID     => $objCopsPlayer->getField(self::FIELD_ID),
+                    self::FIELD_FROM_ID   => $objCopsPlayer->getField(self::FIELD_ID),
+                );
+                $objsCopsMailJoint = $this->CopsMailServices->getMailJoints($argRequest, true);
+                break;
+            case self::CST_FOLDER_INBOX  :
+            case self::CST_FOLDER_EVENTS :
+            case self::CST_FOLDER_ALERT  :
+            case self::CST_FOLDER_SPAM   :
+            default :
+                $argRequest = array(
+                    self::FIELD_FOLDER_ID => $objMailFolder->getField(self::FIELD_ID),
+                    self::FIELD_TO_ID     => $objCopsPlayer->getField(self::FIELD_ID),
+                );
+                $objsCopsMailJoint = $this->CopsMailServices->getMailJoints($argRequest);
+            break;
+        }
+        ///////////////////////////////////////////////////////////////////
 
-    while (!empty($MailFolders)) {
-      $MailFolder = array_shift($MailFolders);
-      $strLeftPanel .= $MailFolder->getBean()->getMenuFolder($this->subOnglet);
+        ///////////////////////////////////////////////////////////////////
+        // TODO : Va falloir gérer la pagination ici
+        $nbMails = count($objsCopsMailJoint);
+        $nbMailsPerPage = 10;
+        $curPage = 1;
+        $minMail = $nbMailsPerPage*($curPage-1)+1;
+        $maxMail = min($nbMails, $nbMailsPerPage*$curPage);
+        $strPagination = '';
+        $strContent = '';
+        if ($nbMails==0) {
+            $strContent = '<tr><td class="text-center">Aucun message dans ce dossier.<br></td></tr>';
+        } else {
+            $strPagination = $minMail.'-'.$maxMail.' / '.$nbMails;
+            while (!empty($objsCopsMailJoint)) {
+                $objCopsMailJoint = array_shift($objsCopsMailJoint);
+                $strContent .= $objCopsMailJoint->getBean()->getInboxRow();
+            }
+        }
+        ///////////////////////////////////////////////////////////////////
+
+        $attributes = array(
+            // Titre du dossier affiché
+            $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL],
+            // Nombre de messages dans le dossier affiché : 1-50/200
+            $strPagination,
+            // La liste des messages du dossier affiché
+            $strContent,
+            // Le slug du dossier affiché
+            $this->slugSubOnglet,
+        );
+        return $this->getRender($urlTemplate, $attributes);
     }
-    /////////////////////////////////////////
-    return $strLeftPanel;
-  }
+
+    /**
+     * @since 1.22.05.02
+     * @version 1.22.10.19
+     */
+    public function getFolderBlock()
+    {
+        /////////////////////////////////////////
+        // Construction du panneau de gauche
+        $strLeftPanel = '';
+        $objsMailFolder = $this->CopsMailServices->getMailFolders();
+
+        while (!empty($objsMailFolder)) {
+            $objMailFolder = array_shift($objsMailFolder);
+            $strLeftPanel .= $objMailFolder->getBean()->getMenuFolder($this->subOnglet);
+        }
+        /////////////////////////////////////////
+        return $strLeftPanel;
+    }
 
 }
