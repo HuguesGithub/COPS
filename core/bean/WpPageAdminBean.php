@@ -8,8 +8,14 @@ if (!defined('ABSPATH')) {
  * @since 1.22.10.18
  * @version 1.22.10.18
  */
-class WpPageAdminBean extends UtilitiesBean
+class WpPageAdminBean extends WpPageBean
 {
+    public $slugPage;
+    public $slugOnglet;
+    public $slugSubOnglet;
+    
+    public $arrSubOnglets = array();
+
     /**
      * Class Constructor
      * @since 1.22.10.18
@@ -20,7 +26,7 @@ class WpPageAdminBean extends UtilitiesBean
         $this->analyzeUri();
         $this->CopsPlayerServices = new CopsPlayerServices();
         $this->CopsMailServices   = new CopsMailServices();
-        $this->urlOnglet = '/admin?'.self::CST_ONGLET.'=';
+        $this->urlOnglet = '/'.self::PAGE_ADMIN.'?'.self::CST_ONGLET.'=';
     
         if (isset($_POST[self::FIELD_MATRICULE])) {
             // On cherche a priori à se logguer
@@ -78,7 +84,7 @@ class WpPageAdminBean extends UtilitiesBean
     /**
      * @return string
      * @since 1.22.10.18
-     * @version 1.22.10.18
+     * @version 1.22.10.19
      */
     public function getContentPage()
     {
@@ -107,7 +113,7 @@ class WpPageAdminBean extends UtilitiesBean
                     $objBean = AdminCopsCalendarPageBean::getCalendarBean($this->urlParams[self::CST_SUBONGLET]);
                     break;
                 case self::ONGLET_INBOX :
-                    $objBean = new AdminCopsInboxPageBean();
+                    $objBean = new WpPageAdminInboxBean();
                     break;
                 case self::ONGLET_LIBRARY :
                     $objBean = new AdminCopsLibraryPageBean();
@@ -119,21 +125,27 @@ class WpPageAdminBean extends UtilitiesBean
                     $objBean = new AdminCopsProfilePageBean();
                     break;
                 case self::ONGLET_ENQUETE :
-                    $objBean = new AdminCopsEnquetePageBean();
+                    $objBean = new WpPageAdminEnqueteBean();
                     break;
                 case self::ONGLET_AUTOPSIE :
-                    $objBean = new AdminCopsAutopsiePageBean();
+                    $objBean = new WpPageAdminAutopsieBean();
                     break;
                 case self::ONGLET_DESK   :
                 default       :
                     $objBean = $this;
                 break;
             }
-            $returned = $this->getBoard();
+            $objBean->initBoard();
+            $returned = $objBean->getBoard();
         } catch (\Exception $Exception) {
             $returned = 'Error';
         }
         return $returned;
+    }
+    
+    public function initBoard()
+    {
+        $this->buildBreadCrumbs('Bureau');
     }
 
     /**
@@ -150,7 +162,7 @@ class WpPageAdminBean extends UtilitiesBean
             // La sidebar
             $this->getSideBar(),
             // Le contenu de la page
-            '',
+            $this->getOngletContent(),
             // L'id
             $this->CopsPlayer->getMaskMatricule(),
             // Le nom
@@ -158,13 +170,16 @@ class WpPageAdminBean extends UtilitiesBean
             // La barre de navigation
             $this->getNavigationBar(),
             // Header
-            '',
+            $this->getContentHeader(),
             // Version
             self::VERSION,
             '', '', '', '', '', '', '', '', '', '', '',
         );
         return $this->getRender($urlTemplate, $attributes);
     }
+    
+    public function getOngletContent()
+    { return ''; }
 
     /**
      * @since 1.22.10.18
@@ -192,7 +207,7 @@ class WpPageAdminBean extends UtilitiesBean
             // Le lien ou le dropdown selon le type de mixed
             if ($hasDropdown===true) {
                 $breadCrumbsContent .= '<div class="btn-group">';
-                $buttonContent = $this->arrSubOnglets[$this->subOnglet][self::FIELD_LABEL];
+                $buttonContent = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
                 $buttonAttributes = array(
                     'type'           => self::TAG_BUTTON,
                     self::ATTR_CLASS => 'btn btn-sm btn-dark dropdown-toggle',
@@ -204,8 +219,10 @@ class WpPageAdminBean extends UtilitiesBean
                     if ($arrData[self::FIELD_LABEL]=='' || !isset($arrData[self::FIELD_ICON])) {
                         continue;
                     }
-                    $url = $this->urlOnglet.$slug.'&subOnglet='.$subOnglet.(isset($arrData['url']) ? '&'.$arrData['url'] : '');
-                    $breadCrumbsContent .= '<a class="dropdown-item btn-sm" href="'.$url.'">'.$arrData[self::FIELD_LABEL].'</a>';
+                    $url  = $this->urlOnglet.$slug.'&subOnglet='.$subOnglet;
+                    $url .= (isset($arrData['url']) ? '&'.$arrData['url'] : '');
+                    $breadCrumbsContent .= '<a class="dropdown-item btn-sm" href="'.$url.'">';
+                    $breadCrumbsContent .= $arrData[self::FIELD_LABEL].'</a>';
                 }
                 $breadCrumbsContent .= '</div>';
                 $breadCrumbsContent .= '</div>';
@@ -241,13 +258,18 @@ class WpPageAdminBean extends UtilitiesBean
                     self::FIELD_ICON  => 'desktop',
                     self::FIELD_LABEL => 'Bureau',
                 ),
-                self::ONGLET_INBOX => array(
-                    self::FIELD_ICON  => 'envelope',
-                    self::FIELD_LABEL => 'Messagerie',
+                self::ONGLET_AUTOPSIE => array(
+                    self::FIELD_ICON  => 'box-archive',
+                    self::FIELD_LABEL => 'Autopsies',
                 ),
                 self::ONGLET_ENQUETE => array(
                     self::FIELD_ICON  => self::I_FILE_CATEGORY,
                     self::FIELD_LABEL => 'Enquêtes',
+                ),
+                
+                self::ONGLET_INBOX => array(
+                    self::FIELD_ICON  => 'envelope',
+                    self::FIELD_LABEL => 'Messagerie',
                 ),
                 self::ONGLET_CALENDAR => array(
                     self::FIELD_ICON   => 'calendar-days',
@@ -292,7 +314,7 @@ class WpPageAdminBean extends UtilitiesBean
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
             $aAttributes = array(
                 self::ATTR_HREF  => $this->urlOnglet.$strOnglet,
-                self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' active' : ''),
+                self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : ''),
             );
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
 
@@ -302,7 +324,7 @@ class WpPageAdminBean extends UtilitiesBean
                 foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
                     if ($strSubOnglet==$this->urlParams[self::CST_SUBONGLET] ||
                         $this->urlParams[self::CST_SUBONGLET]=='date' && $strSubOnglet=='allDates') {
-                        $extraClass = ' active';
+                        $extraClass = ' '.self::CST_ACTIVE;
                     } else {
                         $extraClass = '';
                     }
@@ -314,7 +336,8 @@ class WpPageAdminBean extends UtilitiesBean
                     $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
                     $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
                 }
-                $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, array(self::ATTR_CLASS=>'nav nav-treeview'));
+                $liAttributes = array(self::ATTR_CLASS=>'nav nav-treeview');
+                $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
             }
 
             // Construction de l'élément de la liste
@@ -486,9 +509,9 @@ class WpPageAdminBean extends UtilitiesBean
             // On construit l'entrée de l'onglet/
             $attributes = array(
                 // Menu sélectionné ou pas ?
-                ($slug==$this->subOnglet ? ' '.self::CST_ACTIVE : ''),
+                ($slug==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : ''),
                 // L'url du folder
-                $this->baseUrl.$this->urlSubOnglet.$slug,
+                $this->getSubOngletUrl($slug),
                 // L'icône
                 $subOnglet[self::FIELD_ICON],
                 // Le libellé
@@ -499,5 +522,19 @@ class WpPageAdminBean extends UtilitiesBean
         /////////////////////////////////////////
         return $strLeftPanel;
     }
-
+    
+    public function getSubOngletUrl($slugSubOnglet='')
+    {
+        if ($slugSubOnglet=='') {
+            $slugSubOnglet = $this->slugSubOnglet;
+        }
+        return $this->getOngletUrl().'&amp;'.self::CST_SUBONGLET.'='.$slugSubOnglet;
+    }
+    
+    public function getOngletUrl()
+    { return $this->getPageUrl().'?'.self::CST_ONGLET.'='.$this->slugOnglet; }
+    
+    public function getPageUrl()
+    { return '/'.$this->slugPage; }
+    
 }

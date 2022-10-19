@@ -3,12 +3,12 @@ if (!defined('ABSPATH')) {
   die('Forbidden');
 }
 /**
- * Classe AdminCopsInboxPageBean
+ * Classe WpPageAdminInboxBean
  * @author Hugues
  * @since 1.22.04.29
  * @version 1.22.05.10
  */
-class AdminCopsInboxPageBean extends WpPageAdminBean
+class WpPageAdminInboxBean extends WpPageAdminBean
 {
   public function __construct()
   {
