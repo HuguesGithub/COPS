@@ -21,12 +21,14 @@ class WpPageAdminInboxBean extends WpPageAdminBean
         // Construction du menu de l'inbox
         $this->arrSubOnglets = array(
             self::CST_FOLDER_INBOX  => array(self::FIELD_ICON => 'inbox',         self::FIELD_LABEL => 'Réception'),
+            /*
             self::CST_FOLDER_DRAFT  => array(self::FIELD_ICON => 'file-lines',    self::FIELD_LABEL => 'Brouillons'),
             self::CST_FOLDER_SENT   => array(self::FIELD_ICON => 'paper-plane',   self::FIELD_LABEL => 'Envoyés'),
             self::CST_FOLDER_EVENTS => array(self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => 'Événements'),
             self::CST_FOLDER_ALERT  => array(self::FIELD_ICON => 'bell',         self::FIELD_LABEL => 'Notifications'),
             self::CST_FOLDER_TRASH  => array(self::FIELD_ICON => 'trash',         self::FIELD_LABEL => 'Corbeille'),
-            self::CST_FOLDER_SPAM   => array(self::FIELD_ICON => 'filter',        self::FIELD_LABEL => 'Spam'),
+            self::CST_FOLDER_SPAM   => array(self::FIELD_ICON => 'filter',        self::FIELD_LABEL => 'Indésirables'),
+            */
             self::CST_FOLDER_READ   => array(self::FIELD_LABEL => 'Lire'),
             self::CST_FOLDER_WRITE  => array(self::FIELD_LABEL => 'Rédiger'),
         );
@@ -53,106 +55,101 @@ class WpPageAdminInboxBean extends WpPageAdminBean
   /**
    * @return string
    * @since 1.22.04.29
-   * @version 1.22.06.09
+   * @version 1.22.10.19
    */
-  public function getBoard()
-  {
-    $label = $this->arrSubOnglets[$this->subOnglet][self::FIELD_LABEL];
-
-    // On devrait ici contrôler les actions et les effectuer
-    // read ? -> On marque le message lu
-    if ($this->subOnglet==self::CST_FOLDER_READ) {
-      $this->CopsMailJoint = $this->CopsMailServices->getMailJoint($this->urlParams[self::FIELD_ID]);
-      $this->CopsMailJoint->setField(self::FIELD_LU, 1);
-      $this->CopsMailServices->updateMailJoint($this->CopsMailJoint);
-
-      $MailFolder = $this->CopsMailJoint->getMailFolder();
-      $label = $MailFolder->getField(self::FIELD_LABEL);
-    } elseif ($this->subOnglet==self::CST_FOLDER_WRITE) {
-      if (isset($this->urlParams[self::FIELD_ID])) {
-        $this->CopsMailJoint = $this->CopsMailServices->getMailJoint($this->urlParams[self::FIELD_ID]);
-      } else {
-        $this->CopsMailJoint = new CopsMailJoint();
-      }
-      $MailFolder = $this->CopsMailJoint->getMailFolder();
-      $label = $MailFolder->getField(self::FIELD_LABEL);
-    }
-
-    // trash ? -> On supprimer les messages
-    if (isset($this->urlParams[self::CST_FOLDER_TRASH])) {
-      $ids = explode(',', $this->urlParams['ids']);
-      // On parcourt la liste des ids
-      while (!empty($ids)) {
-        $id = array_shift($ids);
-        $CopsMailJoint = $this->CopsMailServices->getMailJoint($id);
-        // On vérifie que l'id est existant, qu'il appartient bien au folder actuel et que le user actuel en est bien le destinataire
-        if ($CopsMailJoint->getField(self::FIELD_TO_ID)==2) {
-          if ($this->subOnglet!=self::CST_FOLDER_TRASH) {
-            // Si les contrôles sont okay, on déplace le message vers le folder trash.
-            $CopsMailJoint->setField(self::FIELD_FOLDER_ID, 6);
-          } else {
-            // Si le folder actuel est trash, on le supprime définitivement. (bon en fait, on le met dans le folder 10 qui n'existe pas)
-            $CopsMailJoint->setField(self::FIELD_FOLDER_ID, 10);
-          }
-          $this->CopsMailServices->updateMailJoint($CopsMailJoint);
+    public function getBoard()
+    {
+        // On devrait ici contrôler les actions et les effectuer
+        // read ? -> On marque le message lu
+        if ($this->subOnglet==self::CST_FOLDER_READ) {
+            $this->CopsMailJoint = $this->CopsMailServices->getMailJoint($this->urlParams[self::FIELD_ID]);
+            $this->CopsMailJoint->setField(self::FIELD_LU, 1);
+            $this->CopsMailServices->updateMailJoint($this->CopsMailJoint);
+        } elseif ($this->subOnglet==self::CST_FOLDER_WRITE) {
+            if (isset($this->urlParams[self::FIELD_ID])) {
+                $this->CopsMailJoint = $this->CopsMailServices->getMailJoint($this->urlParams[self::FIELD_ID]);
+            } else {
+                $this->CopsMailJoint = new CopsMailJoint();
+            }
         }
-      }
-    }
 
-    if (isset($this->urlParams['writeAction'])) {
-      // L'action souhaitée parmi draft (on va sauvegarder en brouillon), send (on va envoyer)
-      $mailAction = $this->urlParams['writeAction'];
-      $attributes = array(
-        // Le sujet
-        self::FIELD_MAIL_SUBJECT    => $this->urlParams[self::FIELD_MAIL_SUBJECT],
-        // Le contenu
-        self::FIELD_MAIL_CONTENT    => $this->urlParams[self::FIELD_MAIL_CONTENT],
-        // Date d'envoi
-        self::FIELD_MAIL_DATE_ENVOI => ($mailAction==self::CST_FOLDER_DRAFT ? '0000-00-00 00:00:00' : date('Y-m-d H:i:s')),
-      );
+        // trash ? -> On supprimer les messages
+        if (isset($this->urlParams[self::CST_FOLDER_TRASH])) {
+            $ids = explode(',', $this->urlParams['ids']);
+            // On parcourt la liste des ids
+            while (!empty($ids)) {
+                $id = array_shift($ids);
+                $objCopsMailJoint = $this->CopsMailServices->getMailJoint($id);
+                // On vérifie que l'id est existant, qu'il appartient bien au folder actuel 
+                // et que le user actuel en est bien le destinataire
+                if ($objCopsMailJoint->getField(self::FIELD_TO_ID)==2) {
+                    if ($this->subOnglet!=self::CST_FOLDER_TRASH) {
+                        // Si les contrôles sont okay, on déplace le message vers le folder trash.
+                        $objCopsMailJoint->setField(self::FIELD_FOLDER_ID, 6);
+                    } else {
+                        // Si le folder actuel est trash, on le supprime définitivement.
+                        // (bon en fait, on le met dans le folder 10 qui n'existe pas)
+                        $objCopsMailJoint->setField(self::FIELD_FOLDER_ID, 10);
+                    }
+                    $this->CopsMailServices->updateMailJoint($objCopsMailJoint);
+                }
+            }
+        }
 
-      if ($this->urlParams[self::FIELD_ID]!='') {
-        $attributes[self::FIELD_ID] = $this->urlParams[self::FIELD_ID];
-        $CopsMail = new CopsMail($attributes);
-        $this->CopsMailServices->updateMail($CopsMail);
-      } else {
-        // On insère le nouveau mail dans cops_mail.
-        // Toutefois, si c'est un draft, la dateEnvoi est à 0000-00-00 00:00:00
-        $CopsMail = new CopsMail($attributes);
-        $this->CopsMailServices->insertMail($CopsMail);
-      }
+        if (isset($this->urlParams['writeAction'])) {
+            // L'action souhaitée parmi draft (on va sauvegarder en brouillon), send (on va envoyer)
+            $mailAction = $this->urlParams['writeAction'];
+            $attributes = array(
+                // Le sujet
+                self::FIELD_MAIL_SUBJECT    => $this->urlParams[self::FIELD_MAIL_SUBJECT],
+                // Le contenu
+                self::FIELD_MAIL_CONTENT    => $this->urlParams[self::FIELD_MAIL_CONTENT],
+                // Date d'envoi
+                self::FIELD_MAIL_DATE_ENVOI => ($mailAction==self::CST_FOLDER_DRAFT ? '0000-00-00 00:00:00' : date('Y-m-d H:i:s')),
+            );
 
-      $CopsMailUsers = $this->CopsMailServices->getMailUsers(array(self::FIELD_MAIL=>$this->urlParams['mailTo']));
-      $CopsMailUser = array_shift($CopsMailUsers);
+            if ($this->urlParams[self::FIELD_ID]!='') {
+                $attributes[self::FIELD_ID] = $this->urlParams[self::FIELD_ID];
+                $objCopsMail = new CopsMail($attributes);
+                $this->CopsMailServices->updateMail($objCopsMail);
+            } else {
+                // On insère le nouveau mail dans cops_mail.
+                // Toutefois, si c'est un draft, la dateEnvoi est à 0000-00-00 00:00:00
+                $objCopsMail = new CopsMail($attributes);
+                $this->CopsMailServices->insertMail($objCopsMail);
+            }
 
-      $attributes = array(
-        self::FIELD_MAIL_ID     => $CopsMail->getField(self::FIELD_ID),
-        self::FIELD_TO_ID       => $CopsMailUser->getField(self::FIELD_ID),
-        self::FIELD_FROM_ID     => $this->urlParams['mailFrom'],
-        self::FIELD_NB_PJS      => 0,
-      );
-      // TODO : Ici, on doit faire des updates si on est dans le cas d'une modification d'un drf
-      // Pour mémoire, c'était un draft si $this->urlParams['id']!=''
-      // Puis, on insère dans cops_mail_joint dans le folder sent ou draft
-      // Si ce n'est pas un draft, on l'insère aussi dans inbox
-      if ($mailAction==self::CST_FOLDER_DRAFT) {
-        $attributes[self::FIELD_FOLDER_ID] = 2;
-        $attributes[self::FIELD_LU] = 1;
-        $CopsMailJoint = new CopsMailJoint($attributes);
-        $this->CopsMailServices->insertMailJoint($CopsMailJoint);
-      } else {
-        // Pour le destinataire (unique pour le moment)
-        $attributes[self::FIELD_FOLDER_ID] = 1;
-        $attributes[self::FIELD_LU] = 0;
-        $CopsMailJoint = new CopsMailJoint($attributes);
-        $this->CopsMailServices->insertMailJoint($CopsMailJoint);
-        // Pour l'expéditeur
-        $attributes[self::FIELD_FOLDER_ID] = 3;
-        $attributes[self::FIELD_LU] = 1;
-        $CopsMailJoint = new CopsMailJoint($attributes);
-        $this->CopsMailServices->insertMailJoint($CopsMailJoint);
-      }
-    }
+            $objsCopsMailUser = $this->CopsMailServices->getMailUsers(array(self::FIELD_MAIL=>$this->urlParams['mailTo']));
+            $objCopsMailUser = array_shift($objsCopsMailUser);
+
+            $attributes = array(
+                self::FIELD_MAIL_ID     => $objCopsMail->getField(self::FIELD_ID),
+                self::FIELD_TO_ID       => $objCopsMailUser->getField(self::FIELD_ID),
+                self::FIELD_FROM_ID     => $this->urlParams['mailFrom'],
+                self::FIELD_NB_PJS      => 0,
+            );
+            // TODO : Ici, on doit faire des updates si on est dans le cas d'une modification d'un drf
+            // Pour mémoire, c'était un draft si $this->urlParams['id']!=''
+            // Puis, on insère dans cops_mail_joint dans le folder sent ou draft
+            // Si ce n'est pas un draft, on l'insère aussi dans inbox
+            if ($mailAction==self::CST_FOLDER_DRAFT) {
+                $attributes[self::FIELD_FOLDER_ID] = 2;
+                $attributes[self::FIELD_LU] = 1;
+                $objCopsMailJoint = new CopsMailJoint($attributes);
+                $this->CopsMailServices->insertMailJoint($objCopsMailJoint);
+            } else {
+                // Pour le destinataire (unique pour le moment)
+                $attributes[self::FIELD_FOLDER_ID] = 1;
+                $attributes[self::FIELD_LU] = 0;
+                $objCopsMailJoint = new CopsMailJoint($attributes);
+                $this->CopsMailServices->insertMailJoint($objCopsMailJoint);
+                // Pour l'expéditeur
+                $attributes[self::FIELD_FOLDER_ID] = 3;
+                $attributes[self::FIELD_LU] = 1;
+                $objCopsMailJoint = new CopsMailJoint($attributes);
+                $this->CopsMailServices->insertMailJoint($objCopsMailJoint);
+            }
+        }
         return parent::getBoard();
     }
 
@@ -172,15 +169,19 @@ class WpPageAdminInboxBean extends WpPageAdminBean
         switch ($this->subOnglet) {
             case self::CST_FOLDER_READ :
                 $strRightPanel = $this->getReadMessageBlock();
-                $strButtonRetour = '<a href="/admin?onglet=inbox&subOnglet='.$this->Folder->getField(self::FIELD_SLUG).'" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> '.$this->Folder->getField(self::FIELD_LABEL).'</a>';
+                $strButtonRetour = '<a href="/admin?onglet=inbox&subOnglet='.$this->Folder->getField(self::FIELD_SLUG);
+                $strButtonRetour .= '" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> ';
+                $strButtonRetour .= $this->Folder->getField(self::FIELD_LABEL).'</a>';
                 break;
             case self::CST_FOLDER_WRITE :
                 $strRightPanel = $this->getWriteMessageBlock();
-                $strButtonRetour = '<a href="/admin?onglet=inbox" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-backward"></i> Retour</a>';
+                $strButtonRetour  = '<a href="/admin?onglet=inbox" class="btn btn-primary btn-block mb-3">';
+                $strButtonRetour .= '<i class="fa-solid fa-backward"></i> Retour</a>';
                 break;
             default :
                 $strRightPanel = $this->getFolderMessagesList();
-                $strButtonRetour = '<a href="/admin?onglet=inbox&subOnglet=write" class="btn btn-primary btn-block mb-3">Rédiger un message</a>';
+                $strButtonRetour  = '<a href="/admin?onglet=inbox&subOnglet=write" class="btn btn-primary btn-block ';
+                $strButtonRetour .= 'mb-3">Rédiger un message</a>';
                 break;
         }
         /////////////////////////////////////////

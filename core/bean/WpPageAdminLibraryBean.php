@@ -3,103 +3,87 @@ if (!defined('ABSPATH')) {
   die('Forbidden');
 }
 /**
- * Classe AdminCopsLibraryPageBean
+ * Classe WpPageAdminLibraryBean
  * @author Hugues
  * @since 1.22.05.30
- * @version 1.22.06.02
+ * @version 1.22.10.20
  */
-class AdminCopsLibraryPageBean extends WpPageAdminBean
+class WpPageAdminLibraryBean extends WpPageAdminBean
 {
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
+        $this->slugPage = self::PAGE_ADMIN;
+        $this->slugOnglet = self::ONGLET_LIBRARY;
+        $this->slugSubOnglet = '';
+    
+        /////////////////////////////////////////
+        // Construction du menu
+        $this->arrSubOnglets = array(
+            self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book',            self::FIELD_LABEL => 'Index'),
+            //self::CST_LIB_BDD   => array(self::FIELD_ICON => 'database',        self::FIELD_LABEL => 'Bases de données'),
+            //self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users',           self::FIELD_LABEL => 'COPS'),
+            //self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox',         self::FIELD_LABEL => 'Compétences'),
+            //self::CST_LIB_LAPD  => array(self::FIELD_ICON => 'building-shield', self::FIELD_LABEL => 'LAPD'),
+            //self::CST_LIB_STAGE => array(self::FIELD_ICON => 'file-lines',      self::FIELD_LABEL => 'Stages'),
+        );
+        /////////////////////////////////////////
 
-    /////////////////////////////////////////
-    // Construction du menu de l'inbox
-    $this->arrSubOnglets = array(
-      self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book',            self::FIELD_LABEL => 'Index'),
-      self::CST_LIB_BDD   => array(self::FIELD_ICON => 'database',        self::FIELD_LABEL => 'Bases de données'),
-      self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users',           self::FIELD_LABEL => 'COPS'),
-      self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox',         self::FIELD_LABEL => 'Compétences'),
-      self::CST_LIB_LAPD  => array(self::FIELD_ICON => 'building-shield', self::FIELD_LABEL => 'LAPD'),
-      self::CST_LIB_STAGE => array(self::FIELD_ICON => 'file-lines',      self::FIELD_LABEL => 'Stages'),
-    );
-    /////////////////////////////////////////
-    $this->CopsSkillServices = new CopsSkillServices();
-    $this->CopsStageServices = new CopsStageServices();
-    $this->WpPostServices    = new WpPostServices();
-  }
-
-  /**
-   * @return string
-   * @since 1.22.05.30
-   * @version 1.22.06.09
-   */
-  public function getBoard()
-  {
-    $this->subOnglet = (isset($this->urlParams[self::CST_SUBONGLET]) ? $this->urlParams[self::CST_SUBONGLET] : self::CST_LIB_INDEX);
-    $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
-
-    $this->buildBreadCrumbs('Bibliothèque', self::ONGLET_LIBRARY, true);
-
-    switch ($this->subOnglet) {
-      case self::CST_LIB_SKILL :
-        $strContent = $this->getSubongletSkills();
-      break;
-      case self::CST_LIB_STAGE :
-        $strContent = $this->getSubongletStages();
-      break;
-      case self::CST_LIB_COPS :
-        $strContent = $this->getSubongletCops();
-      break;
-      case self::CST_LIB_LAPD :
-        $strContent = $this->getSubongletLapd();
-      break;
-      case self::CST_LIB_BDD :
-        $strContent = $this->getSubongletBdd();
-      break;
-      default :
-        $strContent = $this->getOngletContent();
-      break;
+        /////////////////////////////////////////
+        // Définition des services
+        $this->CopsSkillServices = new CopsSkillServices();
+        $this->CopsStageServices = new CopsStageServices();
+        $this->WpPostServices    = new WpPostServices();
     }
 
-
-
-    // Soit on est loggué et on affiche le contenu du bureau du cops
-    $urlTemplate = 'web/pages/public/public-board.php';
-    $attributes = array(
-      // La sidebar
-      $this->getSideBar(),
-      // Le contenu de la page
-      $strContent,
-      // L'id
-      $this->CopsPlayer->getMaskMatricule(),
-      // Le nom
-      $this->CopsPlayer->getFullName(),
-      // La barre de navigation
-      $this->getNavigationBar(),
-      // Le content header
-      $this->getContentHeader(),
-
-      '', '', '', '', '', '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  /**
-   * @since 1.22.05.30
-   * @version 1.22.05.30
-   */
-  public function getOngletContent()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-article-onglet-menu-panel.php';
-    $strContent = '';
-    foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
-      $attributes = array(self::ONGLET_LIBRARY, $subOnglet, $arrSubOnglet[self::FIELD_LABEL], $arrSubOnglet[self::FIELD_ICON]);
-      $strContent .= $this->getRender($urlTemplate, $attributes);
+    /**
+     * @return string
+     * @since 1.22.10.20
+     * @version 1.22.10.20
+     */
+    public function initBoard()
+    {
+        /////////////////////////////////////////
+        // Création du Breadcrumbs
+        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_LIB_INDEX);
+        $this->buildBreadCrumbs('Bibliothèque', self::ONGLET_LIBRARY, true);
+        $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
     }
-    return $this->getBalise(self::TAG_DIV, $strContent, array(self::ATTR_CLASS=>'row'));
-  }
+
+    /**
+     * @since 1.22.05.30
+     * @version 1.22.10.20
+     */
+    public function getOngletContent()
+    {
+      switch ($this->slugSubOnglet) {
+          case self::CST_LIB_SKILL :
+              $strContent = $this->getSubongletSkills();
+              break;
+          case self::CST_LIB_STAGE :
+              $strContent = $this->getSubongletStages();
+              break;
+          case self::CST_LIB_COPS :
+              $strContent = $this->getSubongletCops();
+              break;
+          case self::CST_LIB_LAPD :
+              $strContent = $this->getSubongletLapd();
+              break;
+          case self::CST_LIB_BDD :
+              $strContent = $this->getSubongletBdd();
+              break;
+          default :
+              $urlTemplate = 'web/pages/public/fragments/public-fragments-article-onglet-menu-panel.php';
+              $strContent = '';
+              foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
+                  $attributes = array(self::ONGLET_LIBRARY, $subOnglet, $arrSubOnglet[self::FIELD_LABEL], $arrSubOnglet[self::FIELD_ICON]);
+                  $strContent .= $this->getRender($urlTemplate, $attributes);
+              }
+              break;
+      }
+      
+        return $this->getBalise(self::TAG_DIV, $strContent, array(self::ATTR_CLASS=>'row'));
+    }
 
   /**
    * @since 1.22.05.30

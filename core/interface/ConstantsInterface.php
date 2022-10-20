@@ -47,7 +47,7 @@ interface ConstantsInterface
   const CST_FOLDER_SENT        = 'sent';
   const CST_FOLDER_SPAM        = 'spam';
   const CST_FOLDER_TRASH       = 'trash';
-  const CST_FOLDER_READ        = 'sent';
+  const CST_FOLDER_READ        = 'read';
   const CST_FOLDER_WRITE       = 'write';
   // Subonglet Library
   const CST_LIB_INDEX          = 'index';

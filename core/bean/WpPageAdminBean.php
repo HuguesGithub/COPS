@@ -48,6 +48,67 @@ class WpPageAdminBean extends WpPageBean
         } elseif (isset($_SESSION[self::FIELD_MATRICULE])) {
             $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
         }
+        
+        $this->arrSidebarContent = array(
+            self::ONGLET_DESK => array(
+                self::FIELD_ICON  => 'desktop',
+                self::FIELD_LABEL => 'Bureau',
+            ),
+            self::ONGLET_LIBRARY => array(
+                self::FIELD_ICON  => 'book',
+                self::FIELD_LABEL => 'Bibliothèque',
+            ),
+        );
+        if ($_SESSION[self::FIELD_MATRICULE]!='Guest') {
+            /*
+            $this->arrSidebarContent = array(
+                self::ONGLET_DESK => array(
+                    self::FIELD_ICON  => 'desktop',
+                    self::FIELD_LABEL => 'Bureau',
+                ),
+                self::ONGLET_AUTOPSIE => array(
+                    self::FIELD_ICON  => 'box-archive',
+                    self::FIELD_LABEL => 'Autopsies',
+                ),
+                self::ONGLET_ENQUETE => array(
+                    self::FIELD_ICON  => self::I_FILE_CATEGORY,
+                    self::FIELD_LABEL => 'Enquêtes',
+                ),
+                
+                self::ONGLET_INBOX => array(
+                    self::FIELD_ICON  => 'envelope',
+                    self::FIELD_LABEL => 'Messagerie',
+                ),
+                self::ONGLET_CALENDAR => array(
+                    self::FIELD_ICON   => 'calendar-days',
+                    self::FIELD_LABEL  => 'Calendrier',
+                    self::CST_CHILDREN => array(
+                        self::CST_CAL_MONTH  => 'Calendrier',
+                        self::CST_CAL_EVENT  => 'Événements',
+                        self::CST_CAL_PARAM  => 'Paramètres',
+                    ),
+                ),
+                self::ONGLET_ARCHIVE => array(
+                    self::FIELD_ICON  => 'box-archive',
+                    self::FIELD_LABEL => 'Archives',
+                ),
+                self::ONGLET_LIBRARY => array(
+                    self::FIELD_ICON  => 'book',
+                    self::FIELD_LABEL => 'Bibliothèque',
+                ),
+                'player' => array(
+                    self::FIELD_ICON   => 'user',
+                    self::FIELD_LABEL  => 'Personnage',
+                    self::CST_CHILDREN => array(
+                        'player-carac'  => 'Caractéristiques',
+                        'player-comps'  => 'Compétences',
+                        'player-story'  => 'Background',
+                    ),
+                ),
+            );
+            */
+        }
+        
     }
 
     /**
@@ -116,7 +177,7 @@ class WpPageAdminBean extends WpPageBean
                     $objBean = new WpPageAdminInboxBean();
                     break;
                 case self::ONGLET_LIBRARY :
-                    $objBean = new AdminCopsLibraryPageBean();
+                    $objBean = new WpPageAdminLibraryBean();
                     break;
                 case 'player' :
                     $objBean = new AdminCopsPlayerPageBean();
@@ -242,66 +303,9 @@ class WpPageAdminBean extends WpPageBean
     protected function getSideBar()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-sidebar.php';
-        $arrSidebarContent = array(
-            self::ONGLET_DESK => array(
-                self::FIELD_ICON  => 'desktop',
-                self::FIELD_LABEL => 'Bureau',
-            ),
-            self::ONGLET_LIBRARY => array(
-                self::FIELD_ICON  => 'book',
-                self::FIELD_LABEL => 'Bibliothèque',
-            ),
-        );
-        if ($_SESSION[self::FIELD_MATRICULE]!='Guest') {
-            $arrSidebarContent = array(
-                self::ONGLET_DESK => array(
-                    self::FIELD_ICON  => 'desktop',
-                    self::FIELD_LABEL => 'Bureau',
-                ),
-                self::ONGLET_AUTOPSIE => array(
-                    self::FIELD_ICON  => 'box-archive',
-                    self::FIELD_LABEL => 'Autopsies',
-                ),
-                self::ONGLET_ENQUETE => array(
-                    self::FIELD_ICON  => self::I_FILE_CATEGORY,
-                    self::FIELD_LABEL => 'Enquêtes',
-                ),
-                
-                self::ONGLET_INBOX => array(
-                    self::FIELD_ICON  => 'envelope',
-                    self::FIELD_LABEL => 'Messagerie',
-                ),
-                self::ONGLET_CALENDAR => array(
-                    self::FIELD_ICON   => 'calendar-days',
-                    self::FIELD_LABEL  => 'Calendrier',
-                    self::CST_CHILDREN => array(
-                        self::CST_CAL_MONTH  => 'Calendrier',
-                        self::CST_CAL_EVENT  => 'Événements',
-                        self::CST_CAL_PARAM  => 'Paramètres',
-                    ),
-                ),
-                self::ONGLET_ARCHIVE => array(
-                    self::FIELD_ICON  => 'box-archive',
-                    self::FIELD_LABEL => 'Archives',
-                ),
-                self::ONGLET_LIBRARY => array(
-                    self::FIELD_ICON  => 'book',
-                    self::FIELD_LABEL => 'Bibliothèque',
-                ),
-                'player' => array(
-                    self::FIELD_ICON   => 'user',
-                    self::FIELD_LABEL  => 'Personnage',
-                    self::CST_CHILDREN => array(
-                        'player-carac'  => 'Caractéristiques',
-                        'player-comps'  => 'Compétences',
-                        'player-story'  => 'Background',
-                    ),
-                ),
-            );
-        }
 
         $sidebarContent = '';
-        foreach ($arrSidebarContent as $strOnglet => $arrOnglet) {
+        foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
             $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
             $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
 
