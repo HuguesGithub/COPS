@@ -86,21 +86,21 @@ class CopsIndexServices extends LocalServices
     
     public function insertIndex(&$objCopsIndex)
     { $this->Dao->insertIndex($objCopsIndex); }
-	
-	public function getIndexNatures()
-	{ return $this->Dao->getIndexNatures();	}
-	
-	public function getCopsIndexNature($natureId)
-	{
+    
+    public function getIndexNatures()
+    { return $this->Dao->getIndexNatures();    }
+    
+    public function getCopsIndexNature($natureId)
+    {
         $attributes = array($natureId);
         $row = $this->Dao->getIndexNature($attributes);
         return new CopsIndexNature($row[0]);
-	}
-	
-	public function getCopsIndexNatureByName($name)
-	{
-		$attributes = array($name);
-		$items = $this->Dao->getCopsIndexNatures($attributes);
+    }
+    
+    public function getCopsIndexNatureByName($name)
+    {
+        $attributes = array($name);
+        $items = $this->Dao->getCopsIndexNatures($attributes);
         return new CopsIndexNature($items[0]);
-	}
+    }
 }

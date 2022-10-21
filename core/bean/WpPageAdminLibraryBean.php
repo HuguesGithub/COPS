@@ -17,27 +17,27 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         parent::__construct();
         /////////////////////////////////////////
         // Définition des services
-		/*
+        /*
         $this->CopsSkillServices = new CopsSkillServices();
         $this->CopsStageServices = new CopsStageServices();
         $this->WpPostServices    = new WpPostServices();
-		*/
+        */
         $this->copsIndexServices  = new CopsIndexServices();
-		$this->wpCategoryServices = new WpCategoryServices();
-		
+        $this->wpCategoryServices = new WpCategoryServices();
+        
         /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_LIBRARY;
         $this->titreOnglet = 'Bibliothèque';
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->catSlug = $this->initVar('catslug');
-		// Si catSlug est défini, on récupère la WpCategory associée.
-		if ($this->catSlug=='') {
-			$this->objWpCategory = new WpCategory();
-		} else {
-			$this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
-		}
-		
+        // Si catSlug est défini, on récupère la WpCategory associée.
+        if ($this->catSlug=='') {
+            $this->objWpCategory = new WpCategory();
+        } else {
+            $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
+        }
+        
         /////////////////////////////////////////
         // Construction du menu
         $this->arrSubOnglets = array(
@@ -95,7 +95,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
 
             // Le lien (ou pas) vers la catégorie
             if ($this->catSlug=='') {
-                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL], $disabledButtonAttributes);
+                $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
+                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $label, $disabledButtonAttributes);
             } else {
                 $aAttributes = array(
                     self::ATTR_HREF=>$this->getSubOngletUrl(),
@@ -104,7 +105,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 $buttonContent = $this->getBalise(self::TAG_A, $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL], $aAttributes);
                 $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
 
-                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $this->objWpCategory->getField('name'), $disabledButtonAttributes);
+                $name = $this->objWpCategory->getField('name');
+                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $name, $disabledButtonAttributes);
             }
         }
         
@@ -138,7 +140,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 $strContent = $this->getSubongletBdd();
                 break;
             case self::CST_LIB_INDEX :
-				$objBean = new WpPageAdminLibraryIndexBean();
+                $objBean = new WpPageAdminLibraryIndexBean();
                 $strContent = $objBean->getSubongletContent();
                 break;
             default :
@@ -146,11 +148,11 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 $strContent = '';
                 foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
                     $attributes = array(
-						self::ONGLET_LIBRARY,
-						$subOnglet,
-						$arrSubOnglet[self::FIELD_LABEL],
-						$arrSubOnglet[self::FIELD_ICON]
-					);
+                        self::ONGLET_LIBRARY,
+                        $subOnglet,
+                        $arrSubOnglet[self::FIELD_LABEL],
+                        $arrSubOnglet[self::FIELD_ICON]
+                    );
                     $strContent .= $this->getRender($urlTemplate, $attributes);
                 }
                 break;

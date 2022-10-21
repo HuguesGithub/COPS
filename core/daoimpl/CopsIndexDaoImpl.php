@@ -137,7 +137,7 @@ class CopsIndexDaoImpl extends LocalDaoImpl
         // Exécution de la requête
         return MySQL::wpdbSelect($prepRequest);
     }
-	
+    
     /**
      * @since 1.22.10.21
      * @version 1.22.10.21
@@ -161,17 +161,17 @@ class CopsIndexDaoImpl extends LocalDaoImpl
         }
         return $objItems;
     }
-	
+    
     /**
      * @param array
      * @since 1.22.10.21
      * @version 1.22.10.21
      */
-	public function getCopsIndexNatures($prepObject)
-	{
-		$request = "SELECT idIdxNature, nomIdxNature FROM wp_7_cops_index_nature WHERE nomIdxNature = '%s';";
+    public function getCopsIndexNatures($prepObject)
+    {
+        $request = "SELECT idIdxNature, nomIdxNature FROM wp_7_cops_index_nature WHERE nomIdxNature = '%s';";
         $prepRequest = MySQL::wpdbPrepare($request, $prepObject);
         return MySQL::wpdbSelect($prepRequest);
-	}
+    }
 
 }

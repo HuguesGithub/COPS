@@ -53,9 +53,18 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 		// Le bouton de création ou d'annulation.
 		$strButtonCreation = '';
 		if ($this->panel!='list') {
-			$strButtonCreation = '<a href="'.$this->urlRefresh.'" class="btn btn-primary btn-block mb-3"><i class="fa-solid fa-angles-left"></i> Retour</a>';
+		    $aAttributes = array(
+		        self::ATTR_HREF => $this->urlRefresh,
+		        self::ATTR_CLASS => 'btn btn-primary btn-block mb-3',
+		    );
+		    $label = '<i class="fa-solid fa-angles-left"></i> Retour';
+		    $strButtonCreation = $this->getBalise(self::TAG_A, $label, $aAttributes);
 		} elseif ($this->hasCopsEditor) {
-			$strButtonCreation = '<a href="'.$this->urlRefresh.'&amp;action=write" class="btn btn-primary btn-block mb-3">Créer une entrée</a>';
+		    $aAttributes = array(
+		        self::ATTR_HREF => $this->urlRefresh.'&amp;action=write',
+		        self::ATTR_CLASS => 'btn btn-primary btn-block mb-3',
+		    );
+		    $strButtonCreation = $this->getBalise(self::TAG_A, 'Créer une entrée', $aAttributes);
 		}
         /////////////////////////////////////////		
 		
@@ -137,7 +146,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 			$optionAttributes = array(
 				self::ATTR_VALUE => $objIndexNature->getField('idIdxNature'),
 			);
-			if ($objIndexNature->getField('idIdxNature')==$this->objIndex->getField('natureId') || $this->objWpCategory->getField('name')==$objIndexNature->getField('nomIdxNature')) {
+			if ($objIndexNature->getField('idIdxNature')==$this->objIndex->getField('natureId')
+			    || $this->objWpCategory->getField('name')==$objIndexNature->getField('nomIdxNature')) {
 				$optionAttributes[self::CST_SELECTED] = self::CST_SELECTED;
 			}
 			$strSelect .= $this->getBalise(self::TAG_OPTION, $objIndexNature->getField('nomIdxNature'), $optionAttributes);
@@ -190,7 +200,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 		// On va chercher les éléments à afficher
 		// Si on a une Catégorie spécifique, on va chercher son équivalent Nature dans la base.
 		if (!$this->blnShowColNature) {
-			$objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($this->objWpCategory->getField('name'));
+		    $name = $this->objWpCategory->getField('name');
+			$objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
 			$attributes[self::SQL_WHERE_FILTERS] = array(
 				'natureId' => $objCopsIndexNature->getField('idIdxNature'),
 			);
@@ -211,23 +222,35 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 			if ($nbPages>1) {
 				if ($curPage!=1) {
 					$btnClass = '';
-					$btnContent = '<a href="'.$this->urlRefresh.'&amp;curPage='.($curPage-1).'" class="text-white"><i class="fa-solid fa-caret-left"></i></a>';
+					$aAttributes = array(
+					    self::ATTR_HREF => $this->urlRefresh.'&amp;curPage='.($curPage-1),
+					    self::ATTR_CLASS => 'text-white',
+					);
+					$label = '<i class="fa-solid fa-caret-left"></i>';
+					$btnContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
 				} else {
 					$btnClass = ' disabled text-white';
 					$btnContent = '<i class="fa-solid fa-caret-left"></i>';
 				}
-				$strPagination .= '<button type="button" class="btn btn-default btn-sm'.$btnClass.'">'.$btnContent.'</button>&nbsp;';
+				$strPagination .= '<button type="button" class="btn btn-default btn-sm'.$btnClass.'">';
+				$strPagination .= $btnContent.'</button>&nbsp;';
 				$firstItem = ($curPage-1)*$nbItemsPerPage;
 				$lastItem = min(($curPage)*$nbItemsPerPage, $nbItems);
 				$strPagination .= ($firstItem+1).' - '.$lastItem.' sur '.$nbItems;
 				if ($curPage!=$nbPages) {
 					$btnClass = '';
-					$btnContent = '<a href="'.$this->urlRefresh.'&amp;curPage='.($curPage+1).'" class="text-white"><i class="fa-solid fa-caret-right"></i></a>';
+					$aAttributes = array(
+					    self::ATTR_HREF => $this->urlRefresh.'&amp;curPage='.($curPage+1),
+					    self::ATTR_CLASS => 'text-white',
+					);
+					$label = '<i class="fa-solid fa-caret-right"></i>';
+					$btnContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
 				} else {
 					$btnClass = ' disabled text-white';
 					$btnContent = '<i class="fa-solid fa-caret-right"></i>';
 				}
-				$strPagination .= '&nbsp;<button type="button" class="btn btn-default btn-sm'.$btnClass.'">'.$btnContent.'</button>';
+				$strPagination .= '&nbsp;<button type="button" class="btn btn-default btn-sm'.$btnClass;
+				$strPagination .= '">'.$btnContent.'</button>';
 				$objsCopsIndex = array_slice($objsCopsIndex, $firstItem, $nbItemsPerPage);
 			}
 			/////////////////////////////////////////////:
@@ -239,9 +262,12 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 		
 		/////////////////////////////////////////////
 		// Toolbar & Pagination
-		$strToolBar  = '<button type="button" class="btn btn-default btn-sm" title="Rafraîchir la liste"><a href="'.$this->urlRefresh.'" class="text-white"><i class="fa-solid fa-arrows-rotate"></i></a></button>';
+		$strToolBar  = '<button type="button" class="btn btn-default btn-sm" title="Rafraîchir la liste"><a href="';
+		$strToolBar .= $this->urlRefresh.'" class="text-white"><i class="fa-solid fa-arrows-rotate"></i></a></button>';
 		if ($this->hasCopsEditor) {
-			$strToolBar .= '&nbsp;<button type="button" class="btn btn-default btn-sm" title="Créer une entrée"><a href="'.$this->urlRefresh.'&amp;action=write" class="text-white"><i class="fa-solid fa-square-plus"></i></a></button>';
+			$strToolBar .= '&nbsp;<button type="button" class="btn btn-default btn-sm" title="Créer une entrée">';
+			$strToolBar .= '<a href="'.$this->urlRefresh.'&amp;action=write" class="text-white">';
+			$strToolBar .= '<i class="fa-solid fa-square-plus"></i></a></button>';
 		}
 		$strToolBar .= $this->getBalise(self::TAG_DIV, $strPagination, array(self::ATTR_CLASS=>'float-right'));
         /////////////////////////////////////////

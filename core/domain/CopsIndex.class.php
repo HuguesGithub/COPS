@@ -41,8 +41,8 @@ class CopsIndex extends LocalDomain
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsIndex';
-	
-	$this->copsIndexServices = new CopsIndexServices();
+    
+    $this->copsIndexServices = new CopsIndexServices();
   }
   /**
    * @param array $row
@@ -53,20 +53,20 @@ class CopsIndex extends LocalDomain
   public static function convertElement($row)
   { return parent::convertRootElement(new CopsIndex(), $row); }
 
-	/**
-	 * @since 1.22.10.21
-	 * @version 1.22.10.21
-	 */
-	public function getBean()
-	{ return new CopsIndexBean($this); }
-	
+    /**
+     * @since 1.22.10.21
+     * @version 1.22.10.21
+     */
+    public function getBean()
+    { return new CopsIndexBean($this); }
+    
   //////////////////////////////////////////////////
   // METHODES
   //////////////////////////////////////////////////
 
-	public function checkFields()
-	{ return ($this->nomIdx!=''); }
-	
+    public function checkFields()
+    { return ($this->nomIdx!=''); }
+    
   public function getNature()
   { return $this->copsIndexServices->getCopsIndexNature($this->natureId); }
 

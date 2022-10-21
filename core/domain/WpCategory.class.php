@@ -23,7 +23,7 @@ class WpCategory extends WpTag
     public function __construct($wpTermObject='')
     {
         if ($wpTermObject!='') {
-            foreach($wpTermObject as $field => $value) {
+            foreach ($wpTermObject as $field => $value) {
                 $this->{$field} = $value;
             }
         }

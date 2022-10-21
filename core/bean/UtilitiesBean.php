@@ -179,19 +179,6 @@ class UtilitiesBean implements ConstantsInterface
     public function getPublicHeader()
     {
         return '';
-        $urlTemplate = 'web/pages/public/fragments/main-header.php';
-        $strNavigation = '';
-        $strSubmenu    = '';
-
-        //////////////////////////////////////////////////////////////
-        // On enrichi le template et on le retourne
-        $args = array(
-            // La navigation - 1
-            $strNavigation,
-            // Sousmenu - 2
-            $strSubmenu,
-        );
-        return $this->getRender($urlTemplate, $args);
     }
 
     /**

@@ -78,7 +78,7 @@ class WpPageAdminInboxBean extends WpPageAdminBean
             while (!empty($ids)) {
                 $id = array_shift($ids);
                 $objCopsMailJoint = $this->CopsMailServices->getMailJoint($id);
-                // On vérifie que l'id est existant, qu'il appartient bien au folder actuel 
+                // On vérifie que l'id est existant, qu'il appartient bien au folder actuel
                 // et que le user actuel en est bien le destinataire
                 if ($objCopsMailJoint->getField(self::FIELD_TO_ID)==2) {
                     if ($this->subOnglet!=self::CST_FOLDER_TRASH) {

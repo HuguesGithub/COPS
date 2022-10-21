@@ -20,10 +20,10 @@ class WpCategoryBean extends UtilitiesBean
         $this->wpCategory = $wpCategory;
     }
     
-	/**
-	 * @since 1.22.10.20
-	 * @version 1.22.10.21
-	 */
+    /**
+     * @since 1.22.10.20
+     * @version 1.22.10.21
+     */
     public function getCategoryNavItem($url, $icon, $blnSelected=false)
     {
         $strIcon = $this->getIcon($icon);
