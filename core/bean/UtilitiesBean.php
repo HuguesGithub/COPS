@@ -37,6 +37,14 @@ class UtilitiesBean implements ConstantsInterface
       return (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='err_login');
     }
     /**
+     * @return bool
+     */
+    public static function isCopsEditor()
+    {
+      // On va checker dans les variables de SESSION si les infos relatives à Cops y sont stockées.
+      return (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest');
+    }
+    /**
      * @return int
      */
     public static function getWpUserId()
@@ -169,7 +177,22 @@ class UtilitiesBean implements ConstantsInterface
      * @return string
      */
     public function getPublicHeader()
-    { return ''; }
+    {
+        return '';
+        $urlTemplate = 'web/pages/public/fragments/main-header.php';
+        $strNavigation = '';
+        $strSubmenu    = '';
+
+        //////////////////////////////////////////////////////////////
+        // On enrichi le template et on le retourne
+        $args = array(
+            // La navigation - 1
+            $strNavigation,
+            // Sousmenu - 2
+            $strSubmenu,
+        );
+        return $this->getRender($urlTemplate, $args);
+    }
 
     /**
      * @return string

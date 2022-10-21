@@ -13,9 +13,7 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
     public function __construct()
     {
         parent::__construct();
-        $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = self::ONGLET_AUTOPSIE;
-        $this->slugSubOnglet = '';
 
         /////////////////////////////////////////
         // Construction du menu

@@ -10,17 +10,38 @@ if (!defined('ABSPATH')) {
  */
 class WpPageAdminLibraryBean extends WpPageAdminBean
 {
+    protected $catSlug;
+    
     public function __construct()
     {
         parent::__construct();
-        $this->slugPage = self::PAGE_ADMIN;
+        /////////////////////////////////////////
+        // Définition des services
+		/*
+        $this->CopsSkillServices = new CopsSkillServices();
+        $this->CopsStageServices = new CopsStageServices();
+        $this->WpPostServices    = new WpPostServices();
+		*/
+        $this->copsIndexServices  = new CopsIndexServices();
+		$this->wpCategoryServices = new WpCategoryServices();
+		
+        /////////////////////////////////////////
+        // Initialisation des variables
         $this->slugOnglet = self::ONGLET_LIBRARY;
-        $this->slugSubOnglet = '';
-    
+        $this->titreOnglet = 'Bibliothèque';
+        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+        $this->catSlug = $this->initVar('catslug');
+		// Si catSlug est défini, on récupère la WpCategory associée.
+		if ($this->catSlug=='') {
+			$this->objWpCategory = new WpCategory();
+		} else {
+			$this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
+		}
+		
         /////////////////////////////////////////
         // Construction du menu
         $this->arrSubOnglets = array(
-            self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book',            self::FIELD_LABEL => 'Index'),
+            self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book', self::FIELD_LABEL => 'Index'),
             //self::CST_LIB_BDD   => array(self::FIELD_ICON => 'database',        self::FIELD_LABEL => 'Bases de données'),
             //self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users',           self::FIELD_LABEL => 'COPS'),
             //self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox',         self::FIELD_LABEL => 'Compétences'),
@@ -29,11 +50,6 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         );
         /////////////////////////////////////////
 
-        /////////////////////////////////////////
-        // Définition des services
-        $this->CopsSkillServices = new CopsSkillServices();
-        $this->CopsStageServices = new CopsStageServices();
-        $this->WpPostServices    = new WpPostServices();
     }
 
     /**
@@ -43,107 +59,166 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
      */
     public function initBoard()
     {
+        $this->buildBreadCrumbs($this->titreOnglet);
+        $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
+                
         /////////////////////////////////////////
         // Création du Breadcrumbs
-        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_LIB_INDEX);
-        $this->buildBreadCrumbs('Bibliothèque', self::ONGLET_LIBRARY, true);
-        $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
-    }
+        $disabledButtonAttributes = array(
+            'type'=>self::TAG_BUTTON,
+            self::ATTR_CLASS=>'btn btn-sm btn-dark disabled'
+        );
+        $buttonAttributes = array(
+            'type'=>self::TAG_BUTTON,
+            self::ATTR_CLASS=>'btn btn-sm btn-dark'
+        );
+        
+        // Le lien vers la Home
+        $aContent = $this->getIcon('desktop');
+        $aAttributes = array(
+            self::ATTR_HREF=>$this->getPageUrl(),
+            self::ATTR_CLASS=>'text-white'
+        );
+        $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+        $breadCrumbsContent = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
 
+        // Le lien (ou pas) vers la page principale
+        if ($this->slugSubOnglet=='') {
+            $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $this->titreOnglet, $disabledButtonAttributes);
+        } else {
+            $aAttributes = array(
+                self::ATTR_HREF=>$this->getOngletUrl(),
+                self::ATTR_CLASS=>'text-white'
+            );
+            $buttonContent = $this->getBalise(self::TAG_A, $this->titreOnglet, $aAttributes);
+            $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+
+            // Le lien (ou pas) vers la catégorie
+            if ($this->catSlug=='') {
+                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL], $disabledButtonAttributes);
+            } else {
+                $aAttributes = array(
+                    self::ATTR_HREF=>$this->getSubOngletUrl(),
+                    self::ATTR_CLASS=>'text-white'
+                );
+                $buttonContent = $this->getBalise(self::TAG_A, $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL], $aAttributes);
+                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+
+                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $this->objWpCategory->getField('name'), $disabledButtonAttributes);
+            }
+        }
+        
+        $divAttributes = array(
+            self::ATTR_CLASS=>'btn-group float-sm-right'
+        );
+        $this->breadCrumbs = $this->getBalise(self::TAG_DIV, $breadCrumbsContent, $divAttributes);
+        /////////////////////////////////////////
+    }
+    
     /**
      * @since 1.22.05.30
      * @version 1.22.10.20
      */
     public function getOngletContent()
     {
-      switch ($this->slugSubOnglet) {
-          case self::CST_LIB_SKILL :
-              $strContent = $this->getSubongletSkills();
-              break;
-          case self::CST_LIB_STAGE :
-              $strContent = $this->getSubongletStages();
-              break;
-          case self::CST_LIB_COPS :
-              $strContent = $this->getSubongletCops();
-              break;
-          case self::CST_LIB_LAPD :
-              $strContent = $this->getSubongletLapd();
-              break;
-          case self::CST_LIB_BDD :
-              $strContent = $this->getSubongletBdd();
-              break;
-          default :
-              $urlTemplate = 'web/pages/public/fragments/public-fragments-article-onglet-menu-panel.php';
-              $strContent = '';
-              foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
-                  $attributes = array(self::ONGLET_LIBRARY, $subOnglet, $arrSubOnglet[self::FIELD_LABEL], $arrSubOnglet[self::FIELD_ICON]);
-                  $strContent .= $this->getRender($urlTemplate, $attributes);
-              }
-              break;
-      }
+        switch ($this->slugSubOnglet) {
+            case self::CST_LIB_SKILL :
+                $strContent = $this->getSubongletSkills();
+                break;
+            case self::CST_LIB_STAGE :
+                $strContent = $this->getSubongletStages();
+                break;
+            case self::CST_LIB_COPS :
+                $strContent = $this->getSubongletCops();
+                break;
+            case self::CST_LIB_LAPD :
+                $strContent = $this->getSubongletLapd();
+                break;
+            case self::CST_LIB_BDD :
+                $strContent = $this->getSubongletBdd();
+                break;
+            case self::CST_LIB_INDEX :
+				$objBean = new WpPageAdminLibraryIndexBean();
+                $strContent = $objBean->getSubongletContent();
+                break;
+            default :
+                $urlTemplate = 'web/pages/public/fragments/public-fragments-article-onglet-menu-panel.php';
+                $strContent = '';
+                foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
+                    $attributes = array(
+						self::ONGLET_LIBRARY,
+						$subOnglet,
+						$arrSubOnglet[self::FIELD_LABEL],
+						$arrSubOnglet[self::FIELD_ICON]
+					);
+                    $strContent .= $this->getRender($urlTemplate, $attributes);
+                }
+                break;
+        }
       
-        return $this->getBalise(self::TAG_DIV, $strContent, array(self::ATTR_CLASS=>'row'));
+        return $strContent;
     }
 
-  /**
-   * @since 1.22.05.30
-   * @version 1.22.05.30
-   */
-  public function getSubongletSkills()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-skills.php';
-    // Récupération des articles Wordpress liés à la catégorie "Compétence"
-    $attributes = array(
-      // Catégorie "Compétence".
-      self::WP_CAT       => self::WP_CAT_ID_SKILL,
-      self::SQL_ORDER_BY => self::WP_POSTTITLE,
-      self::SQL_ORDER    => self::SQL_ORDER_ASC,
-    );
-    $WpPosts = $this->WpPostServices->getPosts($attributes);
-    // Construction des données du template
-    $strContent = '';
-    $strAncres  = '';
-    $prevAncre  = '';
-    $arr_SkillArticles = array();
-//    $strRows    = '';
-    while (!empty($WpPosts)) {
-      $WpPost = array_shift($WpPosts);
-      $arr_SkillArticles[] = $WpPost->getField(self::WP_POSTTITLE);
-      $postTitle = str_replace('É', 'E', $WpPost->getField(self::WP_POSTTITLE));
-      $postAnchor = substr($postTitle, 0, 1);
-
-      if ($prevAncre!=$postAnchor) {
-        $prevAncre = $postAnchor;
-        $strAncres .= '<li class="nav-item"><a class="nav-link text-white" href="#anchor-'.$postAnchor.'">'.$postAnchor.'</a></li>';
-        $strContent .= '<a id="anchor-'.$postAnchor.'"></a>';
-      }
-
-      $strContent .= WpPost::getBean($WpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();
+    /**
+     * @since 1.22.05.30
+     * @version 1.22.05.30
+     */
+    public function getSubongletSkills()
+    {
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-skills.php';
+        // Récupération des articles Wordpress liés à la catégorie "Compétence"
+        $attributes = array(
+            // Catégorie "Compétence".
+            self::WP_CAT       => self::WP_CAT_ID_SKILL,
+            self::SQL_ORDER_BY => self::WP_POSTTITLE,
+            self::SQL_ORDER    => self::SQL_ORDER_ASC,
+        );
+        $WpPosts = $this->WpPostServices->getPosts($attributes);
+        // Construction des données du template
+        $strContent = '';
+        $strAncres  = '';
+        $prevAncre  = '';
+        $arr_SkillArticles = array();
+        //    $strRows    = '';
+        while (!empty($WpPosts)) {
+            $WpPost = array_shift($WpPosts);
+            $arr_SkillArticles[] = $WpPost->getField(self::WP_POSTTITLE);
+            $postTitle = str_replace('É', 'E', $WpPost->getField(self::WP_POSTTITLE));
+            $postAnchor = substr($postTitle, 0, 1);
+            
+            if ($prevAncre!=$postAnchor) {
+                $prevAncre = $postAnchor;
+                $strAncres .= '<li class="nav-item"><a class="nav-link text-white" href="#anchor-'.$postAnchor.'">'.$postAnchor.'</a></li>';
+                $strContent .= '<a id="anchor-'.$postAnchor.'"></a>';
+            }
+            
+            $strContent .= WpPost::getBean($WpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();
+        }
+        
+        // Pour le moment, on a un système hybride entre des données en base et des articles Wordpress.
+        // A terme, seuls les articles seront utilisés pour l'affichage de l'interface.
+        // Les données de la table compétence serviront autrement (notamment ingame)
+        // On doit récupérer l'ensemble des compétences et les afficher.
+        $Skills = $this->CopsSkillServices->getCopsSkills();
+        foreach ($Skills as $Skill) {
+            $skillName = $Skill->getField(self::FIELD_SKILL_NAME);
+            if (in_array($skillName, $arr_SkillArticles)) {
+                continue;
+            }
+            $strContent .= $Skill->getBean()->getLibraryDisplay();
+        }
+        
+        $attributes = array(
+            // La liste des compétences
+            $strContent,
+            // La liste alphabétique des ancres du haut de page
+            $strAncres,
+            // Normalement, plus rien après
+            '', '', '', '', '', '',
+        );
+        return $this->getRender($urlTemplate, $attributes);
     }
-
-    // Pour le moment, on a un système hybride entre des données en base et des articles Wordpress.
-    // A terme, seuls les articles seront utilisés pour l'affichage de l'interface.
-    // Les données de la table compétence serviront autrement (notamment ingame)
-    // On doit récupérer l'ensemble des compétences et les afficher.
-    $Skills = $this->CopsSkillServices->getCopsSkills();
-    foreach ($Skills as $Skill) {
-      $skillName = $Skill->getField(self::FIELD_SKILL_NAME);
-      if (in_array($skillName, $arr_SkillArticles)) {
-        continue;
-      }
-      $strContent .= $Skill->getBean()->getLibraryDisplay();
-    }
-
-    $attributes = array(
-      // La liste des compétences
-      $strContent,
-      // La liste alphabétique des ancres du haut de page
-      $strAncres,
-      // Normalement, plus rien après
-      '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
+   
 
   /**
    * @since 1.22.06.02

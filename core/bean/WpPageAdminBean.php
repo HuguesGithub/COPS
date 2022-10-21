@@ -23,10 +23,12 @@ class WpPageAdminBean extends WpPageBean
      */
     public function __construct()
     {
+        $this->slugPage = self::PAGE_ADMIN;
+        $this->urlOnglet = '/'.$this->slugPage.'?'.self::CST_ONGLET.'=';
+        
         $this->analyzeUri();
         $this->CopsPlayerServices = new CopsPlayerServices();
         $this->CopsMailServices   = new CopsMailServices();
-        $this->urlOnglet = '/'.self::PAGE_ADMIN.'?'.self::CST_ONGLET.'=';
     
         if (isset($_POST[self::FIELD_MATRICULE])) {
             // On cherche a priori à se logguer

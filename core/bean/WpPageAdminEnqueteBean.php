@@ -13,9 +13,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
     public function __construct()
     {
         parent::__construct();
-        $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = self::ONGLET_ENQUETE;
-        $this->slugSubOnglet = '';
         
         /////////////////////////////////////////
         // Construction du menu de l'inbox
