@@ -25,6 +25,24 @@
                    <label class="col-form-label-sm form-control col-3" for="reference">Référence</label>
                 <input type="text" class="form-control col-9" id="reference" name="reference" value="%7$s"/>
             </div>
+            <div class="%8$s">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="code" id="code2" value="2"%9$s>
+  					<label class="form-check-label" for="code2">Code Rouge</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="radio" name="code" id="code1" value="1"%10$s>
+  					<label class="form-check-label" for="code1">Code Bleu</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="radio" name="code" id="code0" value="0"%11$s>
+  					<label class="form-check-label" for="code0">Standard</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="radio" name="code" id="codeHS" value="-1"%12$s>
+  					<label class="form-check-label" for="codeHS">Hors Storyline</label>
+				</div>
+			</div>
         </div>
 
         <div class="card-footer">

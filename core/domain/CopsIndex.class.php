@@ -21,10 +21,11 @@ class CopsIndex extends LocalDomain
 
   protected $nomIdx;
   protected $natureId;
-  protected $reference;
-  protected $descriptionMJ;
   protected $descriptionPJ;
-
+  protected $descriptionMJ;
+  protected $reference;
+  protected $code;
+  
   //////////////////////////////////////////////////
   // GETTERS & SETTERS
   //////////////////////////////////////////////////

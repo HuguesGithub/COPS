@@ -102,7 +102,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                     self::ATTR_HREF=>$this->getSubOngletUrl(),
                     self::ATTR_CLASS=>'text-white'
                 );
-                $buttonContent = $this->getBalise(self::TAG_A, $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL], $aAttributes);
+                $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
+                $buttonContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
                 $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
 
                 $name = $this->objWpCategory->getField('name');

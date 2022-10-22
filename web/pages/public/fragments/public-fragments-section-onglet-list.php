@@ -7,7 +7,7 @@
         <div class="mailbox-controls">%2$s</div>
 
         <div class="table-responsive mailbox-messages">
-          <table class="table table-hover table-striped" aria-describedby="Liste des éléments">
+          <table class="table table-hover table-striped table-sm" aria-describedby="Liste des éléments">
               <thead>%3$s</thead>
             <tbody>%4$s</tbody>
           </table>

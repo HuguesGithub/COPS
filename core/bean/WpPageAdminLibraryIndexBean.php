@@ -66,7 +66,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 		    );
 		    $strButtonCreation = $this->getBalise(self::TAG_A, 'Créer une entrée', $aAttributes);
 		}
-        /////////////////////////////////////////		
+        /////////////////////////////////////////
 		
         /////////////////////////////////////////
         // On va définir la liste des éléments du menu de gauche.
@@ -118,6 +118,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 		if (self::isAdmin()) {
 			$this->objIndex->setField('descriptionMJ', stripslashes($this->urlParams['descriptionMJ']));
 			$this->objIndex->setField('reference', stripslashes($this->urlParams['reference']));
+			$this->objIndex->setField('code', stripslashes($this->urlParams['code']));
 		}
 		if ($this->objIndex->checkFields()) {
 			if ($this->objIndex->getField(self::FIELD_ID)=='') {
@@ -162,6 +163,10 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 			(self::isAdmin() ? $this->objIndex->getField('descriptionMJ') : ''),
 			(self::isAdmin() ? $this->objIndex->getField('reference') : ''),
 			(self::isAdmin() ? '' : ' d-none'),
+		    ($this->objIndex->getField('code')==2 ? ' '.self::CST_CHECKED : ''),
+		    ($this->objIndex->getField('code')==1 ? ' '.self::CST_CHECKED : ''),
+		    ($this->objIndex->getField('code')==0 ? ' '.self::CST_CHECKED : ''),
+		    ($this->objIndex->getField('code')==-1 ? ' '.self::CST_CHECKED : ''),
 		);
         return $this->getRender($urlTemplateEdit, $attributes);
 	}
@@ -176,7 +181,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // On va définir la liste des éléments à afficher.
 		// Les données sont extraites de la table wp_7_cops_index.
         // Si aucune catégorie n'est sélectionnée, on affiche tout
-        // Sinon, on filtre via la catégorie, le nom de la catégorie doit correspondre à la valeur du champ nomIdxNature de la table wp_7_cops_index_nature
+        // Sinon, on filtre via la catégorie, le nom de la catégorie doit correspondre
+        // à la valeur du champ nomIdxNature de la table wp_7_cops_index_nature
         $urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
 		$titre = ($this->blnShowColNature ? 'Index' : $this->objWpCategory->getField('name'));
 		
@@ -187,11 +193,14 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 		);
 		$headerContent  = $this->getBalise(self::TAG_TH, 'Nom', $thAttributes);
 		if ($this->blnShowColNature) {
+		    $thAttributes['style'] = 'width:150px;';
 			$headerContent .= $this->getBalise(self::TAG_TH, 'Nature', $thAttributes);
+			unset($thAttributes['style']);
 		}
 		$headerContent .= $this->getBalise(self::TAG_TH, 'Description', $thAttributes);
 		if ($this->hasCopsEditor) {
-			$headerContent .= $this->getBalise(self::TAG_TH, '&nbsp;');
+		    $thAttributes = array('style'=>'width:60px;', 'scope'=>'col');
+		    $headerContent .= $this->getBalise(self::TAG_TH, '&nbsp;', $thAttributes);
 		}
 		$header = $this->getBalise(self::TAG_TR, $headerContent);
         /////////////////////////////////////////

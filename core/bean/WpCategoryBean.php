@@ -28,7 +28,7 @@ class WpCategoryBean extends UtilitiesBean
     {
         $strIcon = $this->getIcon($icon);
         $label   = $this->wpCategory->getField('name');
-        $aContent = $strIcon.' '.$label;
+        $aContent = $strIcon.'&nbsp;'.$label;
         
         $url    .= $this->wpCategory->getField('slug');
         $aAttributes = array(
