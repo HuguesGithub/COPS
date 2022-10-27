@@ -1,36 +1,54 @@
 <?php
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * CopsIndexBean
  * @author Hugues
  * @since 1.22.10.21
- * @version 1.22.10.21
+ * @version 1.22.10.22
  */
 class CopsIndexBean extends CopsBean
 {
     public function __construct($objStd=null)
     {
         parent::__construct();
-        $this->obj          = ($objStd==null ? new CopsIndex() : $objStd);
+        $this->obj = ($objStd==null ? new CopsIndex() : $objStd);
+        
+        // On initialise l'éventuelle pagination
+        $this->curPage = $this->initVar('curPage', 1);
+        // On initialise l'éventuelle catégorie
+        $this->catSlug = $this->initVar('catslug', '');
     }
 
     /**
      * @return string
      * @since 1.22.10.21
-     * @version 1.22.10.21
+     * @version 1.22.10.22
      */
     public function getCopsIndexRow($blnShowColNature, $hasCopsEditor=false)
     {
         // Si $blnShowColNature, on affiche la colonne Nature.
         // On veut afficher le nom, la nature (opt) et la description.
+        $url  = $this->urlOnglet.self::ONGLET_LIBRARY;
+        $url .= '&amp;'.self::CST_SUBONGLET.'='.self::CST_LIB_INDEX;
+        $url .= '&amp;'.self::CST_ACTION.'='.self::CST_ENQUETE_WRITE;
+        $url .= '&amp;id='.$this->obj->getField(self::FIELD_ID);
+        if ($this->curPage!=1) {
+            $url .= '&amp;curPage='.$this->curPage;
+        }
+        if ($this->catSlug!=1) {
+            $url .= '&amp;catslug='.$this->catSlug;
+        }
         
         $arrColumns = array();
         // Checkbox ?
         
         // Le nom.
         $aAttributes = array(self::ATTR_CLASS=>'text-white');
+        if ($hasCopsEditor) {
+            $aAttributes[self::ATTR_HREF] = $url;
+        }
         $label = $this->getBalise(self::TAG_SPAN, $this->obj->getField('nomIdx'));
         $lienEdition = $this->getBalise(self::TAG_A, $label, $aAttributes);
         $cell = $this->getBalise(self::TAG_TD, $lienEdition, array(self::ATTR_CLASS=>'mailbox-name'));
@@ -52,7 +70,7 @@ class CopsIndexBean extends CopsBean
         if ($hasCopsEditor) {
             $aContent = '<i class="fa-solid fa-square-pen"></i>';
             $aAttributes = array(
-                self::ATTR_HREF => '/admin?onglet=library&amp;subOnglet=index&amp;action=write&amp;id='.$this->obj->getField(self::FIELD_ID),
+                self::ATTR_HREF => $url,
                 self::ATTR_CLASS => 'text-white',
             );
             $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);

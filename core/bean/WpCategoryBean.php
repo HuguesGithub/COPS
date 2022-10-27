@@ -30,7 +30,7 @@ class WpCategoryBean extends UtilitiesBean
         $label   = $this->wpCategory->getField('name');
         $aContent = $strIcon.'&nbsp;'.$label;
         
-        $url    .= $this->wpCategory->getField('slug');
+        $url    .= '&amp;catslug='.$this->wpCategory->getField('slug');
         $aAttributes = array(
             self::ATTR_CLASS => 'nav-link text-white',
             self::ATTR_HREF  => $url,

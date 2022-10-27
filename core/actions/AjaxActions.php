@@ -22,6 +22,9 @@ class AjaxActions extends LocalActions
       case 'saveData' :
         $returned = CopsPlayerActions::dealWithStatic($_POST);
       break;
+      case 'csvExport':
+          $returned = CopsIndexActions::dealWithStatic($_POST);
+          break;
       default :
         $saisie = stripslashes($_POST[self::AJAX_ACTION]);
         $returned  = 'Erreur dans AjaxActions le $_POST['.self::AJAX_ACTION.'] : '.$saisie.'<br>';

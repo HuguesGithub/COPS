@@ -17,11 +17,6 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         parent::__construct();
         /////////////////////////////////////////
         // Définition des services
-        /*
-        $this->CopsSkillServices = new CopsSkillServices();
-        $this->CopsStageServices = new CopsStageServices();
-        $this->WpPostServices    = new WpPostServices();
-        */
         $this->copsIndexServices  = new CopsIndexServices();
         $this->wpCategoryServices = new WpCategoryServices();
         
@@ -34,8 +29,10 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         // Si catSlug est défini, on récupère la WpCategory associée.
         if ($this->catSlug=='') {
             $this->objWpCategory = new WpCategory();
+            $this->objCopsIndexNature = new CopsIndexNature();
         } else {
             $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
+            $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($this->objWpCategory->getField('name'));
         }
         
         /////////////////////////////////////////

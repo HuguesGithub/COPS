@@ -117,7 +117,8 @@ class WpPageAdminInboxBean extends WpPageAdminBean
                 $this->CopsMailServices->insertMail($objCopsMail);
             }
 
-            $objsCopsMailUser = $this->CopsMailServices->getMailUsers(array(self::FIELD_MAIL=>$this->urlParams['mailTo']));
+            $attributes = array(self::FIELD_MAIL=>$this->urlParams['mailTo']);
+            $objsCopsMailUser = $this->CopsMailServices->getMailUsers($attributes);
             $objCopsMailUser = array_shift($objsCopsMailUser);
 
             $attributes = array(

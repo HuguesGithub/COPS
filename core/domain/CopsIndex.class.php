@@ -71,7 +71,24 @@ class CopsIndex extends LocalDomain
   public function getNature()
   { return $this->copsIndexServices->getCopsIndexNature($this->natureId); }
 
-
+    public function getStrCode()
+    {
+        switch ($this->code) {
+            case 2 :
+                $strCode = 'Rouge';
+                break;
+            case 1 :
+                $strCode = 'Bleu';
+                break;
+            case -1 :
+                $strCode = 'Hors Storyline';
+                break;
+            default :
+                $strCode = 'Standard';
+                break;
+        }
+        return $strCode;
+    }
   public function insertCopsIndex()
   {
       $requete  = "INSERT INTO wp_7_cops_index ";

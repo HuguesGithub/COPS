@@ -11,6 +11,10 @@ $(document).ready(function() {
     });
   }
 
+  $('.ajaxAction[data-trigger="click"]').on('click', function(){
+    ajaxActionClick($(this));
+  });
+
   $('.ajaxAction[data-trigger="change"]').on('change', function(){
     ajaxActionChange($(this));
   });
@@ -216,7 +220,16 @@ function enableMailboxControls() {
   }
 }
 
-
+function ajaxActionClick(obj) {
+	let actions = obj.data('ajax').split(',');
+	for (let oneAction of actions) {
+	    switch (oneAction) {
+			case 'csvExport' :
+				csvExport(obj);
+				break;
+		}
+	}
+}
 
 function ajaxActionChange(obj) {
   let id = obj.attr('id');
@@ -261,7 +274,7 @@ function saveData(obj) {
 
   // On a un appel ajax pour rechercher les équivalences au numéro
   $.post(
-    ajaxurl,
+  	ajaxurl,
     data,
     function(response) {
       try {
@@ -274,7 +287,6 @@ function saveData(obj) {
   ).done(function(response) {
     obj = JSON.parse(response);
     displayToast(obj.toastContent);
-//    displayToast('<div class="toast show bg-success"><div class="toast-header"><i class="fa-solid fa-circle-check mr-2"></i><strong class="me-auto">Succès</strong></div><div class="toast-body">Mise à jour de la donnée effectuée.</div></div>');
   });
 
 }
@@ -444,3 +456,36 @@ function estDateEgale(dStart, dEnd) {
 }
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
+
+function csvExport(obj) {
+  let data = {'action': 'dealWithAjax', 'ajaxAction': 'csvExport', 'natureId': obj.data('natureid')};
+
+  // On a un appel ajax pour rechercher les équivalences au numéro
+  $.post(
+    ajaxurl,
+    data,
+    function(response) {
+      try {
+        obj = JSON.parse(response);
+      } catch (e) {
+        console.log("error: "+e);
+        console.log(response);
+      }
+  }).done(function(response) {
+    obj = JSON.parse(response);
+    displayToast(obj.toastContent);
+    /*
+  }).done(function(response) {
+	let a = $("<a />", {
+               href: "data:text/csv," 
+                     + URL.createObjectURL(new Blob([response], {
+                         type:"text/csv"
+                       })),
+               "download":"filename.csv"
+            });	
+            $("body").append(a);
+            a[0].click();
+    */
+  });
+  
+}

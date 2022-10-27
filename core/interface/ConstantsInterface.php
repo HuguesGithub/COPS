@@ -79,6 +79,7 @@ interface ConstantsInterface
   const CST_SELECTED           = 'selected';
   const CST_SUBONGLET          = 'subOnglet';
   const CST_URL                = 'url';
+  const CST_WRITE              = 'write';
   const CST_WRITE_ACTION       = 'writeAction';
   
   /////////////////////////////////////////////////
@@ -316,8 +317,8 @@ interface ConstantsInterface
 
   /////////////////////////////////////////////////
   // Divers
-  const EOL          = "\r\n";
-  const SEP          = ';';
   */
-
+  const CSV_EOL          = "\r\n";
+  const CSV_SEP          = ';';
+  
 }
