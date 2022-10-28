@@ -32,7 +32,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
             $this->objCopsIndexNature = new CopsIndexNature();
         } else {
             $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
-            $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($this->objWpCategory->getField('name'));
+            $name = $this->objWpCategory->getField('name');
+            $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
         }
         
         /////////////////////////////////////////

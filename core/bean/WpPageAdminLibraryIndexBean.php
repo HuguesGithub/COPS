@@ -25,8 +25,9 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $this->urlRefresh = $this->url.'&amp;catslug='.$this->catSlug;
         // On initialise l'éventuelle pagination & on ajoute à l'url de Refresh
         $this->curPage = $this->initVar('curPage', 1);
+        $this->strExtraCurPage = '&amp;curPage=';
         if ($this->curPage!=1) {
-            $this->urlRefresh .= '&amp;curPage='.$this->curPage;
+            $this->urlRefresh .= $this->strExtraCurPage.$this->curPage;
         }
         // Est-on sur la page principale ou le filtre Nature est-il activé ?
         $this->blnShowColNature = ($this->catSlug=='');
@@ -34,7 +35,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // On initialise l'éventuelle action : write
         $this->action = $this->initVar(self::CST_ACTION);
         // Selon la valeur, on initialise le panneau à afficher
-        if ($this->hasCopsEditor && ($this->action==self::CST_WRITE || isset($this->urlParams[self::CST_WRITE_ACTION]))) {
+        if ($this->hasCopsEditor
+            && ($this->action==self::CST_WRITE || isset($this->urlParams[self::CST_WRITE_ACTION]))) {
             $this->panel = 'edit';
         } else {
             $this->panel = 'list';
@@ -65,20 +67,13 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
         // Le bouton de création ou d'annulation.
         $strButtonCreation = '';
+        $classe = 'btn btn-primary mb-3'.($blnExtraButton ? ' col-6' : ' btn-block');
         if ($this->panel!='list') {
-            $aAttributes = array(
-                self::ATTR_HREF => $this->urlRefresh,
-                self::ATTR_CLASS => 'btn btn-primary mb-3'.($blnExtraButton ? ' col-6' : ' btn-block'),
-            );
-            $label = '<i class="fa-solid fa-angles-left"></i> Retour';
-            $strButtonCreation = $this->getBalise(self::TAG_A, $label, $aAttributes);
+            $label = $this->getIcon('angles-left').'&nbsp;Retour';
+            $strButtonCreation .= $this->getLink($label, $this->urlRefresh, $classe);
         }
         if ($this->hasCopsEditor || $blnExtraButton) {
-            $aAttributes = array(
-                self::ATTR_HREF => $this->urlRefresh.'&amp;action=write',
-                self::ATTR_CLASS => 'btn btn-primary mb-3'.($blnExtraButton ? ' col-6' : ' btn-block'),
-            );
-            $strButtonCreation .= $this->getBalise(self::TAG_A, 'Créer une entrée', $aAttributes);
+            $strButtonCreation .= $this->getLink('Créer une entrée', $this->urlRefresh.'&amp;action=write', $classe);
         }
         /////////////////////////////////////////
         
@@ -162,7 +157,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
                 || $this->objWpCategory->getField('name')==$objIndexNature->getField('nomIdxNature')) {
                 $optionAttributes[self::CST_SELECTED] = self::CST_SELECTED;
             }
-            $strSelect .= $this->getBalise(self::TAG_OPTION, $objIndexNature->getField('nomIdxNature'), $optionAttributes);
+            $nomNature = $objIndexNature->getField('nomIdxNature');
+            $strSelect .= $this->getBalise(self::TAG_OPTION, $nomNature, $optionAttributes);
         }
         
         $attributes = array(
@@ -230,48 +226,11 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         
         $listContent = '';
         if (empty($objsCopsIndex)) {
-            $listContent = '<tr><td class="text-center" colspan="3">Aucune entrée.<br></td></tr>';
+            $listContent = '<tr><td class="text-center" colspan="3">Aucune entrée.</td></tr>';
         } else {
             /////////////////////////////////////////////:
             // Pagination
-            $nbItems = count($objsCopsIndex);
-            $nbItemsPerPage = 10;
-            $nbPages = ceil($nbItems/$nbItemsPerPage);
-            $strPagination = '';
-            if ($nbPages>1) {
-                if ($this->curPage!=1) {
-                    $btnClass = '';
-                    $aAttributes = array(
-                        self::ATTR_HREF => $this->urlRefresh.'&amp;curPage='.($this->curPage-1),
-                        self::ATTR_CLASS => 'text-white',
-                    );
-                    $label = '<i class="fa-solid fa-caret-left"></i>';
-                    $btnContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
-                } else {
-                    $btnClass = ' disabled text-white';
-                    $btnContent = '<i class="fa-solid fa-caret-left"></i>';
-                }
-                $strPagination .= '<button type="button" class="btn btn-default btn-sm'.$btnClass.'">';
-                $strPagination .= $btnContent.'</button>&nbsp;';
-                $firstItem = ($this->curPage-1)*$nbItemsPerPage;
-                $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
-                $strPagination .= ($firstItem+1).' - '.$lastItem.' sur '.$nbItems;
-                if ($this->curPage!=$nbPages) {
-                    $btnClass = '';
-                    $aAttributes = array(
-                        self::ATTR_HREF => $this->urlRefresh.'&amp;curPage='.($this->curPage+1),
-                        self::ATTR_CLASS => 'text-white',
-                    );
-                    $label = '<i class="fa-solid fa-caret-right"></i>';
-                    $btnContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
-                } else {
-                    $btnClass = ' disabled text-white';
-                    $btnContent = '<i class="fa-solid fa-caret-right"></i>';
-                }
-                $strPagination .= '&nbsp;<button type="button" class="btn btn-default btn-sm'.$btnClass;
-                $strPagination .= '">'.$btnContent.'</button>';
-                $objsCopsIndex = array_slice($objsCopsIndex, $firstItem, $nbItemsPerPage);
-            }
+            $strPagination = $this->buildPagination($objsCopsIndex);
             /////////////////////////////////////////////:
             foreach ($objsCopsIndex as $objCopsIndex) {
                 $listContent .= $objCopsIndex->getBean()->getCopsIndexRow($this->blnShowColNature, $this->hasCopsEditor);
@@ -282,19 +241,26 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////////
         // Toolbar & Pagination
         // Bouton pour recharger la liste
-        $strToolBar  = '<button type="button" class="btn btn-default btn-sm" title="Rafraîchir la liste"><a href="';
-        $strToolBar .= $this->urlRefresh.'" class="text-white"><i class="fa-solid fa-arrows-rotate"></i></a></button>';
+        $label = $this->getLink($this->getIcon('arrows-rotate'), $this->urlRefresh, self::CST_TEXT_WHITE);
+        $btnAttributes = array('title' => 'Rafraîchir la liste');
+        $strToolBar = $this->getButton($label, $btnAttributes);
+        
         // Bouton pour créer une nouvelle entrée, si droits d'édition
         if ($this->hasCopsEditor) {
-            $strToolBar .= '&nbsp;<button type="button" class="btn btn-default btn-sm" title="Créer une entrée">';
-            $strToolBar .= '<a href="'.$this->urlRefresh.'&amp;action=write" class="text-white">';
-            $strToolBar .= '<i class="fa-solid fa-square-plus"></i></a></button>';
+            $href = $this->urlRefresh.'&amp;action=write';
+            $label = $this->getLink($this->getIcon('arrows-plus'), $href, self::CST_TEXT_WHITE);
+            $btnAttributes = array('title' => 'Créer une entrée');
+            $strToolBar .= $this->getButton($label, $btnAttributes);
         }
         // Bouton pour effectuer un export Excel
-        $strToolBar .= '&nbsp;<button type="button" class="btn btn-default btn-sm ajaxAction"';
-        $strToolBar .= ' title="Exporter la liste" data-trigger="click" data-ajax="csvExport"';
-        $strToolBar .= ' data-natureid="'.$this->objCopsIndexNature->getField('idIdxNature').'">';
-        $strToolBar .= '<i class="fa-solid fa-download"></i></button>';
+        $btnAttributes = array(
+            self::ATTR_CLASS => self::AJAX_ACTION,
+            'title' => 'Exporter la liste',
+            'data-trigger' => 'click',
+            'data-ajax' => 'csvExport',
+            'data-natureid' => $this->objCopsIndexNature->getField('idIdxNature'),
+        );
+        $strToolBar .= '&nbsp;'.$this->getButton($this->getIcon('download'), $btnAttributes);
         // Ajout de la pagination
         $strToolBar .= $this->getBalise(self::TAG_DIV, $strPagination, array(self::ATTR_CLASS=>'float-right'));
         /////////////////////////////////////////
@@ -308,5 +274,54 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
         
         return $this->getRender($urlTemplateList, $listAttributes);
+    }
+
+    /**
+     * 
+     * @param array $objs
+     * @return string
+     * @since v1.22.10.27
+     * @version v1.22.10.27
+     */
+    public function buildPagination(&$objs)
+    {
+        $nbItems = count($objs);
+        $nbItemsPerPage = 10;
+        $nbPages = ceil($nbItems/$nbItemsPerPage);
+        $strPagination = '';
+        if ($nbPages>1) {
+            // Le bouton page précédente
+            $label = $this->getIcon('caret-left');
+            if ($this->curPage!=1) {
+                $btnClass = '';
+                $href = $this->urlRefresh.$this->strExtraCurPage.($this->curPage-1);
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = 'disabled text-white';
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= $this->getButton($btnContent, $btnAttributes).'&nbsp;';
+            
+            // La chaine des éléments affichés
+            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
+            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
+            $strPagination .= ($firstItem+1).' - '.$lastItem.' sur '.$nbItems;
+            
+            // Le bouton page suivante
+            $label = $this->getIcon('caret-right');
+            if ($this->curPage!=$nbPages) {
+                $btnClass = '';
+                $href = $this->urlRefresh.$this->strExtraCurPage.($this->curPage+1);
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = ' disabled text-white';
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= '&nbsp;'.$this->getButton($btnContent, $btnAttributes);
+            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
+        }
+        return $strPagination;
     }
 }

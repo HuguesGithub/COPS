@@ -122,6 +122,49 @@ class UtilitiesBean implements ConstantsInterface
      */
     public function getRender($urlTemplate, $args=array())
     { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
+
+    /**
+     * 
+     * @param string $label
+     * @param array $attributes
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
+    public function getButton($label, $attributes)
+    {
+        $buttonAttributes = array(
+            'type' => 'button',
+            self::ATTR_CLASS => 'btn btn-default btn-sm',
+        );
+        if (!empty($attributes)) {
+            foreach ($attributes as $key=>$value) {
+                if (!isset($buttonAttributes[$key])) {
+                    $buttonAttributes[$key]  = $value;
+                } elseif ($key==self::ATTR_CLASS) {
+                    $buttonAttributes[$key] .= ' '.$value;
+                }
+            }
+        }
+        return $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);        
+    }
+    /**
+     * 
+     * @param string $label
+     * @param string $href
+     * @param string $classe
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
+    public function getLink($label, $href, $classe)
+    {
+        $attributes = array(
+            self::ATTR_HREF => $href,
+            self::ATTR_CLASS => $classe,
+        );
+        return $this->getBalise(self::TAG_A, $label, $attributes);
+    }
     /**
      * @param string
      * @return string
@@ -133,6 +176,7 @@ class UtilitiesBean implements ConstantsInterface
         $prefix .= ' ';
       }
         switch ($tag) {
+            case self::I_ANGLE_LEFT :
             case self::I_BACKWARD :
             case self::I_CIRCLE :
             case self::I_FILE_CATEGORY :
@@ -142,12 +186,17 @@ class UtilitiesBean implements ConstantsInterface
             case self::I_FILE_CIRCLE_CHECK :
             case self::I_FILE_CIRCLE_PLUS :
             case self::I_FILE_CIRCLE_XMARK :
-            case 'desktop' :
-            case 'envelope' :
-            case 'calendar-days' :
-            case 'box-archive' :
+            case 'angles-left' :
+            case 'arrows-rotate' :
             case 'book' :
-            case self::I_ANGLE_LEFT :
+            case 'box-archive' :
+            case 'calendar-days' :
+            case 'caret-left' :
+            case 'caret-right' :
+            case 'desktop' :
+            case 'download' :
+            case 'envelope' :
+            case 'square-plus' :
                 $prefix .= 'fa-solid fa-';
             break;
             default :

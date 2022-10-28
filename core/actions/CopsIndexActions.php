@@ -77,7 +77,8 @@ class CopsIndexActions extends LocalActions
         fclose($fp);
         
         $url = '/wp-content/plugins/hj-cops/web/rsc/files/'.$strFileName;
-        $returned = $this->getToastContentJson('success', 'Download', 'Le fichier CSV peut être téléchargé <a href="'.$url.'" class="text-white">ici</a>.');
+        $strMessage = 'Le fichier CSV peut être téléchargé <a href="'.$url.'" class="text-white">ici</a>.';
+        $returned = $this->getToastContentJson('success', 'Download', $strMessage);
         return $returned;
     }
 

@@ -78,6 +78,7 @@ interface ConstantsInterface
   const CST_ONGLET             = 'onglet';
   const CST_SELECTED           = 'selected';
   const CST_SUBONGLET          = 'subOnglet';
+  const CST_TEXT_WHITE         = 'text-white';
   const CST_URL                = 'url';
   const CST_WRITE              = 'write';
   const CST_WRITE_ACTION       = 'writeAction';
