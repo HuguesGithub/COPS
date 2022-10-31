@@ -18,11 +18,13 @@ interface ConstantsInterface
   const ATTR_HREF              = 'href';
   const ATTR_SRC               = 'src';
   const ATTR_STYLE             = 'style';
+  const ATTR_TITLE             = 'title';
   const ATTR_VALUE             = 'value';
 
-  const ATTR_DATA_AJAX         = 'data-ajax';
+  const ATTR_DATA              = 'data';
+  const ATTR_DATA_AJAX         = 'ajax';
   const ATTR_DATA_DATE         = 'data-date';
-  const ATTR_DATA_TRIGGER      = 'data-trigger';
+  const ATTR_DATA_TRIGGER      = 'trigger';
 
   /////////////////////////////////////////////////
   // Constantes
@@ -71,10 +73,16 @@ interface ConstantsInterface
   const CST_ENQUETE_WRITE      = 'write';
   // Subonglet Autopsie
   const CST_AUTOPSIE_ARCHIVE   = 'archive';
+  // Subonglet Index
+  const CST_CAT_SLUG           = 'catSlug';
+  const CST_CURPAGE            = 'curPage';
   
   const CST_ACTION             = 'action';
   const CST_CHECKED            = 'checked';
   const CST_CHILDREN           = 'children';
+  const CST_DISABLED           = 'disabled';
+  const CST_EDIT               = 'edit';
+  const CST_LIST               = 'list';
   const CST_ONGLET             = 'onglet';
   const CST_SELECTED           = 'selected';
   const CST_SUBONGLET          = 'subOnglet';
@@ -85,7 +93,11 @@ interface ConstantsInterface
   
   /////////////////////////////////////////////////
   // Fields
+  // TABLE multiples
   const FIELD_ID               = 'id';
+  const FIELD_REFERENCE          = 'reference';
+  
+  // Provenance ?
   const FIELD_ICON             = 'icon';
   const FIELD_FOLDER_ID        = 'folderId';
   const FIELD_FROM_ID          = 'fromId';
@@ -138,7 +150,6 @@ interface ConstantsInterface
   const FIELD_SKILL_USES         = 'skillUses';
   const FIELD_SPEC_LEVEL         = 'specLevel';
   const FIELD_PAD_USABLE         = 'padUsable';
-  const FIELD_REFERENCE          = 'reference';
   const FIELD_DEFAULT_ABILITY    = 'defaultAbility';
 
   // TABLE cops_skill_spec
@@ -200,12 +211,23 @@ interface ConstantsInterface
   // TABLE cops_autopsie
   const FIELD_IDX_ENQUETE        = 'idxEnquete';
   const FIELD_DATA               = 'data';
+
+  // TABLE cops_index
+  const FIELD_NOM_IDX            = 'nomIdx';
+  const FIELD_NATURE_ID          = 'natureId';
+  const FIELD_DESCRIPTION_PJ     = 'descriptionPJ';
+  const FIELD_DESCRIPTION_MJ     = 'descriptionMJ';
+  const FIELD_CODE               = 'code';
+  // TABLE cops_index_nature
+  const FIELD_ID_IDX_NATURE      = 'idIdxNature';
+  const FIELD_NOM_IDX_NATURE     = 'nomIdxNature';
   
   /////////////////////////////////////////////////
   // Icons
   const I_CIRCLE                = 'circle';
   const I_EDIT                  = 'edit';
   const I_BACKWARD              = 'backward';
+  const I_DATABASE              = 'database';
   const I_FILE_CATEGORY         = 'folder-tree';
   const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
   const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
@@ -274,6 +296,7 @@ interface ConstantsInterface
   const WP_METAKEY             = 'meta_key';
   const WP_METAVALUENUM        = 'meta_value_num';
   const WP_POSTCONTENT         = 'post_content';
+  const WP_POSTNAME            = 'post_name';
   const WP_POSTTITLE           = 'post_title';
 
   const WP_CF_ADRENALINE       = 'adrenaline';
@@ -319,6 +342,7 @@ interface ConstantsInterface
   /////////////////////////////////////////////////
   // Divers
   */
+  const CST_NBSP         = '&nbsp;';
   const CSV_EOL          = "\r\n";
   const CSV_SEP          = ';';
   

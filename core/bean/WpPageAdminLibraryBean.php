@@ -25,22 +25,26 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         $this->slugOnglet = self::ONGLET_LIBRARY;
         $this->titreOnglet = 'Bibliothèque';
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
-        $this->catSlug = $this->initVar('catslug');
+        $this->catSlug = $this->initVar(self::CST_CAT_SLUG);
         // Si catSlug est défini, on récupère la WpCategory associée.
         if ($this->catSlug=='') {
             $this->objWpCategory = new WpCategory();
             $this->objCopsIndexNature = new CopsIndexNature();
         } else {
+            // On peut-être dans le cas d'un objet WpCategory
             $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
             $name = $this->objWpCategory->getField('name');
             $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
+            // Mais on peut aussi être dans le cas d'un objet WpPost
+            // Il faudrait trouver un moyen d'unifier les deux pour que l'accès aux données soit cohérent
+            // En effet, je vais avoir besoin de getField('post_name') pour le cas du WpPost.
         }
         
         /////////////////////////////////////////
         // Construction du menu
         $this->arrSubOnglets = array(
-            self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book', self::FIELD_LABEL => 'Index'),
-            //self::CST_LIB_BDD   => array(self::FIELD_ICON => 'database',        self::FIELD_LABEL => 'Bases de données'),
+            self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX),
+            self::CST_LIB_BDD => array(self::FIELD_ICON=>self::I_DATABASE, self::FIELD_LABEL=>self::LABEL_DATABASES),
             //self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users',           self::FIELD_LABEL => 'COPS'),
             //self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox',         self::FIELD_LABEL => 'Compétences'),
             //self::CST_LIB_LAPD  => array(self::FIELD_ICON => 'building-shield', self::FIELD_LABEL => 'LAPD'),
@@ -62,57 +66,34 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 
         /////////////////////////////////////////
         // Création du Breadcrumbs
-        $disabledButtonAttributes = array(
-            'type'=>self::TAG_BUTTON,
-            self::ATTR_CLASS=>'btn btn-sm btn-dark disabled'
-        );
-        $buttonAttributes = array(
-            'type'=>self::TAG_BUTTON,
-            self::ATTR_CLASS=>'btn btn-sm btn-dark'
-        );
         
         // Le lien vers la Home
         $aContent = $this->getIcon('desktop');
-        $aAttributes = array(
-            self::ATTR_HREF=>$this->getPageUrl(),
-            self::ATTR_CLASS=>'text-white'
-        );
-        $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-        $breadCrumbsContent = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-
+        $buttonContent = $this->getLink($aContent, parent::getPageUrl(), self::CST_TEXT_WHITE);
+        $breadCrumbsContent = $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark'));
+        
         // Le lien (ou pas) vers la page principale
         if ($this->slugSubOnglet=='') {
-            $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $this->titreOnglet, $disabledButtonAttributes);
+            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark disabled'));
         } else {
-            $aAttributes = array(
-                self::ATTR_HREF=>$this->getOngletUrl(),
-                self::ATTR_CLASS=>'text-white'
-            );
-            $buttonContent = $this->getBalise(self::TAG_A, $this->titreOnglet, $aAttributes);
-            $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+            $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
+            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark'));
 
             // Le lien (ou pas) vers la catégorie
             if ($this->catSlug=='') {
                 $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $label, $disabledButtonAttributes);
+                $breadCrumbsContent .= $this->getButton($label, array(self::ATTR_CLASS=>'btn-dark disabled'));
             } else {
-                $aAttributes = array(
-                    self::ATTR_HREF=>$this->getSubOngletUrl(),
-                    self::ATTR_CLASS=>'text-white'
-                );
                 $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-                $buttonContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
-                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-
+                $buttonContent = $this->getLink($label, parent::getSubOngletUrl(), self::CST_TEXT_WHITE);
+                $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark'));
+                
                 $name = $this->objWpCategory->getField('name');
-                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $name, $disabledButtonAttributes);
+                $breadCrumbsContent .= $this->getButton($name, array(self::ATTR_CLASS=>'btn-dark disabled'));
             }
         }
         
-        $divAttributes = array(
-            self::ATTR_CLASS=>'btn-group float-sm-right'
-        );
-        $this->breadCrumbs = $this->getBalise(self::TAG_DIV, $breadCrumbsContent, $divAttributes);
+        $this->breadCrumbs = $this->getDiv($breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right'));
         /////////////////////////////////////////
     }
     
@@ -136,7 +117,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 $strContent = $this->getSubongletLapd();
                 break;
             case self::CST_LIB_BDD :
-                $strContent = $this->getSubongletBdd();
+                $objBean = new WpPageAdminLibraryBddBean();
+                $strContent = $objBean->getSubongletContent();
                 break;
             case self::CST_LIB_INDEX :
                 $objBean = new WpPageAdminLibraryIndexBean();
@@ -219,7 +201,6 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         );
         return $this->getRender($urlTemplate, $attributes);
     }
-   
 
   /**
    * @since 1.22.06.02
@@ -329,36 +310,5 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
     );
     return $this->getRender($urlTemplate, $attributes);
   }
-
-  public function getSubongletBdd()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-bdd.php';
-    // Récupération des articles Wordpress liés à la catégorie "Base de données"
-    $attributes = array(
-      // Catégorie "Base de données".
-      self::WP_CAT       => self::WP_CAT_ID_BDD,
-      self::WP_METAKEY   => self::WP_CF_ORDREDAFFICHAGE,
-      self::SQL_ORDER_BY => self::WP_METAVALUENUM,
-      self::SQL_ORDER    => self::SQL_ORDER_ASC,
-    );
-    $WpPosts = $this->WpPostServices->getPosts($attributes);
-
-    // Construction des données du template
-    $strContent = '';
-    $strRows    = '';
-    while (!empty($WpPosts)) {
-      $WpPost = array_shift($WpPosts);
-      $strContent .= WpPost::getBean($WpPost, self::WP_CAT_ID_BDD)->getContentDisplay();
-      list($accronym, $label) = explode(':', $WpPost->getField(self::WP_POSTTITLE));
-      $utilite = $WpPost->getPostMeta(self::WP_CF_UTILITE);
-      $strRows    .= '<tr><th scope="row"><a href="#'.trim($accronym).'" class="text-white">'.trim($accronym).'</a></th><td>'.$utilite.'</td><td>'.trim($label).'</td></tr>';
-    }
-
-    //
-    $attributes = array(
-      $strContent,
-      $strRows,
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
+  
 }

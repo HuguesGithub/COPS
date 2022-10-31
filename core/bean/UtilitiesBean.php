@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.00.00
  * @version 1.00.00
  */
-class UtilitiesBean implements ConstantsInterface
+class UtilitiesBean implements ConstantsInterface, LabelsInterface
 {
     public $arrFullMonths = array(1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août',
     'Septembre', 'Octobre', 'Novembre', 'Décembre');
@@ -101,7 +101,13 @@ class UtilitiesBean implements ConstantsInterface
         $extraAttributes = '';
         if (!empty($attributes)) {
             foreach ($attributes as $key => $value) {
-                $extraAttributes .= ' '.$key.'="'.$value.'"';
+                if (is_array($value)) {
+                    foreach ($value as $subkey => $subvalue)  {
+                        $extraAttributes .= ' '.$key.'-'.$subkey.'="'.$subvalue.'"';
+                    }
+                } else {
+                    $extraAttributes .= ' '.$key.'="'.$value.'"';
+                }
             }
         }
         return $extraAttributes;
@@ -124,21 +130,20 @@ class UtilitiesBean implements ConstantsInterface
     { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
 
     /**
-     * 
      * @param string $label
      * @param array $attributes
      * @return string
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getButton($label, $attributes)
+    public function getButton($label, $attributes=array())
     {
         $buttonAttributes = array(
             'type' => 'button',
             self::ATTR_CLASS => 'btn btn-default btn-sm',
         );
         if (!empty($attributes)) {
-            foreach ($attributes as $key=>$value) {
+            foreach ($attributes as $key => $value) {
                 if (!isset($buttonAttributes[$key])) {
                     $buttonAttributes[$key]  = $value;
                 } elseif ($key==self::ATTR_CLASS) {
@@ -146,10 +151,30 @@ class UtilitiesBean implements ConstantsInterface
                 }
             }
         }
-        return $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);        
+        return $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
     }
+    
     /**
-     * 
+     * @param string $label
+     * @param array $attributes
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
+    public function getTh($label, $attributes=array())
+    {
+        $buttonAttributes = array(
+            'scope' => 'col',
+        );
+        if (!empty($attributes)) {
+            foreach ($attributes as $key => $value) {
+                $buttonAttributes[$key]  = $value;
+            }
+        }
+        return $this->getBalise(self::TAG_TH, $label, $buttonAttributes);
+    }
+    
+    /**
      * @param string $label
      * @param string $href
      * @param string $classe
@@ -165,6 +190,25 @@ class UtilitiesBean implements ConstantsInterface
         );
         return $this->getBalise(self::TAG_A, $label, $attributes);
     }
+    
+    /**
+     * @param string $label
+     * @param array $attributes
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
+    public function getDiv($label, $attributes=array())
+    {
+        $divAttributes = array();
+        if (!empty($attributes)) {
+            foreach ($attributes as $key => $value) {
+                $divAttributes[$key]  = $value;
+            }
+        }
+        return $this->getBalise(self::TAG_DIV, $label, $divAttributes);
+    }
+    
     /**
      * @param string
      * @return string
@@ -179,6 +223,7 @@ class UtilitiesBean implements ConstantsInterface
             case self::I_ANGLE_LEFT :
             case self::I_BACKWARD :
             case self::I_CIRCLE :
+            case self::I_DATABASE :
             case self::I_FILE_CATEGORY :
             case self::I_FILE_OPENED :
             case self::I_FILE_CLOSED :

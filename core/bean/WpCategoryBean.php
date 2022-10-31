@@ -28,9 +28,9 @@ class WpCategoryBean extends UtilitiesBean
     {
         $strIcon = $this->getIcon($icon);
         $label   = $this->wpCategory->getField('name');
-        $aContent = $strIcon.'&nbsp;'.$label;
+        $aContent = $strIcon.self::CST_NBSP.$label;
         
-        $url    .= '&amp;catslug='.$this->wpCategory->getField('slug');
+        $url    .= '&amp;'.self::CST_CAT_SLUG.'='.$this->wpCategory->getField('slug');
         $aAttributes = array(
             self::ATTR_CLASS => 'nav-link text-white',
             self::ATTR_HREF  => $url,

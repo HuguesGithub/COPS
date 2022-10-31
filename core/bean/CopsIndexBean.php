@@ -26,20 +26,12 @@ class CopsIndexBean extends CopsBean
      * @since 1.22.10.21
      * @version 1.22.10.22
      */
-    public function getCopsIndexRow($blnShowColNature, $hasCopsEditor=false)
+    public function getCopsIndexRow($url, $blnShowColNature, $hasCopsEditor=false)
     {
         // Si $blnShowColNature, on affiche la colonne Nature.
         // On veut afficher le nom, la nature (opt) et la description.
-        $url  = $this->urlOnglet.self::ONGLET_LIBRARY;
-        $url .= '&amp;'.self::CST_SUBONGLET.'='.self::CST_LIB_INDEX;
         $url .= '&amp;'.self::CST_ACTION.'='.self::CST_ENQUETE_WRITE;
         $url .= '&amp;id='.$this->obj->getField(self::FIELD_ID);
-        if ($this->curPage!=1) {
-            $url .= '&amp;curPage='.$this->curPage;
-        }
-        if ($this->catSlug!=1) {
-            $url .= '&amp;catslug='.$this->catSlug;
-        }
         
         $arrColumns = array();
         // Checkbox ?

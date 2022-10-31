@@ -537,10 +537,81 @@ class WpPageAdminBean extends WpPageBean
         return $this->getOngletUrl().'&amp;'.self::CST_SUBONGLET.'='.$slugSubOnglet;
     }
     
-    public function getOngletUrl()
-    { return $this->getPageUrl().'?'.self::CST_ONGLET.'='.$this->slugOnglet; }
+    /**
+     * @param array $urlElements
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
+    public function getOngletUrl($urlElements=array())
+    {
+        $url = $this->getPageUrl().'?'.self::CST_ONGLET.'='.$this->slugOnglet;
+        if (isset($urlElements[self::CST_SUBONGLET])) {
+            $url .= '&amp;'.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
+        }
+        if (!empty($urlElements)) {
+            foreach ($urlElements as $key => $value) {
+                if ($value!='') {
+                    $url .= '&amp;'.$key.'='.$value;
+                }
+            }
+        }
+        return $url;
+    }
     
+    /**
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
     public function getPageUrl()
     { return '/'.$this->slugPage; }
+
+    /**
+     * @param array
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
+    public function getUrl($urlElements=array())
+    {
+        $url = '/'.$this->slugPage;
+        /////////////////////////////////////////////
+        // Si l'onglet est passé en paramètre et qu'il est défini, on va le reprendre
+        // S'il est défini et vide, on va l'enlever.
+        // S'il n'est pas défini, on va mettre l'onglet courant par défaut.
+        if (!isset($urlElements[self::CST_ONGLET])) {
+            $urlElements[self::CST_ONGLET] = $this->slugOnglet;
+        }
+        if ($urlElements[self::CST_ONGLET]!='') {
+           $url .= '?'.self::CST_ONGLET.'='.$urlElements[self::CST_ONGLET];
+        }
+        unset($urlElements[self::CST_ONGLET]);
+        /////////////////////////////////////////////
+        
+        /////////////////////////////////////////////
+        // On fait de même avec le subOnglet
+        if (!isset($urlElements[self::CST_SUBONGLET])) {
+            $urlElements[self::CST_SUBONGLET] = $this->slugSubOnglet;
+        }
+        if ($urlElements[self::CST_SUBONGLET]!='') {
+           $url .= '&amp;'.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
+        }
+        unset($urlElements[self::CST_SUBONGLET]);
+        /////////////////////////////////////////////
+        
+        /////////////////////////////////////////////
+        // Maintenant, on doit ajouter ceux passer en paramètre
+        if (!empty($urlElements)) {
+            foreach ($urlElements as $key => $value) {
+                if ($value!='') {
+                    $url .= '&amp;'.$key.'='.$value;
+                }
+            }
+        }
+        /////////////////////////////////////////////
+        
+        return $url;
+    }
     
 }
