@@ -31,22 +31,18 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
             $this->objWpCategory = new WpCategory();
             $this->objCopsIndexNature = new CopsIndexNature();
         } else {
-            // On peut-être dans le cas d'un objet WpCategory
             $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
             $name = $this->objWpCategory->getField('name');
             $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
-            // Mais on peut aussi être dans le cas d'un objet WpPost
-            // Il faudrait trouver un moyen d'unifier les deux pour que l'accès aux données soit cohérent
-            // En effet, je vais avoir besoin de getField('post_name') pour le cas du WpPost.
         }
         
         /////////////////////////////////////////
         // Construction du menu
         $this->arrSubOnglets = array(
             self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX),
-            self::CST_LIB_BDD => array(self::FIELD_ICON=>self::I_DATABASE, self::FIELD_LABEL=>self::LABEL_DATABASES),
+            self::CST_LIB_BDD   => array(self::FIELD_ICON => 'database', self::FIELD_LABEL => self::LABEL_DATABASES),
             //self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users',           self::FIELD_LABEL => 'COPS'),
-            //self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox',         self::FIELD_LABEL => 'Compétences'),
+            self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS),
             //self::CST_LIB_LAPD  => array(self::FIELD_ICON => 'building-shield', self::FIELD_LABEL => 'LAPD'),
             //self::CST_LIB_STAGE => array(self::FIELD_ICON => 'file-lines',      self::FIELD_LABEL => 'Stages'),
         );
@@ -73,7 +69,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         $aContent = $this->getIcon('desktop');
         $buttonContent = $this->getLink($aContent, parent::getPageUrl(), self::CST_TEXT_WHITE);
         $breadCrumbsContent = $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
-        
+
         // Le lien (ou pas) vers la page principale
         if ($this->slugSubOnglet=='') {
             $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDarkDisabled));
@@ -107,7 +103,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
     {
         switch ($this->slugSubOnglet) {
             case self::CST_LIB_SKILL :
-                $strContent = $this->getSubongletSkills();
+                $objBean = new WpPageAdminLibrarySkillBean();
+                $strContent = $objBean->getSubongletContent();
                 break;
             case self::CST_LIB_STAGE :
                 $strContent = $this->getSubongletStages();
@@ -142,66 +139,6 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         }
       
         return $strContent;
-    }
-
-    /**
-     * @since 1.22.05.30
-     * @version 1.22.05.30
-     */
-    public function getSubongletSkills()
-    {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-skills.php';
-        // Récupération des articles Wordpress liés à la catégorie "Compétence"
-        $attributes = array(
-            // Catégorie "Compétence".
-            self::WP_CAT       => self::WP_CAT_ID_SKILL,
-            self::SQL_ORDER_BY => self::WP_POSTTITLE,
-            self::SQL_ORDER    => self::SQL_ORDER_ASC,
-        );
-        $WpPosts = $this->WpPostServices->getPosts($attributes);
-        // Construction des données du template
-        $strContent = '';
-        $strAncres  = '';
-        $prevAncre  = '';
-        $arr_SkillArticles = array();
-        //    $strRows    = '';
-        while (!empty($WpPosts)) {
-            $WpPost = array_shift($WpPosts);
-            $arr_SkillArticles[] = $WpPost->getField(self::WP_POSTTITLE);
-            $postTitle = str_replace('É', 'E', $WpPost->getField(self::WP_POSTTITLE));
-            $postAnchor = substr($postTitle, 0, 1);
-            
-            if ($prevAncre!=$postAnchor) {
-                $prevAncre = $postAnchor;
-                $strAncres .= '<li class="nav-item"><a class="nav-link text-white" href="#anchor-'.$postAnchor.'">'.$postAnchor.'</a></li>';
-                $strContent .= '<a id="anchor-'.$postAnchor.'"></a>';
-            }
-            
-            $strContent .= WpPost::getBean($WpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();
-        }
-        
-        // Pour le moment, on a un système hybride entre des données en base et des articles Wordpress.
-        // A terme, seuls les articles seront utilisés pour l'affichage de l'interface.
-        // Les données de la table compétence serviront autrement (notamment ingame)
-        // On doit récupérer l'ensemble des compétences et les afficher.
-        $Skills = $this->CopsSkillServices->getCopsSkills();
-        foreach ($Skills as $Skill) {
-            $skillName = $Skill->getField(self::FIELD_SKILL_NAME);
-            if (in_array($skillName, $arr_SkillArticles)) {
-                continue;
-            }
-            $strContent .= $Skill->getBean()->getLibraryDisplay();
-        }
-        
-        $attributes = array(
-            // La liste des compétences
-            $strContent,
-            // La liste alphabétique des ancres du haut de page
-            $strAncres,
-            // Normalement, plus rien après
-            '', '', '', '', '', '',
-        );
-        return $this->getRender($urlTemplate, $attributes);
     }
 
   /**
@@ -312,5 +249,5 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
     );
     return $this->getRender($urlTemplate, $attributes);
   }
-  
+ 
 }

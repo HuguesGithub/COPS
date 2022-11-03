@@ -10,6 +10,7 @@ interface LabelsInterface
     const LABEL_DATABASES      = 'Bases de données';
     const LABEL_CATEGORIES     = 'Catégories';
     const LABEL_CODE           = 'Code';
+    const LABEL_SKILLS         = 'Compétences';
     const LABEL_CREER_ENTREE   = 'Créer une entrée';
     const LABEL_DESCRIPTION    = 'Description';
     const LABEL_DESCRIPTION_MJ = 'Description MJ';
