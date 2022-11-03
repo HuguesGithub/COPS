@@ -534,7 +534,7 @@ class WpPageAdminBean extends WpPageBean
         if ($slugSubOnglet=='') {
             $slugSubOnglet = $this->slugSubOnglet;
         }
-        return $this->getOngletUrl().'&amp;'.self::CST_SUBONGLET.'='.$slugSubOnglet;
+        return $this->getOngletUrl().self::CST_AMP.self::CST_SUBONGLET.'='.$slugSubOnglet;
     }
     
     /**
@@ -547,12 +547,12 @@ class WpPageAdminBean extends WpPageBean
     {
         $url = $this->getPageUrl().'?'.self::CST_ONGLET.'='.$this->slugOnglet;
         if (isset($urlElements[self::CST_SUBONGLET])) {
-            $url .= '&amp;'.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
+            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
         }
         if (!empty($urlElements)) {
             foreach ($urlElements as $key => $value) {
                 if ($value!='') {
-                    $url .= '&amp;'.$key.'='.$value;
+                    $url .= self::CST_AMP.$key.'='.$value;
                 }
             }
         }
@@ -595,7 +595,7 @@ class WpPageAdminBean extends WpPageBean
             $urlElements[self::CST_SUBONGLET] = $this->slugSubOnglet;
         }
         if ($urlElements[self::CST_SUBONGLET]!='') {
-           $url .= '&amp;'.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
+            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
         }
         unset($urlElements[self::CST_SUBONGLET]);
         /////////////////////////////////////////////
@@ -605,7 +605,7 @@ class WpPageAdminBean extends WpPageBean
         if (!empty($urlElements)) {
             foreach ($urlElements as $key => $value) {
                 if ($value!='') {
-                    $url .= '&amp;'.$key.'='.$value;
+                    $url .= self::CST_AMP.$key.'='.$value;
                 }
             }
         }

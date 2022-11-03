@@ -342,6 +342,7 @@ interface ConstantsInterface
   /////////////////////////////////////////////////
   // Divers
   */
+  const CST_AMP          = '&amp;';
   const CST_NBSP         = '&nbsp;';
   const CSV_EOL          = "\r\n";
   const CSV_SEP          = ';';

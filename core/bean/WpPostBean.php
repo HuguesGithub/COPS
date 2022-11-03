@@ -38,7 +38,7 @@ class WpPostBean extends UtilitiesBean
 
         // Construction de l'élément de la liste.
         $liAttributes = array(
-            self::ATTR_CLASS => 'nav-item'.($blnSelected ? self::CST_NBSP.self::CST_ACTIVE : ''),
+            self::ATTR_CLASS => 'nav-item'.($blnSelected ? ' '.self::CST_ACTIVE : ''),
         );
         return $this->getBalise(self::TAG_LI, $liContent, $liAttributes);
     }

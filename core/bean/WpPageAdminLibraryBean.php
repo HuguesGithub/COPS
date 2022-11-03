@@ -66,30 +66,32 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 
         /////////////////////////////////////////
         // Création du Breadcrumbs
+        $btnDark = 'btn-dark';
+        $btnDarkDisabled = $btnDark.' disabled';
         
         // Le lien vers la Home
         $aContent = $this->getIcon('desktop');
         $buttonContent = $this->getLink($aContent, parent::getPageUrl(), self::CST_TEXT_WHITE);
-        $breadCrumbsContent = $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark'));
+        $breadCrumbsContent = $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
         
         // Le lien (ou pas) vers la page principale
         if ($this->slugSubOnglet=='') {
-            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark disabled'));
+            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDarkDisabled));
         } else {
             $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
-            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark'));
+            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
 
             // Le lien (ou pas) vers la catégorie
             if ($this->catSlug=='') {
                 $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-                $breadCrumbsContent .= $this->getButton($label, array(self::ATTR_CLASS=>'btn-dark disabled'));
+                $breadCrumbsContent .= $this->getButton($label, array(self::ATTR_CLASS=>$btnDarkDisabled));
             } else {
                 $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
                 $buttonContent = $this->getLink($label, parent::getSubOngletUrl(), self::CST_TEXT_WHITE);
-                $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>'btn-dark'));
+                $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
                 
                 $name = $this->objWpCategory->getField('name');
-                $breadCrumbsContent .= $this->getButton($name, array(self::ATTR_CLASS=>'btn-dark disabled'));
+                $breadCrumbsContent .= $this->getButton($name, array(self::ATTR_CLASS=>$btnDarkDisabled));
             }
         }
         

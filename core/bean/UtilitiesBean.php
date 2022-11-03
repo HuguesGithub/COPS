@@ -102,7 +102,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface
         if (!empty($attributes)) {
             foreach ($attributes as $key => $value) {
                 if (is_array($value)) {
-                    foreach ($value as $subkey => $subvalue)  {
+                    foreach ($value as $subkey => $subvalue) {
                         $extraAttributes .= ' '.$key.'-'.$subkey.'="'.$subvalue.'"';
                     }
                 } else {
