@@ -24,8 +24,6 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
     public function getSubongletContent()
     {
         /////////////////////////////////////////
-        // On va définir la liste des éléments du menu de gauche.
-        $menuContent = '';
         // Récupération des articles Wordpress liés à la catégorie "Compétences"
         $attributes = array(
             // Catégorie "Compétences".
@@ -42,26 +40,31 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
         $prevAncre  = '';
         while (!empty($objWpPosts)) {
             $objWpPost = array_shift($objWpPosts);
-			// On récupère le titre du post et sa première lettre, pour vérifier si on doit créer une nouvelle ancre.
+            // On récupère le titre du post et sa première lettre, pour vérifier si on doit créer une nouvelle ancre.
             $postTitle = str_replace('É', 'E', $objWpPost->getField(self::WP_POSTTITLE));
             $postAnchor = substr($postTitle, 0, 1);
             if ($prevAncre!=$postAnchor) {
                 $prevAncre = $postAnchor;
-				$btnContent = $this->getLink($postAnchor, '#anchor-'.$postAnchor, 'nav-link text-white');
-				$liContent = $this->getButton($btnContent, array(self::ATTR_CLASS=>'btn-dark', self::ATTR_STYLE=>'width: -webkit-fill-available'));
+                $btnContent = $this->getLink($postAnchor, '#anchor-'.$postAnchor, 'nav-link text-white');
+                $btnAttributes = array(
+                    self::ATTR_CLASS=>'btn-dark btn-xs',
+                    self::ATTR_STYLE=>'width: -webkit-fill-available'
+                );
+                $liContent = $this->getButton($btnContent, $btnAttributes);
                 $strAncres .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
-                $strContent .= $this->getBalise(self::TAG_A, '', array(self::ATTR_CLASS=>'col-12', self::FIELD_ID=>'anchor-'.$postAnchor));
+                $aAttributes = array(self::ATTR_CLASS=>'col-12', self::FIELD_ID=>'anchor-'.$postAnchor);
+                $strContent .= $this->getBalise(self::TAG_A, '', $aAttributes);
             }
-			// On récupère le contenu de l'article pour afficher la compétence
+            // On récupère le contenu de l'article pour afficher la compétence
             $strContent .= WpPost::getBean($objWpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();
         }
         /////////////////////////////////////////
-		
+        
         /////////////////////////////////////////
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-skills.php';
         $attributes = array(
-			//
-			'section-skill',
+            //
+            'section-skill',
             // La liste alphabétique des ancres du haut de page
             $strAncres,
             // La liste des compétences

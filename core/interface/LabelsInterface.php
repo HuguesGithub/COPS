@@ -8,6 +8,7 @@ interface LabelsInterface
 {
     const LABEL_NO_RESULT      = 'Aucun résultat';
     const LABEL_DATABASES      = 'Bases de données';
+    const LABEL_LIBRARY        = 'Bibliothèque';
     const LABEL_CATEGORIES     = 'Catégories';
     const LABEL_CODE           = 'Code';
     const LABEL_SKILLS         = 'Compétences';
@@ -22,6 +23,7 @@ interface LabelsInterface
     const LABEL_REFRESH_LIST   = 'Rafraîchir la liste';
     const LABEL_REFERENCE      = 'Référence';
     const LABEL_RETOUR         = 'Retour';
+    const LABEL_COURSES        = 'Stages';
     
     const DYN_DISPLAYED_PAGINATION = '%1$s - %2$s sur %3$s';
 }

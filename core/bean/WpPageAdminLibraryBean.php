@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminLibraryBean
  * @author Hugues
  * @since 1.22.05.30
- * @version 1.22.10.20
+ * @version 1.22.11.05
  */
 class WpPageAdminLibraryBean extends WpPageAdminBean
 {
@@ -23,7 +23,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_LIBRARY;
-        $this->titreOnglet = 'Bibliothèque';
+        $this->titreOnglet = self::LABEL_LIBRARY;
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         $this->catSlug = $this->initVar(self::CST_CAT_SLUG);
         // Si catSlug est défini, on récupère la WpCategory associée.
@@ -41,10 +41,10 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         $this->arrSubOnglets = array(
             self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX),
             self::CST_LIB_BDD   => array(self::FIELD_ICON => 'database', self::FIELD_LABEL => self::LABEL_DATABASES),
-            //self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users',           self::FIELD_LABEL => 'COPS'),
             self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS),
+            self::CST_LIB_STAGE => array(self::FIELD_ICON => 'file-lines', self::FIELD_LABEL => self::LABEL_COURSES),
+            self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users', self::FIELD_LABEL => 'COPS'),
             //self::CST_LIB_LAPD  => array(self::FIELD_ICON => 'building-shield', self::FIELD_LABEL => 'LAPD'),
-            //self::CST_LIB_STAGE => array(self::FIELD_ICON => 'file-lines',      self::FIELD_LABEL => 'Stages'),
         );
         /////////////////////////////////////////
 
@@ -72,7 +72,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
 
         // Le lien (ou pas) vers la page principale
         if ($this->slugSubOnglet=='') {
-            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDarkDisabled));
+            $breadCrumbsContent .= $this->getButton($this->titreOnglet, array(self::ATTR_CLASS=>$btnDarkDisabled));
         } else {
             $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
             $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
@@ -97,7 +97,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
     
     /**
      * @since 1.22.05.30
-     * @version 1.22.10.20
+     * @version 1.22.11.05
      */
     public function getOngletContent()
     {
@@ -107,10 +107,12 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 $strContent = $objBean->getSubongletContent();
                 break;
             case self::CST_LIB_STAGE :
-                $strContent = $this->getSubongletStages();
+                $objBean = new WpPageAdminLibraryCourseBean();
+                $strContent = $objBean->getSubongletContent();
                 break;
             case self::CST_LIB_COPS :
-                $strContent = $this->getSubongletCops();
+                $objBean = new WpPageAdminLibraryCopsBean();
+                $strContent = $objBean->getSubongletContent();
                 break;
             case self::CST_LIB_LAPD :
                 $strContent = $this->getSubongletLapd();
@@ -140,101 +142,6 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
       
         return $strContent;
     }
-
-  /**
-   * @since 1.22.06.02
-   * @version 1.22.06.02
-   */
-  public function getSubongletStages()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-stages.php';
-    $strContent = '';
-    // On doit récupérer l'ensemble des compétences et les afficher.
-    $Stages = $this->CopsStageServices->getCopsStageCategories();
-    foreach ($Stages as $Stage) {
-      $strContent .= $Stage->getBean()->getStageCategoryDisplay();
-    }
-
-    $attributes = array(
-      // La liste des stages
-      $strContent,
-      // Normalement, plus rien après
-      '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  /**
-   * @since 1.22.06.26
-   * @version 1.22.06.26
-   */
-  public function getSubongletCops()
-  {
-    //////////////////////////////////////////////////////////
-    // Gestion du Capitaine (potentiellement des Capitaines)
-    $attributes[self::SQL_WHERE_FILTERS] = array(
-      self::FIELD_ID=>self::SQL_JOKER_SEARCH,
-      self::FIELD_MATRICULE=>self::SQL_JOKER_SEARCH,
-      self::FIELD_PASSWORD=>self::SQL_JOKER_SEARCH,
-      self::FIELD_GRADE=>'Capitaine'
-    );
-    $CopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-    $strContentCaptains = '';
-    while (!empty($CopsPlayers)) {
-      $CopsPlayer = array_shift($CopsPlayers);
-      $strContentCaptains .= $CopsPlayer->getBean()->getLibraryCard();
-    }
-    //////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////
-    // Gestion des Lieutenants
-    $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
-    $CopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-    $strContentLieutenants = '';
-    $cpt = 0;
-    while (!empty($CopsPlayers)) {
-      $CopsPlayer = array_shift($CopsPlayers);
-      $section = $CopsPlayer->getField(self::FIELD_SECTION);
-      if (in_array($section, array('A-Alpha', 'B-Epsilon'))) {
-        $strContentLieutenants .= '<div class="col-12 col-md-'.($cpt<3 || $cpt>6 ? 4 : 3).'">'.$CopsPlayer->getBean()->getLibraryCard().'</div>';
-      }
-      //$cpt++;
-    }
-    //////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////
-    // Gestion des Détectives
-    $str_copsDate = get_option(self::CST_CAL_COPSDATE);
-    $td = substr($str_copsDate, 9, 2);
-    $tm = substr($str_copsDate, 12, 2);
-    $tY = substr($str_copsDate, 15, 4);
-    $tsToday   = mktime(1, 0, 0, $tm, $td, $tY);
-
-    $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Détective';
-    $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM;
-    $CopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-    $strContentDetectives = '';
-    while (!empty($CopsPlayers)) {
-      $CopsPlayer = array_shift($CopsPlayers);
-      if ($CopsPlayer->getField(self::FIELD_INTEGRATION_DATE) <= $tY.'-'.$tm.'-'.$td) {
-        $strContentDetectives .= '<div class="col-12 col-md-4">'.$CopsPlayer->getBean()->getLibraryCard().'</div>';
-      }
-    }
-    //////////////////////////////////////////////////////////
-
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-cops.php';
-    $attributes = array(
-      // Les capitaines
-      $strContentCaptains,
-      // Les lieutenants
-      $strContentLieutenants,
-      // Les détectives
-      $strContentDetectives,
-      // Normalement, plus rien après
-      '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
 
   /**
    * @since 1.22.06.27
