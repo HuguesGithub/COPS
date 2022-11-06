@@ -26,9 +26,9 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-stages.php';
         $strContent = '';
         // On doit récupérer l'ensemble des stages et les afficher.
-        $Stages = $this->objCopsStageServices->getCopsStageCategories();
-        foreach ($Stages as $Stage) {
-            $strContent .= $Stage->getBean()->getStageCategoryDisplay();
+        $objStages = $this->objCopsStageServices->getCopsStageCategories();
+        foreach ($objStages as $objStage) {
+            $strContent .= $objStage->getBean()->getStageCategoryDisplay();
         }
         
         $attributes = array(

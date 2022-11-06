@@ -74,6 +74,81 @@ class CopsPlayerBean extends UtilitiesBean
     return $this->getRender($urlTemplate, $attributes);
   }
 
+    /**
+     * @return string
+     * @since v1.22.11.06
+     * @version v1.22.11.06
+     */
+    public function getLibraryRow($blnDisplaySection=true)
+    {
+        $arrColumns = array();
+        // Checkbox ?
+
+        // Le matricule.
+        $section = $this->CopsPlayer->getField(self::FIELD_SECTION);
+        if (in_array($section, array('A-Alpha', 'B-Epsilon')) || $section=='') {
+            $id = $this->CopsPlayer->getField(self::FIELD_ID);
+            $mask = 'masks/mask-'.$id.($id=='51' ? '.png' : '.jpg');
+        } else {
+            $mask = 'masks/mask-000.jpg';
+        }
+        $imgAttributes = array(
+            self::ATTR_CLASS => 'mask',
+            self::ATTR_SRC => 'https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/'.$mask,
+        );
+        $tdContent = $this->getBalise(self::TAG_IMG, '', $imgAttributes);
+        switch ($this->CopsPlayer->getField(self::FIELD_GRADE)) {
+            case 'Capitaine' :
+                $color = 'gold';
+                break;
+            case 'Lieutenant' :
+                $color = 'silver';
+                break;
+            case 'Détective' :
+                $color = '#cd7f32';
+                break;
+            default :
+                $color = '';
+                break;
+        }
+        $cellAttributes = array(
+            self::ATTR_CLASS => 'mailbox-name',
+            self::ATTR_STYLE => 'border-left: 10px solid '.$color,
+        );
+        $cell = $this->getBalise(self::TAG_TD, $tdContent, $cellAttributes);
+        $arrColumns[] = $cell;
+
+        // Le matricule
+        $label = substr($this->CopsPlayer->getField(self::FIELD_MATRICULE), 4);
+        $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+        $arrColumns[] = $cell;
+
+        // Le nom
+        $label = $this->CopsPlayer->getField(self::FIELD_NOM).' '.$this->CopsPlayer->getField(self::FIELD_PRENOM);
+        $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+        $arrColumns[] = $cell;
+        
+        // Le surnom
+        $label = $this->CopsPlayer->getField(self::FIELD_SURNOM);
+        $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+        $arrColumns[] = $cell;
+        
+        if ($blnDisplaySection) {
+            // La section
+            $label = ($section=='' ? 'N/A' : $section);
+            $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+            $arrColumns[] = $cell;
+        }
+        
+        // Construction de la ligne
+        $rowContent = '';
+        while (!empty($arrColumns)) {
+            $td = array_shift($arrColumns);
+            $rowContent .= $td;
+        }
+        return $this->getBalise(self::TAG_TR, $rowContent);
+    }
+  
   public function getLibraryCard()
   {
     ////////////////////////////////////////////////////////////////////
