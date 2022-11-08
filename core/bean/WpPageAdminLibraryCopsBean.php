@@ -19,6 +19,8 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             'ranked' => 'Gradés',
             'alpha' => 'A-Alpha',
             'epsilon' => 'B-Epsilon',
+            'rotation' => 'Rotation COPS',
+            'accueil' => 'Rotation Accueil',
         );
     }
     
@@ -69,103 +71,216 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     
     public function getListContent()
     {
+		switch ($this->catSlug) {
+			case 'ranked' :
+				$returned = $this->getListRanked();
+				break;
+			case 'alpha' :
+			case 'epsilon' :
+				$returned = $this->getListTeam();
+				break;
+			case 'rotation' :
+				$returned = $this->getRotationCops();
+				break;
+			case 'accueil' :
+				$urlTemplate = 'web/pages/public/fragments/public-fragments-card-rotation-accueil.php';
+				$returned = $this->getRender($urlTemplate);
+				break;
+			default :
+				// La page par défaut
+				$urlTemplate = 'web/pages/public/fragments/public-fragments-article-cops-entete.php';
+				$returned = $this->getRender($urlTemplate);
+				break;
+		}
+		return $returned;
+    }
+	
+	public function getHeader($blnRanked=true)
+	{
+		// On va construire le Header du tableau
+		$thAttributes = array(
+			self::ATTR_STYLE => 'width:50px',
+		);
+		$headerContent  = $this->getTh('Masque', $thAttributes);
+		$thAttributes = array(
+			self::ATTR_CLASS => 'mailbox-name',
+		);
+		$headerContent .= $this->getTh('Matricule', $thAttributes);
+		$headerContent .= $this->getTh('Nom', $thAttributes);
+		$headerContent .= $this->getTh('Surnom', $thAttributes);
+		if ($blnRanked) {
+			// Les gradés uniquement
+			$headerContent .= $this->getTh('Section', $thAttributes);
+		}
+		return $headerContent;
+	}
+	
+	public function getListRanked()
+	{
+		$urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
+		$titre = 'Gradés';
+		
+		$strHeader = $this->getBalise(self::TAG_TR, $this->getHeader());
+		/////////////////////////////////////////
+
+		$listContent = '';
         $attributes[self::SQL_WHERE_FILTERS] = array(
             self::FIELD_ID => self::SQL_JOKER_SEARCH,
             self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
             self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH,
-            self::FIELD_GRADE => 'Capitaine'
         );
-        if ($this->catSlug=='') {
-            // La page par défaut
-            $urlTemplate = 'web/pages/public/fragments/public-fragments-article-cops-entete.php';
-            return $this->getRender($urlTemplate);
-        }
-        /////////////////////////////////////////
-        // On va définir la liste des éléments à afficher.
-        $urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
-        $titre = 'Gradés';
-        
-        // On va construire le Header du tableau
-        $thAttributes = array(
-            self::ATTR_STYLE => 'width:50px',
-        );
-        $headerContent  = $this->getTh('Masque', $thAttributes);
-        $thAttributes = array(
-            self::ATTR_CLASS => 'mailbox-name',
-        );
-        $headerContent .= $this->getTh('Matricule', $thAttributes);
-        $headerContent .= $this->getTh('Nom', $thAttributes);
-        $headerContent .= $this->getTh('Surnom', $thAttributes);
-        /////////////////////////////////////////
+		
+		//////////////////////////////////////////////////////////
+		// Gestion du Capitaine (potentiellement des Capitaines)
+		$attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Capitaine';
+		$objCaptains = $this->CopsPlayerServices->getCopsPlayers($attributes);
+		// Gestion des Lieutenants
+		$attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
+		$objLieutenants = $this->CopsPlayerServices->getCopsPlayers($attributes);
+		$objCopsPlayers = array_merge($objCaptains, $objLieutenants);
 
+		while (!empty($objCopsPlayers)) {
+			$objCopsPlayer = array_shift($objCopsPlayers);
+			$section = $objCopsPlayer->getField(self::FIELD_SECTION);
+			if (in_array($section, array('', 'A-Alpha', 'B-Epsilon'))) { // A terme, à supprimer
+				$listContent .= $objCopsPlayer->getBean()->getLibraryRow();
+			}
+		}
+		
+        $listAttributes = array(
+            $titre,
+            '', // Pas de pagination
+            $strHeader,
+            $listContent,
+        );
         /////////////////////////////////////////
-        // On va chercher les éléments à afficher
-        $listContent = '';
-        if ($this->catSlug=='ranked') {
-            $headerContent .= $this->getTh('Section', $thAttributes);
-            // Les gradés uniquement
+        return $this->getRender($urlTemplateList, $listAttributes);
+	}
+	
+	public function getListTeam()
+	{
+		$urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
+		$titre = 'A-Alpha / B-Epsilon';
+		
+		$strHeader = $this->getBalise(self::TAG_TR, $this->getHeader(false));
+		/////////////////////////////////////////
 
-            // Gestion du Capitaine (potentiellement des Capitaines)
-            $objCopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-            while (!empty($objCopsPlayers)) {
-                $objCopsPlayer = array_shift($objCopsPlayers);
-                $listContent .= $objCopsPlayer->getBean()->getLibraryRow();
-            }
-            // Gestion des Lieutenants
-            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
-            $objCopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-            while (!empty($objCopsPlayers)) {
-                $objCopsPlayer = array_shift($objCopsPlayers);
-                $section = $objCopsPlayer->getField(self::FIELD_SECTION);
-                if (in_array($section, array('A-Alpha', 'B-Epsilon'))) { // A terme, à supprimer
-                    $listContent .= $objCopsPlayer->getBean()->getLibraryRow();
-                }
-            }
-            /////////////////////////////////////////
-        } else {
-            //////////////////////////////////////////////////////////
-            // Gestion du Lieutenant
-            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
-            $objCopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-            while (!empty($objCopsPlayers)) {
-                $objCopsPlayer = array_shift($objCopsPlayers);
-                $section = $objCopsPlayer->getField(self::FIELD_SECTION);
-                if ($section!=$this->arrMenu[$this->catSlug]) {
-                    // Si le Cops n'est pas dans la bonne section (ce serait bien de filtrer selon ce critère)
-                    continue;
-                }
-                $listContent .= $objCopsPlayer->getBean()->getLibraryRow(false);
-            }
-            /////////////////////////////////////////
-            
-            // Gestion des Détectives
-            $tsToday = self::getCopsDate('Y-m-d');
-            
-            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Détective';
-            $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM;
-            $objCopsPlayers = $this->CopsPlayerServices->getCopsPlayers($attributes);
-            while (!empty($objCopsPlayers)) {
-                $objCopsPlayer = array_shift($objCopsPlayers);
-                $section = $objCopsPlayer->getField(self::FIELD_SECTION);
-                if ($section!=$this->arrMenu[$this->catSlug]) {
-                    // Si le Cops n'est pas dans la bonne section (ce serait bien de filtrer selon ce critère)
-                    continue;
-                }
-                if ($objCopsPlayer->getField(self::FIELD_INTEGRATION_DATE) <= $tsToday) {
-                    $listContent .= $objCopsPlayer->getBean()->getLibraryRow(false);
-                }
-            }
-            //////////////////////////////////////////////////////////
-        }
+		$listContent = '';
+        $attributes[self::SQL_WHERE_FILTERS] = array(
+            self::FIELD_ID => self::SQL_JOKER_SEARCH,
+            self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
+            self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH,
+        );
+		
+		//////////////////////////////////////////////////////////
+		// Gestion du Lieutenant
+		$attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
+		$objLieutenants = $this->CopsPlayerServices->getCopsPlayers($attributes);
+		// Gestion des Détectives
+		$tsToday = self::getCopsDate('Y-m-d');
+		$attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Détective';
+		$attributes[self::SQL_ORDER_BY] = self::FIELD_NOM;
+		$objDetectives = $this->CopsPlayerServices->getCopsPlayers($attributes);
+		$objCopsPlayers = array_merge($objLieutenants, $objDetectives);
+		
+		while (!empty($objCopsPlayers)) {
+			$objCopsPlayer = array_shift($objCopsPlayers);
+			$section = $objCopsPlayer->getField(self::FIELD_SECTION);
+			if ($section!=$this->arrMenu[$this->catSlug]) {
+				// Si le Cops n'est pas dans la bonne section (ce serait bien de filtrer selon ce critère)
+				continue;
+			}
+			if ($objCopsPlayer->getField(self::FIELD_INTEGRATION_DATE) <= $tsToday) {
+				$listContent .= $objCopsPlayer->getBean()->getLibraryRow(false);
+			}
+		}
 
         $listAttributes = array(
             $titre,
             '', // Pas de pagination
-            $this->getBalise(self::TAG_TR, $headerContent),
+            $strHeader,
             $listContent,
         );
         /////////////////////////////////////////
-
         return $this->getRender($urlTemplateList, $listAttributes);
-    }
+	}
+
+	public function getRotationCops()
+	{
+		$urlTemplate = 'web/pages/public/fragments/public-fragments-card-rotation-cops.php';
+		
+		// Si la date n'est pas définie, on récupère celle du jour.
+		// Sinon, on récupère la date passée en paramètre.
+		list($dDate, $mDate, $yDate) = explode('-', $this->initVar('strDate', $this->getCopsDate('d-m-Y')));
+		$tsNow = mktime(0, 0, 0, $mDate, $dDate, $yDate);
+		
+		// Si la date en question n'est pas un lundi, on récupère le lundi précédent.
+		$nDay = date('N', $tsNow);
+		$dAjust = ($nDay!=1 ? $nDay-1 : 0);
+
+		// Header - 4 semaines concernées
+		$strHeader = '';
+		for ($i=0; $i<4; $i++) {
+			$strDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust+$i*7, $yDate));
+			$strHeader .= $this->getDiv($strDate, array(self::ATTR_CLASS=>'col-3 table-bordered'));
+		}
+
+		// Bouton précédent
+		$prevDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust-7, $yDate));
+		$aContent = $this->getIcon('caret-left');
+		$href = $this->getUrl(array(self::CST_CAT_SLUG=>'rotation', 'strDate'=>$prevDate));
+		$btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
+		$prevBtn  = $this->getButton($btnContent, array(self::ATTR_CLASS=>self::CST_TEXT_WHITE));
+		$prevBtn .= self::CST_NBSP.$prevDate;
+		
+		// Bouton suivant
+		$nextDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust+7, $yDate));
+		$aContent = $this->getIcon('caret-right');
+		$href = $this->getUrl(array(self::CST_CAT_SLUG=>'rotation', 'strDate'=>$nextDate));
+		$btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
+		$nextBtn  = $nextDate.self::CST_NBSP;
+		$nextBtn .= $this->getButton($btnContent, array(self::ATTR_CLASS=>self::CST_TEXT_WHITE));
+		
+		// Décalage de semaines
+		$tsStart = mktime(0, 0, 0, 6, 3, 2030);
+		$nbDiffWeeks = (($tsNow-$tsStart)/60/60/24/7)%4;
+		if ($nbDiffWeeks<0) {
+		    $nbDiffWeeks = 4+$nbDiffWeeks;
+		}
+        
+		// Roulement des équipes
+		$arrSections = array(
+            'A' => array('Alpha', 'Beta', 'Gamma', self::CST_NBSP),    
+            'B' => array('Epsilon', 'Theta', 'Mu', 'Delta'),
+		    'C' => array('Sigma', 'Tau', self::CST_NBSP, 'Pi'),
+		);
+		for ($i=0; $i<$nbDiffWeeks; $i++) {
+		    $strSection = array_pop($arrSections['A']);
+		    array_unshift($arrSections['A'], $strSection);
+		    $strSection = array_pop($arrSections['B']);
+		    array_unshift($arrSections['B'], $strSection);
+		    $strSection = array_pop($arrSections['C']);
+		    array_unshift($arrSections['C'], $strSection);
+		}
+		
+		$divAttributes = array(self::ATTR_CLASS=>'col-1 table-bordered');
+		$strRowA = '';
+		$strRowB = '';
+		$strRowC = '';
+		for ($i=0; $i<12; $i++) {
+		    $strRowA .= $this->getDiv($arrSections['A'][$i%4], $divAttributes);
+		    $strRowB .= $this->getDiv($arrSections['B'][$i%4], $divAttributes);
+		    $strRowC .= $this->getDiv($arrSections['C'][$i%4], $divAttributes);
+		}
+		
+		$attributes = array(
+			$strHeader,
+			$prevBtn,
+			$nextBtn,
+		    $strRowA,
+		    $strRowB,
+		    $strRowC,
+		);
+		return $this->getRender($urlTemplate, $attributes);
+	}
 }

@@ -83,6 +83,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface
             case 'H:i:s'   :
             case 'D m-d-Y' :
             case 'Y-m-d'   :
+            case 'd-m-Y'  :
                 $formatted = date($format, mktime($h, $i, $s, $m, $d, $y));
                 break;
             default :
