@@ -52,5 +52,4 @@ class WpPageBean extends UtilitiesBean
         }
         return $returned;
     }
-
 }

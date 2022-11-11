@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 class WpCategory extends WpTag
 {
     protected $term_id;
-    protected $name;
+    public $name;
     protected $slug;
     protected $term_group;
     protected $term_taxonomy_id;
@@ -32,4 +32,8 @@ class WpCategory extends WpTag
     public function getBean()
     { return new WpCategoryBean($this); }
 
+    
+    public static function compCategories($a, $b)
+    { return strtolower($a->name) <=> strtolower($b->name); }
+    
 }

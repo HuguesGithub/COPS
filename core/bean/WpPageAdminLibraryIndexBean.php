@@ -45,13 +45,34 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         
         // On initialise l'id Wordpress de la Catégory "Index"
         $this->wpCategoryId = 48;
+
+        $urlElements = array(
+            self::CST_SUBONGLET => self::CST_LIB_INDEX,
+        );
+        $buttonContent = $this->getLink('Index', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonAttributes = array(self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark));
+        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        
+        if ($this->catSlug=='') {
+            $this->objCopsIndexNature = new CopsIndexNature();
+        } else {
+            $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
+            $name = $this->objWpCategory->getField('name');
+            $this->objCopsIndexNature = $this->objCopsIndexServices->getCopsIndexNatureByName($name);
+            
+            $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
+            $buttonContent = $this->getLink($name, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+            $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        }
+        
     }
     
     /**
      * @since 1.22.10.21
      * @version 1.22.10.21
      */
-    public function getSubongletContent()
+    public function getOngletContent()
     {
         /////////////////////////////////////////
         // On doit gérer une modification ou une création.
@@ -79,6 +100,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // Pour ça, on doit récupérer les catégories Wp qui sont des enfants de la catégorie Index.
         $menuContent = '';
         $objsCategoryMenu = $this->objWpCategoryServices->getCategoryChildren($this->wpCategoryId);
+        usort($objsCategoryMenu, [WpCategory::class, 'compCategories']);
         while (!empty($objsCategoryMenu)) {
             $objWpCategory = array_shift($objsCategoryMenu);
             $blnSelected = ($this->catSlug==$objWpCategory->getField('slug'));
@@ -326,7 +348,13 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         }
         return $strPagination;
     }
-    
+
+    /**
+     * @param array $urlElements
+     * @return string
+     * @since v1.22.11.11
+     * @version v1.22.11.11
+     */
     public function getRefreshUrl($urlElements=array())
     {
         // Si catSlug est défini et non présent dans $urlElements, il doit être repris.
@@ -340,3 +368,4 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         return $this->getUrl($urlElements);
     }
 }
+

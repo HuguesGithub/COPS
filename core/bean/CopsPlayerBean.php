@@ -79,7 +79,7 @@ class CopsPlayerBean extends UtilitiesBean
      * @since v1.22.11.06
      * @version v1.22.11.06
      */
-    public function getLibraryRow($blnDisplaySection=true)
+  public function getLibraryRow($href, $blnDisplaySection=true)
     {
         $arrColumns = array();
         // Checkbox ?
@@ -125,7 +125,9 @@ class CopsPlayerBean extends UtilitiesBean
 
         // Le nom
         $label = $this->CopsPlayer->getField(self::FIELD_NOM).' '.$this->CopsPlayer->getField(self::FIELD_PRENOM);
-        $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+        $href .= self::CST_AMP.self::FIELD_ID.'='.$this->CopsPlayer->getField(self::FIELD_ID);
+        $tdContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+        $cell = $this->getBalise(self::TAG_TD, $tdContent, array(self::ATTR_CLASS=>'mailbox-date'));
         $arrColumns[] = $cell;
         
         // Le surnom

@@ -24,6 +24,9 @@ class WpPageAdminBean extends WpPageBean
     public function __construct()
     {
         $this->slugPage = self::PAGE_ADMIN;
+        $this->slugOnglet = $this->initVar(self::CST_ONGLET);
+        $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+        
         $this->urlOnglet = '/'.$this->slugPage.'?'.self::CST_ONGLET.'=';
         
         $this->analyzeUri();
@@ -110,7 +113,20 @@ class WpPageAdminBean extends WpPageBean
             );
             */
         }
+
+        $this->btnDark = 'btn-dark';
+        $this->btnDisabled = 'btn-dark disabled';
         
+        // Le lien vers la Home
+        $aContent = $this->getIcon('desktop');
+        $buttonContent = $this->getLink($aContent, '/'.self::PAGE_ADMIN, self::CST_TEXT_WHITE);
+        if ($this->slugOnglet=='desk') {
+            $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDisabled);
+        } else {
+            $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDark);
+        }
+        $this->breadCrumbsContent = $this->getButton($buttonContent, $buttonAttributes);
+        /////////////////////////////////////////
     }
 
     /**
@@ -173,13 +189,13 @@ class WpPageAdminBean extends WpPageBean
         try {
             switch ($this->urlParams[self::CST_ONGLET]) {
                 case self::ONGLET_CALENDAR :
-                    $objBean = AdminCopsCalendarPageBean::getCalendarBean($this->urlParams[self::CST_SUBONGLET]);
+                    $objBean = AdminCopsCalendarPageBean::getCalendarBean($this->slugSubOnglet);
                     break;
                 case self::ONGLET_INBOX :
                     $objBean = new WpPageAdminInboxBean();
                     break;
                 case self::ONGLET_LIBRARY :
-                    $objBean = new WpPageAdminLibraryBean();
+                    $objBean = WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet);
                     break;
                 case 'player' :
                     $objBean = new AdminCopsPlayerPageBean();
@@ -198,17 +214,11 @@ class WpPageAdminBean extends WpPageBean
                     $objBean = $this;
                 break;
             }
-            $objBean->initBoard();
             $returned = $objBean->getBoard();
         } catch (\Exception $Exception) {
             $returned = 'Error';
         }
         return $returned;
-    }
-    
-    public function initBoard()
-    {
-        $this->buildBreadCrumbs('Bureau');
     }
 
     /**
@@ -241,80 +251,23 @@ class WpPageAdminBean extends WpPageBean
         return $this->getRender($urlTemplate, $attributes);
     }
     
-    public function getOngletContent()
-    { return ''; }
-
     /**
      * @since 1.22.10.18
      * @version 1.22.10.18
      */
-    public function buildBreadCrumbs($label, $slug=null, $hasDropdown=false)
-    {
-        // Le lien vers la Home
-        $aContent = $this->getIcon('desktop');
-        $aAttributes = array(self::ATTR_HREF=>'/admin/', self::ATTR_CLASS=>'text-white');
-        $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-        $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
-        $breadCrumbsContent = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-
-        // Le lien intermédiaire ou final si slug vaut null
-        if ($slug==null) {
-            $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
-            $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
-        } else {
-            $aAttributes = array(self::ATTR_HREF=>$this->urlOnglet.$slug, self::ATTR_CLASS=>'text-white');
-            $buttonContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
-            $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
-            $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-
-            // Le lien ou le dropdown selon le type de mixed
-            if ($hasDropdown===true) {
-                $breadCrumbsContent .= '<div class="btn-group">';
-                $buttonContent = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-                $buttonAttributes = array(
-                    'type'           => self::TAG_BUTTON,
-                    self::ATTR_CLASS => 'btn btn-sm btn-dark dropdown-toggle',
-                    'data-toggle'    => 'dropdown',
-                );
-                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-                $breadCrumbsContent .= '<div class="dropdown-menu">';
-                foreach ($this->arrSubOnglets as $subOnglet => $arrData) {
-                    if ($arrData[self::FIELD_LABEL]=='' || !isset($arrData[self::FIELD_ICON])) {
-                        continue;
-                    }
-                    $url  = $this->urlOnglet.$slug.'&subOnglet='.$subOnglet;
-                    $url .= (isset($arrData['url']) ? '&'.$arrData['url'] : '');
-                    $breadCrumbsContent .= '<a class="dropdown-item btn-sm" href="'.$url.'">';
-                    $breadCrumbsContent .= $arrData[self::FIELD_LABEL].'</a>';
-                }
-                $breadCrumbsContent .= '</div>';
-                $breadCrumbsContent .= '</div>';
-            } elseif ($hasDropdown!==false) {
-                $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
-                $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $hasDropdown, $buttonAttributes);
-            }
-        }
-        $divAttributes = array(self::ATTR_CLASS=>'btn-group float-sm-right');
-        $this->breadCrumbs = $this->getBalise(self::TAG_DIV, $breadCrumbsContent, $divAttributes);
-    }
-
-    /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     */
-    protected function getSideBar()
-    {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-sidebar.php';
-
-        $sidebarContent = '';
-        foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
+     protected function getSideBar()
+     {
+         $urlTemplate = 'web/pages/public/fragments/public-fragments-sidebar.php';
+         
+         $sidebarContent = '';
+         foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
             $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
             $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
-
+         
             // Construction du label
             $pContent  = $arrOnglet[self::FIELD_LABEL];
             $pContent .= ($hasChildren ? $this->getIcon(self::I_ANGLE_LEFT, 'right') : '');
-
+         
             // Construction du lien
             $aContent  = $this->getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
@@ -323,7 +276,7 @@ class WpPageAdminBean extends WpPageBean
                 self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : ''),
             );
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-
+         
             // S'il a des enfants, on enrichit
             if ($hasChildren) {
                 $ulContent = '';
@@ -345,22 +298,32 @@ class WpPageAdminBean extends WpPageBean
                 $liAttributes = array(self::ATTR_CLASS=>'nav nav-treeview');
                 $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
             }
-
+         
             // Construction de l'élément de la liste
             $liAttributes = array(self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : ''));
             $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
-        }
-
-        $attributes = array(
+         }
+         
+         $attributes = array(
             $sidebarContent,
             // La date
             self::getCopsDate('D m-d-Y'),
             // L'heure
             self::getCopsDate('H:i:s'),
-        );
-        return $this->getRender($urlTemplate, $attributes);
-    }
+         );
+         return $this->getRender($urlTemplate, $attributes);
+     }
 
+     /**
+      * @return string
+      * @since v1.22.11.11
+      * @version v1.22.11.11
+      */
+     public function getOngletContent()
+     {
+         print_r($this);
+         return ''; }
+     
     /**
      * @since 1.22.10.18
      * @version 1.22.10.18
@@ -374,15 +337,15 @@ class WpPageAdminBean extends WpPageBean
         $attributes = array(
             // Nom Prénom de la personne logguée
             $this->CopsPlayer->getFullName(),
-      // Si présence de notifications, le badge
-      // <span class="badge badge-warning navbar-badge">0</span>
+            // Si présence de notifications, le badge
+            // <span class="badge badge-warning navbar-badge">0</span>
             '',
-      // La liste des notifications
-      // Ou un message adapté s'il n'y en a pas.
+            // La liste des notifications
+            // Ou un message adapté s'il n'y en a pas.
             '<span class="dropdown-item dropdown-header">Aucune nouvelle Notification</span>',
-      // Si présence d'un nouveau mail, le badge
+            // Si présence d'un nouveau mail, le badge
             ($nbMailsNonLus!=0 ? '<span class="badge badge-success navbar-badge">'.$nbMailsNonLus.'</span>' : ''),
-      // Si Guest, on cache des trucs.
+            // Si Guest, on cache des trucs.
             ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
         );
         return $this->getRender($urlTemplate, $attributes);
@@ -391,7 +354,7 @@ class WpPageAdminBean extends WpPageBean
     /**
      * @since 1.22.10.18
      * @version 1.22.10.18
-     */
+     *
     public function getNotificationsDropdown()
     {
     /*
@@ -457,7 +420,7 @@ class WpPageAdminBean extends WpPageBean
     $strNotificationsDropdown  = '<li class="nav-item dropdown">';
     $strNotificationsDropdown .= $this->getRender($urlTemplate, $attributes);
     $strNotificationsDropdown .= '</li>';
-*/
+*
         $strNotificationsDropdown = '';
         return $strNotificationsDropdown;
 
@@ -478,7 +441,7 @@ class WpPageAdminBean extends WpPageBean
     <span class="float-right text-muted text-sm">2 days</span>
   </a>
         </div>
-    */
+    *
     }
 
     /**
@@ -492,7 +455,7 @@ class WpPageAdminBean extends WpPageBean
             // Le Titre
             $this->strTitle,
             // Le BreadCrumb
-            $this->breadCrumbs,
+            $this->getDiv($this->breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right')),
         );
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -500,7 +463,7 @@ class WpPageAdminBean extends WpPageBean
     /**
      * @since 1.22.10.18
      * @version 1.22.10.18
-     */
+     *
     public function getFolderBlock()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-li-menu-folder.php';
@@ -548,6 +511,7 @@ class WpPageAdminBean extends WpPageBean
         $url = $this->getPageUrl().'?'.self::CST_ONGLET.'='.$this->slugOnglet;
         if (isset($urlElements[self::CST_SUBONGLET])) {
             $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
+            unset($urlElements[self::CST_SUBONGLET]);
         }
         if (!empty($urlElements)) {
             foreach ($urlElements as $key => $value) {
@@ -614,4 +578,69 @@ class WpPageAdminBean extends WpPageBean
         return $url;
     }
     
+    /*
+    public function buildBreadCrumbs()
+    {
+        
+        /*
+        // Le lien vers la Home
+        $aContent = $this->getIcon('desktop');
+        $aAttributes = array(self::ATTR_HREF=>'/admin/', self::ATTR_CLASS=>'text-white');
+        $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+        $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
+        $this->breadCrumbsContent = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+        */
+        
+        //        $this->breadCrumbs = $this->getDiv($breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right'));
+        /////////////////////////////////////////
+    //}
+    
+    /**
+     * @since 1.22.10.18
+     * @version 1.22.10.18
+     *
+     public function buildBreadCrumbs($label, $slug=null, $hasDropdown=false)
+     {
+     
+     // Le lien intermédiaire ou final si slug vaut null
+     if ($slug==null) {
+     $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
+     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
+     } else {
+     $aAttributes = array(self::ATTR_HREF=>$this->urlOnglet.$slug, self::ATTR_CLASS=>'text-white');
+     $buttonContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
+     $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
+     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+     
+     // Le lien ou le dropdown selon le type de mixed
+     if ($hasDropdown===true) {
+     $breadCrumbsContent .= '<div class="btn-group">';
+     $buttonContent = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
+     $buttonAttributes = array(
+     'type'           => self::TAG_BUTTON,
+     self::ATTR_CLASS => 'btn btn-sm btn-dark dropdown-toggle',
+     'data-toggle'    => 'dropdown',
+     );
+     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+     $breadCrumbsContent .= '<div class="dropdown-menu">';
+     foreach ($this->arrSubOnglets as $subOnglet => $arrData) {
+     if ($arrData[self::FIELD_LABEL]=='' || !isset($arrData[self::FIELD_ICON])) {
+     continue;
+     }
+     $url  = $this->urlOnglet.$slug.'&subOnglet='.$subOnglet;
+     $url .= (isset($arrData['url']) ? '&'.$arrData['url'] : '');
+     $breadCrumbsContent .= '<a class="dropdown-item btn-sm" href="'.$url.'">';
+     $breadCrumbsContent .= $arrData[self::FIELD_LABEL].'</a>';
+     }
+     $breadCrumbsContent .= '</div>';
+     $breadCrumbsContent .= '</div>';
+     } elseif ($hasDropdown!==false) {
+     $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
+     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $hasDropdown, $buttonAttributes);
+     }
+     }
+     $divAttributes = array(self::ATTR_CLASS=>'btn-group float-sm-right');
+     $this->breadCrumbs = $this->getBalise(self::TAG_DIV, $breadCrumbsContent, $divAttributes);
+     }
+     */
 }

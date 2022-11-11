@@ -15,13 +15,36 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
         parent::__construct();
         // On initialise les services
         $this->objWpPostServices = new WpPostServices();
+        
+        $urlElements = array(
+            self::CST_SUBONGLET => self::CST_LIB_BDD,
+        );
+
+        $buttonContent = $this->getLink('Bases de données', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonAttributes = array(self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark));
+        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        
+        if ($this->catSlug!='') {
+            $attributes = array(
+                'name' => $this->catSlug,
+            );
+            $objsWpPost = $this->objWpPostServices->getPosts($attributes);
+            $this->objWpPost = array_shift($objsWpPost);
+            $post_title = $this->objWpPost->getField('post_title');
+            list($name) = explode(':', $post_title);
+            
+            $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
+            $buttonContent = $this->getLink(trim($name), $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+            $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        }
     }
     
     /**
      * @since 1.22.10.21
      * @version 1.22.10.21
      */
-    public function getSubongletContent()
+    public function getOngletContent()
     {
         /////////////////////////////////////////
         // On va définir la liste des éléments du menu de gauche.

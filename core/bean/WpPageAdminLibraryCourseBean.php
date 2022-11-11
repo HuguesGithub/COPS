@@ -15,13 +15,21 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
         parent::__construct();
         // On initialise les services
         $this->objCopsStageServices = new CopsStageServices();
+        
+        $urlElements = array(
+            self::CST_SUBONGLET => self::CST_LIB_STAGE,
+        );
+        
+        $buttonContent = $this->getLink('Stages', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }
     
     /**
      * @since 1.22.11.03
      * @version 1.22.11.03
      */
-    public function getSubongletContent()
+    public function getOngletContent()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-stages.php';
         $strContent = '';

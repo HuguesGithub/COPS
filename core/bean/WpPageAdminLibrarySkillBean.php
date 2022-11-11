@@ -15,13 +15,21 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
         parent::__construct();
         // On initialise les services
         $this->objWpPostServices = new WpPostServices();
+        
+        $urlElements = array(
+            self::CST_SUBONGLET => self::CST_LIB_SKILL,
+        );
+        
+        $buttonContent = $this->getLink('Compétences', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }
     
     /**
      * @since 1.22.11.03
      * @version 1.22.11.03
      */
-    public function getSubongletContent()
+    public function getOngletContent()
     {
         /////////////////////////////////////////
         // Récupération des articles Wordpress liés à la catégorie "Compétences"

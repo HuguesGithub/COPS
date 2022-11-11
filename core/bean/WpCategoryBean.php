@@ -11,7 +11,7 @@ class WpCategoryBean extends UtilitiesBean
      * @var WpCategory $wpCategory
      */
     protected $wpCategory;
-
+    
     /**
      * Constructeur
      */
