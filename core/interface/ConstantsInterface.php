@@ -41,16 +41,16 @@ interface ConstantsInterface
   const CST_FILE_OPENED        = 'opened';
   const CST_FILE_CLOSED        = 'closed';
   const CST_FILE_COLDED        = 'colded';
-  // Subonglet Inbox
+  // Subonglet Mail
   const CST_FOLDER_ALERT       = 'alert';
   const CST_FOLDER_DRAFT       = 'draft';
   const CST_FOLDER_EVENTS      = 'events';
-  const CST_FOLDER_INBOX       = 'inbox';
+  const CST_MAIL_INBOX         = 'inbox';
   const CST_FOLDER_SENT        = 'sent';
   const CST_FOLDER_SPAM        = 'spam';
-  const CST_FOLDER_TRASH       = 'trash';
-  const CST_FOLDER_READ        = 'read';
-  const CST_FOLDER_WRITE       = 'write';
+  const CST_MAIL_TRASH         = 'trash';
+  const CST_MAIL_READ          = 'read';
+  const CST_MAIL_WRITE         = 'write';
   // Subonglet Library
   const CST_LIB_INDEX          = 'index';
   const CST_LIB_BDD            = 'bdd';

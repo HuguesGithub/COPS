@@ -72,7 +72,7 @@ class CopsMailServices extends LocalServices
      * @since 1.22.05.04
      * @version 1.22.10.17
      */
-    public function getMailFolder($slug=self::CST_FOLDER_INBOX)
+    public function getMailFolder($slug=self::CST_MAIL_INBOX)
     {
         $objMailFolders = $this->getMailFolders(array(self::FIELD_SLUG=>$slug));
         return array_shift($objMailFolders);
@@ -168,7 +168,7 @@ class CopsMailServices extends LocalServices
     public function getNombreMailsNonLus($attributes=array())
     {
         // On vérifie la présence du slug pour le Folder, puis on récupère le Folder associé
-        $slug = (isset($attributes[self::FIELD_SLUG]) ? $attributes[self::FIELD_SLUG] : self::CST_FOLDER_INBOX);
+        $slug = (isset($attributes[self::FIELD_SLUG]) ? $attributes[self::FIELD_SLUG] : self::CST_MAIL_INBOX);
         $objMailFolder = $this->getMailFolder($slug);
         // On récupère le User courant
         $objCopsPlayer = CopsPlayer::getCurrentCopsPlayer();
@@ -184,12 +184,12 @@ class CopsMailServices extends LocalServices
             case self::CST_FOLDER_SENT   :
                 $attributes[self::FIELD_FROM_ID] = $objCopsPlayer->getField(self::FIELD_FROM_ID);
                 break;
-            case self::CST_FOLDER_TRASH  :
+            case self::CST_MAIL_TRASH  :
                 $attributes[self::FIELD_TO_ID] = $objCopsPlayer->getField(self::FIELD_ID);
                 $attributes[self::FIELD_FROM_ID] = $objCopsPlayer->getField(self::FIELD_FROM_ID);
                 $blnBothFolders = true;
                 break;
-            case self::CST_FOLDER_INBOX  :
+            case self::CST_MAIL_INBOX  :
             case self::CST_FOLDER_EVENTS :
             case self::CST_FOLDER_ALERT  :
             case self::CST_FOLDER_SPAM   :
@@ -219,12 +219,12 @@ class CopsMailServices extends LocalServices
                 $attributes[] = self::SQL_JOKER_SEARCH;
                 $attributes[] = $objCopsMailJoint->getField(self::FIELD_FROM_ID);
                 break;
-            case self::CST_FOLDER_TRASH  :
+            case self::CST_MAIL_TRASH  :
                 $attributes[] = $objCopsMailJoint->getField(self::FIELD_TO_ID);
                 $attributes[] = $objCopsMailJoint->getField(self::FIELD_FROM_ID);
                 $blnBothFolders = true;
                 break;
-            case self::CST_FOLDER_INBOX  :
+            case self::CST_MAIL_INBOX  :
             case self::CST_FOLDER_EVENTS :
             case self::CST_FOLDER_ALERT  :
             case self::CST_FOLDER_SPAM   :

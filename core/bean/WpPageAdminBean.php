@@ -27,7 +27,7 @@ class WpPageAdminBean extends WpPageBean
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         
-        $this->urlOnglet = '/'.$this->slugPage.'?'.self::CST_ONGLET.'=';
+        $this->urlOnglet = $this->getPageUrl().'?'.self::CST_ONGLET.'=';
         
         $this->analyzeUri();
         $this->CopsPlayerServices = new CopsPlayerServices();
@@ -61,16 +61,19 @@ class WpPageAdminBean extends WpPageBean
             ),
             self::ONGLET_LIBRARY => array(
                 self::FIELD_ICON  => 'book',
-                self::FIELD_LABEL => 'Bibliothèque',
+                self::FIELD_LABEL => self::LABEL_LIBRARY,
             ),
         );
         if ($_SESSION[self::FIELD_MATRICULE]!='Guest') {
+            $this->arrSidebarContentNonGuest = array(
+                self::ONGLET_INBOX => array(
+                    self::FIELD_ICON  => 'envelope',
+                    self::FIELD_LABEL => self::LABEL_MESSAGERIE,
+                ),
+            );
+            $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
             /*
             $this->arrSidebarContent = array(
-                self::ONGLET_DESK => array(
-                    self::FIELD_ICON  => 'desktop',
-                    self::FIELD_LABEL => 'Bureau',
-                ),
                 self::ONGLET_AUTOPSIE => array(
                     self::FIELD_ICON  => 'box-archive',
                     self::FIELD_LABEL => 'Autopsies',
@@ -80,10 +83,6 @@ class WpPageAdminBean extends WpPageBean
                     self::FIELD_LABEL => 'Enquêtes',
                 ),
                 
-                self::ONGLET_INBOX => array(
-                    self::FIELD_ICON  => 'envelope',
-                    self::FIELD_LABEL => 'Messagerie',
-                ),
                 self::ONGLET_CALENDAR => array(
                     self::FIELD_ICON   => 'calendar-days',
                     self::FIELD_LABEL  => 'Calendrier',
@@ -96,10 +95,6 @@ class WpPageAdminBean extends WpPageBean
                 self::ONGLET_ARCHIVE => array(
                     self::FIELD_ICON  => 'box-archive',
                     self::FIELD_LABEL => 'Archives',
-                ),
-                self::ONGLET_LIBRARY => array(
-                    self::FIELD_ICON  => 'book',
-                    self::FIELD_LABEL => 'Bibliothèque',
                 ),
                 'player' => array(
                     self::FIELD_ICON   => 'user',
@@ -192,7 +187,7 @@ class WpPageAdminBean extends WpPageBean
                     $objBean = AdminCopsCalendarPageBean::getCalendarBean($this->slugSubOnglet);
                     break;
                 case self::ONGLET_INBOX :
-                    $objBean = new WpPageAdminInboxBean();
+                    $objBean = WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet);
                     break;
                 case self::ONGLET_LIBRARY :
                     $objBean = WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet);
@@ -320,9 +315,7 @@ class WpPageAdminBean extends WpPageBean
       * @version v1.22.11.11
       */
      public function getOngletContent()
-     {
-         print_r($this);
-         return ''; }
+     { return ''; }
      
     /**
      * @since 1.22.10.18
@@ -349,99 +342,6 @@ class WpPageAdminBean extends WpPageBean
             ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
         );
         return $this->getRender($urlTemplate, $attributes);
-    }
-
-    /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-    public function getNotificationsDropdown()
-    {
-    /*
-    $mocks_notifs = array(
-      1 => array(1, 3, 1, '2022-03-01 20:00:00', 0),
-      2 => array(2, 3, 1, '2022-03-03 20:00:00', 0),
-      3 => array(3, 3, 1, '2022-03-08 20:00:00', 0),
-    );
-
-    $mocks_type_notif = array(
-      1 => array(1, '%s événement%s à venir', 'calendar-alt'),
-    );
-    //////////////////////////////////////////////////////////////////
-    // Construction de la liste des notifications
-    $squelette = '  <div class="dropdown-divider"></div><a href="%s" class="dropdown-item"><i class="fas fa-%s mr-2"></i> %s<span class="float-right text-muted text-sm">%s</span></a><!-- ./ dropdown-item -->';
-    $strNotifications = '';
-    $nbNotifications  = 0;
-
-    // Build From MOCKS
-    if ($this->GoneJoueur->getId()==3) {
-      $nbNotifications  = count($mocks_notifs);
-      $strNbNotifications = $nbNotifications.' Notification'.($nbNotifications<=1 ? '' : 's');
-      $d = DateTime::createFromFormat('Y-m-d H:i:s', $mocks_notifs[3][3], new DateTimeZone('UTC'));
-      $spanTs = time()-$d->getTimestamp();
-      if ($spanTs>=86400) {
-        $nb = floor($spanTs/86400);
-        $strDelay = $nb.' jour'.($nb>1?'s':'');
-      } elseif ($spanTs>=3600) {
-        $nb = floor($spanTs/3600);
-        $strDelay = $nb.' heure'.($nb>1?'s':'');
-      } elseif ($spanTs>=60) {
-        $nb = floor($spanTs/60);
-        $strDelay = $nb.' minutes'.($nb>1?'s':'');
-      } else {
-        $strDelay = 'à l\'instant';
-      }
-      $strNotifications = sprintf($squelette, '#', $mocks_type_notif[1][2], sprintf($mocks_type_notif[1][1], $nbNotifications, ($nbNotifications>1?'s':'')), $strDelay);
-    } else {
-      $nbNotifications  = 0;
-      $strNbNotifications = 'Aucune nouvelle Notification';
-      $strNotifications = '';
-    }
-
-    //////////////////////////////////////////////////////////////////
-
-    $urlTemplate = 'web/pages/admin/fragments/admin-dropdown-notifications.php';
-    $attributes = array(
-      // Le nombre de notifications
-      $nbNotifications,
-      // La phrase qui va bien
-      $strNbNotifications,
-      // La liste des Notifications
-      $strNotifications,
-      // L'url pour toutes les voir
-      '#',
-      // On affiche ou non le badge selon le nombre de nouvelles notifications
-      ($nbNotifications==0 ? 'hidden' : ''),
-      '', '', '', '', '', '', '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-
-
-    $strNotificationsDropdown  = '<li class="nav-item dropdown">';
-    $strNotificationsDropdown .= $this->getRender($urlTemplate, $attributes);
-    $strNotificationsDropdown .= '</li>';
-*
-        $strNotificationsDropdown = '';
-        return $strNotificationsDropdown;
-
-    /*
-  <div class="dropdown-divider"></div>
-  <a href="#" class="dropdown-item">
-    <i class="fas fa-envelope mr-2"></i> 4 new messages
-    <span class="float-right text-muted text-sm">3 mins</span>
-  </a>
-  <!-- ./ dropdown-item -->
-  <a href="#" class="dropdown-item">
-    <i class="fas fa-users mr-2"></i> 8 friend requests
-    <span class="float-right text-muted text-sm">12 hours</span>
-  </a>
-  <div class="dropdown-divider"></div>
-  <a href="#" class="dropdown-item">
-    <i class="fas fa-file mr-2"></i> 3 new reports
-    <span class="float-right text-muted text-sm">2 days</span>
-  </a>
-        </div>
-    *
     }
 
     /**
@@ -491,15 +391,15 @@ class WpPageAdminBean extends WpPageBean
         /////////////////////////////////////////
         return $strLeftPanel;
     }
-    
-    public function getSubOngletUrl($slugSubOnglet='')
-    {
-        if ($slugSubOnglet=='') {
-            $slugSubOnglet = $this->slugSubOnglet;
-        }
-        return $this->getOngletUrl().self::CST_AMP.self::CST_SUBONGLET.'='.$slugSubOnglet;
-    }
-    
+        
+    /**
+     * @return string
+     * @since 1.22.10.28
+     * @version 1.22.10.28
+     */
+    public function getPageUrl()
+    { return '/'.$this->slugPage; }
+
     /**
      * @param array $urlElements
      * @return string
@@ -524,14 +424,6 @@ class WpPageAdminBean extends WpPageBean
     }
     
     /**
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     */
-    public function getPageUrl()
-    { return '/'.$this->slugPage; }
-
-    /**
      * @param array
      * @return string
      * @since 1.22.10.28
@@ -539,33 +431,31 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getUrl($urlElements=array())
     {
-        $url = '/'.$this->slugPage;
+        $url = $this->getPageUrl();
         /////////////////////////////////////////////
         // Si l'onglet est passé en paramètre et qu'il est défini, on va le reprendre
         // S'il est défini et vide, on va l'enlever.
         // S'il n'est pas défini, on va mettre l'onglet courant par défaut.
         if (!isset($urlElements[self::CST_ONGLET])) {
-            $urlElements[self::CST_ONGLET] = $this->slugOnglet;
+            $url .= '?'.self::CST_ONGLET.'='.$this->slugOnglet;
+        } else {
+            $url .= '?'.self::CST_ONGLET.'='.$urlElements[self::CST_ONGLET];
+            unset($urlElements[self::CST_ONGLET]);
         }
-        if ($urlElements[self::CST_ONGLET]!='') {
-           $url .= '?'.self::CST_ONGLET.'='.$urlElements[self::CST_ONGLET];
-        }
-        unset($urlElements[self::CST_ONGLET]);
         /////////////////////////////////////////////
         
         /////////////////////////////////////////////
         // On fait de même avec le subOnglet
         if (!isset($urlElements[self::CST_SUBONGLET])) {
-            $urlElements[self::CST_SUBONGLET] = $this->slugSubOnglet;
-        }
-        if ($urlElements[self::CST_SUBONGLET]!='') {
+            $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$this->slugSubOnglet;
+        } else {
             $url .= self::CST_AMP.self::CST_SUBONGLET.'='.$urlElements[self::CST_SUBONGLET];
+            unset($urlElements[self::CST_SUBONGLET]);
         }
-        unset($urlElements[self::CST_SUBONGLET]);
         /////////////////////////////////////////////
         
         /////////////////////////////////////////////
-        // Maintenant, on doit ajouter ceux passer en paramètre
+        // Maintenant, on doit ajouter ceux passés en paramètre
         if (!empty($urlElements)) {
             foreach ($urlElements as $key => $value) {
                 if ($value!='') {
@@ -578,69 +468,4 @@ class WpPageAdminBean extends WpPageBean
         return $url;
     }
     
-    /*
-    public function buildBreadCrumbs()
-    {
-        
-        /*
-        // Le lien vers la Home
-        $aContent = $this->getIcon('desktop');
-        $aAttributes = array(self::ATTR_HREF=>'/admin/', self::ATTR_CLASS=>'text-white');
-        $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-        $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
-        $this->breadCrumbsContent = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-        */
-        
-        //        $this->breadCrumbs = $this->getDiv($breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right'));
-        /////////////////////////////////////////
-    //}
-    
-    /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-     public function buildBreadCrumbs($label, $slug=null, $hasDropdown=false)
-     {
-     
-     // Le lien intermédiaire ou final si slug vaut null
-     if ($slug==null) {
-     $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
-     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
-     } else {
-     $aAttributes = array(self::ATTR_HREF=>$this->urlOnglet.$slug, self::ATTR_CLASS=>'text-white');
-     $buttonContent = $this->getBalise(self::TAG_A, $label, $aAttributes);
-     $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark');
-     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-     
-     // Le lien ou le dropdown selon le type de mixed
-     if ($hasDropdown===true) {
-     $breadCrumbsContent .= '<div class="btn-group">';
-     $buttonContent = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-     $buttonAttributes = array(
-     'type'           => self::TAG_BUTTON,
-     self::ATTR_CLASS => 'btn btn-sm btn-dark dropdown-toggle',
-     'data-toggle'    => 'dropdown',
-     );
-     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
-     $breadCrumbsContent .= '<div class="dropdown-menu">';
-     foreach ($this->arrSubOnglets as $subOnglet => $arrData) {
-     if ($arrData[self::FIELD_LABEL]=='' || !isset($arrData[self::FIELD_ICON])) {
-     continue;
-     }
-     $url  = $this->urlOnglet.$slug.'&subOnglet='.$subOnglet;
-     $url .= (isset($arrData['url']) ? '&'.$arrData['url'] : '');
-     $breadCrumbsContent .= '<a class="dropdown-item btn-sm" href="'.$url.'">';
-     $breadCrumbsContent .= $arrData[self::FIELD_LABEL].'</a>';
-     }
-     $breadCrumbsContent .= '</div>';
-     $breadCrumbsContent .= '</div>';
-     } elseif ($hasDropdown!==false) {
-     $buttonAttributes = array('type'=>self::TAG_BUTTON, self::ATTR_CLASS=>'btn btn-sm btn-dark disabled');
-     $breadCrumbsContent .= $this->getBalise(self::TAG_BUTTON, $hasDropdown, $buttonAttributes);
-     }
-     }
-     $divAttributes = array(self::ATTR_CLASS=>'btn-group float-sm-right');
-     $this->breadCrumbs = $this->getBalise(self::TAG_DIV, $breadCrumbsContent, $divAttributes);
-     }
-     */
 }

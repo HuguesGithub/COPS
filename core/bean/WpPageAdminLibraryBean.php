@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe WpPageAdminLibraryBean
@@ -33,11 +33,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         } else {
             $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
             $name = $this->objWpCategory->getField('name');
-            if ($name=='') {
-                $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
-            } else {
-                $name = 'TODO';
-            }
+            $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
         }
         
         /////////////////////////////////////////
@@ -52,77 +48,21 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         );
         /////////////////////////////////////////
 
-        $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
-        $buttonAttributes = array(self::ATTR_CLASS=>($this->slugSubOnglet==''?$this->btnDisabled:$this->btnDark));
+        /////////////////////////////////////////
+        // Construction du Breadcrumbs
+        if ($this->slugSubOnglet=='') {
+            $spanAttributes = array(
+                self::ATTR_CLASS => self::CST_TEXT_WHITE,
+            );
+            $buttonContent = $this->getBalise(self::TAG_SPAN, $this->titreOnglet, $spanAttributes);
+            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+        } else {
+            $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
+            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDark));
+        }
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }
 
-    /**
-     * @return string
-     * @since 1.22.10.20
-     * @version 1.22.10.20
-     *
-    public function initBoard()
-    {
-        $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
-        $this->buildBreadCrumbs();
-        
-         
-        /*
-        $this->buildBreadCrumbs($this->titreOnglet);
-                
-        
-
-        // Le lien (ou pas) vers la page principale
-        if ($this->slugSubOnglet=='') {
-            $breadCrumbsContent .= $this->getButton($this->titreOnglet, array(self::ATTR_CLASS=>$btnDarkDisabled));
-        } else {
-
-            // Le lien (ou pas) vers la catégorie
-            if ($this->catSlug=='') {
-                $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-                $breadCrumbsContent .= $this->getButton($label, array(self::ATTR_CLASS=>$btnDarkDisabled));
-            } else {
-                
-                $name = $this->objWpCategory->getField('name');
-                $breadCrumbsContent .= $this->getButton($name, array(self::ATTR_CLASS=>$btnDarkDisabled));
-            }
-        }
-        
-         *
-    }
-    /*
-    public function buildBreadCrumbs()
-    {
-        /////////////////////////////////////////
-        // Création du Breadcrumbs
-        $btnDark = 'btn-dark';
-        $btnDarkDisabled = $btnDark.' disabled';
-        
-        // Ca ne devrait pas être défini ici, mais plus haut.
-        // Le lien vers la Home
-        $aContent = $this->getIcon('desktop');
-        $buttonContent = $this->getLink($aContent, parent::getPageUrl(), self::CST_TEXT_WHITE);
-        $breadCrumbsContent = $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
-        
-        // Ca ne devrait pas être défini ici, mais plus haut.
-        // Le lien vers Bibliothèque
-        $btnDark = 'btn-dark';
-        $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
-        $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
-        
-        if ($this->catSlug=='') {
-            $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-            $breadCrumbsContent .= $this->getButton($label, array(self::ATTR_CLASS=>$btnDarkDisabled));
-        } else {
-            $label = $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL];
-            $buttonContent = $this->getLink($label, parent::getSubOngletUrl(), self::CST_TEXT_WHITE);
-            $breadCrumbsContent .= $this->getButton($buttonContent, array(self::ATTR_CLASS=>$btnDark));
-        }
-        $this->breadCrumbs = $this->getDiv($breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right'));
-        /////////////////////////////////////////
-    }
-    *
     /**
      * @since 1.22.05.30
      * @version 1.22.11.05
@@ -137,11 +77,11 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
                 $subOnglet,
                 $arrSubOnglet[self::FIELD_LABEL],
                 $arrSubOnglet[self::FIELD_ICON]
-                );
+            );
             $strContent .= $this->getRender($urlTemplate, $attributes);
         }
       
-        return $strContent;
+        return $this->getDiv($strContent, array(self::ATTR_CLASS=>'row'));
     }
 
   /**
@@ -156,14 +96,6 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
       '', '', '', '', '', '',
     );
     return $this->getRender($urlTemplate, $attributes);
-  }
- 
-  public function buildBreadCrumbs()
-  {
-      parent::buildBreadCrumbs();
-      
-      //        $this->breadCrumbs = $this->getDiv($breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right'));
-      /////////////////////////////////////////
   }
   */
     

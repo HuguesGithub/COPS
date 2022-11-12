@@ -183,12 +183,17 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getLink($label, $href, $classe)
+    public function getLink($label, $href, $classe, $extraAttributes=array())
     {
         $attributes = array(
             self::ATTR_HREF => $href,
             self::ATTR_CLASS => $classe,
         );
+        if (!empty($extraAttributes)) {
+            foreach ($extraAttributes as $key => $value) {
+                $attributes[$key]  = $value;
+            }
+        }
         return $this->getBalise(self::TAG_A, $label, $attributes);
     }
     
@@ -242,7 +247,9 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface
             case 'desktop' :
             case 'download' :
             case 'envelope' :
+            case 'inbox' :
             case 'square-plus' :
+            case 'trash-alt' :
                 $prefix .= 'fa-solid fa-';
             break;
             default :

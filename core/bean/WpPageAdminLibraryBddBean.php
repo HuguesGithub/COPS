@@ -30,8 +30,8 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
             );
             $objsWpPost = $this->objWpPostServices->getPosts($attributes);
             $this->objWpPost = array_shift($objsWpPost);
-            $post_title = $this->objWpPost->getField('post_title');
-            list($name) = explode(':', $post_title);
+            $postTitle = $this->objWpPost->getField(self::WP_POSTTITLE);
+            list($name) = explode(':', $postTitle);
             
             $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
             $buttonContent = $this->getLink(trim($name), $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);

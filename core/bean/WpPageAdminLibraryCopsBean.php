@@ -118,7 +118,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             self::CST_SUBONGLET => self::CST_LIB_COPS,
         );
         
-        $buttonContent = $this->getLink('COPS', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = $this->getLink('COPS', $this->getUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = array(self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark));
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         
@@ -132,12 +132,12 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             $name = $this->objCops->getField(self::FIELD_NOM).' '.$this->objCops->getField(self::FIELD_PRENOM);
             $urlElements[self::FIELD_ID] = $id;
             
-            $buttonContent = $this->getLink($name, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+            $buttonContent = $this->getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
             $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
             $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         } elseif ($this->catSlug!='') {
             $name = $this->arrMenu[$this->catSlug];
-            $buttonContent = $this->getLink($name, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+            $buttonContent = $this->getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
             $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
             $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         }
@@ -285,7 +285,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             self::CST_SUBONGLET => $this->slugSubOnglet,
             self::CST_CAT_SLUG => 'individual',
         );
-        $href = $this->getOngletUrl($aAttributes);
+        $href = $this->getUrl($aAttributes);
 
         while (!empty($objCopsPlayers)) {
             $objCopsPlayer = array_shift($objCopsPlayers);
@@ -341,7 +341,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             self::CST_SUBONGLET => $this->slugSubOnglet,
             self::CST_CAT_SLUG => 'individual',
         );
-        $href = $this->getOngletUrl($aAttributes);
+        $href = $this->getUrl($aAttributes);
         
         while (!empty($objCopsPlayers)) {
             $objCopsPlayer = array_shift($objCopsPlayers);
