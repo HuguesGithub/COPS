@@ -116,7 +116,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
               $objBean = new WpPageAdminLibraryCopsBean();
               break;
           case self::CST_LIB_LAPD :
-//              $strContent = $this->getSubongletLapd();
+              // TODO
+              $objBean = new WpPageAdminLibraryLapsBean();
               break;
           case self::CST_LIB_BDD :
               $objBean = new WpPageAdminLibraryBddBean();

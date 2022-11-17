@@ -23,67 +23,10 @@ class WpPageAdminMailInboxBean extends WpPageAdminMailBean
     
     /**
      * @since 1.22.11.11
-     * @version 1.22.11.11
+     * @version 1.22.11.17
      */
     public function getOngletContent()
     {
-        ///////////////////////////////////////////////////////////////////
-        // Bouton de création d'un nouveau message
-        $urlElements = array(self::CST_SUBONGLET=>self::CST_WRITE);
-        $href = $this->getOngletUrl($urlElements);
-        $strButtonRetour = $this->getLink('Rédiger un message', $href, 'btn btn-primary btn-block mb-3');
-        
-        ///////////////////////////////////////////////////////////////////
-        // Récupération des mails du dossier affiché pour l'utilisateur courant
-        $objMailFolder = $this->CopsMailServices->getMailFolder($this->subOnglet);
-        $argRequest = array(
-            self::FIELD_FOLDER_ID => $objMailFolder->getField(self::FIELD_ID),
-            self::FIELD_TO_ID => $this->CopsPlayer->getField(self::FIELD_ID),
-        );
-        $objsCopsMailJoint = $this->CopsMailServices->getMailJoints($argRequest);
-        
-        $strContent = '';
-        if (empty($objsCopsMailJoint)) {
-            $strContent = '<tr><td class="text-center" colspan="3">'.self::LABEL_NO_RESULT.'</td></tr>';
-        } else {
-            ///////////////////////////////////////////////////////////////////
-            // Pagination
-            $strPagination = $this->buildPagination($objsCopsMailJoint);
-            foreach ($objsCopsMailJoint as $objCopsMailJoint) {
-                $strContent .= $objCopsMailJoint->getBean()->getInboxRow();
-            }
-        }
-        ///////////////////////////////////////////////////////////////////
-        
-        //////////////////////////////////////////////////////////////
-        // Construction de la liste
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-messages.php';
-        $attributes = array(
-            // Titre du dossier affiché
-            self::LABEL_INBOX,
-            // Nombre de messages dans le dossier affiché : 1-50/200
-            $strPagination,
-            // La liste des messages du dossier affiché
-            $strContent,
-            // Le slug du dossier affiché
-            $this->slugSubOnglet,
-        );
-        $mainContent = $this->getRender($urlTemplate, $attributes);
-        //////////////////////////////////////////////////////////////
-        
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
-        $attributes = array(
-            // L'id de la page
-            'section-inbox',
-            // Le bouton éventuel de création / retour...
-            $strButtonRetour,
-            // Le nom du bloc du menu de gauche
-            self::LABEL_MESSAGERIE,
-            // La liste des éléments du menu de gauche
-            $this->getMenuContent(),
-            // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
-            $mainContent,
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        return $this->getOngletContentMutual(self::LABEL_INBOX, 'section-inbox');
     }
 }

@@ -461,7 +461,9 @@ class WpPageAdminMailBean extends WpPageAdminBean
              $strExpediteurOptions .= '<option value="1">Ressources Humaines</option>';
              $strExpediteurOptions .= '<option value="2">COPS 101</option>';
          }
-         $strExpediteurOptions .= '<option value="'.$objMailUser->getField('id').'">'.$objMailUser->getField('user').'</option>';
+         $label = $objMailUser->getField('user');
+         $optAttributes = array(self::ATTR_VALUE=>$objMailUser->getField(self::FIELD_ID));
+         $strExpediteurOptions .= $this->getBalise(self::TAG_OPTION, $label, $optAttributes);
          return $strExpediteurOptions;
      }
      
@@ -662,51 +664,69 @@ class WpPageAdminMailBean extends WpPageAdminBean
     }
     
     /**
-     * @param array $objs
-     * @return string
-     * @since 1.22.11.12
-     * @version 1.22.11.12
+     * @since 1.22.11.17
+     * @version 1.22.11.17
      */
-    public function buildPagination(&$objs)
+    public function getOngletContentMutual($labelDossier, $idPage)
     {
-        $nbItems = count($objs);
-        $nbItemsPerPage = 10;
-        $nbPages = ceil($nbItems/$nbItemsPerPage);
-        $strPagination = '';
-        if ($nbPages>1) {
-            // Le bouton page précédente
-            $label = $this->getIcon('caret-left');
-            if ($this->curPage!=1) {
-                $btnClass = '';
-                $href = $this->getRefreshUrl(array(self::CST_CURPAGE=>$this->curPage-1));
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
+        ///////////////////////////////////////////////////////////////////
+        // Bouton de création d'un nouveau message
+        $urlElements = array(self::CST_SUBONGLET=>self::CST_WRITE);
+        $href = $this->getOngletUrl($urlElements);
+        $strButtonRetour = $this->getLink('Rédiger un message', $href, 'btn btn-primary btn-block mb-3');
+        
+        ///////////////////////////////////////////////////////////////////
+        // Récupération des mails du dossier affiché pour l'utilisateur courant
+        $objMailFolder = $this->CopsMailServices->getMailFolder($this->subOnglet);
+        $argRequest = array(
+            self::FIELD_FOLDER_ID => $objMailFolder->getField(self::FIELD_ID),
+            self::FIELD_TO_ID => $this->CopsPlayer->getField(self::FIELD_ID),
+        );
+        $objsCopsMailJoint = $this->CopsMailServices->getMailJoints($argRequest);
+        
+        $strContent = '';
+        if (empty($objsCopsMailJoint)) {
+            $strContent = '<tr><td class="text-center" colspan="3">'.self::LABEL_NO_RESULT.'</td></tr>';
+        } else {
+            ///////////////////////////////////////////////////////////////////
+            // Pagination
+            $strPagination = $this->buildPagination($objsCopsMailJoint);
+            foreach ($objsCopsMailJoint as $objCopsMailJoint) {
+                $strContent .= $objCopsMailJoint->getBean()->getInboxRow();
             }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
-            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
-            
-            // La chaine des éléments affichés
-            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
-            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
-            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, array($firstItem+1, $lastItem, $nbItems));
-            
-            // Le bouton page suivante
-            $label = $this->getIcon('caret-right');
-            if ($this->curPage!=$nbPages) {
-                $btnClass = '';
-                $href = $this->getRefreshUrl(array(self::CST_CURPAGE=>$this->curPage+1));
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
-            }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
-            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
-            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
         }
-        return $strPagination;
+        ///////////////////////////////////////////////////////////////////
+        
+        //////////////////////////////////////////////////////////////
+        // Construction de la liste
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-messages.php';
+        $attributes = array(
+            // Titre du dossier affiché
+            $labelDossier,
+            // Nombre de messages dans le dossier affiché : 1-50/200
+            $strPagination,
+            // La liste des messages du dossier affiché
+            $strContent,
+            // Le slug du dossier affiché
+            $this->slugSubOnglet,
+        );
+        $mainContent = $this->getRender($urlTemplate, $attributes);
+        //////////////////////////////////////////////////////////////
+        
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        $attributes = array(
+            // L'id de la page
+            $idPage,
+            // Le bouton éventuel de création / retour...
+            $strButtonRetour,
+            // Le nom du bloc du menu de gauche
+            self::LABEL_MESSAGERIE,
+            // La liste des éléments du menu de gauche
+            $this->getMenuContent(),
+            // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
+            $mainContent,
+        );
+        return $this->getRender($urlTemplate, $attributes);
     }
     
 }
