@@ -94,6 +94,7 @@ class CopsMailServices extends LocalServices
         $prepAttributes = array(
             (!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]),
             (!isset($attributes[self::FIELD_MAIL]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_MAIL]),
+            (!isset($attributes['copsId']) ? self::SQL_JOKER_SEARCH : $attributes['copsId']),
         );
         $rows = $this->Dao->getMailUsers($prepAttributes);
         $objMailUsers = array();

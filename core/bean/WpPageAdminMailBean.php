@@ -53,7 +53,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
             if ($this->objCopsMailJoint->getField(self::FIELD_TO_ID)==$this->CopsPlayer->getField(self::FIELD_ID)) {
                 $this->objCopsMail = $this->objCopsMailJoint->getMail();
             } else {
-                $this->objCopsMail = new CopsMail();;
+                $this->objCopsMail = new CopsMail();
             }
         } else {
             $this->objCopsMailJoint = new CopsMailJoint();
@@ -372,6 +372,37 @@ class WpPageAdminMailBean extends WpPageAdminBean
         );
         return $this->getRender($urlTemplate, $attributes);
     }
+    
+    public function dealWithDraftMessage()
+    {
+        /**
+        Array
+        (
+            [mailFrom] => 3
+            [mailTo] => cops001@cops.gov
+            [mailSubject] => Test envoi
+            [compose-textarea] =>
+            [mailContent] => Content Test<br>
+            [writeAction] => draft
+            [id] =>
+        )
+        */
+        // On créé un CopsMail
+        $objCopsMail = new CopsMail();
+        $objCopsMail->setField(self::FIELD_MAIL_SUBJECT, stripslashes($_POST['mailSubject']));
+        $objCopsMail->setField(self::FIELD_MAIL_CONTENT, stripslashes($_POST['mailContent']));
+        $objCopsMail->setField(self::FIELD_MAIL_DATE_ENVOI, self::getCopsDate('Y-m-d h:i:s'));
+        $this->CopsMailServices->insertMail($objCopsMail);
+        // Puis on créé un CopsMailJoint
+        $objCopsMailJoint = new CopsMailJoint();
+        $objCopsMailJoint->setField(self::FIELD_MAIL_ID, $objCopsMail->getField(self::FIELD_ID));
+        $objCopsMailJoint->setField(self::FIELD_TO_ID, 0); // TODO
+        $objCopsMailJoint->setField(self::FIELD_FROM_ID, $_POST['mailFrom']);
+        $objCopsMailJoint->setField(self::FIELD_FOLDER_ID, 2);
+        $objCopsMailJoint->setField(self::FIELD_LU, 0);
+        $objCopsMailJoint->setField(self::FIELD_NB_PJS, 0);
+        $this->CopsMailServices->insertMailJoint($objCopsMailJoint);
+    }
 
     /**
      * @since 1.22.05.04
@@ -379,6 +410,12 @@ class WpPageAdminMailBean extends WpPageAdminBean
      */
     public function getWriteMessageBlock()
     {
+        /////////////////////////////////////////////////////////////////
+        // Vient-on de poster un nouveau message ?
+        if (isset($_POST[self::CST_WRITE_ACTION]) && $_POST[self::CST_WRITE_ACTION]=='draft') {
+            $this->dealWithDraftMessage();
+        }
+        
         $spanAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
         $buttonContent = $this->getBalise(self::TAG_SPAN, 'Rédiger', $spanAttributes);
         $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
@@ -416,16 +453,15 @@ class WpPageAdminMailBean extends WpPageAdminBean
      public function getExpediteurOptions()
      {
          $strExpediteurOptions = '';
-         $fromId = $this->objCopsMailJoint->getField(self::FIELD_FROM_ID);
-         $objMailUser = $this->objCopsMailJoint->getAuteur();
-         $strAuteur = $objMailUser->getField('user');
+         $id = $this->CopsPlayer->getField(self::FIELD_ID);
+         $objsMailUser = $this->CopsMailServices->getMailUsers(array('copsId'=>$id));
+         echo "[".MySQL::wpdbLastQuery()."]";
+         $objMailUser = array_shift($objsMailUser);
          if (self::isAdmin()) {
              $strExpediteurOptions .= '<option value="1">Ressources Humaines</option>';
              $strExpediteurOptions .= '<option value="2">COPS 101</option>';
-             $strExpediteurOptions .= '<option value="'.$fromId.'">'.$strAuteur.'</option>';
-         } else {
-             $strExpediteurOptions .= '<option value="'.$fromId.'">'.$strAuteur.'</option>';
          }
+         $strExpediteurOptions .= '<option value="'.$objMailUser->getField('id').'">'.$objMailUser->getField('user').'</option>';
          return $strExpediteurOptions;
      }
      
@@ -479,21 +515,28 @@ class WpPageAdminMailBean extends WpPageAdminBean
             self::ATTR_CLASS => 'btn btn-default',
             self::ATTR_TITLE=>'Supprimer',
         );
-        $strButtonLeft = $this->getBalise(self::TAG_BUTTON, $buttonContent.self::CST_NBSP.'Supprimer', $buttonAttributes);
+        $strButtonLeft = $this->getBalise(self::TAG_BUTTON, $buttonContent.' Supprimer', $buttonAttributes);
         
-        /*
+        /**
+         * TODO
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" title="Répondre"><a href="#" class="text-white"><i class="fa-solid fa-reply"></i></a></button>
-        <button type="button" class="btn btn-default btn-sm" title="Transférer"><a href="#" class="text-white"><i class="fa-solid fa-share"></i></a></button>
+        <button type="button" class="btn btn-default btn-sm" title="Répondre"><a href="#" class="text-white">
+            <i class="fa-solid fa-reply"></i></a></button>
+        <button type="button" class="btn btn-default btn-sm" title="Transférer"><a href="#" class="text-white">
+            <i class="fa-solid fa-share"></i></a></button>
       </div>
-      <button type="button" class="btn btn-default btn-sm" title="Imprimer"><a href="#" class="text-white"><i class="fa-solid fa-print"></i></a></button>
+      <button type="button" class="btn btn-default btn-sm" title="Imprimer"><a href="#" class="text-white">
+        <i class="fa-solid fa-print"></i></a></button>
       </div>
-    	
-      <button type="button" class="btn btn-default"><a href="#" class="text-white"><i class="fa-solid fa-reply"></i> Répondre</a></button>
-      <button type="button" class="btn btn-default"><a href="#" class="text-white"><i class="fa-solid fa-share"></i> Transférer</a></button>
+        
+      <button type="button" class="btn btn-default"><a href="#" class="text-white">
+        <i class="fa-solid fa-reply"></i> Répondre</a></button>
+      <button type="button" class="btn btn-default"><a href="#" class="text-white">
+        <i class="fa-solid fa-share"></i> Transférer</a></button>
     </div>
-    <button type="button" class="btn btn-default"><a href="#" class="text-white"><i class="fa-solid fa-print"></i> Imprimer</a></button>
-         * 
+    <button type="button" class="btn btn-default"><a href="#" class="text-white">
+        <i class="fa-solid fa-print"></i> Imprimer</a></button>
+         *
          */
         //////////////////////////////////////////////////
         
@@ -598,5 +641,72 @@ class WpPageAdminMailBean extends WpPageAdminBean
         
         return $objBean;
     }
-     
+    
+    /**
+     * @param array $urlElements
+     * @return string
+     * @since v1.22.11.12
+     * @version v1.22.11.12
+     */
+    public function getRefreshUrl($urlElements=array())
+    {
+        // Si catSlug est défini et non présent dans $urlElements, il doit être repris.
+        if ($this->catSlug!='' && !isset($urlElements[self::CST_CAT_SLUG])) {
+            $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
+        }
+        // Si curPage est défini et non présent dans $urlElements, il doit être repris.
+        if ($this->curPage!='' && !isset($urlElements[self::CST_CURPAGE])) {
+            $urlElements[self::CST_CURPAGE] = $this->curPage;
+        }
+        return $this->getUrl($urlElements);
+    }
+    
+    /**
+     * @param array $objs
+     * @return string
+     * @since 1.22.11.12
+     * @version 1.22.11.12
+     */
+    public function buildPagination(&$objs)
+    {
+        $nbItems = count($objs);
+        $nbItemsPerPage = 10;
+        $nbPages = ceil($nbItems/$nbItemsPerPage);
+        $strPagination = '';
+        if ($nbPages>1) {
+            // Le bouton page précédente
+            $label = $this->getIcon('caret-left');
+            if ($this->curPage!=1) {
+                $btnClass = '';
+                $href = $this->getRefreshUrl(array(self::CST_CURPAGE=>$this->curPage-1));
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
+            
+            // La chaine des éléments affichés
+            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
+            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
+            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, array($firstItem+1, $lastItem, $nbItems));
+            
+            // Le bouton page suivante
+            $label = $this->getIcon('caret-right');
+            if ($this->curPage!=$nbPages) {
+                $btnClass = '';
+                $href = $this->getRefreshUrl(array(self::CST_CURPAGE=>$this->curPage+1));
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
+            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
+        }
+        return $strPagination;
+    }
+    
 }

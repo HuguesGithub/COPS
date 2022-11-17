@@ -121,8 +121,9 @@ class CopsMailDaoImpl extends LocalDaoImpl
     public function getMailUsers($attributes)
     {
         $request = $this->buildSelect($this->dbTable_cmu);
-        $request .= "WHERE id LIKE '%s'";
-        $request .= "AND mail LIKE '%s';";
+        $request .= "WHERE id LIKE '%s' ";
+        $request .= "AND mail LIKE '%s' ";
+        $request .= "AND copsId LIKE '%s';";
         $prepSql  = MySQL::wpdbPrepare($request, $attributes);
         return MySQL::wpdbSelect($prepSql);
     }
