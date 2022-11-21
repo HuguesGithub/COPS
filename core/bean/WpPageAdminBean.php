@@ -61,16 +61,30 @@ class WpPageAdminBean extends WpPageBean
             ),
             self::ONGLET_LIBRARY => array(
                 self::FIELD_ICON  => 'book',
-                self::FIELD_LABEL => self::LABEL_LIBRARY,
+                self::FIELD_LABEL => 'Bibliothèque',
             ),
         );
         if ($_SESSION[self::FIELD_MATRICULE]!='Guest') {
             $this->arrSidebarContentNonGuest = array(
                 self::ONGLET_INBOX => array(
                     self::FIELD_ICON  => 'envelope',
-                    self::FIELD_LABEL => self::LABEL_MESSAGERIE,
+                    self::FIELD_LABEL => 'Messagerie',
                 ),
-                // TODO
+                self::ONGLET_CALENDAR => array(
+                    self::FIELD_ICON   => 'calendar-days',
+                    self::FIELD_LABEL  => 'Calendrier',
+                    /*
+                    self::CST_CHILDREN => array(
+                        self::CST_CAL_MONTH  => 'Calendrier',
+                        self::CST_CAL_EVENT  => 'Événements',
+                        self::CST_CAL_PARAM  => 'Paramètres',
+                    ),
+                    */
+                ),
+            );
+            $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
+            /*
+            $this->arrSidebarContent = array(
                 self::ONGLET_AUTOPSIE => array(
                     self::FIELD_ICON  => 'box-archive',
                     self::FIELD_LABEL => 'Autopsies',
@@ -80,15 +94,6 @@ class WpPageAdminBean extends WpPageBean
                     self::FIELD_LABEL => 'Enquêtes',
                 ),
                 
-                self::ONGLET_CALENDAR => array(
-                    self::FIELD_ICON   => 'calendar-days',
-                    self::FIELD_LABEL  => 'Calendrier',
-                    self::CST_CHILDREN => array(
-                        self::CST_CAL_MONTH  => 'Calendrier',
-                        self::CST_CAL_EVENT  => 'Événements',
-                        self::CST_CAL_PARAM  => 'Paramètres',
-                    ),
-                ),
                 self::ONGLET_ARCHIVE => array(
                     self::FIELD_ICON  => 'box-archive',
                     self::FIELD_LABEL => 'Archives',
@@ -102,9 +107,8 @@ class WpPageAdminBean extends WpPageBean
                         'player-story'  => 'Background',
                     ),
                 ),
-                // Fin TODO
             );
-            $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
+            */
         }
 
         $this->btnDark = 'btn-dark';
@@ -182,7 +186,7 @@ class WpPageAdminBean extends WpPageBean
         try {
             switch ($this->urlParams[self::CST_ONGLET]) {
                 case self::ONGLET_CALENDAR :
-                    $objBean = AdminCopsCalendarPageBean::getCalendarBean($this->slugSubOnglet);
+                    $objBean = WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet);
                     break;
                 case self::ONGLET_INBOX :
                     $objBean = WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet);
@@ -464,54 +468,6 @@ class WpPageAdminBean extends WpPageBean
         /////////////////////////////////////////////
         
         return $url;
-    }
-    
-    /**
-     * @param array $objs
-     * @return string
-     * @since 1.22.10.27
-     * @version 1.22.10.27
-     */
-    public function buildPagination(&$objs)
-    {
-        $nbItems = count($objs);
-        $nbItemsPerPage = 10;
-        $nbPages = ceil($nbItems/$nbItemsPerPage);
-        $strPagination = '';
-        if ($nbPages>1) {
-            // Le bouton page précédente
-            $label = $this->getIcon('caret-left');
-            if ($this->curPage!=1) {
-                $btnClass = '';
-                $href = $this->getRefreshUrl(array(self::CST_CURPAGE=>$this->curPage-1));
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
-            }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
-            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
-            
-            // La chaine des éléments affichés
-            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
-            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
-            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, array($firstItem+1, $lastItem, $nbItems));
-            
-            // Le bouton page suivante
-            $label = $this->getIcon('caret-right');
-            if ($this->curPage!=$nbPages) {
-                $btnClass = '';
-                $href = $this->getRefreshUrl(array(self::CST_CURPAGE=>$this->curPage+1));
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
-            }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
-            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
-            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
-        }
-        return $strPagination;
     }
     
 }

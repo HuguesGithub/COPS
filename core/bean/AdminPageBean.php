@@ -34,38 +34,6 @@ class AdminPageBean extends UtilitiesBean
    * @version 1.22.09.05
    * @since 1.22.09.05
    */
-  public function analyzeUri()
-  {
-    $uri = $_SERVER['REQUEST_URI'];
-    $pos = strpos($uri, '?');
-    if ($pos!==false) {
-      $arrParams = explode('&', substr($uri, $pos+1, strlen($uri)));
-      if (!empty($arrParams)) {
-        foreach ($arrParams as $param) {
-          list($key, $value) = explode('=', $param);
-          $this->urlParams[$key] = $value;
-        }
-      }
-      $uri = substr($uri, 0, $pos-1);
-    }
-    $pos = strpos($uri, '#');
-    if ($pos!==false) {
-      $this->anchor = substr($uri, $pos+1, strlen($uri));
-    }
-    if (isset($_POST)) {
-      foreach ($_POST as $key => $value) {
-        $this->urlParams[$key] = $value;
-      }
-    }
-    return $uri;
-  }
-
-
-  /**
-   * @return string
-   * @version 1.22.09.05
-   * @since 1.22.09.05
-   */
   public function getContentPage()
   {
     if (self::isAdmin() || current_user_can('editor')) {

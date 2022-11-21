@@ -117,7 +117,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
               break;
           case self::CST_LIB_LAPD :
               // TODO
-              $objBean = new WpPageAdminLibraryLapsBean();
+              //$objBean = new WpPageAdminLibraryLapsBean();
               break;
           case self::CST_LIB_BDD :
               $objBean = new WpPageAdminLibraryBddBean();

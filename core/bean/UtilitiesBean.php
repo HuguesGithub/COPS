@@ -80,9 +80,13 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface
             case 'tsnow' :
                 $formatted = mktime($h, $i, $s, $m, $d, $y);
                 break;
+            case 'tsStart' :
+                $formatted = mktime(0, 0, 0, $m, $d, $y);
+                break;
             case 'H:i:s'   :
             case 'D m-d-Y' :
             case 'Y-m-d'   :
+            case 'm-d-Y'  :
             case 'd-m-Y'  :
             case 'Y-m-d h:i:s'  :
                 $formatted = date($format, mktime($h, $i, $s, $m, $d, $y));
