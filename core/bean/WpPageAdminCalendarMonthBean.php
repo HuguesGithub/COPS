@@ -68,57 +68,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $viewContent = $this->getRender($urlTemplate, $attributes);
         /////////////////////////////////////////
         
-        $prevCurday = date('m-d-Y', mktime(1, 0, 0, $m-1, $d, $y));
-        $nextCurday = date('m-d-Y', mktime(1, 0, 0, $m+1, $d, $y));
-        
-        $urlElements = array(
-            self::CST_ONGLET => self::ONGLET_CALENDAR,
-            self::CST_SUBONGLET => $this->slugSubOnglet,
-        );
-        $urlToday = $this->getUrl($urlElements);
-        $urlElements[self::CST_CAL_CURDAY] = $prevCurday;
-        $urlPrev  = $this->getUrl($urlElements);
-        $urlElements[self::CST_CAL_CURDAY] = $nextCurday;
-        $urlNext  = $this->getUrl($urlElements);
-
-        $urlElements[self::CST_CAL_CURDAY] = $this->curStrDate;
-        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_MONTH;
-        $urlMonth = $this->getUrl($urlElements);
-        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
-        $urlWeek  = $this->getUrl($urlElements);
-        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
-        $urlDay   = $this->getUrl($urlElements);
-        
         $calendarHeader = $this->arrFullMonths[date('m', mktime(1, 0, 0, $m, $d, $y))*1].date(' Y', mktime(1, 0, 0, $m, $d, $y));// Juin 2030
-        
-        /////////////////////////////////////////
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar.php';
-        $attributes = array(
-            // L'url pour accéder au mois/semaine/jour précédent
-            $urlPrev,
-            // L'url pour accéder au mois/semaine/jour suivant
-            $urlNext,
-            // L'url pour accéder au mois/semaine/jour courant
-            $urlToday,
-            // Le bandeau pour indiquer l'intervalle (mois/semaine/jour) visionné
-            $calendarHeader,
-            // Permet de définir si le bouton est celui de la vue en cours
-            ($this->slugSubOnglet==self::CST_CAL_MONTH ? ' '.self::CST_ACTIVE : ''),
-            // L'url pour visualiser le jour courant dans le mois
-            $urlMonth,
-            // Permet de définir si le bouton est celui de la vue en cours
-            ($this->slugSubOnglet==self::CST_CAL_WEEK ? ' '.self::CST_ACTIVE : ''),
-            // L'url pour visualiser le jour courant dans la semaine
-            $urlWeek,
-            // Permet de définir si le bouton est celui de la vue en cours
-            ($this->slugSubOnglet==self::CST_CAL_DAY ? ' '.self::CST_ACTIVE : ''),
-            // L'url pour visualiser le jour courant dans le jour
-            $urlDay,
-            // Le contenu du calendrier à visionner
-            $viewContent,
-        );
-        $mainContent = $this->getRender($urlTemplate, $attributes);
-        /////////////////////////////////////////
+        $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
         
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
         $attributes = array(

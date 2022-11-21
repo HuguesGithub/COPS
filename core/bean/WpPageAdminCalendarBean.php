@@ -139,4 +139,66 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         /////////////////////////////////////////
         return $menuContent;
     }
+    
+    /**
+     * @return string
+     * @since v1.22.11.21
+     * @version v1.22.11.21
+     */
+    public function getSectionCalendar($calendarHeader, $viewContent)
+    {
+        /////////////////////////////////////////
+        // On récupère le jour courant
+        list($m, $d, $y) = explode('-', $this->curStrDate);
+        
+        $prevCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d-1, $y));
+        $nextCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d+1, $y));
+        
+        $urlElements = array(
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => $this->slugSubOnglet,
+        );
+        $urlToday = $this->getUrl($urlElements);
+        $urlElements[self::CST_CAL_CURDAY] = $prevCurday;
+        $urlPrev  = $this->getUrl($urlElements);
+        $urlElements[self::CST_CAL_CURDAY] = $nextCurday;
+        $urlNext  = $this->getUrl($urlElements);
+        
+        $urlElements[self::CST_CAL_CURDAY] = $this->curStrDate;
+        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_MONTH;
+        $urlMonth = $this->getUrl($urlElements);
+        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
+        $urlWeek  = $this->getUrl($urlElements);
+        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
+        $urlDay   = $this->getUrl($urlElements);
+        
+        /////////////////////////////////////////
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar.php';
+        $attributes = array(
+            // L'url pour accéder au mois/semaine/jour précédent
+            $urlPrev,
+            // L'url pour accéder au mois/semaine/jour suivant
+            $urlNext,
+            // L'url pour accéder au mois/semaine/jour courant
+            $urlToday,
+            // Le bandeau pour indiquer l'intervalle (mois/semaine/jour) visionné
+            $calendarHeader,
+            // Permet de définir si le bouton est celui de la vue en cours
+            ($this->slugSubOnglet==self::CST_CAL_MONTH ? ' '.self::CST_ACTIVE : ''),
+            // L'url pour visualiser le jour courant dans le mois
+            $urlMonth,
+            // Permet de définir si le bouton est celui de la vue en cours
+            ($this->slugSubOnglet==self::CST_CAL_WEEK ? ' '.self::CST_ACTIVE : ''),
+            // L'url pour visualiser le jour courant dans la semaine
+            $urlWeek,
+            // Permet de définir si le bouton est celui de la vue en cours
+            ($this->slugSubOnglet==self::CST_CAL_DAY ? ' '.self::CST_ACTIVE : ''),
+            // L'url pour visualiser le jour courant dans le jour
+            $urlDay,
+            // Le contenu du calendrier à visionner
+            $viewContent,
+        );
+        /////////////////////////////////////////
+        return $this->getRender($urlTemplate, $attributes);
+    }
 }
