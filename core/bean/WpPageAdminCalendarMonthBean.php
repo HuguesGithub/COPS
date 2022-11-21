@@ -71,13 +71,23 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $prevCurday = date('m-d-Y', mktime(1, 0, 0, $m-1, $d, $y));
         $nextCurday = date('m-d-Y', mktime(1, 0, 0, $m+1, $d, $y));
         
-        $urlBase  = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_CALENDAR.self::CST_AMP.self::CST_SUBONGLET.'=';
-        $urlToday = $urlBase.$this->slugSubOnglet;
-        $urlMonth = $urlBase.self::CST_CAL_MONTH.self::CST_AMP.self::CST_CAL_CURDAY.'='.substr($this->curStrDate, 0, 10);
-        $urlWeek  = $urlBase.self::CST_CAL_WEEK.self::CST_AMP.self::CST_CAL_CURDAY.'='.substr($this->curStrDate, 0, 10);
-        $urlDay   = $urlBase.self::CST_CAL_DAY.self::CST_AMP.self::CST_CAL_CURDAY.'='.substr($this->curStrDate, 0, 10);
-        $urlPrev  = $urlBase.$this->slugSubOnglet.self::CST_AMP.self::CST_CAL_CURDAY.'='.$prevCurday;
-        $urlNext  = $urlBase.$this->slugSubOnglet.self::CST_AMP.self::CST_CAL_CURDAY.'='.$nextCurday;
+        $urlElements = array(
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => $this->slugSubOnglet,
+        );
+        $urlToday = $this->getUrl($urlElements);
+        $urlElements[self::CST_CAL_CURDAY] = $prevCurday;
+        $urlPrev  = $this->getUrl($urlElements);
+        $urlElements[self::CST_CAL_CURDAY] = $nextCurday;
+        $urlNext  = $this->getUrl($urlElements);
+
+        $urlElements[self::CST_CAL_CURDAY] = $this->curStrDate;
+        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_MONTH;
+        $urlMonth = $this->getUrl($urlElements);
+        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
+        $urlWeek  = $this->getUrl($urlElements);
+        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
+        $urlDay   = $this->getUrl($urlElements);
         
         $calendarHeader = $this->arrFullMonths[date('m', mktime(1, 0, 0, $m, $d, $y))*1].date(' Y', mktime(1, 0, 0, $m, $d, $y));// Juin 2030
         
@@ -133,11 +143,16 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
     public function getMonthCell($tsDisplay, $blnMonday)
     {
         $strClass = $this->getFcDayClass($tsDisplay);
-    
-        $urlBase  = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_CALENDAR.self::CST_AMP.self::CST_SUBONGLET.'=';
+
+        $urlElements = array(
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_CAL_CURDAY => date('m-d-Y', $tsDisplay),
+        );
+        
         // Construction de la cellule
 		if ($blnMonday) {
-			$aHref = $urlBase.self::CST_CAL_WEEK.self::CST_AMP.self::CST_CAL_CURDAY.'='.date('m-d-Y', $tsDisplay);
+		    $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
+		    $aHref = $this->getUrl($urlElements);
 			$aClass = 'fc-daygrid-day-number text-white float-left';
 			$aAttributes = array(
 				self::ATTR_STYLE => 'position: absolute; left: 0;',
@@ -147,8 +162,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 			$strWeekLink = '';
 		}
 		
-        $urlBase = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_CALENDAR.self::CST_AMP.self::CST_SUBONGLET.'=';
-        $url = $urlBase.self::CST_CAL_DAY.self::CST_AMP.self::CST_CAL_CURDAY.'='.date('m-d-Y', $tsDisplay);
+		$urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
+		$url = $this->getUrl($urlElements);
         $strLink = $this->getLink(date('d', $tsDisplay), $url, 'fc-daygrid-day-number text-white');
 		
         $strContent  = $this->getDiv($strWeekLink.$strLink, array(self::ATTR_CLASS=>'fc-daygrid-day-top'));

@@ -24,6 +24,7 @@ interface LabelsInterface
     const LABEL_NOM            = 'Nom';
     const LABEL_REFRESH_LIST   = 'Rafraîchir la liste';
     const LABEL_INBOX          = 'Réception';
+    const LABEL_WRITE_MAIL     = 'Rédiger un message';
     const LABEL_REFERENCE      = 'Référence';
     const LABEL_RETOUR         = 'Retour';
     const LABEL_COURSES        = 'Stages';

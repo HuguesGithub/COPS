@@ -190,7 +190,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
             default :
                 $strRightPanel = $this->getFolderMessagesList();
                 $strButtonRetour  = '<a href="/admin?onglet=inbox&subOnglet=write" class="btn btn-primary btn-block ';
-                $strButtonRetour .= 'mb-3">Rédiger un message</a>';
+                $strButtonRetour .= 'mb-3">'.self::LABEL_WRITE_MAIL.'</a>';
                 break;
         }
         /////////////////////////////////////////
@@ -342,9 +342,9 @@ class WpPageAdminMailBean extends WpPageAdminBean
         // Bouton de création d'un message
         $urlElements = array(self::CST_SUBONGLET=>self::CST_WRITE);
         $href = $this->getOngletUrl($urlElements);
-        $btnContent = $this->getLink('Rédiger un message', $href, 'text-white');
+        $btnContent = $this->getLink(self::LABEL_WRITE_MAIL, $href, 'text-white');
         $btnAttributes = array(
-            self::ATTR_TITLE => 'Rédiger un message',
+            self::ATTR_TITLE => self::LABEL_WRITE_MAIL,
             self::ATTR_CLASS => 'btn btn-default btn-primary col-8 mb-3',
         );
         $strButtonRetour .= $this->getBalise(self::TAG_BUTTON, $btnContent, $btnAttributes);
@@ -673,7 +673,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
         // Bouton de création d'un nouveau message
         $urlElements = array(self::CST_SUBONGLET=>self::CST_WRITE);
         $href = $this->getOngletUrl($urlElements);
-        $strButtonRetour = $this->getLink('Rédiger un message', $href, 'btn btn-primary btn-block mb-3');
+        $strButtonRetour = $this->getLink(self::LABEL_WRITE_MAIL, $href, 'btn btn-primary btn-block mb-3');
         
         ///////////////////////////////////////////////////////////////////
         // Récupération des mails du dossier affiché pour l'utilisateur courant
