@@ -185,6 +185,10 @@ interface ConstantsInterface
   const FIELD_REPEAT_INTERVAL    = 'repeatInterval';
   const FIELD_REPEAT_END         = 'repeatEnd';
   const FIELD_REPEAT_END_VALUE   = 'repeatEndValue';
+  const FIELD_MINUTE_DEBUT         = 'minuteDebut';
+  const FIELD_MINUTE_FIN           = 'minuteFin';
+  const FIELD_ENDDATE_VALUE         = 'endDateValue';
+
 
   // TABLE cops_event_date
   const FIELD_EVENT_ID           = 'eventId';

@@ -92,18 +92,230 @@ class CopsEvent extends LocalDomain
   public function getBean()
   { return new CopsEventBean($this); }
 
-  //////////////////////////////////////////////////
-  // METHODES
-  //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    // METHODES
+    //////////////////////////////////////////////////
 
-  public function isSeveralDays()
-  { return ($this->dateDebut!=$this->dateFin); }
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function checkFields()
+    {
+		$blnOk = true;
+		if ($this->eventLibelle=='' || $this->dateDebut=='' || $this->dateFin=='') {
+			$blnOk = false;
+		} elseif (!$this->isValidInterval()) {
+			$blnOk = false;
+		} elseif ($this->repeatStatus==1) {
+			if ($this->repeatInterval=='' || $this->repeatEnd=='') {
+				$blnOk = false;
+			}
+			if (($this->repeatEnd=='endDate' || $this->repeatEnd=='endRepeat') && $this->repeatEndValue=='') {
+				$blnOk = false;
+			}
+		}
+		return $blnOk;
+	}
 
-  public function isAllDayEvent()
-  { return ($this->allDayEvent==1); }
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function isValidInterval()
+    {
+		$dF = $this->dateFin;
+		$dD = $this->dateDebut;
+		return !(!$this->isAllDayEvent() && ($dF<$dD || $dF==$dD && $this->heureFin<$this->heureDebut));
+	}
 
-  public function isFirstDay($tsDisplay)
-  { return (date('Y-m-d', $tsDisplay)==$this->dateDebut); }
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function isAllDayEvent()
+    { return ($this->allDayEvent==1); }
+
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function isRepetitive()
+    { return ($this->repeatStatus==1); }
+	
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function saveEvent()
+    {
+        $this->CopsEventServices->saveEvent($this);
+		
+		if ($this->isRepetitive()) {
+			// On créé un nouvel objet event_date
+			$objCopsEventDate = new CopsEventDate();
+			// Que l'on assigne à l'event créé à l'instant.
+			$objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
+			if ($this->isAllDayEvent()) {
+				// Toute la journée
+				$objCopsEventDate->setField(self::FIELD_TSTART, 0);
+				$objCopsEventDate->setField(self::FIELD_TEND, 1440);
+			} else {
+				// Heures et minutes renseignées
+				list($h, $i,) = explode(':', $this->heureDebut);
+				$objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
+				list($h, $i,) = explode(':', $this->heureFin);
+				$objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
+			}
+
+			$dateDebut = $this->dateDebut;
+			$dateFin = $this->dateFin;
+			
+			// Selon le critère de fin de répétition, on gère différemment.
+			switch ($this->repeatEnd) {
+				case 'endDate' :
+					// On répète jusqu'à dépasser une date
+					while ($dateDebut<$this->repeatEndValue) {
+						// On insère l'event_date
+						$objCopsEventDate->setField(self::FIELD_DSTART, $dateDebut);
+						$objCopsEventDate->setField(self::FIELD_DEND, $dateFin);
+						$objCopsEventDate->saveEventDate();
+						$this->incrementerDates($dateDebut, $dateFin);
+					}
+				break;
+				case 'endRepeat' :
+					// On répète un certain nombre de fois
+					for ($i=0; $i<$this->repeatEndValue; $i++) {
+						// On insère l'event_date
+						$objCopsEventDate->setField(self::FIELD_DSTART, $dateDebut);
+						$objCopsEventDate->setField(self::FIELD_DEND, $dateFin);
+						$objCopsEventDate->saveEventDate();
+						$this->incrementerDates($dateDebut, $dateFin);
+					}
+				break;
+				default :
+					// On récupère le dernier événement pour récupérer sa date de début
+					// TODO
+					$endDateValue = '';
+					// On répète jusqu'au-delà du dernier événement
+					do {
+						// On insère l'event_date
+						$objCopsEventDate->setField(self::FIELD_DSTART, $dateDebut);
+						$objCopsEventDate->setField(self::FIELD_DEND, $dateFin);
+						$objCopsEventDate->saveEventDate();
+						$this->incrementerDates($dateDebut, $dateFin);
+					} while ($dateDebut<$endDateValue);
+					// Ensuite, lorsqu'on affiche un écran, il faut vérifier qu'aucun event "never" ne devrait s'y afficher.
+					// Si c'est le cas, on créé l'event_date et tous ceux manquants depuis le dernier.
+					// TODO
+				break;
+			}
+		} else {
+			// S'il ne se répète pas, on insère une seule entrée dans event_date.
+			$objCopsEventDate = new CopsEventDate();
+			$objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
+			$objCopsEventDate->setField(self::FIELD_DSTART, $this->dateDebut);
+			$objCopsEventDate->setField(self::FIELD_DEND, $this->dateFin);
+			if ($this->isAllDayEvent()) {
+				// Toute la journée
+				$objCopsEventDate->setField(self::FIELD_TSTART, 0);
+				$objCopsEventDate->setField(self::FIELD_TEND, 1440);
+			} else {
+				// Heures et minutes renseignées
+				list($h, $i,) = explode(':', $this->heureDebut);
+				$objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
+				list($h, $i,) = explode(':', $this->heureFin);
+				$objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
+			}
+			$objCopsEventDate->saveEventDate();
+		}
+    }
+	
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+	public function incrementerDates(&$dateDebut, &$dateFin)
+	{
+		// On parse les dates
+		list($yd, $md, $dd) = explode('-', $dateDebut);
+		list($yf, $mf, $df) = explode('-', $dateFin);
+		// Selon le type de répétition, on incrémente de l'intervalle la donnée correspondante
+		switch ($this->repeatType) {
+			case 'daily' :
+				$dd += $this->repeatInterval;
+				$df += $this->repeatInterval;
+			break;
+			case 'weekly' :
+				$dd += 7*$this->repeatInterval;
+				$df += 7*$this->repeatInterval;
+			break;
+			case 'monthly' :
+				$md += $this->repeatInterval;
+				$mf += $this->repeatInterval;
+			break;
+			case 'yearly' :
+				$yd += $this->repeatInterval;
+				$yf += $this->repeatInterval;
+			break;
+			default :
+			break;
+		}
+		// On met à jour les nouvelles dates.
+		$dateDebut = date('Y-m-d', mktime(0, 0, 0, $md, $dd, $yd));
+		$dateFin = date('Y-m-d', mktime(0, 0, 0, $mf, $df, $yf));
+	}
+
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function getRgbCategorie()
+    {
+        list($r, $g, $b) = sscanf($this->getCategorieCouleur(), "%02x%02x%02x");
+        return $r.', '.$g.', '.$b;
+    }
+
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function getCategorieCouleur()
+    { return $this->getCategorie()->getField('categorieCouleur'); }
+
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function getCategorie()
+    { return $this->CopsEventServices->getCategorie($this->categorieId); }
+
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+	public function isSeveralDays()
+	{ return ($this->dateDebut!=$this->dateFin); }
+
+	/**
+	 * @since v1.22.11.22
+	 * @version v1.22.11.22
+	 */
+    public function isFirstDay($tsDisplay)
+    { return (date('Y-m-d', $tsDisplay)==$this->dateDebut); }
+
+
+
+
+
+
+
+
+	
+	
+
+
+
 
   public function isLastDay($tsDisplay)
   { return (date('Y-m-d', $tsDisplay)==$this->dateFin); }
@@ -130,359 +342,9 @@ class CopsEvent extends LocalDomain
     return round(($tsFin-$tsDeb)/(60*60*24));
   }
 
-  public function isValidInterval()
-  {
-    list($Yd, $md, $dd) = explode('-', $this->dateDebut);
-    list($Yf, $mf, $df) = explode('-', $this->dateFin);
-    if (!$this->isAllDayEvent()) {
-      list($hd, $id, $sd) = explode(':', $this->heureDebut);
-      list($hf, $ifin, $sf) = explode(':', $this->heureFin);
-    } else {
-      $hd = 0;
-      $id = 0;
-      $sd = 0;
-      $hf = 0;
-      $ifin = 0;
-      $sf = 0;
-    }
-    $tsDebut = mktime($hd, $id, $sd, $md, $dd, $Yd);
-    $tsFin = mktime($hf, $ifin, $sf, $mf, $df, $Yf);
-    return ($tsDebut<=$tsFin);
-  }
-
-  public function saveEvent()
-  {
-    $this->CopsEventServices->saveEvent($this);
-    if ($this->repeatStatus==1) {
-      switch ($this->repeatType) {
-        case 'daily' :
-          $this->createDailyEventDate();
-        break;
-        case 'weekly' :
-          $this->createWeeklyEventDate();
-        break;
-        case 'monthly' :
-          $this->createMonthlyEventDate();
-        break;
-        case 'yearly' :
-          $this->createYearlyEventDate();
-        break;
-        default;
-        break;
-      }
-    } else {
-      $interval = $this->repeatInterval;
-      $repeatEnd = $this->repeatEnd;
-      $repeatEndValue = $this->repeatEndValue;
-      if (strpos($repeatEndValue, '/')!==false) {
-        list($d, $m, $Y) = explode('/', $repeatEndValue);
-        $repeatEndValue = $Y.'-'.$m.'-'.$d;
-      }
-
-      $CopsEventDate = new CopsEventDate();
-      $CopsEventDate->setField('eventId', $this->id);
-      if ($this->allDayEvent==1) {
-        $CopsEventDate->setField('tStart', 0);
-        $CopsEventDate->setField('tEnd', 24*60);
-      } else {
-        list($h, $i, $s) = explode(':', $this->heureDebut);
-        $CopsEventDate->setField('tStart', $i+$h*60);
-        list($h, $i, $s) = explode(':', $this->heureFin);
-        $CopsEventDate->setField('tEnd', $i+$h*60);
-      }
-      list($Y, $m, $d) = explode('-', $this->dateDebut);
-      $dStart = mktime($h, $i, $s, $m, $d+$cpt, $Y);
-      $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-      list($Y, $m, $d) = explode('-', $this->dateFin);
-      $dEnd = mktime($h, $i, $s, $m, $d+$cpt, $Y);
-      $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-      $CopsEventDate->saveEventDate();
-    }
-  }
-
-  public function createDailyEventDate()
-  {
-    $interval = $this->repeatInterval;
-    $repeatEnd = $this->repeatEnd;
-    $repeatEndValue = $this->repeatEndValue;
-    if (strpos($repeatEndValue, '/')!==false) {
-      list($d, $m, $Y) = explode('/', $repeatEndValue);
-      $repeatEndValue = $Y.'-'.$m.'-'.$d;
-    }
-
-    // TODO : Réfléchir à comment implémenter le 'never'
-    if ($repeatEnd=='endDate') {
-      // On répète jusqu'à dépassement d'une date
-      $blnOk = true;
-      $cpt = 0;
-      while ($blnOk) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField('eventId', $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField('tStart', 0);
-          $CopsEventDate->setField('tEnd', 24*60);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m, $d+$cpt, $Y);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m, $d+$cpt, $Y);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        if ($CopsEventDate->getField('dStart')<=$repeatEndValue) {
-          $CopsEventDate->saveEventDate();
-        } else {
-          $blnOk = false;
-        }
-        $cpt++;
-      }
-    } elseif ($repeatEnd=='endRepeat') {
-      // On répète un certain nombre de fois.
-      for ($cpt=0; $cpt<$repeatEndValue; $cpt++) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField('eventId', $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField('tStart', 0);
-          $CopsEventDate->setField('tEnd', 24*36);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m, $d+$cpt, $Y);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m, $d+$cpt, $Y);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        $CopsEventDate->saveEventDate();
-      }
-    }
-  }
-
-  public function createWeeklyEventDate()
-  {
-    $interval = $this->repeatInterval;
-    $repeatEnd = $this->repeatEnd;
-    $repeatEndValue = $this->repeatEndValue;
-    if (strpos($repeatEndValue, '/')!==false) {
-      list($d, $m, $Y) = explode('/', $repeatEndValue);
-      $repeatEndValue = $Y.'-'.$m.'-'.$d;
-    }
-
-    // TODO : Réfléchir à comment implémenter le 'never'
-    if ($repeatEnd=='endDate') {
-      // On répète jusqu'à dépassement d'une date
-      $blnOk = true;
-      $cpt = 0;
-      while ($blnOk) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField('eventId', $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField('tStart', 0);
-          $CopsEventDate->setField('tEnd', 24*60);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m, $d+$cpt*7, $Y);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m, $d+$cpt*7, $Y);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        if ($CopsEventDate->getField('dStart')<=$repeatEndValue) {
-          $CopsEventDate->saveEventDate();
-        } else {
-          $blnOk = false;
-        }
-        $cpt++;
-      }
-    } elseif ($repeatEnd=='endRepeat') {
-      // On répète un certain nombre de fois.
-      for ($cpt=0; $cpt<$repeatEndValue; $cpt++) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField('eventId', $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField('tStart', 0);
-          $CopsEventDate->setField('tEnd', 24*36);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m, $d+$cpt*7, $Y);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m, $d+$cpt*7, $Y);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        $CopsEventDate->saveEventDate();
-      }
-    }
-  }
-
-  public function createMonthlyEventDate()
-  {
-    $interval = $this->repeatInterval;
-    $repeatEnd = $this->repeatEnd;
-    $repeatEndValue = $this->repeatEndValue;
-    if (strpos($repeatEndValue, '/')!==false) {
-      list($d, $m, $Y) = explode('/', $repeatEndValue);
-      $repeatEndValue = $Y.'-'.$m.'-'.$d;
-    }
-
-    // TODO : Réfléchir à comment implémenter le 'never'
-    if ($repeatEnd=='endDate') {
-      // On répète jusqu'à dépassement d'une date
-      $blnOk = true;
-      $cpt = 0;
-      while ($blnOk) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField(self::FIELD_TSTART, 0);
-          $CopsEventDate->setField(self::FIELD_TEND, 24*60);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m+$cpt, $d, $Y);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m+$cpt, $d, $Y);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        if ($CopsEventDate->getField('dStart')<=$repeatEndValue) {
-          $CopsEventDate->saveEventDate();
-        } else {
-          $blnOk = false;
-        }
-        $cpt++;
-      }
-    } elseif ($repeatEnd=='endRepeat') {
-      // On répète un certain nombre de fois.
-      for ($cpt=0; $cpt<$repeatEndValue; $cpt++) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField('eventId', $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField(self::FIELD_TSTART, 0);
-          $CopsEventDate->setField('tEnd', 24*36);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m+$cpt, $d, $Y);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m+$cpt, $d, $Y);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        $CopsEventDate->saveEventDate();
-      }
-    }
-  }
-
-  public function createYearlyEventDate()
-  {
-    $interval = $this->repeatInterval;
-    $repeatEnd = $this->repeatEnd;
-    $repeatEndValue = $this->repeatEndValue;
-    if (strpos($repeatEndValue, '/')!==false) {
-      list($d, $m, $Y) = explode('/', $repeatEndValue);
-      $repeatEndValue = $Y.'-'.$m.'-'.$d;
-    }
-
-    // TODO : Réfléchir à comment implémenter le 'never'
-    if ($repeatEnd=='endDate') {
-      // On répète jusqu'à dépassement d'une date
-      $blnOk = true;
-      $cpt = 0;
-      while ($blnOk) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField('eventId', $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField('tStart', 0);
-          $CopsEventDate->setField('tEnd', 24*60);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m, $d, $Y+$cpt);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m, $d, $Y+$cpt);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        if ($CopsEventDate->getField('dStart')<=$repeatEndValue) {
-          $CopsEventDate->saveEventDate();
-        } else {
-          $blnOk = false;
-        }
-        $cpt++;
-      }
-    } elseif ($repeatEnd=='endRepeat') {
-      // On répète un certain nombre de fois.
-      for ($cpt=0; $cpt<$repeatEndValue; $cpt++) {
-        $CopsEventDate = new CopsEventDate();
-        $CopsEventDate->setField('eventId', $this->id);
-        if ($this->allDayEvent==1) {
-          $CopsEventDate->setField('tStart', 0);
-          $CopsEventDate->setField('tEnd', 24*36);
-        } else {
-          list($h, $i, $s) = explode(':', $this->heureDebut);
-          $CopsEventDate->setField('tStart', $i+$h*60);
-          list($h, $i, $s) = explode(':', $this->heureFin);
-          $CopsEventDate->setField('tEnd', $i+$h*60);
-        }
-        list($Y, $m, $d) = explode('-', $this->dateDebut);
-        $dStart = mktime($h, $i, $s, $m, $d, $Y+$cpt);
-        $CopsEventDate->setField('dStart', date('Y-m-d', $dStart));
-        list($Y, $m, $d) = explode('-', $this->dateFin);
-        $dEnd = mktime($h, $i, $s, $m, $d, $Y+$cpt);
-        $CopsEventDate->setField('dEnd', date('Y-m-d', $dEnd));
-
-        $CopsEventDate->saveEventDate();
-      }
-    }
-  }
-
   public function getInsertAttributes()
   {
     return array($this->eventLibelle, $this->categorieId, $this->dateDebut, $this->dateFin, $this->allDayEvent, $this->heureDebut, $this->heureFin,
       $this->repeatStatus, $this->repeatType, $this->repeatInterval, $this->repeatEnd, $this->repeatEndValue);
   }
-
-  public function getRgbCategorie()
-  {
-    list($r, $g, $b) = sscanf($this->getCategorieCouleur(), "%02x%02x%02x");
-    return $r.', '.$g.', '.$b;
-  }
-
-  public function getCategorie()
-  { return $this->CopsEventServices->getCategorie($this->categorieId); }
-
-  public function getCategorieCouleur()
-  { return $this->getCategorie()->getField('categorieCouleur'); }
 }

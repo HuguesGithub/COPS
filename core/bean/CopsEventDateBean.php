@@ -101,4 +101,22 @@ class CopsEventDateBean extends UtilitiesBean
     ///////////////////////////////////////////////////
     return $strClass;
   }
+  
+    /**
+     * @since 1.22.11.22
+     * @version 1.22.11.22
+     */
+	public function getAllDayEvent()
+	{
+        $urlTemplate = 'web/pages/public/fragments/public-fragments-div-calendar-day-allday-event.php';
+        $attributes = array(
+            // Titre
+            $this->CopsEvent->getField('eventLibelle'),
+            // getRgbCategorie()
+            $this->CopsEvent->getRgbCategorie(),
+			// Si plusieurs colonnes
+			($this->CopsEvent->isSeveralDays() ? 'fc-daygrid-event-harness-abs' : ''),
+        );
+        return $this->getRender($urlTemplate, $attributes);
+	}
 }

@@ -15,6 +15,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         parent::__construct();
         $this->slugSubOnglet = self::CST_CAL_WEEK;
         $this->titreSubOnglet = 'Hebdomadaire';
+        /////////////////////////////////////////
+        // Définition des services
+		$this->objCopsEventServices = new CopsEventServices();
     
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -45,14 +48,17 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $fN = date('N', mktime(0, 0, 0, $m, $d, $y));
         // On s'appuie dessus pour définir le premier et le dernier jour de la semaine
         list($fd, $fM, $fm, $fY) = explode(' ', date('d M m Y', mktime(0, 0, 0, $m, $d+1-$fN, $y)));
+		$this->firstDay = $fY.'-'.$fm.'-'.$fd;
         list($ld, $lM, $lm, $lY) = explode(' ', date('d M m Y', mktime(0, 0, 0, $m, $d+7-$fN, $y)));
+		$this->lastDay = $lY.'-'.$lm.'-'.$ld;
         // Si $fM et $lM sont identiques, la semaine complète est dans un même mois.
         if ($fM==$lM) {
             $calendarHeader = $fd.'-'.$ld.' '.$this->arrFullMonths[$fm*1].' '.$fY; // 3-9 Juin 2030
         } elseif ($fY!=$lY) {
             // Si $fY et $lY diffèrent, la semaine est à cheval sur deux années.
             // 26 Dec 2021 – 1 Jan 2022
-            $calendarHeader = $fd.' '.$this->arrFullMonths[$fm*1].' '.$fY.' - '.$ld.' '.$this->arrFullMonths[$lm*1].' '.$lY;
+            $calendarHeader  = $fd.' '.$this->arrFullMonths[$fm*1].' '.$fY;
+            $calendarHeader .= ' - '.$ld.' '.$this->arrFullMonths[$lm*1].' '.$lY;
         } else {
             // Sinon, seuls les deux mois diffèrent, la semaine est à cheval sur deux mois.
             // Mar 27 – Apr 2, 2022
@@ -80,6 +86,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
             $strColumnHoraire .= $this->getColumnHoraire($h);
         }
         /////////////////////////////////////////
+        
+        $this->prevCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d-7, $y));
+        $this->nextCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d+7, $y));
         
         /////////////////////////////////////////
         $urlTemplate = self::PF_SECTION_CAL_WEEK;
@@ -144,7 +153,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         );
         $divBottom = $this->getDiv('', $botAttributes);
         
-        $eventContent = $this->getWeekCell().$divBottom;
+        $eventContent = $this->getAllDayEvents($tsDisplay).$divBottom;
         
         $divContent  = $this->getDiv($eventContent, array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
         $divContent .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
@@ -158,6 +167,37 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
+	
+    /**
+     * @since v1.22.11.22
+     * @version v1.22.11.22
+     */
+	public function getAllDayEvents($tsDisplay)
+	{
+		$attributes[self::SQL_WHERE_FILTERS] = array(
+			self::FIELD_ID => '%',
+			self::FIELD_DSTART => $this->lastDay,
+			self::FIELD_DEND => $this->firstDay,
+		);
+		$objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+		
+		$strContent = '';
+		while (!empty($objsCopsEventDate)) {
+			$objCopsEventDate = array_shift($objsCopsEventDate);
+			if ($objCopsEventDate->getCopsEvent()->getField(self::FIELD_ALL_DAY_EVENT)==0) {
+				continue;
+			}
+			$dateDisplay = date('Y-m-d', $tsDisplay);
+			if ($dateDisplay>$objCopsEventDate->getCopsEvent()->getField(self::FIELD_DATE_FIN)) {
+				continue;
+			}
+			if ($dateDisplay<$objCopsEventDate->getCopsEvent()->getField(self::FIELD_DATE_DEBUT)) {
+				continue;
+			}
+			$strContent .= $objCopsEventDate->getBean()->getAllDayEvent();
+		}
+		return $strContent;
+	}
     
     /**
      * @since v1.22.11.21

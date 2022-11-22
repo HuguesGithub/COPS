@@ -120,6 +120,7 @@
     </div>
 
     <div class="card-footer clearfix">
+      <input type="hidden" name="writeAction">
       <button class="btn btn-sm btn-info float-left" data-trigger="click" data-action="submit" data-target="#creerNewEvent">Créer</a>
     </div>
   </div>

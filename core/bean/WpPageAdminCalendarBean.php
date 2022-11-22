@@ -36,6 +36,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
             self::CST_CAL_MONTH => array(self::FIELD_LABEL => 'Mensuel', self::CST_URL => $extraUrl),
             self::CST_CAL_WEEK => array(self::FIELD_LABEL => 'Hebdomadaire', self::CST_URL => $extraUrl),
             self::CST_CAL_DAY => array(self::FIELD_LABEL  => 'Quotidien', self::CST_URL => $extraUrl),
+            self::CST_CAL_EVENT => array(self::FIELD_LABEL  => 'Événements'),
         );
         /////////////////////////////////////////
 
@@ -45,15 +46,6 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDark));
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
-        
-        /*
-        /////////////////////////////////////////
-        // Construction du menu
-        $this->arrSubOnglets = array(
-            self::CST_CAL_EVENT => array(self::FIELD_LABEL  => 'Événements'),
-            self::CST_CAL_PARAM => array(self::FIELD_LABEL  => 'Paramètres'),
-        );
-        */
     }
     
     /**
@@ -64,12 +56,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
     {
         switch ($slugSubContent) {
             case self::CST_CAL_EVENT :
-                // TODO
-                //$objBean = new WpPageAdminCalendarEventBean();
-                break;
-            case self::CST_CAL_PARAM :
-                // TODO
-                //$objBean = new WpPageAdminCalendarParamBean();
+                $objBean = new WpPageAdminCalendarEventBean();
                 break;
             case self::CST_CAL_DAY :
                 $objBean = new WpPageAdminCalendarDayBean();
@@ -151,17 +138,14 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         // On récupère le jour courant
         list($m, $d, $y) = explode('-', $this->curStrDate);
         
-        $prevCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d-1, $y));
-        $nextCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d+1, $y));
-        
         $urlElements = array(
             self::CST_ONGLET => self::ONGLET_CALENDAR,
             self::CST_SUBONGLET => $this->slugSubOnglet,
         );
         $urlToday = $this->getUrl($urlElements);
-        $urlElements[self::CST_CAL_CURDAY] = $prevCurday;
+        $urlElements[self::CST_CAL_CURDAY] = $this->prevCurday;
         $urlPrev  = $this->getUrl($urlElements);
-        $urlElements[self::CST_CAL_CURDAY] = $nextCurday;
+        $urlElements[self::CST_CAL_CURDAY] = $this->nextCurday;
         $urlNext  = $this->getUrl($urlElements);
         
         $urlElements[self::CST_CAL_CURDAY] = $this->curStrDate;
