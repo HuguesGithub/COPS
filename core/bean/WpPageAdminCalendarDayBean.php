@@ -17,7 +17,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $this->titreSubOnglet = 'Quotidien';
         /////////////////////////////////////////
         // Définition des services
-		$this->objCopsEventServices = new CopsEventServices();
+        $this->objCopsEventServices = new CopsEventServices();
     
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -110,8 +110,8 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
             self::ATTR_STYLE => 'margin-top: 0px;',
         );
         $divBottom = $this->getDiv('', $botAttributes);
-		
-		$allDayEvents = $this->getAllDayEvents($tsDisplay);
+        
+        $allDayEvents = $this->getAllDayEvents($tsDisplay);
         
         $divIn  = $this->getDiv($allDayEvents.$divBottom, array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
         $divIn .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
@@ -124,30 +124,30 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
     }
-	
+    
     /**
      * @since v1.22.11.22
      * @version v1.22.11.22
      */
-	public function getAllDayEvents($tsDisplay)
-	{
-		$attributes[self::SQL_WHERE_FILTERS] = array(
-			self::FIELD_ID => '%',
-			self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
-			self::FIELD_DEND => date('Y-m-d', $tsDisplay),
-		);
-		$objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
-		
-		$strContent = '';
-		while (!empty($objsCopsEventDate)) {
-			$objCopsEventDate = array_shift($objsCopsEventDate);
-			if ($objCopsEventDate->getCopsEvent()->getField(self::FIELD_ALL_DAY_EVENT)==0) {
-				continue;
-			}
-			$strContent .= $objCopsEventDate->getBean()->getAllDayEvent();
-		}
-		return $strContent;
-	}
+    public function getAllDayEvents($tsDisplay)
+    {
+        $attributes[self::SQL_WHERE_FILTERS] = array(
+            self::FIELD_ID => '%',
+            self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
+            self::FIELD_DEND => date('Y-m-d', $tsDisplay),
+        );
+        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+        
+        $strContent = '';
+        while (!empty($objsCopsEventDate)) {
+            $objCopsEventDate = array_shift($objsCopsEventDate);
+            if ($objCopsEventDate->getCopsEvent()->getField(self::FIELD_ALL_DAY_EVENT)==0) {
+                continue;
+            }
+            $strContent .= $objCopsEventDate->getBean()->getAllDayEvent();
+        }
+        return $strContent;
+    }
 
     /**
      * @since v1.22.11.21

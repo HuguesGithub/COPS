@@ -17,7 +17,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $this->titreSubOnglet = 'Mensuel';
         /////////////////////////////////////////
         // Définition des services
-		$this->objCopsEventServices = new CopsEventServices();
+        $this->objCopsEventServices = new CopsEventServices();
     
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -113,11 +113,11 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             $aHref = $this->getUrl($urlElements);
             $aClass = 'fc-daygrid-day-number text-white';
             $divContent = $this->getLink(date('W', $tsDisplay), $aHref, $aClass);
-			$divAttributes = array(
-				self::ATTR_CLASS => 'badge bg-primary',
+            $divAttributes = array(
+                self::ATTR_CLASS => 'badge bg-primary',
                 self::ATTR_STYLE => 'position: absolute; left: 2px; top: 2px',
             );
-			$strWeekLink = $this->getDiv($divContent, $divAttributes);
+            $strWeekLink = $this->getDiv($divContent, $divAttributes);
         } else {
             $strWeekLink = '';
         }
@@ -127,7 +127,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $strLink = $this->getLink(date('d', $tsDisplay), $url, 'fc-daygrid-day-number text-white');
         
         $strContent  = $this->getDiv($strWeekLink.$strLink, array(self::ATTR_CLASS=>'fc-daygrid-day-top'));
-        $strContent .= $this->getDiv($this->getAllDayEvents($tsDisplay), array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
+        $divAllDaysAttributes = array(self::ATTR_CLASS=>'fc-daygrid-day-events');
+        $strContent .= $this->getDiv($this->getAllDayEvents($tsDisplay), $divAllDaysAttributes);
         $strContent .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
         
         $divAttributes = array(self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner');
@@ -139,47 +140,45 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         );
         return $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
     }
-	
+    
     /**
      * @since v1.22.11.22
      * @version v1.22.11.22
      */
-	public function getAllDayEvents($tsDisplay)
-	{
-		$dateDisplay = date('Y-m-d', $tsDisplay);
-		$attributes[self::SQL_WHERE_FILTERS] = array(
-			self::FIELD_ID => '%',
-			self::FIELD_DSTART => $dateDisplay,
-			self::FIELD_DEND => $dateDisplay,
-		);
-		$objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
-		
-		$strContent = '';
-		while (!empty($objsCopsEventDate)) {
-			$objCopsEventDate = array_shift($objsCopsEventDate);
-			if (!$objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
-				continue;
-			}
-			if ($dateDisplay>$objCopsEventDate->getField(self::FIELD_DEND)) {
-				continue;
-			}
-			if ($dateDisplay<$objCopsEventDate->getField(self::FIELD_DSTART)) {
-				continue;
-			}
-			// Si c'est un événement sur plusieurs jours
-			if ($objCopsEventDate->getCopsEvent()->isSeveralDays()) {
-				// Que ce n'est pas le premier jour de l'événement
-				if (!$objCopsEventDate->getCopsEvent()->isFirstDay($tsDisplay)) {
-					// Ni un lundi, on ne l'affiche pas.
-					if (date('N', $tsDisplay)!=1) {
-						continue;
-					}
-				}
-			}
-			$strContent .= $objCopsEventDate->getBean()->getAllDayEvent($tsDisplay);
-		}
-		return $strContent;
-	}
+    public function getAllDayEvents($tsDisplay)
+    {
+        $dateDisplay = date('Y-m-d', $tsDisplay);
+        $attributes[self::SQL_WHERE_FILTERS] = array(
+            self::FIELD_ID => '%',
+            self::FIELD_DSTART => $dateDisplay,
+            self::FIELD_DEND => $dateDisplay,
+        );
+        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+        
+        $strContent = '';
+        while (!empty($objsCopsEventDate)) {
+            $objCopsEventDate = array_shift($objsCopsEventDate);
+            if (!$objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
+                continue;
+            }
+            if ($dateDisplay>$objCopsEventDate->getField(self::FIELD_DEND)) {
+                continue;
+            }
+            if ($dateDisplay<$objCopsEventDate->getField(self::FIELD_DSTART)) {
+                continue;
+            }
+            // Si c'est un événement sur plusieurs jours
+            if ($objCopsEventDate->getCopsEvent()->isSeveralDays() &&
+                // Que ce n'est pas le premier jour de l'événement
+                !$objCopsEventDate->getCopsEvent()->isFirstDay($tsDisplay) &&
+                // Ni un lundi, on ne l'affiche pas.
+                date('N', $tsDisplay)!=1) {
+                continue;
+            }
+            $strContent .= $objCopsEventDate->getBean()->getAllDayEvent($tsDisplay);
+        }
+        return $strContent;
+    }
 
     /**
      * @since v1.22.11.21

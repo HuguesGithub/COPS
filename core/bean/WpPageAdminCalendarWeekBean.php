@@ -17,7 +17,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $this->titreSubOnglet = 'Hebdomadaire';
         /////////////////////////////////////////
         // Définition des services
-		$this->objCopsEventServices = new CopsEventServices();
+        $this->objCopsEventServices = new CopsEventServices();
     
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -48,9 +48,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $fN = date('N', mktime(0, 0, 0, $m, $d, $y));
         // On s'appuie dessus pour définir le premier et le dernier jour de la semaine
         list($fd, $fM, $fm, $fY) = explode(' ', date('d M m Y', mktime(0, 0, 0, $m, $d+1-$fN, $y)));
-		$this->firstDay = $fY.'-'.$fm.'-'.$fd;
+        $this->firstDay = $fY.'-'.$fm.'-'.$fd;
         list($ld, $lM, $lm, $lY) = explode(' ', date('d M m Y', mktime(0, 0, 0, $m, $d+7-$fN, $y)));
-		$this->lastDay = $lY.'-'.$lm.'-'.$ld;
+        $this->lastDay = $lY.'-'.$lm.'-'.$ld;
         // Si $fM et $lM sont identiques, la semaine complète est dans un même mois.
         if ($fM==$lM) {
             $calendarHeader = $fd.'-'.$ld.' '.$this->arrFullMonths[$fm*1].' '.$fY; // 3-9 Juin 2030
@@ -167,37 +167,37 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
-	
+    
     /**
      * @since v1.22.11.22
      * @version v1.22.11.22
      */
-	public function getAllDayEvents($tsDisplay)
-	{
-		$attributes[self::SQL_WHERE_FILTERS] = array(
-			self::FIELD_ID => '%',
-			self::FIELD_DSTART => $this->lastDay,
-			self::FIELD_DEND => $this->firstDay,
-		);
-		$objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
-		
-		$strContent = '';
-		while (!empty($objsCopsEventDate)) {
-			$objCopsEventDate = array_shift($objsCopsEventDate);
-			if ($objCopsEventDate->getCopsEvent()->getField(self::FIELD_ALL_DAY_EVENT)==0) {
-				continue;
-			}
-			$dateDisplay = date('Y-m-d', $tsDisplay);
-			if ($dateDisplay>$objCopsEventDate->getCopsEvent()->getField(self::FIELD_DATE_FIN)) {
-				continue;
-			}
-			if ($dateDisplay<$objCopsEventDate->getCopsEvent()->getField(self::FIELD_DATE_DEBUT)) {
-				continue;
-			}
-			$strContent .= $objCopsEventDate->getBean()->getAllDayEvent();
-		}
-		return $strContent;
-	}
+    public function getAllDayEvents($tsDisplay)
+    {
+        $attributes[self::SQL_WHERE_FILTERS] = array(
+            self::FIELD_ID => '%',
+            self::FIELD_DSTART => $this->lastDay,
+            self::FIELD_DEND => $this->firstDay,
+        );
+        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+        
+        $strContent = '';
+        while (!empty($objsCopsEventDate)) {
+            $objCopsEventDate = array_shift($objsCopsEventDate);
+            if ($objCopsEventDate->getCopsEvent()->getField(self::FIELD_ALL_DAY_EVENT)==0) {
+                continue;
+            }
+            $dateDisplay = date('Y-m-d', $tsDisplay);
+            if ($dateDisplay>$objCopsEventDate->getCopsEvent()->getField(self::FIELD_DATE_FIN)) {
+                continue;
+            }
+            if ($dateDisplay<$objCopsEventDate->getCopsEvent()->getField(self::FIELD_DATE_DEBUT)) {
+                continue;
+            }
+            $strContent .= $objCopsEventDate->getBean()->getAllDayEvent();
+        }
+        return $strContent;
+    }
     
     /**
      * @since v1.22.11.21
@@ -244,29 +244,6 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
     <div class="fc-event-resizer fc-event-resizer-end"></div>
   </a>
 </div>
-       */
-    }
-    
-    /**
-     * @since v1.22.11.21
-     * @version v1.22.11.21
-     */
-    public function getWeekCell()
-    {
-        return '';
-      /*
-                            <div class="fc-daygrid-event-harness" style="margin-top: 0px;">
-                              <a class="fc-daygrid-event fc-daygrid-block-event fc-h-event fc-event fc-event-draggable fc-event-resizable fc-event-start fc-event-end fc-event-past" style="border-color: rgb(245, 105, 84); background-color: rgb(245, 105, 84);">
-                                <div class="fc-event-main">
-                                  <div class="fc-event-main-frame">
-                                    <div class="fc-event-title-container">
-                                      <div class="fc-event-title fc-sticky">All Day Event</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="fc-event-resizer fc-event-resizer-end"></div>
-                              </a>
-                            </div>
        */
     }
 
