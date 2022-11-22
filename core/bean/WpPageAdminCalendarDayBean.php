@@ -24,7 +24,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
-	
+    
     /**
      * @since 1.22.11.21
      * @version 1.22.11.21
@@ -34,32 +34,32 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////
         // On récupère le jour courant
         list($m, $d, $y) = explode('-', $this->curStrDate);
-		$tsDisplay = mktime(0, 0, 0, $m, $d, $y);
-		$strClass = $this->getFcDayClass($tsDisplay);
-		
+        $tsDisplay = mktime(0, 0, 0, $m, $d, $y);
+        $strClass = $this->getFcDayClass($tsDisplay);
+        
         // On construit la colonne des horaires
         $strColumnHoraire = '';
         for ($h=0; $h<=23; $h++) {
             $strColumnHoraire .= $this->getColumnHoraire($h);
         }
         /////////////////////////////////////////
-		
-		$urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-day.php';
-		$attributes = array(
-		    // Le Header de la journée
-		    $this->getRowHeaders($strClass, $tsDisplay),
-		    // Les events all-day de la journée
-		    $this->getRowAllDay($strClass, $tsDisplay),
-		    // La première colonne contenant les horaires
-		    $strColumnHoraire,
-		    // La deuxième colonne avec les events de la journée
-		    $this->getRowHoraire($strClass, $tsDisplay),
-		);
-		$viewContent = $this->getRender($urlTemplate, $attributes);
-		$calendarHeader = $d.' '.$this->arrFullMonths[$m*1].' '.$y;
-		$mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
-		
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        
+        $urlTemplate = self::PF_SECTION_CAL_DAY;
+        $attributes = array(
+            // Le Header de la journée
+            $this->getRowHeaders($strClass, $tsDisplay),
+            // Les events all-day de la journée
+            $this->getRowAllDay($strClass, $tsDisplay),
+            // La première colonne contenant les horaires
+            $strColumnHoraire,
+            // La deuxième colonne avec les events de la journée
+            $this->getRowHoraire($strClass, $tsDisplay),
+        );
+        $viewContent = $this->getRender($urlTemplate, $attributes);
+        $calendarHeader = $d.' '.$this->arrFullMonths[$m*1].' '.$y;
+        $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
+        
+        $urlTemplate = self::PF_SECTION_ONGLET;
         $attributes = array(
             // L'id de la page
             'section-cal-day',
@@ -72,8 +72,8 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
             // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
             $mainContent,
         );
-        return $this->getRender($urlTemplate, $attributes);		
-	}
+        return $this->getRender($urlTemplate, $attributes);
+    }
 
     /**
      * @since 1.22.11.21
@@ -81,10 +81,10 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
      */
     public function getRowHeaders($strClass, $tsDisplay)
     {
-		$url = '#';
-		$aClass = 'fc-col-header-cell-cushion text-white';
-		$divContent = $this->getLink($this->arrFullDays[date('w', $tsDisplay)], $url, $aClass);
-		$thContent = $this->getDiv($divContent, array(self::ATTR_CLASS=>'fc-scrollgrid-sync-inner'));
+        $url = '#';
+        $aClass = 'fc-col-header-cell-cushion text-white';
+        $divContent = $this->getLink($this->arrFullDays[date('w', $tsDisplay)], $url, $aClass);
+        $thContent = $this->getDiv($divContent, array(self::ATTR_CLASS=>'fc-scrollgrid-sync-inner'));
         $attributes = array(
             'role' => 'columnheader',
             self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
@@ -104,55 +104,18 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
             self::ATTR_STYLE => 'margin-top: 0px;',
         );
         $divBottom = $this->getDiv('', $botAttributes);
-		
-		$divIn  = $this->getDiv($divBottom, array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
-		$divIn .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
-		
-		$tdContent = $this->getDiv($divIn, array(self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner'));
+        
+        $divIn  = $this->getDiv($divBottom, array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
+        $divIn .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
+        
+        $tdContent = $this->getDiv($divIn, array(self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner'));
         $attributes = array(
             'role'        => 'gridcell',
             self::ATTR_CLASS     => 'fc-daygrid-day fc-day ' . $strClass,
             self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
-    }
-    
-    /**
-     * @since v1.22.11.21
-     * @version v1.22.11.21
-     */
-    public function getColumnHoraire($h)
-    {
-        $hPadded = str_pad($h, 2, '0', STR_PAD_LEFT);
-        $cushionAttributes = array(self::ATTR_CLASS=>'fc-timegrid-slot-label-cushion fc-scrollgrid-shrink-cushion');
-        $shrinkCushion = $this->getDiv(date('ga', mktime($h, 0, 0)), $cushionAttributes);
-        $frameAttributes = array(self::ATTR_CLASS=>'fc-timegrid-slot-label-frame fc-scrollgrid-shrink-frame');
-        $shrinkFrame = $this->getDiv($shrinkCushion, $frameAttributes);
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink',
-            'data-time' => $hPadded.':00:00',
-        );
-        $firstRow = $this->getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
-        
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane',
-            'data-time' => $hPadded.':00:00',
-        );
-        $firstRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
-        
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00',
-        );
-        $secondRow = $this->getBalise(self::TAG_TD, '', $tdAttributes);
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00',
-        );
-        $secondRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
-        
-        return $this->getBalise(self::TAG_TR, $firstRow).$this->getBalise(self::TAG_TR, $secondRow);
-    }
+    }    
 
     /**
      * @since v1.22.11.21
@@ -178,9 +141,9 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
      * @since v1.22.11.21
      * @version v1.22.11.21
      */
-	public function getDayCell()
-	{
-		return '';
+    public function getDayCell()
+    {
+        return '';
       /*
 <div class="fc-timegrid-event-harness fc-timegrid-event-harness-inset" style="inset: 0px 0% -1199px; z-index: 1;">
   <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past" style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
@@ -196,5 +159,5 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
   </a>
 </div>
        */
-	}
+    }
 }

@@ -60,7 +60,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             }
             $strContent .= $this->getBalise(self::TAG_TR, $trContent);
         }
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-month.php';
+        $urlTemplate = self::PF_SECTION_CAL_MONTH;
         $attributes = array(
             // Les lignes à afficher
             $strContent,
@@ -71,7 +71,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $calendarHeader = $this->arrFullMonths[date('m', mktime(1, 0, 0, $m, $d, $y))*1].date(' Y', mktime(1, 0, 0, $m, $d, $y));// Juin 2030
         $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
         
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        $urlTemplate = self::PF_SECTION_ONGLET;
         $attributes = array(
             // L'id de la page
             'section-cal-month',
@@ -101,22 +101,22 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         );
         
         // Construction de la cellule
-		if ($blnMonday) {
-		    $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
-		    $aHref = $this->getUrl($urlElements);
-			$aClass = 'fc-daygrid-day-number text-white float-left';
-			$aAttributes = array(
-				self::ATTR_STYLE => 'position: absolute; left: 0;',
-			);
-			$strWeekLink = $this->getLink(date('W', $tsDisplay), $aHref, $aClass, $aAttributes);
-		} else {
-			$strWeekLink = '';
-		}
-		
-		$urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
-		$url = $this->getUrl($urlElements);
+        if ($blnMonday) {
+            $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
+            $aHref = $this->getUrl($urlElements);
+            $aClass = 'fc-daygrid-day-number text-white float-left';
+            $aAttributes = array(
+                self::ATTR_STYLE => 'position: absolute; left: 0;',
+            );
+            $strWeekLink = $this->getLink(date('W', $tsDisplay), $aHref, $aClass, $aAttributes);
+        } else {
+            $strWeekLink = '';
+        }
+        
+        $urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
+        $url = $this->getUrl($urlElements);
         $strLink = $this->getLink(date('d', $tsDisplay), $url, 'fc-daygrid-day-number text-white');
-		
+        
         $strContent  = $this->getDiv($strWeekLink.$strLink, array(self::ATTR_CLASS=>'fc-daygrid-day-top'));
         $strContent .= $this->getDiv($this->getEvents($tsDisplay), array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
         $strContent .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
@@ -128,9 +128,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
             'data-date' => date('Y-m-d', $tsDisplay),
         );
-        $strCellContent = $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
-        
-        return $strCellContent;
+        return $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
     }
 
     /**

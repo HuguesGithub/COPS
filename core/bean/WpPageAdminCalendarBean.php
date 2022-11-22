@@ -173,7 +173,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         $urlDay   = $this->getUrl($urlElements);
         
         /////////////////////////////////////////
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar.php';
+        $urlTemplate = self::PF_SECTION_CALENDAR;
         $attributes = array(
             // L'url pour accéder au mois/semaine/jour précédent
             $urlPrev,
@@ -200,5 +200,42 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         );
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    /**
+     * @since v1.22.11.21
+     * @version v1.22.11.21
+     */
+    public function getColumnHoraire($h)
+    {
+        $hPadded = str_pad($h, 2, '0', STR_PAD_LEFT);
+        $cushionAttributes = array(self::ATTR_CLASS=>'fc-timegrid-slot-label-cushion fc-scrollgrid-shrink-cushion');
+        $shrinkCushion = $this->getDiv(date('ga', mktime($h, 0, 0)), $cushionAttributes);
+        $frameAttributes = array(self::ATTR_CLASS=>'fc-timegrid-slot-label-frame fc-scrollgrid-shrink-frame');
+        $shrinkFrame = $this->getDiv($shrinkCushion, $frameAttributes);
+        $tdAttributes = array(
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink',
+            'data-time' => $hPadded.':00:00',
+        );
+        $firstRow = $this->getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
+        
+        $tdAttributes = array(
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane',
+            'data-time' => $hPadded.':00:00',
+        );
+        $firstRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
+        
+        $tdAttributes = array(
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor',
+            'data-time' => $hPadded.':30:00',
+        );
+        $secondRow = $this->getBalise(self::TAG_TD, '', $tdAttributes);
+        $tdAttributes = array(
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor',
+            'data-time' => $hPadded.':30:00',
+        );
+        $secondRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
+        
+        return $this->getBalise(self::TAG_TR, $firstRow).$this->getBalise(self::TAG_TR, $secondRow);
     }
 }
