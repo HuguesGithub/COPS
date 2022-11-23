@@ -108,7 +108,7 @@ class CopsEventDateBean extends UtilitiesBean
      */
     public function getAllDayEvent()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-div-calendar-day-allday-event.php';
+        $urlTemplate = self::PF_ARTICLE_CAL_ALLDAY;
         $attributes = array(
             // Titre
             $this->CopsEvent->getField('eventLibelle'),

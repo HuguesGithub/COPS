@@ -24,7 +24,7 @@ class CopsEventBean extends CopsBean
      */
     public function getTableRow()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-tr-event-row.php';
+        $urlTemplate = self::PF_TR_EVENT;
         $attributes = array(
             // L'url vers le détail de l'event
             $this->urlSubOnglet.self::CST_CAL_EVENT.'&amp;id='.$this->obj->getField(self::FIELD_ID),

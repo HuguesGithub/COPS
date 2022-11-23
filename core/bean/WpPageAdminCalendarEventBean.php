@@ -88,7 +88,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
      */
     public function getOngletContent()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-form-event.php';
+        $urlTemplate = self::PF_FORM_EVENT;
         ///////////////////////////////////////////////////////
         // Contenu du formulaire
         $attributes = array(
@@ -100,7 +100,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         $strForm = $this->getRender($urlTemplate, $attributes);
         ///////////////////////////////////////////////////////
         
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-events.php';
+        $urlTemplate = self::PF_SECTION_CAL_EVENTS;
         ///////////////////////////////////////////////////////
         // Contenu de la page
         $strContent = '';
