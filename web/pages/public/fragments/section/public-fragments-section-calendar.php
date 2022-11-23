@@ -1,4 +1,4 @@
-<div class="card card-primary">
+<section class="card card-primary">
   <div class="card-body p-0">
     <div id="calendar" class="fc fc-media-screen fc-direction-ltr fc-theme-bootstrap">
       <div class="fc-header-toolbar fc-toolbar fc-toolbar-ltr">
@@ -23,4 +23,4 @@
       </div>
     </div>
   </div>
-</div>
+</section>

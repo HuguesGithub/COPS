@@ -16,6 +16,7 @@ interface ConstantsInterface
   const ATTR_ALT               = 'alt';
   const ATTR_CLASS             = 'class';
   const ATTR_HREF              = 'href';
+  const ATTR_ROLE              = 'role';
   const ATTR_SRC               = 'src';
   const ATTR_STYLE             = 'style';
   const ATTR_TITLE             = 'title';

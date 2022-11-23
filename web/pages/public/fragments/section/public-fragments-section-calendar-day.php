@@ -1,4 +1,4 @@
-<div class="fc-timegrid fc-timeGridDay-view fc-view">
+<section class="fc-timegrid fc-timeGridDay-view fc-view">
   <table role="grid" class="fc-scrollgrid table-bordered fc-scrollgrid-liquid" aria-describedby="Calendrier du jour">
     <tbody role="rowgroup">
       <!-- Entête avec le jour de la semaine -->
@@ -93,4 +93,4 @@
       </tr>
     </tbody>
   </table>
-</div>
+</section>

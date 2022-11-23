@@ -134,9 +134,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         
         $tdContent = $this->getDiv($divContent, array(self::ATTR_CLASS=>'fc-timegrid-col-frame'));
         $tdAttributes = array(
-            'role' => 'gridcell',
+            self::ATTR_ROLE => 'gridcell',
             self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay),
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
@@ -161,9 +161,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
 
         $tdContent = $this->getDiv($divContent, $divAttributes);
         $tdAttributes = array(
-            'role' => 'gridcell',
+            self::ATTR_ROLE => 'gridcell',
             self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay),
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
@@ -205,8 +205,11 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
      */
     public function getRowHeader($strClass, $tsDisplay)
     {
-        $urlBase = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_CALENDAR.self::CST_AMP.self::CST_SUBONGLET.'=';
-        $url = $urlBase.self::CST_CAL_DAY.self::CST_AMP.self::CST_CAL_CURDAY.'='.date('m-d-Y', $tsDisplay);
+        $urlElements = array(
+            self::CST_SUBONGLET => self::CST_CAL_DAY,
+            self::CST_CAL_CURDAY =>date('m-d-Y', $tsDisplay),
+        );
+        $url = $this->getUrl($urlElements);
 
         $label = date('d ', $tsDisplay).$this->arrFullMonths[date('m', $tsDisplay)*1].date(' Y', $tsDisplay);
         $aContent = $this->arrShortDays[date('w', $tsDisplay)].date(' d/m', $tsDisplay);
@@ -216,9 +219,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $divContent = $this->getLink($aContent, $url, 'fc-col-header-cell-cushion text-white', $aAttributes);
         $thContent = $this->getDiv($divContent, array(self::ATTR_CLASS=>'fc-scrollgrid-sync-inner'));
         $thAttributes = array(
-            'role' => 'columnheader',
+            self::ATTR_ROLE => 'columnheader',
             self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay),
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
         );
         return $this->getBalise(self::TAG_TH, $thContent, $thAttributes);
     }
@@ -232,7 +235,8 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         return '';
       /*
 <div class="fc-timegrid-event-harness fc-timegrid-event-harness-inset" style="inset: 0px 0% -1199px; z-index: 1;">
-  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past" style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
+  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past"
+   style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
     <div class="fc-event-main">
       <div class="fc-event-main-frame">
         <div class="fc-event-time">12:00</div>

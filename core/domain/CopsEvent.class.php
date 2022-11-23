@@ -149,25 +149,26 @@ class CopsEvent extends LocalDomain
      */
     public function saveEvent()
     {
+        // On sauvegarde l'événement
         $this->CopsEventServices->saveEvent($this);
+        // On créé un nouvel objet event_date
+        $objCopsEventDate = new CopsEventDate();
+        // Que l'on assigne à l'event créé à l'instant.
+        $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
+        // On renseigne les heures de début et de fin
+        if ($this->isAllDayEvent()) {
+            // Toute la journée
+            $objCopsEventDate->setField(self::FIELD_TSTART, 0);
+            $objCopsEventDate->setField(self::FIELD_TEND, 1440);
+        } else {
+            // Heures et minutes renseignées
+            list($h, $i,) = explode(':', $this->heureDebut);
+            $objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
+            list($h, $i,) = explode(':', $this->heureFin);
+            $objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
+        }
         
         if ($this->isRepetitive()) {
-            // On créé un nouvel objet event_date
-            $objCopsEventDate = new CopsEventDate();
-            // Que l'on assigne à l'event créé à l'instant.
-            $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
-            if ($this->isAllDayEvent()) {
-                // Toute la journée
-                $objCopsEventDate->setField(self::FIELD_TSTART, 0);
-                $objCopsEventDate->setField(self::FIELD_TEND, 1440);
-            } else {
-                // Heures et minutes renseignées
-                list($h, $i,) = explode(':', $this->heureDebut);
-                $objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-                list($h, $i,) = explode(':', $this->heureFin);
-                $objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
-            }
-
             $dateDebut = $this->dateDebut;
             $dateFin = $this->dateFin;
             
@@ -205,28 +206,15 @@ class CopsEvent extends LocalDomain
                         $objCopsEventDate->saveEventDate();
                         $this->incrementerDates($dateDebut, $dateFin);
                     } while ($dateDebut<$endDateValue);
-                    // Ensuite, lorsqu'on affiche un écran, il faut vérifier qu'aucun event "never" ne devrait s'y afficher.
+                    // Ensuite, lorsqu'on affiche un écran, 
+                    // il faut vérifier qu'aucun event "never" ne devrait s'y afficher.
                     // Si c'est le cas, on créé l'event_date et tous ceux manquants depuis le dernier.
                     // TODO
                 break;
             }
         } else {
-            // S'il ne se répète pas, on insère une seule entrée dans event_date.
-            $objCopsEventDate = new CopsEventDate();
-            $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
             $objCopsEventDate->setField(self::FIELD_DSTART, $this->dateDebut);
             $objCopsEventDate->setField(self::FIELD_DEND, $this->dateFin);
-            if ($this->isAllDayEvent()) {
-                // Toute la journée
-                $objCopsEventDate->setField(self::FIELD_TSTART, 0);
-                $objCopsEventDate->setField(self::FIELD_TEND, 1440);
-            } else {
-                // Heures et minutes renseignées
-                list($h, $i,) = explode(':', $this->heureDebut);
-                $objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-                list($h, $i,) = explode(':', $this->heureFin);
-                $objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
-            }
             $objCopsEventDate->saveEventDate();
         }
     }
@@ -281,7 +269,7 @@ class CopsEvent extends LocalDomain
      * @version v1.22.11.22
      */
     public function getCategorieCouleur()
-    { return $this->getCategorie()->getField('categorieCouleur'); }
+    { return $this->getCategorie()->getField(self::FIELD_CATEG_COLOR); }
 
     /**
      * @since v1.22.11.22
