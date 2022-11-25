@@ -356,7 +356,17 @@ class CopsEvent extends LocalDomain
 		return ($tsDisplay-$tsDeb)/(60*60*24)+1;
 	}
 
-
+	/**
+	 * @since v1.22.11.25
+	 * @version v1.22.11.25
+	 */
+	public function isSeveralWeeks()
+	{
+	    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8), substr($this->dateFin, 0, 4));
+	    $tsDeb = mktime(0, 0, 0, substr($this->dateDebut, 5, 2), substr($this->dateDebut, 8), substr($this->dateDebut, 0, 4));
+	    return (date('W', $tsDeb)!=date('W', $tsFin));
+	}
+	
 
 
 
@@ -369,12 +379,6 @@ class CopsEvent extends LocalDomain
 
 
 
-  public function isSeveralWeeks()
-  {
-    $tsFin = mktime(0, 0, 0, substr($this->dateFin, 5, 2), substr($this->dateFin, 8), substr($this->dateFin, 0, 4));
-    $tsDeb = mktime(0, 0, 0, substr($this->dateDebut, 5, 2), substr($this->dateDebut, 8), substr($this->dateDebut, 0, 4));
-    return (date('W', $tsDeb)!=date('W', $tsFin));
-  }
 
   public function isOverThisWeek($tsDisplay)
   {
