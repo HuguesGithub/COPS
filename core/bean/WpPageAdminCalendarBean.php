@@ -113,8 +113,14 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         // On va définir la liste des éléments du menu de gauche.
         $menuContent = '';
         foreach ($this->arrMenu as $key => $arrMenu) {
+            //$aContent = $this->getIcon($arrMenu[self::FIELD_ICON]).self::CST_NBSP.$arrMenu[self::FIELD_LABEL];
             $aContent = $arrMenu[self::FIELD_LABEL];
-            $href = $this->getUrl(array(self::CST_SUBONGLET => $key));
+			$urlElements = array(self::CST_SUBONGLET => $key);
+			if (isset($arrMenu[self::CST_URL])) {
+				list($k, $v) = explode('=', $arrMenu[self::CST_URL]);
+				$urlElements[$k] = $v;
+			}
+            $href = $this->getUrl($urlElements);
             $liContent = $this->getLink($aContent, $href, 'nav-link text-white');
             
             // Si le slug affiché vaut celui du menu ou qu'on est sur la vue par défaut est le menu est inbox
@@ -133,6 +139,10 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
      */
     public function getSectionCalendar($calendarHeader, $viewContent)
     {
+        /////////////////////////////////////////
+        // On récupère le jour courant
+        list($m, $d, $y) = explode('-', $this->curStrDate);
+        
         $urlElements = array(
             self::CST_ONGLET => self::ONGLET_CALENDAR,
             self::CST_SUBONGLET => $this->slugSubOnglet,

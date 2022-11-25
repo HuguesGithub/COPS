@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * CopsEventDateBean
@@ -10,11 +10,58 @@ if (!defined('ABSPATH')) {
  */
 class CopsEventDateBean extends UtilitiesBean
 {
-  public function __construct($Obj=null)
-  {
-    $this->CopsEventDate = ($Obj==null ? new CopsEventDate() : $Obj);
-    $this->CopsEvent     = $this->CopsEventDate->getCopsEvent();
-  }
+    public function __construct($obj=null)
+    {
+		$this->objCopsEventDate = ($obj==null ? new CopsEventDate() : $obj);
+		$this->objCopsEvent     = $this->objCopsEventDate->getCopsEvent();
+    }
+
+    /**
+     * @since 1.22.06.09
+     * @version 1.22.06.09
+     */
+    public function getFcDayClass($tsDisplay)
+    {
+		// On récupère le jour courant
+		$tsToday = self::getCopsDate('tsStart');
+
+		$strClass = 'fc-event-';
+		// La date passée, présente ou future
+		// si le jour est dans le passé : fc-day-past, dans le futur : fc-day-future, aujourd'hui : fc-day-today
+		if ($tsDisplay==$tsToday) {
+			$strClass .= 'today ';
+		} elseif ($tsDisplay<$tsToday) {
+			$strClass .= 'past ';
+		} else {
+			$strClass .= 'future ';
+		}
+		
+		///////////////////////////////////////////////////
+		// Si c'est le début de l'event
+		if ($this->objCopsEvent->isFirstDay($tsDisplay)) {
+			$strClass .= 'fc-event-start ';
+		}
+		
+		///////////////////////////////////////////////////
+		// Si c'est la fin de l'event
+		if ($this->objCopsEvent->isLastWeek($tsDisplay)) {
+			$strClass .= 'fc-event-end ';
+		}
+		
+		// On construit la classe de la cellule comme fin d'event
+		/*
+		if ($this->objCopsEvent->isLastDay($tsDisplay)) {
+			$strClass .= 'fc-event-end ';
+		} elseif (!$this->objCopsEvent->isSeveralWeeks()) {
+			$strClass .= 'fc-event-end ';
+		} elseif (!$this->objCopsEvent->isOverThisWeek($tsDisplay)) {
+			$strClass .= 'fc-event-end ';
+		}
+		*/
+		///////////////////////////////////////////////////
+		return $strClass;
+	}
+
 
   /**
    * @since 1.22.06.13
@@ -61,75 +108,6 @@ class CopsEventDateBean extends UtilitiesBean
     );
     return $this->getRender($urlTemplate, $attributes);
   }
-
-    /**
-     * @since 1.22.06.09
-     * @version 1.22.11.24
-     */
-    public function getFcDayClass($tsDisplay)
-    {
-        // On récupère le jour courant
-        $tsToday = self::getCopsDate('tsStart');
-
-        $strClass = '';
-        ///////////////////////////////////////////////////
-        // On construit la classe de la cellule comme début d'event
-        if ($this->CopsEvent->isFirstDay($tsDisplay)) {
-            $strClass .= 'fc-event-start ';
-        }
-        // On construit la classe de la cellule comme fin d'event
-        if ($this->CopsEvent->isLastDay($tsDisplay)) {
-            $strClass .= 'fc-event-end ';
-        } elseif (!$this->CopsEvent->isSeveralWeeks()) {
-            $strClass .= 'fc-event-end ';
-        } elseif (!$this->CopsEvent->isOverThisWeek($tsDisplay)) {
-            $strClass .= 'fc-event-end ';
-        }
-        // La date passée, présente ou future
-        // si le jour est dans le passé : fc-day-past, dans le futur : fc-day-future, aujourd'hui : fc-day-today
-        if ($tsDisplay==$tsToday) {
-            $strClass .= 'fc-event-today';
-        } elseif ($tsDisplay<=$tsToday) {
-            $strClass .= 'fc-event-past';
-        } else {
-            $strClass .= 'fc-event-future';
-        }
-        ///////////////////////////////////////////////////
-        return $strClass;
-    }
   
-    /**
-     * @since 1.22.11.22
-     * @version 1.22.11.24
-     */
-	public function getAllDayEvent($tsDisplay)
-	{
-		$extraClasse = '';
-		$fcDayClass = $this->getFcDayClass($tsDisplay);
-		if ($this->CopsEvent->isSeveralDays()) {
-			$extraClasse = 'fc-daygrid-event-harness-abs';
-			if ($this->CopsEvent->getNbDays()>1) {
-				if ($this->CopsEvent->isFirstDay($tsDisplay)) {
-					$extraAttributes = ' data-colspan="'.($this->CopsEvent->getNbDays()-1).'"';
-				} else {
-					$extraAttributes = ' data-colspan="'.($this->CopsEvent->getNbDays()-$this->CopsEvent->getNbDaysSinceFirst($tsDisplay)).'"';
-				}
-			}
-		}
-		
-        $urlTemplate = self::WEB_PPFD_ALLDAY_EVENT;
-        $attributes = array(
-            // Titre
-            $this->CopsEvent->getField('eventLibelle'),
-            // getRgbCategorie()
-            $this->CopsEvent->getRgbCategorie(),
-			// Si plusieurs colonnes
-			$extraClasse,
-			// Toujours si plusieurs colonnes
-			$extraAttributes,
-			// D'autres classes supplémentaires
-			$fcDayClass,
-        );
-        return $this->getRender($urlTemplate, $attributes);
-	}
+
 }

@@ -1,66 +1,82 @@
 <?php
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe CopsEventDate
  * @author Hugues
  * @version 1.22.06.13
- * @since 1.22.06.13
+ * @since 1.22.11.25
  */
 class CopsEventDate extends LocalDomain
 {
-  //////////////////////////////////////////////////
-  // ATTRIBUTES
-  //////////////////////////////////////////////////
-  /**
-   * Id technique de la donnée
-   * @var int $id
-   */
-  protected $id;
+    //////////////////////////////////////////////////
+    // ATTRIBUTES
+    //////////////////////////////////////////////////
+    /**
+     * Id technique de la donnée
+     * @var int $id
+     */
+    protected $id;
 
-  protected $eventId;
-  protected $dStart;
-  protected $dEnd;
-  protected $tStart;
-  protected $tEnd;
+    protected $eventId;
+    protected $dStart;
+    protected $dEnd;
+    protected $tStart;
+    protected $tEnd;
 
-  //////////////////////////////////////////////////
-  // GETTERS & SETTERS
-  //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    // GETTERS & SETTERS
+    //////////////////////////////////////////////////
 
-  //////////////////////////////////////////////////
-  // CONSTRUCT - CLASSVARS - CONVERT - BEAN
-  //////////////////////////////////////////////////
-  /**
-   * @param array $attributes
-   * @version 1.22.06.13
-   * @since 1.22.06.13
-   */
-  public function __construct($attributes=array())
-  {
-    parent::__construct($attributes);
-    $this->stringClass = 'CopsEventDate';
-    $this->CopsEventServices = new CopsEventServices();
-  }
-  /**
-   * @param array $row
-   * @return CopsEventDate
-   * @version 1.22.06.13
-   * @since 1.22.06.13
-   */
-  public static function convertElement($row)
-  { return parent::convertRootElement(new CopsEventDate(), $row); }
-  /**
-   * @return CopsEventDateBean
-   * @version 1.22.06.13
-   * @since 1.22.06.13
-   */
-  public function getBean()
-  { return new CopsEventDateBean($this); }
+    //////////////////////////////////////////////////
+    // CONSTRUCT - CLASSVARS - CONVERT - BEAN
+    //////////////////////////////////////////////////
+    /**
+     * @param array $attributes
+     * @version 1.22.06.13
+     * @since 1.22.06.13
+     */
+    public function __construct($attributes=array())
+    {
+        parent::__construct($attributes);
+		$this->stringClass = 'CopsEventDate';
+		$this->CopsEventServices = new CopsEventServices();
+		// On initialise l'event source
+		$this->objCopsEvent = $this->getCopsEvent();
+    }
+    /**
+     * @param array $row
+     * @return CopsEventDate
+     * @version 1.22.06.13
+     * @since 1.22.06.13
+     */
+    public static function convertElement($row)
+    { return parent::convertRootElement(new CopsEventDate(), $row); }
+	
+    /**
+     * @version 1.22.06.13
+     * @since 1.22.11.25
+     */
+    public function getBean()
+    {
+		$objCopsEvent = $this->getCopsEvent();
+		if ($objCopsEvent->isAllDayEvent()) {
+			$objBean = new CopsEventDateAlldayBean($this);
+		} elseif ($objCopsEvent->isSeveralDays()) {
+			$objBean = new CopsEventDateLongBean($this);
+		} else {
+			$objBean = new CopsEventDateDotBean($this);
+		}
+		return $objBean;
+	}
 
-  public function getCopsEvent()
-  { return $this->CopsEventServices->getCopsEvent($this->eventId); }
+    /**
+     * @version 1.22.06.13
+     * @since 1.22.11.25
+     */
+    public function getCopsEvent()
+    { return $this->CopsEventServices->getCopsEvent($this->eventId); }
 
   //////////////////////////////////////////////////
   // METHODES

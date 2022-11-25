@@ -4,7 +4,7 @@
       <tr class="fc-scrollgrid-section fc-scrollgrid-section-header ">
         <th>
           <div class="fc-scroller-harness">
-            <div class="fc-scroller" style="overflow: hidden;">
+            <div class="fc-scroller" style="overflow: hidden scroll;">
               <table class="fc-col-header" aria-describedby="Entête de colonnes du mois">
                 <colgroup></colgroup>
                 <tbody>
@@ -24,11 +24,11 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody style="height: 499px;">
       <tr class="fc-scrollgrid-section fc-scrollgrid-section-body  fc-scrollgrid-section-liquid">
         <td>
           <div class="fc-scroller-harness fc-scroller-harness-liquid">
-            <div class="fc-scroller fc-scroller-liquid-absolute" style="overflow: hidden auto;">
+            <div class="fc-scroller fc-scroller-liquid-absolute" style="overflow: hidden scroll;">
               <div class="fc-daygrid-body fc-daygrid-body-unbalanced" style="height:498px;">
                 <table class="fc-scrollgrid-sync-table" style="height:498px;" aria-describedby="Affichage des événements du mois">
                   <colgroup></colgroup>

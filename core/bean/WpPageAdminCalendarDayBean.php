@@ -17,7 +17,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $this->titreSubOnglet = 'Quotidien';
         /////////////////////////////////////////
         // Définition des services
-        $this->objCopsEventServices = new CopsEventServices();
+		$this->objCopsEventServices = new CopsEventServices();
     
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -34,11 +34,37 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
      */
     public function getOngletContent()
     {
+		$this->objsAlldayEventDate = array();
+		$this->objsTodayEventDate = array();
+		
         /////////////////////////////////////////
         // On récupère le jour courant
         list($m, $d, $y) = explode('-', $this->curStrDate);
         $tsDisplay = mktime(0, 0, 0, $m, $d, $y);
         $strClass = $this->getFcDayClass($tsDisplay);
+		
+        /////////////////////////////////////////
+        // On récupère tous les events
+		$attributes = array(
+			self::SQL_WHERE_FILTERS => array(
+				self::FIELD_ID => '%',
+				self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
+				self::FIELD_DEND => date('Y-m-d', $tsDisplay),
+			),
+			self::SQL_ORDER_BY => array('dStart', 'dEnd'),
+			self::SQL_ORDER => array('ASC', 'DESC'),
+		);
+		$objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+		// On va trier les event "Allday" de ceux qui ne le sont pas.
+		while (!empty($objsCopsEventDate)) {
+			$objCopsEventDate = array_shift($objsCopsEventDate);
+			if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
+				$this->objsAlldayEventDate[] = $objCopsEventDate;
+			} else {
+				$this->objsTodayEventDate[] = $objCopsEventDate;
+			}
+		}
+        /////////////////////////////////////////
         
         // On construit la colonne des horaires
         $strColumnHoraire = '';
@@ -110,8 +136,8 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
             self::ATTR_STYLE => 'margin-top: 0px;',
         );
         $divBottom = $this->getDiv('', $botAttributes);
-        
-        $allDayEvents = $this->getAllDayEvents($tsDisplay);
+		
+		$allDayEvents = $this->getAllDayEvents($tsDisplay);
         
         $divIn  = $this->getDiv($allDayEvents.$divBottom, array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
         $divIn .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
@@ -119,35 +145,25 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $tdContent = $this->getDiv($divIn, array(self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner'));
         $attributes = array(
             'role'        => 'gridcell',
-            self::ATTR_CLASS     => 'fc-daygrid-day fc-day ' . $strClass,
+            self::ATTR_CLASS => 'fc-daygrid-day fc-day ' . $strClass,
             self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
     }
-    
+	
     /**
      * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @version v1.22.11.25
      */
-    public function getAllDayEvents($tsDisplay)
-    {
-        $attributes[self::SQL_WHERE_FILTERS] = array(
-            self::FIELD_ID => '%',
-            self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
-            self::FIELD_DEND => date('Y-m-d', $tsDisplay),
-        );
-        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
-        
-        $strContent = '';
-        while (!empty($objsCopsEventDate)) {
-            $objCopsEventDate = array_shift($objsCopsEventDate);
-            if ($objCopsEventDate->getCopsEvent()->getField(self::FIELD_ALL_DAY_EVENT)==0) {
-                continue;
-            }
-            $strContent .= $objCopsEventDate->getBean()->getAllDayEvent();
-        }
-        return $strContent;
-    }
+	public function getAllDayEvents($tsDisplay)
+	{
+		$strContent = '';
+		while (!empty($this->objsAlldayEventDate)) {
+			$objCopsEventDate = array_shift($this->objsAlldayEventDate);
+			$strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_DAY, $tsDisplay);
+		}
+		return $strContent;
+	}
 
     /**
      * @since v1.22.11.21
@@ -164,7 +180,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $tdAttributes = array(
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay),
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay),
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
@@ -178,8 +194,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         return '';
       /*
 <div class="fc-timegrid-event-harness fc-timegrid-event-harness-inset" style="inset: 0px 0% -1199px; z-index: 1;">
-  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past"
-   style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
+  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past" style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
     <div class="fc-event-main">
       <div class="fc-event-main-frame">
         <div class="fc-event-time">12:00</div>

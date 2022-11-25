@@ -303,6 +303,34 @@ class CopsEvent extends LocalDomain
 	 */
     public function isFirstDay($tsDisplay)
     { return (date('Y-m-d', $tsDisplay)==$this->dateDebut); }
+	
+	/**
+	 * @since v1.22.11.25
+	 * @version v1.22.11.25
+	 */
+	public function isLastDay($tsDisplay)
+	{ return (date('Y-m-d', $tsDisplay)==$this->dateFin); }
+
+	/**
+	 * @since v1.22.11.25
+	 * @version v1.22.11.25
+	 */
+    public function isFirstWeek($tsDisplay)
+    {
+		list($y, $m, $d) = explode('-', $this->dateDebut);
+		return (date('W', $tsDisplay)==date('W', mktime(0, 0, 0, $m, $d, $y)));
+	}
+
+	/**
+	 * @since v1.22.11.25
+	 * @version v1.22.11.25
+	 */
+    public function isLastWeek($tsDisplay)
+    {
+		list($y, $m, $d) = explode('-', $this->dateFin);
+		return (date('W', $tsDisplay)==date('W', mktime(0, 0, 0, $m, $d, $y)));
+	}
+	
 
 	/**
 	 * @since v1.22.11.24
@@ -334,15 +362,12 @@ class CopsEvent extends LocalDomain
 
 
 
-
 	
 	
 
 
 
 
-  public function isLastDay($tsDisplay)
-  { return (date('Y-m-d', $tsDisplay)==$this->dateFin); }
 
   public function isSeveralWeeks()
   {

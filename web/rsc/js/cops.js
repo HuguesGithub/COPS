@@ -179,11 +179,11 @@ $(document).ready(function() {
 });
 
 function stretchColspanEvents() {
-  let tdWidth = $('.fc-scrollgrid-sync-table td:first').width();
-  $('.fc-daygrid-event-harness[data-colspan!="0"]').each(function(){
-    let nbDays = $(this).data('colspan');
-    $(this).css('right', -1*nbDays*(tdWidth+2));
-  });
+	$('.fc-daygrid-event-harness[data-colspan!="0"]').each(function(){
+		let tdWidth = $(this).width();
+		let nbDays = $(this).data('colspan');
+		$(this).css('right', -1*nbDays*(tdWidth+2));
+    });
 }
 
 function openConfirmModal(title, message, hrefConfirm) {
@@ -432,8 +432,8 @@ function estDateValide(target) {
     if (datas.length!=3) {
       blnOk = false;
     } else {
-      let d = new Date(datas[2], datas[1], datas[0]);
-      blnOk = (d.getDate()==datas[0]*1 && d.getMonth()==datas[1]*1);
+//      let d = new Date(datas[2], datas[1], datas[0]);
+//      blnOk = (d.getDate()==datas[0]*1 && d.getMonth()==datas[1]*1);
     }
   }
   return blnOk;
