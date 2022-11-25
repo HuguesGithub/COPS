@@ -55,14 +55,6 @@ class CopsEnqueteTemoignage extends LocalDomain
     public static function convertElement($row)
     { return parent::convertRootElement(new CopsEnqueteTemoignage(), $row); }
     
-    /**
-     * @return CopsEnqueteTemoignageBean
-     * @version 1.22.09.23
-     * @since 1.22.09.23
-     */
-    public function getBean()
-    { return new CopsEnqueteTemoignageBean($this); }
-    
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////

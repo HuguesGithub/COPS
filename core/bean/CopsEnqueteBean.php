@@ -16,7 +16,6 @@ class CopsEnqueteBean extends CopsBean
         $this->obj          = ($objStd==null ? new CopsEnquete() : $objStd);
         $this->urlOnglet   .= self::ONGLET_ENQUETE;
         $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
-		$this->objCopsAutopsieServices = new CopsAutopsieServices();
 		$this->strNoRapportDisponible = 'Aucune rapport disponible';
     }
 

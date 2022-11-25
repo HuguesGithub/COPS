@@ -16,8 +16,8 @@ class CopsEventDateAlldayBean extends CopsEventDateBean
     }
 
     /**
-	 * @param $tag vaut day, week ou month, selon le type de vue.
-	 * @param $tsDisplay la date du jour affiché.
+	 * @param string $tag vaut day, week ou month, selon le type de vue.
+	 * @param int $tsDisplay la date du jour affiché.
      * @since 1.22.11.25
      * @version 1.22.11.25
      */

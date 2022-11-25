@@ -48,13 +48,6 @@ class CopsEventCategorie extends LocalDomain
    */
   public static function convertElement($row)
   { return parent::convertRootElement(new CopsEventCategorie(), $row); }
-  /**
-   * @return CopsEventCategorieBean
-   * @version 1.22.06.25
-   * @since 1.22.06.25
-   */
-  public function getBean()
-  { return new CopsEventCategorieBean($this); }
 
   //////////////////////////////////////////////////
   // METHODES

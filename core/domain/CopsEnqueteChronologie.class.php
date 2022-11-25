@@ -49,14 +49,6 @@ class CopsEnqueteChronologie extends LocalDomain
     public static function convertElement($row)
     { return parent::convertRootElement(new CopsEnqueteChronologie(), $row); }
     
-    /**
-     * @return CopsEnqueteChronologieBean
-     * @version 1.22.09.23
-     * @since 1.22.09.23
-     */
-    public function getBean()
-    { return new CopsEnqueteChronologieBean($this); }
-    
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////
