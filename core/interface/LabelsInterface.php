@@ -1,8 +1,8 @@
 <?php
 /**
  * @author Hugues
- * @since 1.22.10.28
- * @version 1.22.10.28
+ * @since 1.22.11.24
+ * @version 1.22.11.24
  */
 interface LabelsInterface
 {
@@ -22,6 +22,7 @@ interface LabelsInterface
     const LABEL_MESSAGERIE     = 'Messagerie';
     const LABEL_NATURE         = 'Nature';
     const LABEL_NOM            = 'Nom';
+    const LABEL_PARENTS        = 'Parents';
     const LABEL_REFRESH_LIST   = 'Rafraîchir la liste';
     const LABEL_INBOX          = 'Réception';
     const LABEL_WRITE_MAIL     = 'Rédiger un message';
