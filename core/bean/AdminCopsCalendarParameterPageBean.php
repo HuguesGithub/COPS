@@ -44,7 +44,8 @@ class AdminCopsCalendarParameterPageBean extends AdminCopsCalendarPageBean
     // Construction Options Minutes
     $strOptionsMinute = '';
     for ($j=0; $j<60; $j+=5) {
-      $strOptionsMinute .= '<option value="'.$j.'"'.($j==$i*1 ? ' selected="selected"' : '').'>'.str_pad($j, 2, '0', STR_PAD_LEFT).'</option>';
+      $strOptionsMinute .= '<option value="'.$j.'"'.($j==$i*1 ? ' selected="selected"' : '').'>';
+      $strOptionsMinute .= str_pad($j, 2, '0', STR_PAD_LEFT).'</option>';
     }
 
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-parameters.php';

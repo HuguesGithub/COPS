@@ -41,8 +41,11 @@ class AdminPageCalendrierBean extends AdminPageBean
   public function getContentPage()
   {
       if (isset($_POST['changeDate'])) {
-          $str_copsDate  = str_pad($_POST['sel-h'], 2, '0', STR_PAD_LEFT).':'.str_pad($_POST['sel-i'], 2, '0', STR_PAD_LEFT).':'.str_pad($_POST['sel-s'], 2, '0', STR_PAD_LEFT);
-          $str_copsDate .= ' '.str_pad($_POST['sel-d'], 2, '0', STR_PAD_LEFT).'/'.str_pad($_POST['sel-m'], 2, '0', STR_PAD_LEFT).'/'.$_POST['sel-y'];
+          $str_copsDate  = str_pad($_POST['sel-h'], 2, '0', STR_PAD_LEFT).':';
+          $str_copsDate .= str_pad($_POST['sel-i'], 2, '0', STR_PAD_LEFT).':';
+          $str_copsDate .= str_pad($_POST['sel-s'], 2, '0', STR_PAD_LEFT);
+          $str_copsDate .= ' '.str_pad($_POST['sel-d'], 2, '0', STR_PAD_LEFT).'/';
+          $str_copsDate .= str_pad($_POST['sel-m'], 2, '0', STR_PAD_LEFT).'/'.$_POST['sel-y'];
             update_option('cops_date', $str_copsDate);
       } elseif (isset($_GET['action']) && $_GET['action']=='add') {
         $tsNow = self::getCopsDate('tsnow');

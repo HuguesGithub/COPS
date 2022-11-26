@@ -64,12 +64,14 @@ class AdminPageIndexBean extends AdminPageBean
 
   public function getLisReference()
   {
-    $str_requete = "SELECT nomIdxReference, abrIdxReference FROM wp_7_cops_index_reference ORDER BY idIdxReference ASC;";
+    $str_requete = "SELECT nomIdxReference, abrIdxReference FROM ";
+    $str_requete .= "wp_7_cops_index_reference ORDER BY idIdxReference ASC;";
     $rows = MySQL::wpdbSelect($str_requete);
 
     $str_lis  = '';
     foreach ($rows as $row) {
-      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->abrIdxReference.'">'.$row->nomIdxReference.'</a></li>';
+      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->abrIdxReference.'">';
+      $str_lis .= $row->nomIdxReference.'</a></li>';
     }
     return $str_lis;
   }
@@ -121,12 +123,14 @@ class AdminPageIndexBean extends AdminPageBean
 
   public function getLisReferenceCheckboxes()
   {
-    $str_requete = "SELECT nomIdxReference, abrIdxReference FROM wp_7_cops_index_reference ORDER BY idIdxReference ASC;";
+    $str_requete  = "SELECT nomIdxReference, abrIdxReference ";
+    $str_requete .= "FROM wp_7_cops_index_reference ORDER BY idIdxReference ASC;";
     $rows = MySQL::wpdbSelect($str_requete);
 
     $str_lis  = '';
     foreach ($rows as $row) {
-      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->abrIdxReference.'"><label class="checkbox" title=""><input type="checkbox"> '.$row->nomIdxReference.'</label></a></li>';
+      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->abrIdxReference.'">';
+      $str_lis .= '<label class="checkbox" title=""><input type="checkbox"> '.$row->nomIdxReference.'</label></a></li>';
     }
     return $str_lis;
   }
@@ -138,7 +142,8 @@ class AdminPageIndexBean extends AdminPageBean
 
     $str_lis  = '';
     foreach ($rows as $row) {
-      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->idIdxNature.'"><label class="checkbox" title=""><input type="checkbox"> '.$row->nomIdxNature.'</label></a></li>';
+      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->idIdxNature.'">';
+      $str_lis .= '<label class="checkbox" title=""><input type="checkbox"> '.$row->nomIdxNature.'</label></a></li>';
     }
     return $str_lis;
   }

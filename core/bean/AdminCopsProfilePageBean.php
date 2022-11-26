@@ -35,7 +35,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
    */
   public function getBoard()
   {
-    $this->subOnglet = (isset($this->urlParams[self::CST_SUBONGLET]) ? $this->urlParams[self::CST_SUBONGLET] : self::CST_PFL_IDENTITY);
+    $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_PFL_IDENTITY);
     $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
 
     $this->buildBreadCrumbs('Profil', self::ONGLET_PROFILE, true);

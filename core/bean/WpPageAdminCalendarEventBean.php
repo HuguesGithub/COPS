@@ -49,8 +49,10 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
           $CopsEvent->setField('allDayEvent', 1);
         } else {
           $CopsEvent->setField('allDayEvent', 0);
-          $CopsEvent->setField('heureDebut', str_pad($_POST['heureDebut'], 2, '0', STR_PAD_LEFT).':'.str_pad($_POST['minuteDebut'], 2, '0', STR_PAD_LEFT));
-          $CopsEvent->setField('heureFin', str_pad($_POST['heureFin'], 2, '0', STR_PAD_LEFT).':'.str_pad($_POST['minuteFin'], 2, '0', STR_PAD_LEFT));
+          $CopsEvent->setField('heureDebut', str_pad($_POST['heureDebut'], 2, '0', STR_PAD_LEFT).':'
+          .str_pad($_POST['minuteDebut'], 2, '0', STR_PAD_LEFT));
+          $CopsEvent->setField('heureFin', str_pad($_POST['heureFin'], 2, '0', STR_PAD_LEFT).':'
+          .str_pad($_POST['minuteFin'], 2, '0', STR_PAD_LEFT));
         }
 
         if ($CopsEvent->isValidInterval()) {
@@ -325,7 +327,8 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         }
         if (isset($this->urlParams['repeatEnd']) && $this->urlParams['repeatEnd']=='endRepeat' &&
         isset($this->urlParams['endRepetitionValue']) && $this->urlParams['endRepetitionValue']!='') {
-            $this->objCopsEvent->setField(self::FIELD_REPEAT_END_VALUE, stripslashes($this->urlParams['endRepetitionValue']));
+            $valeur = stripslashes($this->urlParams['endRepetitionValue']);
+            $this->objCopsEvent->setField(self::FIELD_REPEAT_END_VALUE, $valeur);
         }
         ///////////////////////////////////////////////////////
         

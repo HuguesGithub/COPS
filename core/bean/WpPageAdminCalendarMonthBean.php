@@ -127,7 +127,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $strLink = $this->getLink(date('d', $tsDisplay), $url, 'fc-daygrid-day-number text-white');
         
         $strContent  = $this->getDiv($strWeekLink.$strLink, array(self::ATTR_CLASS=>'fc-daygrid-day-top'));
-        $strContent .= $this->getDiv($this->getAllDayEvents($tsDisplay), array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
+        $attr = array(self::ATTR_CLASS=>'fc-daygrid-day-events');
+        $strContent .= $this->getDiv($this->getAllDayEvents($tsDisplay), $attr);
         $strContent .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
         
         $divAttributes = array(self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner');
@@ -165,7 +166,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             $objCopsEventDate = array_shift($objsCopsEventDate);
             if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
                 if ($objCopsEventDate->getCopsEvent()->isFirstDay($tsDisplay)) {
-                    $strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $tsDisplay, $nbEvents);
+                    $tag = self::CST_CAL_MONTH;
+                    $strContent .= $objCopsEventDate->getBean()->getCartouche($tag, $tsDisplay, $nbEvents);
                 }
                 $nbEvents++;
             }

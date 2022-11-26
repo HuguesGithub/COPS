@@ -29,7 +29,8 @@ class CopsMailFolderBean extends UtilitiesBean
     $slug = $this->CopsMailFolder->getField(self::FIELD_SLUG);
     $nbMailsNonLus = $this->CopsMailFolder->getNombreMailsNonLus(array(self::FIELD_SLUG=>$slug));
     if ($nbMailsNonLus!=0) {
-      $strBadge = $this->getBalise(self::TAG_SPAN, $nbMailsNonLus, array(self::ATTR_CLASS=>'badge bg-primary float-right'));
+        $badgeAttr = array(self::ATTR_CLASS=>'badge bg-primary float-right');
+      $strBadge = $this->getBalise(self::TAG_SPAN, $nbMailsNonLus, $badgeAttr);
     } else {
       $strBadge = '';
     }

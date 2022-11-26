@@ -242,7 +242,8 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         return '';
       /*
 <div class="fc-timegrid-event-harness fc-timegrid-event-harness-inset" style="inset: 0px 0% -1199px; z-index: 1;">
-  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past" style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
+  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past"
+   style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
     <div class="fc-event-main">
       <div class="fc-event-main-frame">
         <div class="fc-event-time">12:00</div>
@@ -266,7 +267,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         return '';
       /*
                             <div class="fc-daygrid-event-harness" style="margin-top: 0px;">
-                              <a class="fc-daygrid-event fc-daygrid-block-event fc-h-event fc-event fc-event-draggable fc-event-resizable fc-event-start fc-event-end fc-event-past" style="border-color: rgb(245, 105, 84); background-color: rgb(245, 105, 84);">
+                              <a class="fc-daygrid-event fc-daygrid-block-event fc-h-event fc-event fc-event-draggable
+                               fc-event-resizable fc-event-start fc-event-end fc-event-past"
+                                style="border-color: rgb(245, 105, 84); background-color: rgb(245, 105, 84);">
                                 <div class="fc-event-main">
                                   <div class="fc-event-main-frame">
                                     <div class="fc-event-title-container">

@@ -205,7 +205,8 @@ class CopsEvent extends LocalDomain
                         $objCopsEventDate->saveEventDate();
                         $this->incrementerDates($dateDebut, $dateFin);
                     } while ($dateDebut<$endDateValue);
-                    // Ensuite, lorsqu'on affiche un écran, il faut vérifier qu'aucun event "never" ne devrait s'y afficher.
+                    // Ensuite, lorsqu'on affiche un écran,
+                    // il faut vérifier qu'aucun event "never" ne devrait s'y afficher.
                     // Si c'est le cas, on créé l'event_date et tous ceux manquants depuis le dernier.
                     // TODO
                 break;
