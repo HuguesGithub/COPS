@@ -112,4 +112,20 @@ class CopsEventServices extends LocalServices
   public function getCategorie($id)
   { return $this->Dao->getCopsEventCategorie($id); }
 
+  /**
+   * @return CopsEventCategorie[]
+   * @since v1.22.11.26
+   * @version v1.22.11.26
+   */
+  public function getCopsEventCategories($attributes=array())
+  {
+      if (!isset($attributes[self::SQL_ORDER_BY])) {
+          $attributes[self::SQL_ORDER_BY] = self::FIELD_CATEG_LIBELLE;
+      }
+      if (!isset($attributes[self::SQL_ORDER])) {
+          $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
+      }
+      return $this->Dao->getCopsEventCategories($attributes);
+  }
+  
 }

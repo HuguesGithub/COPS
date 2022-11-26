@@ -47,18 +47,7 @@ class CopsEventDateBean extends UtilitiesBean
         if ($this->objCopsEvent->isLastWeek($tsDisplay)) {
             $strClass .= 'fc-event-end ';
         }
-        
-        // On construit la classe de la cellule comme fin d'event
-        /*
-        if ($this->objCopsEvent->isLastDay($tsDisplay)) {
-            $strClass .= 'fc-event-end ';
-        } elseif (!$this->objCopsEvent->isSeveralWeeks()) {
-            $strClass .= 'fc-event-end ';
-        } elseif (!$this->objCopsEvent->isOverThisWeek($tsDisplay)) {
-            $strClass .= 'fc-event-end ';
-        }
-        */
-        ///////////////////////////////////////////////////
+
         return $strClass;
     }
 
@@ -71,11 +60,8 @@ class CopsEventDateBean extends UtilitiesBean
   {
     if ($this->CopsEvent->isAllDayEvent()) {
       if ($this->CopsEvent->isSeveralDays()) {
-        if ($this->CopsEvent->isFirstDay($tsDisplay)) {
+        if ($this->CopsEvent->isFirstDay($tsDisplay) || date('N', $tsDisplay)==1) {
           return $this->getEventCartoucheDisplay($tsDisplay);
-        } elseif (date('N', $tsDisplay)==1) {
-          return $this->getEventCartoucheDisplay($tsDisplay);
-
         }
       } else {
         return $this->getEventCartoucheDisplay($tsDisplay);

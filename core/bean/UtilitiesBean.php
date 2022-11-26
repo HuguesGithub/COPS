@@ -162,6 +162,23 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     
     /**
      * @param string $label
+     * @param string $value
+     * @param boolean $blnChecked
+     * @return string
+     * @since v1.22.11.26
+     * @version v1.22.11.26
+     */
+    public function getOption($label, $value, $blnChecked=false)
+    {
+        $attributes = array(self::ATTR_VALUE => $value);
+        if ($blnChecked) {
+            $attributes[self::CST_CHECKED] = self::CST_CHECKED;
+        }
+        return $this->getBalise(self::TAG_OPTION, $label, $attributes);
+    }
+    
+    /**
+     * @param string $label
      * @param array $attributes
      * @return string
      * @since 1.22.10.28
@@ -232,6 +249,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
       }
         switch ($tag) {
             case self::I_ANGLE_LEFT :
+            case self::I_ANGLES_LEFT :
             case self::I_BACKWARD :
             case self::I_CIRCLE :
             case self::I_DATABASE :
@@ -242,7 +260,6 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
             case self::I_FILE_CIRCLE_CHECK :
             case self::I_FILE_CIRCLE_PLUS :
             case self::I_FILE_CIRCLE_XMARK :
-            case 'angles-left' :
             case 'arrows-rotate' :
             case 'book' :
             case 'box-archive' :

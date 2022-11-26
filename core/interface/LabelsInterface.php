@@ -6,6 +6,7 @@
  */
 interface LabelsInterface
 {
+    const LABEL_YEARLY         = 'Annuel';
     const LABEL_NO_RESULT      = 'Aucun résultat';
     const LABEL_DATABASES      = 'Bases de données';
     const LABEL_LIBRARY        = 'Bibliothèque';
@@ -17,12 +18,16 @@ interface LabelsInterface
     const LABEL_DESCRIPTION    = 'Description';
     const LABEL_DESCRIPTION_MJ = 'Description MJ';
     const LABEL_DESCRIPTION_PJ = 'Description PJ';
+    const LABEL_EVENTS         = 'Événements';
     const LABEL_EXPORT_LIST    = 'Exporter la liste';
+    const LABEL_WEEKLY         = 'Hebdomadaire';
     const LABEL_INDEX          = 'Index';
+    const LABEL_MONTHLY        = 'Mensuel';
     const LABEL_MESSAGERIE     = 'Messagerie';
     const LABEL_NATURE         = 'Nature';
     const LABEL_NOM            = 'Nom';
     const LABEL_PARENTS        = 'Parents';
+    const LABEL_DAILY          = 'Quotidien';
     const LABEL_REFRESH_LIST   = 'Rafraîchir la liste';
     const LABEL_INBOX          = 'Réception';
     const LABEL_WRITE_MAIL     = 'Rédiger un message';

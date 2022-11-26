@@ -16,10 +16,12 @@ interface ConstantsInterface
   const ATTR_ALT               = 'alt';
   const ATTR_CLASS             = 'class';
   const ATTR_HREF              = 'href';
+  const ATTR_NAME              = 'name';
   const ATTR_ROLE              = 'role';
   const ATTR_SRC               = 'src';
   const ATTR_STYLE             = 'style';
   const ATTR_TITLE             = 'title';
+  const ATTR_TYPE              = 'type';
   const ATTR_VALUE             = 'value';
 
   const ATTR_DATA              = 'data';
@@ -189,8 +191,14 @@ interface ConstantsInterface
   const FIELD_MINUTE_DEBUT         = 'minuteDebut';
   const FIELD_MINUTE_FIN           = 'minuteFin';
   const FIELD_ENDDATE_VALUE         = 'endDateValue';
-
-
+    const CST_EVENT_RT_NEVER        = 'never';
+    const CST_EVENT_RT_ENDDATE      = 'endDate';
+    const CST_EVENT_RT_ENDREPEAT    = 'endRepeat';
+    const CST_EVENT_RT_DAILY        = 'daily';
+    const CST_EVENT_RT_WEEKLY       = 'weekly';
+    const CST_EVENT_RT_MONTHLY      = 'monthly';
+    const CST_EVENT_RT_YEARLY       = 'yearly';
+    
   // TABLE cops_event_date
   const FIELD_EVENT_ID           = 'eventId';
   const FIELD_DSTART             = 'dStart';
@@ -229,10 +237,14 @@ interface ConstantsInterface
   
   /////////////////////////////////////////////////
   // Icons
-  const I_CIRCLE                = 'circle';
-  const I_EDIT                  = 'edit';
+  const I_ANGLE_LEFT            = 'angle-left';
+  const I_ANGLE_RIGHT           = 'angle-right';
+  const I_ANGLES_LEFT           = 'angles-left';
+  const I_ARROWS_ROTATE         = 'arrows-rotate';
   const I_BACKWARD              = 'backward';
+  const I_CIRCLE                = 'circle';
   const I_DATABASE              = 'database';
+  const I_EDIT                  = 'edit';
   const I_FILE_CATEGORY         = 'folder-tree';
   const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
   const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
@@ -240,8 +252,6 @@ interface ConstantsInterface
   const I_FILE_OPENED           = 'folder-open';
   const I_FILE_CLOSED           = 'folder-closed';
   const I_FILE_COLDED           = 'folder';
-  const I_ANGLE_LEFT            = 'angle-left';
-  const I_ANGLE_RIGHT           = 'angle-right';
   
   /////////////////////////////////////////////////
   // Page d'administration
@@ -282,6 +292,8 @@ interface ConstantsInterface
   const TAG_DIV                = 'div';
   const TAG_I                  = 'i';
   const TAG_IMG                = 'img';
+  const TAG_INPUT              = 'input';
+  const TAG_LABEL              = 'label';
   const TAG_LI                 = 'li';
   const TAG_OPTION             = 'option';
   const TAG_P                  = 'p';

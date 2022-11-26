@@ -121,7 +121,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
   public function getCopsEventCategorie($id)
   {
-    $request  = "SELECT * FROM ".$this->dbTable_cec." ";
+    $request  = "SELECT id, categorieLibelle, categorieCouleur FROM ".$this->dbTable_cec." ";
     $request .= "WHERE id = '%s';";
 
     $prepRequest = vsprintf($request, array($id));
@@ -136,4 +136,32 @@ class CopsEventDaoImpl extends LocalDaoImpl
     //////////////////////////////
   }
 
+    /**
+     * @param array $attributes
+     * @return CopsEventCategorie[]
+     */
+    public function getCopsEventCategories($attributes)
+  {
+      $request  = "SELECT id, categorieLibelle, categorieCouleur FROM ".$this->dbTable_cec." ";
+      $request .= "WHERE 1=1 ";
+      $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
+      
+      $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
+      //////////////////////////////
+      // Exécution de la requête
+      $rows = MySQL::wpdbSelect($prepRequest);
+      //////////////////////////////
+      
+      //////////////////////////////
+      // Construction du résultat
+      $Items = array();
+      if (!empty($rows)) {
+          foreach ($rows as $row) {
+              $Items[] = CopsEventCategorie::convertElement($row);
+          }
+      }
+      return $Items;
+      //////////////////////////////
+  }
+  
 }

@@ -44,14 +44,8 @@ class CopsEventDateAlldayBean extends CopsEventDateBean
         
         if ($tag==self::CST_CAL_DAY) {
             $this->getDayClass($fcDayClass, $tsDisplay);
-        } elseif ($tag==self::CST_CAL_WEEK) {
-            $this->getWeekClass($fcDayClass, $tsDisplay);
-            $divClass = 'fc-daygrid-event-harness-abs';
-            $divStyle .= 'top: '.(25*$nbEvents).'px; ';
-            if ($this->objCopsEvent->getNbDays()>1) {
-                $divAttributes = ' data-colspan="'.($this->objCopsEvent->getNbDays()-1).'"';
-            }
-        } elseif ($tag==self::CST_CAL_MONTH) {
+        } elseif ($tag==self::CST_CAL_WEEK || $tag==self::CST_CAL_MONTH) {
+            // Pour le moment, les deux sont identiques.
             $this->getWeekClass($fcDayClass, $tsDisplay);
             $divClass = 'fc-daygrid-event-harness-abs';
             $divStyle .= 'top: '.(25*$nbEvents).'px; ';

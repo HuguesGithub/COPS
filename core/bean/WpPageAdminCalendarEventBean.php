@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe WpPageAdminCalendarEventBean
  * @author Hugues
  * @since 1.22.11.22
- * @version 1.22.11.22
+ * @version 1.22.11.26
  */
 class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
 {
@@ -14,7 +14,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
     {
         parent::__construct();
         $this->slugSubOnglet = self::CST_CAL_EVENT;
-        $this->titreSubOnglet = 'Événements';
+        $this->titreSubOnglet = self::LABEL_EVENTS;
         /////////////////////////////////////////
         // Définition des services
         $this->objCopsEventServices = new CopsEventServices();
@@ -22,6 +22,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////
         // On initialise l'éventuelle pagination & on ajoute à l'url de Refresh
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
+        $this->action = $this->initVar(self::CST_ACTION);
         
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -34,6 +35,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         if (isset($_POST) && isset($this->urlParams[self::CST_WRITE_ACTION])) {
             $this->dealWithWriteAction();
         }
+        $this->objCopsEvent = new CopsEvent();
         /*
 
     if (isset($_POST) && !empty($_POST)) {
@@ -88,57 +90,188 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
 
     /**
      * @since 1.22.11.25
-     * @version 1.22.11.25
+     * @version 1.22.11.26
      */
     public function getOngletContent()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-form-event.php';
+        /////////////////////////////////////////
+        $strButtonCreation = '';
+        $classe = 'btn btn-primary mb-3 btn-block';
+        if ($this->action==self::CST_WRITE) {
+            /////////////////////////////////////////
+            // Le bouton d'annulation.
+            $href = $this->getRefreshUrl(array(self::CST_ACTION=>''));
+            $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
+            /////////////////////////////////////////
+            $mainContent = $this->getEditContent();
+        } else {
+            // Le bouton de création.
+            $href = $this->getRefreshUrl(array(self::CST_ACTION=>self::CST_WRITE));
+            $label = self::LABEL_CREER_ENTREE;
+            /////////////////////////////////////////
+            $mainContent = $this->getListContent();
+        }
+        $strButtonCreation .= $this->getLink($label, $href, $classe);
+        /////////////////////////////////////////
+        
+        $urlTemplate = self::PF_SECTION_ONGLET;
+        $attributes = array(
+            // L'id de la page
+            'section-cal-event',
+            // Le bouton éventuel de création / retour...
+            $strButtonCreation,
+            // Le nom du bloc du menu de gauche
+            $this->titreOnglet,
+            // La liste des éléments du menu de gauche
+            $this->getMenuContent(),
+            // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
+            $mainContent,
+        );
+        return $this->getRender($urlTemplate, $attributes);
+    }
+    
+    /**
+     * @since v1.22.11.26
+     * @version v1.22.11.26
+     * @return string
+     */
+    public function getEditContent()
+    {
+        ///////////////////////////////////////////////////////
+        // Les options pour la Catégorie
+        $strOptsCategorie = '';
+        $objsCopsEventCategorie = array();
+        while (!empty($objsCopsEventCategorie)) {
+            $objCopsEventCategorie = array_shift($objsCopsEventCategorie);
+            $label = $objCopsEventCategorie->getField(self::FIELD_CATEG_LIBELLE);
+            $value = $objCopsEventCategorie->getField(self::FIELD_ID);
+            $blnChecked = ($this->objCopsEvent->getField(self::FIELD_CATEG_ID==$value));
+            $strOptsCategorie .= $this->getOption($label, $value, $blnChecked);
+        }
+        
+        ///////////////////////////////////////////////////////
+        // Les options pour les heures vont de 00 à 23 par pas de 1
+        $strOptsHeuresDebut = '';
+        $strOptsHeuresFin = '';
+        for ($i=0; $i<=23; $i++) {
+            $label = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $hDebut = $this->objCopsEvent->getField(self::FIELD_HEURE_DEBUT);
+            $strOptsHeuresDebut .= $this->getOption($label, $i, $i==$hDebut);
+            $hFin = $this->objCopsEvent->getField(self::FIELD_HEURE_FIN);
+            $strOptsHeuresFin .= $this->getOption($label, $i, $i==$hFin);
+        }
+        
+        ///////////////////////////////////////////////////////
+        // Les options pour les minutes vont de 00 à 55 par pas de 5
+        $strOptsMinutesDebut = '';
+        $strOptsMinutesFin = '';
+        for ($i=0; $i<=55; $i+=5) {
+            $label = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $mDebut = $this->objCopsEvent->getField(self::FIELD_MINUTE_DEBUT);
+            $strOptsHeuresDebut .= $this->getOption($label, $i, $i==$mDebut);
+            $mFin = $this->objCopsEvent->getField(self::FIELD_MINUTE_FIN);
+            $strOptsHeuresFin .= $this->getOption($label, $i, $i==$mFin);
+        }
+
+        ///////////////////////////////////////////////////////
+        // Les options pour la Périodicité
+        $strOptsPeriodicite = '';
+        $arrPeriodicite = array(
+            self::CST_EVENT_RT_DAILY => self::LABEL_DAILY,
+            self::CST_EVENT_RT_WEEKLY => self::LABEL_WEEKLY,
+            self::CST_EVENT_RT_MONTHLY => self::LABEL_MONTHLY,
+            self::CST_EVENT_RT_YEARLY => self::LABEL_YEARLY,
+        );
+        $inputAttributes = array(
+            self::ATTR_CLASS => 'custom-control-input',
+            self::ATTR_TYPE => 'radio',
+            self::ATTR_NAME => 'repeatType',
+        );
+        $labelAttributes = array(self::ATTR_CLASS => 'custom-control-label');
+        foreach ($arrPeriodicite as $key=>$value) {
+            $inputAttributes[self::FIELD_ID] = 'repeat_'.$key;
+            $inputAttributes[self::ATTR_VALUE] = $key;
+            if ($key==$this->objCopsEvent->getField(self::FIELD_REPEAT_TYPE)) {
+                $inputAttributes[self::CST_CHECKED] = self::CST_CHECKED;
+            }
+            $strInput = $this->getBalise(self::TAG_INPUT, '', $inputAttributes);
+            
+            $labelAttributes['for'] = 'repeat_'.$key;
+            $strLabel = $this->getBalise(self::TAG_LABEL, $value, $labelAttributes);
+            
+            $divAttributes = array(
+                self::ATTR_CLASS => 'custom-control custom-radio',
+            );
+            $strOptsPeriodicite .= $this->getDiv($strInput.$strLabel, $divAttributes);
+        }
+        
+        ///////////////////////////////////////////////////////
+        // Initialisation des booléens
+        $blnIsAlldayEvent = $this->objCopsEvent->isAllDayEvent();
+        $blnIsRecurEvent = $this->objCopsEvent->isRepetitive();
+        // Initialisation du type de fin de répétition
+        $strRepeatType = $this->objCopsEvent->getField(self::FIELD_REPEAT_TYPE);
+        
+        $urlTemplate = self::PF_FORM_EVENT;
         ///////////////////////////////////////////////////////
         // Contenu du formulaire
         $attributes = array(
-            // Id du Form
+            // Id du Form - creerNewEvent pour une création, editerEvent pour une édition
             'creerNewEvent',
-            // Affichage du form
-            'display: none;',
+            // Id de l'événement - vide pour une création, renseigné pour une édition
+            $this->objCopsEvent->getField(self::FIELD_ID),
+            // Titre de l'événement
+            $this->objCopsEvent->getField(self::FIELD_EVENT_LIBELLE),
+            // Liste d'options pour la Catégorie
+            $strOptsCategorie,
+            // Checkbox Allday Event
+            ($blnIsAlldayEvent ? self::CST_CHECKED : ''),
+            // Date de début
+            $this->objCopsEvent->getField(self::FIELD_DATE_DEBUT),
+            // Affichage horaires début et fin selon checkbox Allday Event
+            ($blnIsAlldayEvent ? ' style="display:none;"' : ''),
+            // Liste des options d'heure début
+            $strOptsHeuresDebut,
+            // Liste des options de minutes début
+            $strOptsMinutesDebut,
+            // Date de fin
+            $this->objCopsEvent->getField(self::FIELD_DATE_FIN),
+            // Liste des options d'heure fin
+            $strOptsHeuresFin,
+            // Liste des options de minutes fin
+            $strOptsMinutesFin,
+            // Checkbox Récurrent Event
+            ($blnIsRecurEvent ? self::CST_CHECKED : ''),
+            // Affichage interface selon checkbox Récurrent Event
+            ($blnIsRecurEvent ? ' style="display:none;"' : ''),
+            // Liste des options de périodicité
+            $strOptsPeriodicite,
+            // Intervalle de répétition
+            $this->objCopsEvent->getField(self::FIELD_REPEAT_INTERVAL),
+            // Radio Never end
+            ($strRepeatType==self::CST_EVENT_RT_NEVER ? self::CST_CHECKED : ''),
+            // Radio EndDate
+            ($strRepeatType==self::CST_EVENT_RT_ENDDATE ? self::CST_CHECKED : ''),
+            // Valeur EndDate si renseignée
+            $this->objCopsEvent->getField(self::FIELD_ENDDATE_VALUE),
+            // Radio EndRepeat
+            ($strRepeatType==self::CST_EVENT_RT_ENDREPEAT ? self::CST_CHECKED : ''),
+            // Valeur EndRepeat si renseignée
+            $this->objCopsEvent->getField(self::FIELD_REPEAT_END),
         );
-        $strForm = $this->getRender($urlTemplate, $attributes);
+        return $this->getRender($urlTemplate, $attributes);
         ///////////////////////////////////////////////////////
-        
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-events.php';
-        ///////////////////////////////////////////////////////
-        // Contenu de la page
-        $strContent = '';
-        $objsCopsEvent = $this->objCopsEventServices->getCopsEvents();
-        while (!empty($objsCopsEvent)) {
-            $objCopsEvent = array_shift($objsCopsEvent);
-            $strContent .= $objCopsEvent->getBean()->getTableRow();
-        }
-        ///////////////////////////////////////////////////////
+    }
     
-        $attributes = array(
-          // Les lignes à afficher
-          $strContent,
-          // Formulaire
-          $strForm,
-        );
-        $mainContent = $this->getRender($urlTemplate, $attributes);
-        
-        /////////////////////////////////////////
-        // Le bouton de création ou d'annulation.
-        $strButtonCreation = '';
-        $classe = 'btn btn-primary mb-3 btn-block';
-        /*
-        if ($this->panel!=self::CST_LIST) {
-            $label = $this->getIcon('angles-left').self::CST_NBSP.self::LABEL_RETOUR;
-            $strButtonCreation .= $this->getLink($label, $this->getRefreshUrl(), $classe);
-        }
-        */
-        $href = $this->getRefreshUrl(array(self::CST_ACTION=>self::CST_WRITE));
-        $strButtonCreation .= $this->getLink(self::LABEL_CREER_ENTREE, $href, $classe);
-        /////////////////////////////////////////
-        
-        $urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
-        $titre = 'Événements';
+    /**
+     * @since v1.22.11.26
+     * @version v1.22.11.26
+     * @return string
+     */
+    public function getListContent()
+    {
+        $urlTemplateList = self::PF_SECTION_ONGLET_LIST;
+        $titre = self::LABEL_EVENTS;
         
         // On va construire le Header du tableau
         $thAttributes = array(
@@ -174,7 +307,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////////
         // Toolbar & Pagination
         // Bouton pour recharger la liste
-        $label = $this->getLink($this->getIcon('arrows-rotate'), $this->getRefreshUrl(), self::CST_TEXT_WHITE);
+        $label = $this->getLink($this->getIcon(self::I_ARROWS_ROTATE), $this->getRefreshUrl(), self::CST_TEXT_WHITE);
         $btnAttributes = array(self::ATTR_TITLE => self::LABEL_REFRESH_LIST);
         $strToolBar = $this->getButton($label, $btnAttributes);
         // Ajout de la pagination
@@ -187,23 +320,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             $header,
             $listContent,
         );
-        $mainContent = $this->getRender($urlTemplateList, $listAttributes);
-        
-        
-        $urlTemplate = self::PF_SECTION_ONGLET;
-        $attributes = array(
-            // L'id de la page
-            'section-cal-event',
-            // Le bouton éventuel de création / retour...
-            $strButtonCreation,
-            // Le nom du bloc du menu de gauche
-            $this->titreOnglet,
-            // La liste des éléments du menu de gauche
-            $this->getMenuContent(),
-            // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
-            $mainContent,
-        );
-        return $this->getRender($urlTemplate, $attributes);
+        return $this->getRender($urlTemplateList, $listAttributes);
     }
 
     /**
