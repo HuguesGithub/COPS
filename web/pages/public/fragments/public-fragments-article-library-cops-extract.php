@@ -4,7 +4,7 @@
                 </div>
                 <div class="card-body row">
                   <div class="col-12 col-md-3">
-                    <img class="mask" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/%3$s"/>
+                    <img class="mask" src="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/%3$s"/ alt="Masque">
                   </div>
                   <div class="col-12 col-md-9">
                     <dl class="cops-id">

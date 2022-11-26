@@ -12,8 +12,8 @@ class CopsEventDateBean extends UtilitiesBean
 {
     public function __construct($obj=null)
     {
-		$this->objCopsEventDate = ($obj==null ? new CopsEventDate() : $obj);
-		$this->objCopsEvent     = $this->objCopsEventDate->getCopsEvent();
+        $this->objCopsEventDate = ($obj==null ? new CopsEventDate() : $obj);
+        $this->objCopsEvent     = $this->objCopsEventDate->getCopsEvent();
     }
 
     /**
@@ -22,45 +22,45 @@ class CopsEventDateBean extends UtilitiesBean
      */
     public function getFcDayClass($tsDisplay)
     {
-		// On récupère le jour courant
-		$tsToday = self::getCopsDate('tsStart');
+        // On récupère le jour courant
+        $tsToday = self::getCopsDate('tsStart');
 
-		$strClass = 'fc-event-';
-		// La date passée, présente ou future
-		// si le jour est dans le passé : fc-day-past, dans le futur : fc-day-future, aujourd'hui : fc-day-today
-		if ($tsDisplay==$tsToday) {
-			$strClass .= 'today ';
-		} elseif ($tsDisplay<$tsToday) {
-			$strClass .= 'past ';
-		} else {
-			$strClass .= 'future ';
-		}
-		
-		///////////////////////////////////////////////////
-		// Si c'est le début de l'event
-		if ($this->objCopsEvent->isFirstDay($tsDisplay)) {
-			$strClass .= 'fc-event-start ';
-		}
-		
-		///////////////////////////////////////////////////
-		// Si c'est la fin de l'event
-		if ($this->objCopsEvent->isLastWeek($tsDisplay)) {
-			$strClass .= 'fc-event-end ';
-		}
-		
-		// On construit la classe de la cellule comme fin d'event
-		/*
-		if ($this->objCopsEvent->isLastDay($tsDisplay)) {
-			$strClass .= 'fc-event-end ';
-		} elseif (!$this->objCopsEvent->isSeveralWeeks()) {
-			$strClass .= 'fc-event-end ';
-		} elseif (!$this->objCopsEvent->isOverThisWeek($tsDisplay)) {
-			$strClass .= 'fc-event-end ';
-		}
-		*/
-		///////////////////////////////////////////////////
-		return $strClass;
-	}
+        $strClass = 'fc-event-';
+        // La date passée, présente ou future
+        // si le jour est dans le passé : fc-day-past, dans le futur : fc-day-future, aujourd'hui : fc-day-today
+        if ($tsDisplay==$tsToday) {
+            $strClass .= 'today ';
+        } elseif ($tsDisplay<$tsToday) {
+            $strClass .= 'past ';
+        } else {
+            $strClass .= 'future ';
+        }
+        
+        ///////////////////////////////////////////////////
+        // Si c'est le début de l'event
+        if ($this->objCopsEvent->isFirstDay($tsDisplay)) {
+            $strClass .= 'fc-event-start ';
+        }
+        
+        ///////////////////////////////////////////////////
+        // Si c'est la fin de l'event
+        if ($this->objCopsEvent->isLastWeek($tsDisplay)) {
+            $strClass .= 'fc-event-end ';
+        }
+        
+        // On construit la classe de la cellule comme fin d'event
+        /*
+        if ($this->objCopsEvent->isLastDay($tsDisplay)) {
+            $strClass .= 'fc-event-end ';
+        } elseif (!$this->objCopsEvent->isSeveralWeeks()) {
+            $strClass .= 'fc-event-end ';
+        } elseif (!$this->objCopsEvent->isOverThisWeek($tsDisplay)) {
+            $strClass .= 'fc-event-end ';
+        }
+        */
+        ///////////////////////////////////////////////////
+        return $strClass;
+    }
 
 
   /**

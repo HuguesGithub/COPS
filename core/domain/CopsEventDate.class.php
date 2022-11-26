@@ -40,10 +40,10 @@ class CopsEventDate extends LocalDomain
     public function __construct($attributes=array())
     {
         parent::__construct($attributes);
-		$this->stringClass = 'CopsEventDate';
-		$this->CopsEventServices = new CopsEventServices();
-		// On initialise l'event source
-		$this->objCopsEvent = $this->getCopsEvent();
+        $this->stringClass = 'CopsEventDate';
+        $this->CopsEventServices = new CopsEventServices();
+        // On initialise l'event source
+        $this->objCopsEvent = $this->getCopsEvent();
     }
     /**
      * @param array $row
@@ -53,23 +53,23 @@ class CopsEventDate extends LocalDomain
      */
     public static function convertElement($row)
     { return parent::convertRootElement(new CopsEventDate(), $row); }
-	
+    
     /**
      * @version 1.22.06.13
      * @since 1.22.11.25
      */
     public function getBean()
     {
-		$objCopsEvent = $this->getCopsEvent();
-		if ($objCopsEvent->isAllDayEvent()) {
-			$objBean = new CopsEventDateAlldayBean($this);
-		} elseif ($objCopsEvent->isSeveralDays()) {
-			$objBean = new CopsEventDateLongBean($this);
-		} else {
-			$objBean = new CopsEventDateDotBean($this);
-		}
-		return $objBean;
-	}
+        $objCopsEvent = $this->getCopsEvent();
+        if ($objCopsEvent->isAllDayEvent()) {
+            $objBean = new CopsEventDateAlldayBean($this);
+        } elseif ($objCopsEvent->isSeveralDays()) {
+            $objBean = new CopsEventDateLongBean($this);
+        } else {
+            $objBean = new CopsEventDateDotBean($this);
+        }
+        return $objBean;
+    }
 
     /**
      * @version 1.22.06.13

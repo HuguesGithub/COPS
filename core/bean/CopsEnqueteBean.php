@@ -16,7 +16,7 @@ class CopsEnqueteBean extends CopsBean
         $this->obj          = ($objStd==null ? new CopsEnquete() : $objStd);
         $this->urlOnglet   .= self::ONGLET_ENQUETE;
         $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
-		$this->strNoRapportDisponible = 'Aucune rapport disponible';
+        $this->strNoRapportDisponible = 'Aucune rapport disponible';
     }
 
     /**
@@ -139,17 +139,17 @@ class CopsEnqueteBean extends CopsBean
     }
 
     $strRapportSID = $this->strNoRapportDisponible;
-		// Récupération et construction des rapports d'autopsie.
-		$objsAutopsie = $this->getCopsAutopsies();
-		if (empty($objsAutopsie)) {
-		    $strRapportAutopsie = $this->strNoRapportDisponible;
-		} else {
-		    $strRapportAutopsie = '';
-			while (!empty($objsAutopsie)) {
-				$objCopsAutopsie = array_shift($objsAutopsie);
-				$strRapportAutopsie .= $objCopsAutopsie->getBean()->getCopsAutopsieLi();
-			}
-		}
+        // Récupération et construction des rapports d'autopsie.
+        $objsAutopsie = $this->getCopsAutopsies();
+        if (empty($objsAutopsie)) {
+            $strRapportAutopsie = $this->strNoRapportDisponible;
+        } else {
+            $strRapportAutopsie = '';
+            while (!empty($objsAutopsie)) {
+                $objCopsAutopsie = array_shift($objsAutopsie);
+                $strRapportAutopsie .= $objCopsAutopsie->getBean()->getCopsAutopsieLi();
+            }
+        }
 
         $attributes = array(
             // Id de l'enquête, s'il existe
@@ -199,17 +199,17 @@ class CopsEnqueteBean extends CopsBean
         /////////////////////////////////////////
         // Construction du panneau de droite
         $strRapportSID = $this->strNoRapportDisponible;
-		// Récupération et construction des rapports d'autopsie.
-		$objsAutopsie = $this->getCopsAutopsies();
-		if (empty($objsAutopsie)) {
-		    $strRapportAutopsie = $this->strNoRapportDisponible;
-		} else {
-		    $strRapportAutopsie = '';
-			while (!empty($objsAutopsie)) {
-				$objCopsAutopsie = array_shift($objsAutopsie);
-				$strRapportAutopsie .= $objCopsAutopsie->getBean()->getCopsAutopsieLi();
-			}
-		}
+        // Récupération et construction des rapports d'autopsie.
+        $objsAutopsie = $this->getCopsAutopsies();
+        if (empty($objsAutopsie)) {
+            $strRapportAutopsie = $this->strNoRapportDisponible;
+        } else {
+            $strRapportAutopsie = '';
+            while (!empty($objsAutopsie)) {
+                $objCopsAutopsie = array_shift($objsAutopsie);
+                $strRapportAutopsie .= $objCopsAutopsie->getBean()->getCopsAutopsieLi();
+            }
+        }
 
         $strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
         $strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
@@ -255,13 +255,13 @@ class CopsEnqueteBean extends CopsBean
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
-	
-	public function getCopsAutopsies()
-	{
-		$attributes[self::SQL_WHERE_FILTERS] = array(
-			self::FIELD_IDX_ENQUETE => $this->obj->getField(self::FIELD_IDX_ENQUETE),
-		);
-		return $this->objCopsAutopsieServices->getAutopsies($attributes);
-	}
+    
+    public function getCopsAutopsies()
+    {
+        $attributes[self::SQL_WHERE_FILTERS] = array(
+            self::FIELD_IDX_ENQUETE => $this->obj->getField(self::FIELD_IDX_ENQUETE),
+        );
+        return $this->objCopsAutopsieServices->getAutopsies($attributes);
+    }
 
 }

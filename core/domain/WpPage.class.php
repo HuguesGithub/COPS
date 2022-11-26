@@ -17,7 +17,7 @@ class WpPage extends WpPost
     parent::__construct();
     $post = get_post($id);
     $attributes = $this->getClassVars();
-    foreach ($attributes as $attribute=>$value) {
+    foreach ($attributes as $attribute => $value) {
       $this->{$attribute} = $post->{$attribute};
     }
     $this->WpPostServices = new WpPostServices();

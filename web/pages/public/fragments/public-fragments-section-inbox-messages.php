@@ -28,7 +28,7 @@
         </div>
 
         <div class="table-responsive mailbox-messages">
-          <table class="table table-hover table-striped">
+          <table class="table table-hover table-striped" aria-label="Liste des messages">
             <tbody>
               %3$s
             </tbody>

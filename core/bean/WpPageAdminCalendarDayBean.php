@@ -17,7 +17,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $this->titreSubOnglet = 'Quotidien';
         /////////////////////////////////////////
         // Définition des services
-		$this->objCopsEventServices = new CopsEventServices();
+        $this->objCopsEventServices = new CopsEventServices();
     
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -34,36 +34,36 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
      */
     public function getOngletContent()
     {
-		$this->objsAlldayEventDate = array();
-		$this->objsTodayEventDate = array();
-		
+        $this->objsAlldayEventDate = array();
+        $this->objsTodayEventDate = array();
+        
         /////////////////////////////////////////
         // On récupère le jour courant
         list($m, $d, $y) = explode('-', $this->curStrDate);
         $tsDisplay = mktime(0, 0, 0, $m, $d, $y);
         $strClass = $this->getFcDayClass($tsDisplay);
-		
+        
         /////////////////////////////////////////
         // On récupère tous les events
-		$attributes = array(
-			self::SQL_WHERE_FILTERS => array(
-				self::FIELD_ID => '%',
-				self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
-				self::FIELD_DEND => date('Y-m-d', $tsDisplay),
-			),
-			self::SQL_ORDER_BY => array('dStart', 'dEnd'),
-			self::SQL_ORDER => array('ASC', 'DESC'),
-		);
-		$objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
-		// On va trier les event "Allday" de ceux qui ne le sont pas.
-		while (!empty($objsCopsEventDate)) {
-			$objCopsEventDate = array_shift($objsCopsEventDate);
-			if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
-				$this->objsAlldayEventDate[] = $objCopsEventDate;
-			} else {
-				$this->objsTodayEventDate[] = $objCopsEventDate;
-			}
-		}
+        $attributes = array(
+            self::SQL_WHERE_FILTERS => array(
+                self::FIELD_ID => '%',
+                self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
+                self::FIELD_DEND => date('Y-m-d', $tsDisplay),
+            ),
+            self::SQL_ORDER_BY => array('dStart', 'dEnd'),
+            self::SQL_ORDER => array('ASC', 'DESC'),
+        );
+        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+        // On va trier les event "Allday" de ceux qui ne le sont pas.
+        while (!empty($objsCopsEventDate)) {
+            $objCopsEventDate = array_shift($objsCopsEventDate);
+            if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
+                $this->objsAlldayEventDate[] = $objCopsEventDate;
+            } else {
+                $this->objsTodayEventDate[] = $objCopsEventDate;
+            }
+        }
         /////////////////////////////////////////
         
         // On construit la colonne des horaires
@@ -136,8 +136,8 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
             self::ATTR_STYLE => 'margin-top: 0px;',
         );
         $divBottom = $this->getDiv('', $botAttributes);
-		
-		$allDayEvents = $this->getAllDayEvents($tsDisplay);
+        
+        $allDayEvents = $this->getAllDayEvents($tsDisplay);
         
         $divIn  = $this->getDiv($allDayEvents.$divBottom, array(self::ATTR_CLASS=>'fc-daygrid-day-events'));
         $divIn .= $this->getDiv('', array(self::ATTR_CLASS=>'fc-daygrid-day-bg'));
@@ -150,20 +150,20 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         );
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
     }
-	
+    
     /**
      * @since v1.22.11.22
      * @version v1.22.11.25
      */
-	public function getAllDayEvents($tsDisplay)
-	{
-		$strContent = '';
-		while (!empty($this->objsAlldayEventDate)) {
-			$objCopsEventDate = array_shift($this->objsAlldayEventDate);
-			$strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_DAY, $tsDisplay);
-		}
-		return $strContent;
-	}
+    public function getAllDayEvents($tsDisplay)
+    {
+        $strContent = '';
+        while (!empty($this->objsAlldayEventDate)) {
+            $objCopsEventDate = array_shift($this->objsAlldayEventDate);
+            $strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_DAY, $tsDisplay);
+        }
+        return $strContent;
+    }
 
     /**
      * @since v1.22.11.21

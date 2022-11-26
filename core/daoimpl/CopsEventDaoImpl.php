@@ -32,17 +32,17 @@ class CopsEventDaoImpl extends LocalDaoImpl
   {
     $request  = "SELECT id, eventId, dStart, dEnd, tStart, tEnd FROM ".$this->dbTable_ced." ";
     $request .= "WHERE 1=1 AND id LIKE '%s' AND dStart <= '%s' AND dEnd >= '%s' ";
-	if (is_array($attributes[self::SQL_ORDER_BY])) {
-		$request .= "ORDER BY ";
-		while (!empty($attributes[self::SQL_ORDER_BY])) {
-			$orderBy = array_shift($attributes[self::SQL_ORDER_BY]);
-			$order = array_shift($attributes[self::SQL_ORDER]);
-			$request .= $orderBy." $order, ";
-		}
-		$request = substr($request, 0, -2).";";
-	} else {
-		$request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
-	}
+    if (is_array($attributes[self::SQL_ORDER_BY])) {
+        $request .= "ORDER BY ";
+        while (!empty($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = array_shift($attributes[self::SQL_ORDER_BY]);
+            $order = array_shift($attributes[self::SQL_ORDER]);
+            $request .= $orderBy." $order, ";
+        }
+        $request = substr($request, 0, -2).";";
+    } else {
+        $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
+    }
 
     $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
     //////////////////////////////

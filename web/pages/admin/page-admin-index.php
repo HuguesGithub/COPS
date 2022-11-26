@@ -131,13 +131,13 @@
 </div>
 
 <div class="main-body">
-  <table class="table table-striped table-sm">
+  <table class="table table-striped table-sm" aria-label="Liste des index">
     <thead class="text-center bg-dark text-white">
       <tr>
-        <td class="col-2">Nom</td>
-        <td class="col-2">Nature</td>
-        <td class="col-2">Référence</td>
-        <td class="col-6">Description</td>
+        <th class="col-2">Nom</th>
+        <th class="col-2">Nature</th>
+        <th class="col-2">Référence</th>
+        <th class="col-6">Description</th>
       </tr>
     </thead>
     <tbody>

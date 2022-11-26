@@ -8,7 +8,8 @@ if (!defined('ABSPATH')) {
  * @version 22.07.06
  * @since 22.07.06
  */
-class WpPostServices extends GlobalServices {
+class WpPostServices extends GlobalServices
+{
 
   public function __construct()
   { }

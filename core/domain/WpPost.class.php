@@ -32,7 +32,8 @@ class WpPost extends LocalDomain
   protected $comment_count;
   protected $filter;
 
-  public function __construct() {}
+  public function __construct()
+  {}
 
   public function getClassVars()
   { return get_class_vars('WpPost'); }
@@ -112,7 +113,7 @@ class WpPost extends LocalDomain
   public function getStrPostDate()
   {
     $s = $this->post_date;
-    return substr($s,8,2).'/'.substr($s,5,2).' à '.substr($s,11,2).'h'.substr($s,14,2);
+    return substr($s, 8, 2).'/'.substr($s, 5, 2).' à '.substr($s, 11, 2).'h'.substr($s, 14, 2);
   }
   public function getStrDate()
   {
@@ -122,7 +123,7 @@ class WpPost extends LocalDomain
   }
   public function getPostMetas()
   {
-    if ( !isset($this->metas) ) { $this->metas = get_post_meta($this->ID); }
+    if (!isset($this->metas)) { $this->metas = get_post_meta($this->ID); }
     return $this->metas;
   }
   public function setPostMeta($key, $value)
@@ -130,9 +131,9 @@ class WpPost extends LocalDomain
   public function getImgUrl()
   {
     $medias = $this->getAttachedMedia('image');
-    if ( !empty($medias) ) {
+    if (!empty($medias)) {
       $media = array_shift($medias);
-      if ( $media->guid!='' ) {
+      if ($media->guid!='') {
         return $media->guid;
       }
     }
@@ -145,8 +146,8 @@ class WpPost extends LocalDomain
     $secondsperDay = 60*60*24;
     $tresholdDays = 100;
     $s = $this->getPostDate();
-    $daysElapsed = (time()-mktime(0, 0, 0, substr($s,5,2), substr($s,8,2), substr($s,0,4)))/$secondsperDay;
-    return ( /*$daysElapsed > $tresholdDays &&*/ self::isAdmin() ? $this->getGuid() : $this->getPostMeta('article_url') );
+    $daysElapsed = (time()-mktime(0, 0, 0, substr($s, 5, 2), substr($s, 8, 2), substr($s, 0, 4)))/$secondsperDay;
+    return (/*$daysElapsed > $tresholdDays &&*/self::isAdmin() ? $this->getGuid() : $this->getPostMeta('article_url'));
   }
   public function getUrl()
   { return $this->getPostMeta('article_url'); }

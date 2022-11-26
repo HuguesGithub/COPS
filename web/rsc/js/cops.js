@@ -26,7 +26,7 @@ $(document).ready(function() {
 
     // Action sur la checkbox globale
     $('.checkbox-toggle').click(function () {
-      var clicks = $(this).data('clicks')
+      let clicks = $(this).data('clicks')
       if (clicks) {
         //Uncheck all checkboxes
         $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
@@ -50,13 +50,13 @@ $(document).ready(function() {
     // Action sur le trash global
     $('.mailbox-controls button[data-action=\'trash\']').click(function() {
       if (!$(this).hasClass('disabled')) {
-        var title = "Confirmation de la suppression";
-        var get = [];
-        location.search.replace('?', '').split('&').forEach(function(val) { split = val.split("=", 2); get[split[0]] = split[1]; });
-        var folder = get['subOnglet'];
-        var message = "Les messages sélectionnés seront"+(folder=="trash" ? " définitivement" : "")+" supprimés.";
-        var ids = $(".mailbox-messages input:checkbox:checked").map(function(){ return $(this).val(); }).get().join();
-        var hrefConfirm = "/admin?onglet=inbox"+(folder!=undefined ? "&subOnglet="+get['subOnglet'] : "")+"&trash=1&ids="+ids;
+        let title = "Confirmation de la suppression";
+        let get = [];
+        location.search.replace('?', '').split('&').forEach(function(val) { let split = val.split("=", 2); get[split[0]] = split[1]; });
+        let folder = get['subOnglet'];
+        let message = "Les messages sélectionnés seront"+(folder=="trash" ? " définitivement" : "")+" supprimés.";
+        let ids = $(".mailbox-messages input:checkbox:checked").map(function(){ return $(this).val(); }).get().join();
+        let hrefConfirm = "/admin?onglet=inbox"+(folder!=undefined ? "&subOnglet="+get['subOnglet'] : "")+"&trash=1&ids="+ids;
         openConfirmModal(title, message, hrefConfirm);
       }
     });

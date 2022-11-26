@@ -62,21 +62,21 @@
   <button class="btn btn-outline-secondary disabled col-2" type="button">&nbsp;</button>
   <button class="btn btn-outline-secondary disabled col-2" type="button">&nbsp;</button>
   <button class="btn btn-outline-secondary disabled col-2" type="button">&nbsp;</button>
-</div>                
+</div>
 <div class="input-group mb-3">
   <span class="input-group-text col-4">Minutes</span>
   <button class="btn btn-outline-secondary col-2" type="button"><a href="%7$s&action=add&unite=m&quantite=1">+1</a></button>
   <button class="btn btn-outline-secondary col-2" type="button"><a href="%7$s&action=add&unite=m&quantite=5">+5</a></button>
   <button class="btn btn-outline-secondary col-2" type="button"><a href="%7$s&action=add&unite=m&quantite=15">+15</a></button>
   <button class="btn btn-outline-secondary col-2" type="button"><a href="%7$s&action=add&unite=m&quantite=30">+30</a></button>
-</div>                
+</div>
 <div class="input-group mb-3">
   <span class="input-group-text col-4">Heures</span>
   <button class="btn btn-outline-secondary col-2" type="button"><a href="%7$s&action=add&unite=h&quantite=1">+1</a></button>
   <button class="btn btn-outline-secondary disabled col-2" type="button">&nbsp;</button>
   <button class="btn btn-outline-secondary disabled col-2" type="button">&nbsp;</button>
   <button class="btn btn-outline-secondary disabled col-2" type="button">&nbsp;</button>
-</div>                
+</div>
                 </div>
             </div>
           </div>
