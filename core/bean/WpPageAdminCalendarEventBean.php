@@ -23,6 +23,8 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         // On initialise l'éventuelle pagination & on ajoute à l'url de Refresh
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         $this->action = $this->initVar(self::CST_ACTION);
+        $id = $this->initVar(self::FIELD_ID);
+        $this->objCopsEvent = $this->objCopsEventServices->getCopsEvent($id);
         
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
@@ -35,7 +37,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         if (isset($_POST) && isset($this->urlParams[self::CST_WRITE_ACTION])) {
             $this->dealWithWriteAction();
         }
-        $this->objCopsEvent = new CopsEvent();
+        
         /*
 
     if (isset($_POST) && !empty($_POST)) {
@@ -140,7 +142,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         ///////////////////////////////////////////////////////
         // Les options pour la Catégorie
         $strOptsCategorie = '';
-        $objsCopsEventCategorie = array();
+        $objsCopsEventCategorie = $this->objCopsEventServices->getCopsEventCategories();
         while (!empty($objsCopsEventCategorie)) {
             $objCopsEventCategorie = array_shift($objsCopsEventCategorie);
             $label = $objCopsEventCategorie->getField(self::FIELD_CATEG_LIBELLE);
@@ -168,9 +170,9 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         for ($i=0; $i<=55; $i+=5) {
             $label = str_pad($i, 2, '0', STR_PAD_LEFT);
             $mDebut = $this->objCopsEvent->getField(self::FIELD_MINUTE_DEBUT);
-            $strOptsHeuresDebut .= $this->getOption($label, $i, $i==$mDebut);
+            $strOptsMinutesDebut .= $this->getOption($label, $i, $i==$mDebut);
             $mFin = $this->objCopsEvent->getField(self::FIELD_MINUTE_FIN);
-            $strOptsHeuresFin .= $this->getOption($label, $i, $i==$mFin);
+            $strOptsMinutesFin .= $this->getOption($label, $i, $i==$mFin);
         }
 
         ///////////////////////////////////////////////////////
@@ -185,10 +187,10 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         $inputAttributes = array(
             self::ATTR_CLASS => 'custom-control-input',
             self::ATTR_TYPE => 'radio',
-            self::ATTR_NAME => 'repeatType',
+            self::ATTR_NAME => self::FIELD_REPEAT_TYPE,
         );
         $labelAttributes = array(self::ATTR_CLASS => 'custom-control-label');
-        foreach ($arrPeriodicite as $key=>$value) {
+        foreach ($arrPeriodicite as $key => $value) {
             $inputAttributes[self::FIELD_ID] = 'repeat_'.$key;
             $inputAttributes[self::ATTR_VALUE] = $key;
             if ($key==$this->objCopsEvent->getField(self::FIELD_REPEAT_TYPE)) {
@@ -243,7 +245,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             // Checkbox Récurrent Event
             ($blnIsRecurEvent ? self::CST_CHECKED : ''),
             // Affichage interface selon checkbox Récurrent Event
-            ($blnIsRecurEvent ? ' style="display:none;"' : ''),
+            ($blnIsRecurEvent ? '' : ' style="display:none;"'),
             // Liste des options de périodicité
             $strOptsPeriodicite,
             // Intervalle de répétition
@@ -396,6 +398,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         // On défini les champs obligatoires
         $arrFields = array(
             self::FIELD_EVENT_LIBELLE,
+            self::FIELD_CATEG_ID,
             self::FIELD_DATE_DEBUT,
             self::FIELD_DATE_FIN,
             self::FIELD_ALL_DAY_EVENT,
@@ -430,23 +433,34 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
                 $this->objCopsEvent->setDateDebut(stripslashes($this->urlParams[$field]));
             } elseif ($field==self::FIELD_DATE_FIN) {
                 $this->objCopsEvent->setDateFin(stripslashes($this->urlParams[$field]));
+            } elseif ($field==self::FIELD_HEURE_DEBUT) {
+                $valeur  = str_pad($this->urlParams[$field], 2, '0', STR_PAD_LEFT).':';
+                $valeur .= str_pad($this->initVar(self::FIELD_MINUTE_DEBUT, 0), 2, '0', STR_PAD_LEFT);
+                $this->objCopsEvent->setField($field, $valeur);
+            } elseif ($field==self::FIELD_HEURE_FIN) {
+                $valeur  = str_pad($this->urlParams[$field], 2, '0', STR_PAD_LEFT).':';
+                $valeur .= str_pad($this->initVar(self::FIELD_MINUTE_FIN, 0), 2, '0', STR_PAD_LEFT);
+                $this->objCopsEvent->setField($field, $valeur);
             } else {
                 $this->objCopsEvent->setField($field, stripslashes($this->urlParams[$field]));
             }
         }
-
-        // TODO : Ajouter une liste déroulante sur le formulaire pour gérer la catégorie.
-        $this->objCopsEvent->setField(self::FIELD_CATEG_ID, 1);
         
-        if (isset($this->urlParams['repeatEnd']) && $this->urlParams['repeatEnd']=='endDate' &&
-        isset($this->urlParams['endDateValue']) && $this->urlParams['endDateValue']!='') {
-            $this->objCopsEvent->setRepeatEndValue(stripslashes($this->urlParams['endDateValue']));
+        
+        /*
+        if (isset($this->urlParams[self::FIELD_REPEAT_END])) {
+            if ($this->urlParams[self::FIELD_REPEAT_END]=='endDate' &&
+            $this->urlParams[self::FIELD_ENDDATE_VALUE]!='') {
+                $valeur = stripslashes($this->urlParams[self::FIELD_ENDDATE_VALUE]);
+                $this->objCopsEvent->setRepeatEndValue($valeur);
+            }
+            if ($this->urlParams[self::FIELD_REPEAT_END]=='endRepeat' &&
+            $this->urlParams[self::FIELD_REPEAT_END_VALUE]!='') {
+                $valeur = stripslashes($this->urlParams[self::FIELD_REPEAT_END_VALUE]);
+                $this->objCopsEvent->setField(self::FIELD_REPEAT_END_VALUE, $valeur);
+            }
         }
-        if (isset($this->urlParams['repeatEnd']) && $this->urlParams['repeatEnd']=='endRepeat' &&
-        isset($this->urlParams['endRepetitionValue']) && $this->urlParams['endRepetitionValue']!='') {
-            $valeur = stripslashes($this->urlParams['endRepetitionValue']);
-            $this->objCopsEvent->setField(self::FIELD_REPEAT_END_VALUE, $valeur);
-        }
+        */
         ///////////////////////////////////////////////////////
         
         ///////////////////////////////////////////////////////
@@ -454,6 +468,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         if ($this->objCopsEvent->checkFields()) {
             if ($this->objCopsEvent->getField(self::FIELD_ID)=='') {
                 $this->objCopsEvent->saveEvent();
+                echo "[".MySQL::wpdbLastQuery()."]";
             } else {
                 //$this->objCopsEventServices->updateEvent($this->objCopsEvent);
             }

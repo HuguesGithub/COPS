@@ -386,6 +386,7 @@ function controlerFormulaireCreerNewEvent() {
     blnOk = false;
     console.log('Le libellé doit être saisi.');
   }
+  /*
   if (!estDateValide('#dateDebut')) {
     $('#dateDebut').addClass('border-danger');
     blnOk = false;
@@ -396,6 +397,7 @@ function controlerFormulaireCreerNewEvent() {
     blnOk = false;
     console.log('La date de fin doit être saisie.');
   }
+  */
   if (blnOk && estDateSuperieure('#dateDebut', '#dateFin')) {
     $('#dateDebut').addClass('border-danger');
     $('#dateFin').addClass('border-danger');

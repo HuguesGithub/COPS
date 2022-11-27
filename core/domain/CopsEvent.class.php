@@ -345,7 +345,18 @@ class CopsEvent extends LocalDomain
         $tsFin = mktime(0, 0, 0, $m, $d, $y);
         return 1+($tsFin-$tsDeb)/(60*60*24);
     }
-
+    
+    /**
+     * @since v1.22.11.27
+     * @version v1.22.11.27
+     */
+    public function getNbDaysTillEnd($tsDisplay)
+    {
+        list($y, $m, $d) = explode('-', $this->dateFin);
+        $tsFin = mktime(0, 0, 0, $m, $d, $y);
+        return 1+($tsFin-$tsDisplay)/(60*60*24);
+    }
+    
     /**
      * @since v1.22.11.24
      * @version v1.22.11.24

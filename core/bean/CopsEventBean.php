@@ -24,10 +24,12 @@ class CopsEventBean extends CopsBean
      */
     public function getTableRow()
     {
+        $urlEdit  = $this->urlSubOnglet.self::CST_CAL_EVENT.'&amp;id='.$this->obj->getField(self::FIELD_ID);
+        $urlEdit .= self::CST_AMP.self::CST_ACTION.'='.self::CST_WRITE;
         $urlTemplate = self::PF_TR_EVENT;
         $attributes = array(
             // L'url vers le détail de l'event
-            $this->urlSubOnglet.self::CST_CAL_EVENT.'&amp;id='.$this->obj->getField(self::FIELD_ID),
+            $urlEdit,
             // Le libellé de l'event
             $this->obj->getField(self::FIELD_EVENT_LIBELLE),
             // La catégorie de l'event

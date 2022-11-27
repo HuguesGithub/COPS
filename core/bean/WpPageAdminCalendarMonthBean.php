@@ -160,16 +160,22 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             self::SQL_ORDER => array('ASC', 'DESC'),
         );
         $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
-        $nbEvents = 0;
+        $nbEvts = 0;
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {
             $objCopsEventDate = array_shift($objsCopsEventDate);
             if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
                 if ($objCopsEventDate->getCopsEvent()->isFirstDay($tsDisplay)) {
                     $tag = self::CST_CAL_MONTH;
-                    $strContent .= $objCopsEventDate->getBean()->getCartouche($tag, $tsDisplay, $nbEvents);
+                    $strContent .= $objCopsEventDate->getBean()->getCartouche($tag, $tsDisplay, $nbEvts);
+                } elseif (date('N', $tsDisplay)==1) {
+                    // On a un événement qui est couvert par la période mais dont le premier jour
+                    // n'est pas sur la période. C'est un événement de la semaine précédente
+                    // qui déborde sur la semaine affichée.
+                    // On ne doit le traiter que si on est un lundi.
+                    $strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $tsDisplay, $nbEvts);
                 }
-                $nbEvents++;
+                $nbEvts++;
             }
         }
         /////////////////////////////////////////
@@ -178,7 +184,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         // On créé le div de fin de cellule
         $botAttributes = array(
             self::ATTR_CLASS => 'fc-daygrid-day-bottom',
-            self::ATTR_STYLE => 'margin-top: '.(25*$nbEvents).'px;',
+            self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;',
         );
         $divBottom = $this->getDiv('', $botAttributes);
         /////////////////////////////////////////

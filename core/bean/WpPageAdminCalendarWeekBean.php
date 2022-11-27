@@ -51,6 +51,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $this->firstDay = $fY.'-'.$fm.'-'.$fd;
         list($ld, $lM, $lm, $lY) = explode(' ', date('d M m Y', mktime(0, 0, 0, $m, $d+7-$fN, $y)));
         $this->lastDay = $lY.'-'.$lm.'-'.$ld;
+        
+        /////////////////////////////////////////
+        // On construit le header du tableau
         // Si $fM et $lM sont identiques, la semaine complète est dans un même mois.
         if ($fM==$lM) {
             $calendarHeader = $fd.'-'.$ld.' '.$this->arrFullMonths[$fm*1].' '.$fY; // 3-9 Juin 2030
@@ -152,23 +155,29 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         // On récupère tous les events du jour
         $attributes = array(
             self::SQL_WHERE_FILTERS => array(
-                self::FIELD_ID => '%',
+                self::FIELD_ID => self::SQL_JOKER_SEARCH,
                 self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
                 self::FIELD_DEND => date('Y-m-d', $tsDisplay),
             ),
-            self::SQL_ORDER_BY => array('dStart', 'dEnd'),
-            self::SQL_ORDER => array('ASC', 'DESC'),
+            self::SQL_ORDER_BY => array(self::FIELD_DSTART, self::FIELD_DEND),
+            self::SQL_ORDER => array(self::SQL_ORDER_ASC, self::SQL_ORDER_DESC),
         );
         $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
-        $nbEvents = 0;
+        $nbEvts = 0;
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {
             $objCopsEventDate = array_shift($objsCopsEventDate);
             if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
                 if ($objCopsEventDate->getCopsEvent()->isFirstDay($tsDisplay)) {
-                    $strContent .= $objCopsEventDate->getBean()->getCartouche('week', $tsDisplay, $nbEvents);
+                    $strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $tsDisplay, $nbEvts);
+                } elseif (date('N', $tsDisplay)==1) {
+                    // On a un événement qui est couvert par la période mais dont le premier jour
+                    // n'est pas sur la période. C'est un événement de la semaine précédente
+                    // qui déborde sur la semaine affichée.
+                    // On ne doit le traiter que si on est un lundi.
+                    $strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $tsDisplay, $nbEvts);
                 }
-                $nbEvents++;
+                $nbEvts++;
             }
         }
         /////////////////////////////////////////
@@ -177,7 +186,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         // On créé le div de fin de cellule
         $botAttributes = array(
             self::ATTR_CLASS => 'fc-daygrid-day-bottom',
-            self::ATTR_STYLE => 'margin-top: '.(25*$nbEvents).'px;',
+            self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;',
         );
         $divBottom = $this->getDiv('', $botAttributes);
         /////////////////////////////////////////

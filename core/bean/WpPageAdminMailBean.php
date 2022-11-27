@@ -113,7 +113,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
                 // Le contenu
                 self::FIELD_MAIL_CONTENT    => $this->urlParams[self::FIELD_MAIL_CONTENT],
                 // Date d'envoi
-                self::FIELD_MAIL_DATE_ENVOI => 
+                self::FIELD_MAIL_DATE_ENVOI =>
                 ($mailAction==self::CST_FOLDER_DRAFT ? '0000-00-00 00:00:00' : date('Y-m-d H:i:s')),
             );
 

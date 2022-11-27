@@ -117,7 +117,7 @@ class WpPageAdminBean extends WpPageBean
         // Le lien vers la Home
         $aContent = $this->getIcon('desktop');
         $buttonContent = $this->getLink($aContent, '/'.self::PAGE_ADMIN, self::CST_TEXT_WHITE);
-        if ($this->slugOnglet=='desk') {
+        if ($this->slugOnglet=='desk' || $this->slugOnglet=='') {
             $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDisabled);
         } else {
             $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDark);
