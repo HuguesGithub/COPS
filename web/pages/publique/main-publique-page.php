@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
 <?php
-  $PageBean = CopsPageBean::getPageBean();
+use core\bean\WpPageBean;
+
+$PageBean = WpPageBean::getPageBean();
   define('COPS_SITE_URL', 'https://cops.jhugues.fr/');
   define('PLUGINS_MYCOMMON', COPS_SITE_URL.'wp-content/plugins/mycommon/');
   define('PLUGINS_COPS', COPS_SITE_URL.'wp-content/plugins/hj-cops/');
   date_default_timezone_set('Europe/Paris');
 //  wp_head();
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
     <meta charset='utf-8'/>
     <meta content='width=device-width, initial-scale=1' name='viewport'/>
     <title>C.O.P.S. | Central Organisation for Public Security</title>

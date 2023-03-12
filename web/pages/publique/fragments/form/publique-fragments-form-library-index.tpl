@@ -6,10 +6,16 @@
 
         <div class="card-body p-2">
             <div class="input-group mb-3">
-                   <label class="col-form-label-sm form-control col-3" for="nomIdx">Nom de l'entrée</label>
-                <input type="text" class="form-control col-3" id="nomIdx" name="nomIdx" value="%3$s" required/>
-                <label class="col-form-label-sm form-control col-3" for="natureId">Nature</label>
-                <select class="form-control col-3" id="natureId" name="natureId">
+                <label class="col-form-label-sm form-control col-3" for="nomIdxReference">Nom</label>
+                <input type="text" class="form-control col-3" id="nomIdxReference" name="nomIdxReference" value="%3$s" required/>
+                <label class="col-form-label-sm form-control col-3" for="prenomIdxReference">Prénom</label>
+                <input type="text" class="form-control col-3" id="prenomIdxReference" name="prenomIdxReference" value="%13$s"/>
+            </div>
+            <div class="input-group mb-3">
+                <label class="col-form-label-sm form-control col-3" for="akaIdxReference">Surnom</label>
+                <input type="text" class="form-control col-3" id="akaIdxReference" name="akaIdxReference" value="%14$s"/>
+                <label class="col-form-label-sm form-control col-3" for="natureIdxId">Nature</label>
+                <select class="form-control col-3" id="natureIdxId" name="natureIdxId">
                     <option></option>%4$s
                 </select>
             </div>
