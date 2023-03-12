@@ -1,13 +1,17 @@
 <?php
+namespace core\domain;
+
+use core\bean\WpCategoryBean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
 /**
- * WpCategory
+ * WpCategoryClass
  * @since 1.22.10.20
  * @version 1.22.10.20
  */
-class WpCategory extends WpTag
+class WpCategoryClass extends WpTagClass
 {
     protected $term_id;
     public $name;

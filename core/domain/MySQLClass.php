@@ -1,4 +1,6 @@
 <?php
+namespace core\domain;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -9,7 +11,7 @@ if (!defined('ABSPATH')) {
  * @since 1.0.00
  * @author Hugues
  */
-class MySQL
+class MySQLClass
 {
     /**
      * Prepare une requête avant de l'exécuter

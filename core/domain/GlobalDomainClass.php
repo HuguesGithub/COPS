@@ -1,4 +1,10 @@
 <?php
+namespace core\domain;
+
+use core\interfaceimpl\ConstantsInterface;
+use core\interfaceimpl\LabelsInterface;
+use core\interfaceimpl\UrlsInterface;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -8,7 +14,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.27
  * @version 1.22.04.27
  */
-class GlobalDomain implements ConstantsInterface
+class GlobalDomainClass implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
   protected $stringClass;
 
@@ -72,4 +78,3 @@ class GlobalDomain implements ConstantsInterface
   { return get_class_vars($this->stringClass); }
 
 }
-?>

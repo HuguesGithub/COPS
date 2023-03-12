@@ -3,12 +3,12 @@ if (!defined('ABSPATH')) {
   die('Forbidden');
 }
 /**
- * Classe CopsPlayer
+ * Classe CopsPlayerClass
  * @author Hugues
  * @version 1.22.04.28
  * @since 1.22.04.28
  */
-class CopsPlayer extends LocalDomain
+class CopsPlayerClass extends LocalDomain
 {
   //////////////////////////////////////////////////
   // ATTRIBUTES
