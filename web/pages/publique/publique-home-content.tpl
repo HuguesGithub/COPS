@@ -7,7 +7,7 @@
             <section class="topper"></section>
             <section id="masthead-bar-one" class="hasLinks masthead-bar-one">
                 <div>
-                    <div class="todays-date"><span data-testid="todays-date">Dimanche<br>12 Mars 2023</span></div>
+                    <div class="todays-date"><span data-testid="todays-date">Dimanche 12 Mars 2023</span></div>
                 </div>
                 <div id="masthead-bar-one-widgets" class="css-103zufb">
                     <div class="css-i1s3vq e1pjtsj61">

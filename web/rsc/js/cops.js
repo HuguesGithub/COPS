@@ -176,6 +176,10 @@ $(document).ready(function() {
 		$($(this).data('tab')).show();
 		$($(this).data('tab')+' .note-editable').focus();
 	});
+
+    $('textarea').each(function(textarea) {
+        $(this).height($(this)[0].scrollHeight);
+    })
 });
 
 function stretchColspanEvents() {

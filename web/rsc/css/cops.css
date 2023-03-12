@@ -360,3 +360,253 @@ border-color: #4b545c;
   opacity: .65;
   transform: scale(.85) translateY(-.5rem) translateX(.15rem);
 }
+
+
+
+/******************************
+ *** HEADER MASTHEAD
+ ******************************/
+.masthead {
+    opacity: 1;
+    visibility: visible;
+    -webkit-animation-name: animation-5j8bii;
+    animation-name: animation-5j8bii;
+    -webkit-animation-duration: 300ms;
+    animation-duration: 300ms;
+    -webkit-animation-delay: 0ms;
+    animation-delay: 0ms;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+.masthead header {
+    margin: auto;
+    padding: 0 3%;
+    max-width: 1200px;
+    position: relative;
+    border-bottom: none;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+.masthead .topper {
+    height: 36px;
+    position: relative;
+    background: transparent;
+    border-bottom: 0;
+    padding: 4px 15px 8px;       
+}
+.masthead .masthead-bar-one {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    font-family: nyt-franklin,helvetica,arial,sans-serif;
+    font-size: 11px;
+    background-color: #f7f7f7;
+    background-color: #fff;
+    position: relative;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    border: none;
+    padding: 0;
+    height: 0;
+    -webkit-transform: translateY(38px);
+    -ms-transform: translateY(38px);
+    transform: translateY(38px);
+    -webkit-align-items: flex-end;
+    -webkit-box-align: flex-end;
+    -ms-flex-align: flex-end;
+    align-items: flex-end;
+    overflow: inherit;
+}
+.masthead .todays-date {
+    color: #121212;
+    font-family: nyt-franklin,helvetica,arial,sans-serif;
+    font-weight: 700;
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    width: auto;
+    margin-bottom: 5px;
+  }
+
+
+ .masthead .masthead-meta { border-bottom: 2px solid #000000; border-top: 1px solid #000000; height: 96px; margin: 20px auto 0; padding: 8px 5px; position: relative; }
+ .masthead .editions { left: 50%; margin-left: -84px; min-width: 150px; position: absolute; top: -16px; }
+ .masthead .editions.tab { background-color: #ffffff; border-style: solid solid none; border-radius: 5px 5px 0 0; border-width: 1px 1px medium; height: 16px; font-size: 0.6875rem; text-align: center; }
+ .masthead .editions .date { text-transform: capitalize; }
+ .masthead .branding { font-family: "PlainBlackNormal"; font-size: 3.25rem; font-weight: 400; line-height: 3.25rem; margin: 15px auto 5px; text-align: center; }
+ .masthead .mini-navigation { border-top: 1px solid #000000; margin-bottom: 0; margin-top: 2px; padding: 2px; text-align: center; }
+ .quote.top-left-quote, .quote.top-right-quote { border: 1px solid; border-radius: 10px; display: block; font-size: 0.725rem; height: 78px; line-height: 14px; max-width: 205px; min-width: 184px; padding: 5px; }
+ .quote.top-left-quote { float: left; }
+ .quote.top-right-quote { float: right; }
+ .quote .author { display: block; font-style: italic; text-align: right; }
+ .quote .author::before { content: " - "; }
+ 
+ /******************************
+  *** NAVIGATION
+  ******************************/
+ .mini-navigation .mini-navigation-menu { margin-bottom: 0; text-align: center; white-space: nowrap; }
+ .mini-navigation .mini-navigation-menu li { display: inline-block; color: #000; font-size: 12px; line-height: 16px; font-weight: 500; font-style: normal; font-family: arial, helvetica, sans-serif; text-transform: capitalize; }
+ .mini-navigation .mini-navigation-menu li a { display: inline-block; margin: 5px 2px 5px 0; padding: 0 4px; }
+ .mini-navigation .mini-navigation-menu li a:hover { background-color: #e9ebe4; text-decoration: none; }
+ 
+
+
+
+
+  .css-hnzl8o {
+    display: inline-block;
+    font-size: 12px;
+    -webkit-transition: color 0.6s ease;
+    transition: color 0.6s ease;
+    color: #121212;
+  }
+
+  .css-103zufb {
+    display: unset;
+  }
+  .css-i1s3vq {
+    color: #121212;
+    font-size: 12px;
+    font-family: nyt-franklin,helvetica,arial,sans-serif;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .css-dey754 {
+    display: flex;
+    -moz-box-align: center;
+    align-items: center;
+    -moz-box-pack: justify;
+    justify-content: space-between;
+    font-family: nyt-franklin, helvetica, arial, sans-serif;
+    font-size: 0.625rem;
+  }
+  .css-1lire5m {
+    font-weight: bold;
+    font-size: 0.8125rem;
+  }
+  .css-6vr0ez {
+    margin-left: 2px;
+    color: var(--color-content-quaternary,#727272);
+  }
+
+  .css-27ffgo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 105px;
+  }
+  .css-stscvm {
+    display: block;
+    margin-top: -15px;
+  }
+  .css-158f1cv {
+    text-align: center;
+  }
+  .css-1q2j1fr {
+    display: block;
+    width: 430px;
+    height: 58px;
+    margin: 6px auto;
+  }
+  .css-wu78io {
+    position: fixed;
+    top: -120px;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    z-index: 100001;
+    background: #fff;
+  }
+  .css-umysuv {
+    border-top: 1px solid #ebebeb;
+    display: block;
+    border-bottom: 1px solid #000;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  ol, ul {
+    list-style: none;
+  }
+  .css-192g0mx {
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 5px 0 4px;
+    margin: 0 60px;
+  }
+  .css-umysuv::after {
+    content: '';
+    border-bottom: 1px double #000;
+    display: block;
+  }
+  .css-cwdrld {
+    display: inline-block;
+    font-family: nyt-franklin,helvetica,arial,sans-serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+  }
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  .css-1r6wvpq a:hover, .css-1r6wvpq a:focus {
+    text-decoration: none;
+    color: black !important;
+  }
+  .css-1wjnrbv {
+    border-radius: 3px;
+    display: inline-block;
+    padding: 4px;
+    -webkit-transition: background 0.6s ease;
+    transition: background 0.6s ease;
+    vertical-align: middle;
+  }
+  .css-1wjnrbv:hover, .css-1wjnrbv:focus {
+    background-color: #f7f7f7;
+  }
+  .branding { font-family: "PlainBlackNormal"; font-size: 3.25rem; font-weight: 400; line-height: 3.25rem; margin: 15px auto 5px; text-align: center; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************
+ *** FONT FACE
+ ******************************/
+ @font-face {
+    font-family: "PlainBlackNormal";
+    font-style: normal;
+    font-weight: normal;
+    src:    url("/wp-content/plugins/mycommon/web/rsc/fonts/plainblack/Plain_Black-webfont.eot?#iefix") format("embedded-opentype"),
+            url("/wp-content/plugins/mycommon/web/rsc/fonts/plainblack/Plain_Black-webfont.woff") format("woff"),
+            url("/wp-content/plugins/mycommon/web/rsc/fonts/plainblack/Plain_Black-webfont.ttf") format("truetype"),
+            url("/wp-content/plugins/mycommon/web/rsc/fonts/plainblack/Plain_Black-webfont.svg#PlainBlackNormal") format("svg");
+}
