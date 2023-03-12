@@ -1,4 +1,6 @@
 <?php
+namespace core\bean;
+
 /**
  * WpCategoryBean
  * @since 1.22.10.20

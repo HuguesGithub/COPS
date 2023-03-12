@@ -1,6 +1,8 @@
 <?php
+namespace core\bean;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe AdminCopsProfilePageBean
@@ -10,82 +12,81 @@ if (!defined('ABSPATH')) {
  */
 class AdminCopsProfilePageBean extends WpPageAdminBean
 {
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    /////////////////////////////////////////
-    // Construction du menu de l'inbox
-    $this->arrSubOnglets = array(
-      self::CST_PFL_IDENTITY    => array(self::FIELD_LABEL => 'Identité'),
-      self::CST_PFL_ABILITIES   => array(self::FIELD_LABEL => 'Caractéristiques'),
-      self::CST_PFL_SKILLS      => array(self::FIELD_LABEL => 'Compétences'),
-      self::CST_PFL_EQUIPMENT   => array(self::FIELD_LABEL => 'Équipement'),
-      self::CST_PFL_CONTACTS    => array(self::FIELD_LABEL => 'Contacts'),
-      self::CST_PFL_BACKGROUND  => array(self::FIELD_LABEL => 'Background'),
-    );
-    /////////////////////////////////////////
-
-  }
-
-  /**
-   * @return string
-   * @since 1.22.04.28
-   * @version 1.22.06.09
-   */
-  public function getBoard()
-  {
-    $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_PFL_IDENTITY);
-    $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
-
-    $this->buildBreadCrumbs('Profil', self::ONGLET_PROFILE, true);
-
-    switch ($this->subOnglet) {
-      case self::CST_PFL_ABILITIES :
-        $strContent = $this->getSubongletAbilities();
-      break;
-      case self::CST_PFL_BACKGROUND :
-        $strContent = $this->getSubongletBackground();
-      break;
-      case self::CST_PFL_CONTACTS :
-        $strContent = $this->getSubongletContacts();
-      break;
-      case self::CST_PFL_EQUIPMENT :
-        $strContent = $this->getSubongletEquipment();
-      break;
-      case self::CST_PFL_IDENTITY :
-        $strContent = $this->getSubongletIdentity();
-      break;
-      case self::CST_PFL_SKILLS :
-        $strContent = $this->getSubongletSkills();
-      break;
-      default :
-        $strContent = $this->getOngletContent();
-      break;
+        /////////////////////////////////////////
+        // Construction du menu de l'inbox
+        $this->arrSubOnglets = array(
+            self::CST_PFL_IDENTITY    => array(self::FIELD_LABEL => 'Identité'),
+            self::CST_PFL_ABILITIES   => array(self::FIELD_LABEL => 'Caractéristiques'),
+            self::CST_PFL_SKILLS      => array(self::FIELD_LABEL => 'Compétences'),
+            self::CST_PFL_EQUIPMENT   => array(self::FIELD_LABEL => 'Équipement'),
+            self::CST_PFL_CONTACTS    => array(self::FIELD_LABEL => 'Contacts'),
+            self::CST_PFL_BACKGROUND  => array(self::FIELD_LABEL => 'Background'),
+        );
+        /////////////////////////////////////////
     }
 
+    /**
+     * @return string
+     * @since 1.22.04.28
+     * @version 1.22.06.09
+     */
+    public function getBoard()
+    {
+        $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_PFL_IDENTITY);
+        $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
+
+        $this->buildBreadCrumbs('Profil', self::ONGLET_PROFILE, true);
+
+        switch ($this->subOnglet) {
+            case self::CST_PFL_ABILITIES :
+                $strContent = $this->getSubongletAbilities();
+            break;
+            case self::CST_PFL_BACKGROUND :
+                $strContent = $this->getSubongletBackground();
+            break;
+            case self::CST_PFL_CONTACTS :
+                $strContent = $this->getSubongletContacts();
+            break;
+            case self::CST_PFL_EQUIPMENT :
+                $strContent = $this->getSubongletEquipment();
+            break;
+            case self::CST_PFL_IDENTITY :
+                $strContent = $this->getSubongletIdentity();
+            break;
+            case self::CST_PFL_SKILLS :
+                $strContent = $this->getSubongletSkills();
+            break;
+            default :
+                $strContent = $this->getOngletContent();
+            break;
+        }
 
 
-    // Soit on est loggué et on affiche le contenu du bureau du cops
-    $urlTemplate = 'web/pages/public/public-board.php';
-    $attributes = array(
-      // La sidebar
-      $this->getSideBar(),
-      // Le contenu de la page
-      $strContent,
-      // L'id
-      $this->CopsPlayer->getMaskMatricule(),
-      // Le nom
-      $this->CopsPlayer->getFullName(),
-      // La barre de navigation
-      $this->getNavigationBar(),
-      // Le content header
-      $this->getContentHeader(),
 
-      '', '', '', '', '', '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
+        // Soit on est loggué et on affiche le contenu du bureau du cops
+        $urlTemplate = self::WEB_PP_BOARD;
+        $attributes = array(
+        // La sidebar
+        $this->getSideBar(),
+        // Le contenu de la page
+        $strContent,
+        // L'id
+        $this->CopsPlayer->getMaskMatricule(),
+        // Le nom
+        $this->CopsPlayer->getFullName(),
+        // La barre de navigation
+        $this->getNavigationBar(),
+        // Le content header
+        $this->getContentHeader(),
+
+        '', '', '', '', '', '', '', '', '', '', '',
+        );
+        return $this->getRender($urlTemplate, $attributes);
+    }
 
   /**
    * @since 1.22.04.28

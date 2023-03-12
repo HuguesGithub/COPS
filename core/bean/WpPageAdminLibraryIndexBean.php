@@ -1,6 +1,12 @@
 <?php
+namespace core\bean;
+
+use core\domain\CopsIndexNatureClass;
+use core\domain\WpCategoryClass;
+use core\domain\MySQLClass;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe WpPageAdminLibraryIndexBean
@@ -13,23 +19,20 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
     public function __construct()
     {
         parent::__construct();
-        // On initialise les services
-        $this->objWpCategoryServices = new WpCategoryServices();
-        $this->objCopsIndexServices  = new CopsIndexServices();
         
         // L'utilisateur a-t-il les droits d'édition ?
-        $this->hasCopsEditor = self::isCopsEditor();
+        $this->hasCopsEditor = static::isCopsEditor();
 
         // On initialise l'éventuelle pagination & on ajoute à l'url de Refresh
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
+        // On initialise l'éventuelle action : write
+        $this->action = $this->initVar(self::CST_ACTION);
         // Définition de l'url de Refresh
         $this->urlRefresh = $this->getRefreshUrl();
         
         // Est-on sur la page principale ou le filtre Nature est-il activé ?
         $this->blnShowColNature = ($this->catSlug=='');
         
-        // On initialise l'éventuelle action : write
-        $this->action = $this->initVar(self::CST_ACTION);
         // Selon la valeur, on initialise le panneau à afficher
         if ($this->hasCopsEditor
             && ($this->action==self::CST_WRITE || isset($this->urlParams[self::CST_WRITE_ACTION]))) {
@@ -41,8 +44,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // On initialise l'éventuel id
         $id = $this->initVar(self::FIELD_ID);
         // On initialise l'éventuel objet concerné
-        $this->objIndex = $this->objCopsIndexServices->getIndex($id);
-        
+        $this->objIndex = $this->objCopsIndexServices->getIndexReference($id);
+
         // On initialise l'id Wordpress de la Catégory "Index"
         $this->wpCategoryId = 48;
 
@@ -54,7 +57,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         
         if ($this->catSlug=='') {
-            $this->objCopsIndexNature = new CopsIndexNature();
+            $this->objCopsIndexNature = new CopsIndexNatureClass();
         } else {
             $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
             $name = $this->objWpCategory->getField('name');
@@ -84,7 +87,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
         // Le bouton de création ou d'annulation.
         $strButtonCreation = '';
-        $classe = 'btn btn-primary mb-3'.($blnExtraButton ? ' col-6' : ' btn-block');
+        $classe = 'btn btn-primary mb-3'.($blnExtraButton ? ' col' : ' btn-block');
         if ($this->panel!=self::CST_LIST) {
             $label = $this->getIcon('angles-left').self::CST_NBSP.self::LABEL_RETOUR;
             $strButtonCreation .= $this->getLink($label, $this->getRefreshUrl(), $classe);
@@ -93,6 +96,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             $href = $this->getRefreshUrl(array(self::CST_ACTION=>self::CST_WRITE));
             $strButtonCreation .= $this->getLink(self::LABEL_CREER_ENTREE, $href, $classe);
         }
+        $strButtonCreation = $this->getDiv($strButtonCreation, array(self::ATTR_CLASS=>'btn-group d-flex'));
         /////////////////////////////////////////
         
         /////////////////////////////////////////
@@ -100,7 +104,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // Pour ça, on doit récupérer les catégories Wp qui sont des enfants de la catégorie Index.
         $menuContent = '';
         $objsCategoryMenu = $this->objWpCategoryServices->getCategoryChildren($this->wpCategoryId);
-        usort($objsCategoryMenu, [WpCategory::class, 'compCategories']);
+        usort($objsCategoryMenu, [WpCategoryClass::class, 'compCategories']);
         while (!empty($objsCategoryMenu)) {
             $objWpCategory = array_shift($objsCategoryMenu);
             $blnSelected = ($this->catSlug==$objWpCategory->getField('slug'));
@@ -118,7 +122,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         }
         /////////////////////////////////////////
         
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        $urlTemplate = self::WEB_PPFS_ONGLET;
         $attributes = array(
             // L'id de la page
             'section-index',
@@ -140,22 +144,34 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
      */
     public function dealWithWriteAction()
     {
-        $arrFields = array(self::FIELD_NOM_IDX, self::FIELD_NATURE_ID, self::FIELD_DESCRIPTION_PJ);
-        if (self::isAdmin()) {
+        $this->objIndex = $this->objCopsIndexServices->getIndexReference($this->initVar(self::FIELD_ID));
+
+        // On défini les champs éditables par n'importe qui.
+        $arrFields = array(
+            self::FIELD_NOM_IDX,
+            self::FIELD_PRENOM_IDX,
+            self::FIELD_AKA_IDX,
+            self::FIELD_NATURE_IDX_ID,
+            self::FIELD_DESCRIPTION_PJ
+        );
+        // On ajoute les champs qui nécessite des droits spécifiques
+        if ($this->hasCopsEditor) {
             $arrFields = array_merge(
                 $arrFields,
-                array(self::FIELD_DESCRIPTION_MJ, self::FIELD_REFERENCE, self::FIELD_CODE)
+                array(self::FIELD_DESCRIPTION_MJ, self::FIELD_CODE)
             );
         }
+        // On met à jour l'objet
         while (!empty($arrFields)) {
             $field = array_shift($arrFields);
             $this->objIndex->setField($field, stripslashes($this->urlParams[$field]));
         }
-        if ($this->objIndex->checkFields()) {
-            if ($this->objIndex->getField(self::FIELD_ID)=='') {
-                $this->objCopsIndexServices->insertIndex($this->objIndex);
+        // On vérifie les champs et on créé/met à jour l'entrée
+        if ($this->objIndex->isFieldsValid()) {
+            if ($this->objIndex->getField(self::FIELD_ID_IDX_REF)=='') {
+                $this->objCopsIndexServices->insertIndexReference($this->objIndex);
             } else {
-                $this->objCopsIndexServices->updateIndex($this->objIndex);
+                $this->objCopsIndexServices->updateIndexReference($this->objIndex);
             }
         }
     }
@@ -166,8 +182,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
      */
     public function getEditContent()
     {
-        $urlTemplateEdit = 'web/pages/public/fragments/public-fragments-section-library-index-edit.php';
-        
+        $urlTemplateEdit = self::WEB_PPFF_LIBRARY_INDEX;
+
         $objsIndexNature = $this->objCopsIndexServices->getIndexNatures();
         $strSelect = '';
         while (!empty($objsIndexNature)) {
@@ -175,8 +191,9 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             $optionAttributes = array(
                 self::ATTR_VALUE => $objIndexNature->getField(self::FIELD_ID_IDX_NATURE),
             );
-            if ($objIndexNature->getField(self::FIELD_ID_IDX_NATURE)==$this->objIndex->getField(self::FIELD_NATURE_ID)
-                || $this->objWpCategory->getField('name')==$objIndexNature->getField(self::FIELD_NOM_IDX_NATURE)) {
+
+            if ($objIndexNature->getField(self::FIELD_ID_IDX_NATURE)==$this->objIndex->getField(self::FIELD_NATURE_IDX_ID)) {
+//                || $this->objWpCategory->getField(self::WP_NAME)==$objIndexNature->getField(self::FIELD_NOM_IDX_NATURE)) {
                 $optionAttributes[self::CST_SELECTED] = self::CST_SELECTED;
             }
             $nomNature = $objIndexNature->getField(self::FIELD_NOM_IDX_NATURE);
@@ -184,18 +201,20 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         }
         
         $attributes = array(
-            $this->objIndex->getField(self::FIELD_ID),
+            $this->objIndex->getField(self::FIELD_ID_IDX_REF),
             $this->urlRefresh,
             $this->objIndex->getField(self::FIELD_NOM_IDX),
             $strSelect,
             $this->objIndex->getField(self::FIELD_DESCRIPTION_PJ),
-            (self::isAdmin() ? $this->objIndex->getField(self::FIELD_DESCRIPTION_MJ) : ''),
-            (self::isAdmin() ? $this->objIndex->getField(self::FIELD_REFERENCE) : ''),
-            (self::isAdmin() ? '' : ' d-none'),
+            ($this->hasCopsEditor ? $this->objIndex->getField(self::FIELD_DESCRIPTION_MJ) : ''),
+            ($this->hasCopsEditor ? $this->objIndex->getBean()->getReferences() : ''),
+            ($this->hasCopsEditor ? '' : ' d-none'),
             ($this->objIndex->getField(self::FIELD_CODE)==2 ? ' '.self::CST_CHECKED : ''),
             ($this->objIndex->getField(self::FIELD_CODE)==1 ? ' '.self::CST_CHECKED : ''),
             ($this->objIndex->getField(self::FIELD_CODE)==0 ? ' '.self::CST_CHECKED : ''),
             ($this->objIndex->getField(self::FIELD_CODE)==-1 ? ' '.self::CST_CHECKED : ''),
+            $this->objIndex->getField(self::FIELD_PRENOM_IDX),
+            $this->objIndex->getField(self::FIELD_AKA_IDX),
         );
         return $this->getRender($urlTemplateEdit, $attributes);
     }
@@ -212,8 +231,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // Si aucune catégorie n'est sélectionnée, on affiche tout
         // Sinon, on filtre via la catégorie, le nom de la catégorie doit correspondre
         // à la valeur du champ nomIdxNature de la table wp_7_cops_index_nature
-        $urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
-        $titre = ($this->blnShowColNature ? self::LABEL_INDEX : $this->objWpCategory->getField('name'));
+        $urlTemplateList = self::WEB_PPFS_ONGLET_LIST;
+        $titre = ($this->blnShowColNature ? self::LABEL_INDEX : $this->objWpCategory->getField(self::WP_NAME));
         
         // On va construire le Header du tableau
         $thAttributes = array(
@@ -226,6 +245,9 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             unset($thAttributes[self::ATTR_STYLE]);
         }
         $headerContent .= $this->getTh(self::LABEL_DESCRIPTION, $thAttributes);
+        $thAttributes[self::ATTR_STYLE] = 'width:250px;';
+        $headerContent .= $this->getTh(self::LABEL_REFERENCE, $thAttributes);
+        unset($thAttributes[self::ATTR_STYLE]);
         if ($this->hasCopsEditor) {
             $thAttributes = array(self::ATTR_STYLE=>'width:60px;');
             $headerContent .= $this->getTh(self::CST_NBSP, $thAttributes);
@@ -238,18 +260,18 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // Si on a une Catégorie spécifique, on va chercher son équivalent Nature dans la base.
         $attributes = array();
         if (!$this->blnShowColNature) {
-            $name = $this->objWpCategory->getField('name');
-            $objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
+            $name = $this->objWpCategory->getField(self::WP_NAME);
+            $objCopsIndexNature = $this->objCopsIndexServices->getCopsIndexNatureByName($name);
             $attributes[self::SQL_WHERE_FILTERS] = array(
-                self::FIELD_NATURE_ID => $objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
+                self::FIELD_NATURE_IDX_ID => $objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
             );
         }
-        $objsCopsIndex = $this->copsIndexServices->getIndexes($attributes);
+        $objsCopsIndex = $this->objCopsIndexServices->getIndexReferences($attributes);
         
         $listContent = '';
         $strPagination = '';
         if (empty($objsCopsIndex)) {
-            $listContent = '<tr><td class="text-center" colspan="3">'.self::LABEL_NO_RESULT.'</td></tr>';
+            $listContent = '<tr><td class="text-center" colspan="5">'.self::LABEL_NO_RESULT.'</td></tr>';
         } else {
             /////////////////////////////////////////////:
             // Pagination
@@ -258,7 +280,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             foreach ($objsCopsIndex as $objCopsIndex) {
                 $url = $this->getRefreshUrl();
                 $bln = $this->blnShowColNature;
-                $listContent .= $objCopsIndex->getBean()->getCopsIndexRow($url, $bln, $this->hasCopsEditor);
+                $listContent .= $objCopsIndex->getBean()->getCopsIndexReferenceRow($url, $bln, $this->hasCopsEditor);
             }
         }
         /////////////////////////////////////////
@@ -284,7 +306,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             self::ATTR_DATA => array(
                 self::ATTR_DATA_TRIGGER => 'click',
                 self::ATTR_DATA_AJAX => 'csvExport',
-                strtolower(self::FIELD_NATURE_ID) => $this->objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
+//                strtolower(self::FIELD_NATURE_IDX_ID) => $this->objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
             ),
         );
         $strToolBar .= self::CST_NBSP.$this->getButton($this->getIcon('download'), $btnAttributes);

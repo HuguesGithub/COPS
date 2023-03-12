@@ -1,4 +1,6 @@
 <?php
+namespace core\bean;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -17,7 +19,7 @@ class WpPageHomeBean extends WpPageBean
      */
     public function getContentPage()
     {
-        $urlTemplate = 'web/pages/public/public-home-content.php';
+        $urlTemplate = self::WEB_PP_HOME_CONTENT;
 
         $args = array(
             // La date Cops du jour

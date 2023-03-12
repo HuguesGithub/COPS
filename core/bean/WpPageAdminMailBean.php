@@ -358,7 +358,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
             $mainContent = '';
         }
         
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        $urlTemplate = self::WEB_PPFS_ONGLET;
         $attributes = array(
             // L'id de la page
             'section-inbox',
@@ -714,7 +714,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
         $mainContent = $this->getRender($urlTemplate, $attributes);
         //////////////////////////////////////////////////////////////
         
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        $urlTemplate = self::WEB_PPFS_ONGLET;
         $attributes = array(
             // L'id de la page
             $idPage,

@@ -1,4 +1,10 @@
 <?php
+namespace core\bean;
+
+use core\domain;
+use core\services\WpCategoryServices;
+use core\services\CopsIndexServices;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -28,10 +34,11 @@ class WpPageAdminBean extends WpPageBean
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
         
         $this->urlOnglet = $this->getPageUrl().'?'.self::CST_ONGLET.'=';
+        $this->initServices();
         
         $this->analyzeUri();
-        $this->CopsPlayerServices = new CopsPlayerServices();
-        $this->CopsMailServices   = new CopsMailServices();
+//        $this->CopsPlayerServices = new CopsPlayerServices();
+//        $this->CopsMailServices   = new CopsMailServices();
     
         if (isset($_POST[self::FIELD_MATRICULE])) {
             // On cherche a priori à se logguer
@@ -40,18 +47,18 @@ class WpPageAdminBean extends WpPageBean
                 self::FIELD_MATRICULE => $_POST[self::FIELD_MATRICULE],
                 self::FIELD_PASSWORD  => ($_POST[self::FIELD_PASSWORD]=='' ? '' : md5($_POST[self::FIELD_PASSWORD])),
             );
-            $objsCopsPlayer = $this->CopsPlayerServices->getCopsPlayers($attributes);
-            if (!empty($objsCopsPlayer)) {
-                $this->CopsPlayer = array_shift($objsCopsPlayer);
+//            $objsCopsPlayer = $this->CopsPlayerServices->getCopsPlayers($attributes);
+//            if (!empty($objsCopsPlayer)) {
+//                $this->CopsPlayer = array_shift($objsCopsPlayer);
                 $_SESSION[self::FIELD_MATRICULE] = $_POST[self::FIELD_MATRICULE];
-            } else {
-                $_SESSION[self::FIELD_MATRICULE] = 'err_login';
-            }
+//            } else {
+//                $_SESSION[self::FIELD_MATRICULE] = 'err_login';
+//            }
         } elseif (isset($_GET['logout'])) {
             // On cherche a priori à se déconnecter
             unset($_SESSION[self::FIELD_MATRICULE]);
         } elseif (isset($_SESSION[self::FIELD_MATRICULE])) {
-            $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
+//            $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
         }
         
         $this->arrSidebarContent = array(
@@ -64,7 +71,7 @@ class WpPageAdminBean extends WpPageBean
                 self::FIELD_LABEL => 'Bibliothèque',
             ),
         );
-        if ($_SESSION[self::FIELD_MATRICULE]!='Guest') {
+    if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
             $this->arrSidebarContentNonGuest = array(
                 self::ONGLET_INBOX => array(
                     self::FIELD_ICON  => 'envelope',
@@ -124,6 +131,14 @@ class WpPageAdminBean extends WpPageBean
         }
         $this->breadCrumbsContent = $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
+        $this->strTitle = '';
+    }
+
+    private function initServices()
+    {
+        // On initialise les services
+        $this->objWpCategoryServices = new WpCategoryServices();
+        $this->objCopsIndexServices  = new CopsIndexServices();
     }
 
     /**
@@ -167,7 +182,7 @@ class WpPageAdminBean extends WpPageBean
         if (!self::isCopsLogged()) {
             // Soit on n'est pas loggué et on affiche la mire d'identification.
             // Celle-ci est invisible et passe visible en cas de souris qui bouge ou touche cliquée.
-            $urlTemplate = 'web/pages/public/fragments/public-fragments-section-connexion-panel.php';
+            $urlTemplate = self::WEB_PPFS_CONNEX_PANEL;
             if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]=='err_login') {
                 $strNotification  = "Une erreur est survenue lors de la saisie de votre identifiant et de votre ";
                 $strNotification .= "mot de passe.<br>L'un des champs était vide, ou les deux ne correspondaient";
@@ -184,7 +199,10 @@ class WpPageAdminBean extends WpPageBean
             return $this->getRender($urlTemplate, $attributes);
         }
         try {
-            switch ($this->urlParams[self::CST_ONGLET]) {
+            if (!isset($this->urlParams[self::CST_ONGLET])) {
+                $this->urlParams[self::CST_ONGLET] = '';
+             }
+                switch ($this->urlParams[self::CST_ONGLET]) {
                 case self::ONGLET_CALENDAR :
                     $objBean = WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet);
                     break;
@@ -227,16 +245,16 @@ class WpPageAdminBean extends WpPageBean
     public function getBoard()
     {
         // Soit on est loggué et on affiche le contenu du bureau du cops
-        $urlTemplate = 'web/pages/public/public-board.php';
+        $urlTemplate = self::WEB_PP_BOARD;
         $attributes = array(
             // La sidebar
             $this->getSideBar(),
             // Le contenu de la page
             $this->getOngletContent(),
             // L'id
-            $this->CopsPlayer->getMaskMatricule(),
+            '',//$this->CopsPlayer->getMaskMatricule(),
             // Le nom
-            $this->CopsPlayer->getFullName(),
+            '',//$this->CopsPlayer->getFullName(),
             // La barre de navigation
             $this->getNavigationBar(),
             // Header
@@ -254,9 +272,12 @@ class WpPageAdminBean extends WpPageBean
      */
      protected function getSideBar()
      {
-         $urlTemplate = 'web/pages/public/fragments/public-fragments-sidebar.php';
+         $urlTemplate = self::WEB_PPF_SIDEBAR;
          
          $sidebarContent = '';
+         if (!isset($this->urlParams[self::CST_ONGLET])) {
+            $this->urlParams[self::CST_ONGLET] = '';
+         }
          foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
             $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
             $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
@@ -326,12 +347,13 @@ class WpPageAdminBean extends WpPageBean
     public function getNavigationBar()
     {
         // On détermine le nombre de messages non lus dans la boite de réception
-        $nbMailsNonLus = $this->CopsMailServices->getNombreMailsNonLus();
+        $nbMailsNonLus = 0;
+//        $nbMailsNonLus = $this->CopsMailServices->getNombreMailsNonLus();
 
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-content-navigation-bar.php';
+        $urlTemplate = self::WEB_PPFS_CONTENT_NAVBAR;
         $attributes = array(
             // Nom Prénom de la personne logguée
-            $this->CopsPlayer->getFullName(),
+            '',//$this->CopsPlayer->getFullName(),
             // Si présence de notifications, le badge
             // <span class="badge badge-warning navbar-badge">0</span>
             '',
@@ -352,7 +374,7 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getContentHeader()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-content-header.php';
+        $urlTemplate = self::WEB_PPFS_CONTENT_HEADER;
         $attributes = array(
             // Le Titre
             $this->strTitle,
@@ -468,6 +490,62 @@ class WpPageAdminBean extends WpPageBean
         /////////////////////////////////////////////
         
         return $url;
+    }
+
+    /**
+     * @param array $objs
+     * @return string
+     * @since 2.22.12.08
+     * @version 2.22.12.08
+     */
+    public function buildPagination(&$objs)
+    {
+        $nbItems = count($objs);
+        $nbItemsPerPage = 10;
+        $nbPages = ceil($nbItems/$nbItemsPerPage);
+        $strPagination = '';
+        $arrUrl = array();
+        if ($this->catSlug!='') {
+            $arrUrl[self::CST_CAT_SLUG] = $this->catSlug;
+        }
+
+        if ($nbPages>1) {
+            $this->blnHasPagination = true;
+            // Le bouton page précédente
+            $label = $this->getIcon(self::I_CARET_LEFT);
+            if ($this->curPage!=1) {
+                $btnClass = '';
+                $arrUrl[self::CST_CURPAGE] = $this->curPage-1;
+                $href = $this->getUrl($arrUrl);
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
+            
+            // La chaine des éléments affichés
+            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
+            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
+            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, array($firstItem+1, $lastItem, $nbItems));
+            
+            // Le bouton page suivante
+            $label = $this->getIcon(self::I_CARET_RIGHT);
+            if ($this->curPage!=$nbPages) {
+                $btnClass = '';
+                $arrUrl[self::CST_CURPAGE] = $this->curPage+1;
+                $href = $this->getUrl($arrUrl);
+                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+            } else {
+                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
+                $btnContent = $label;
+            }
+            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
+            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
+        }
+        return $strPagination;
     }
     
 }

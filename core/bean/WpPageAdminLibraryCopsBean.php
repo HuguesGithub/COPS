@@ -237,7 +237,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
      */
     public function getContent($mainContent)
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        $urlTemplate = self::WEB_PPFS_ONGLET;
         $attributes = array(
             // L'id de la page
             'section-cops',
@@ -260,7 +260,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
      */
     public function getListRanked()
     {
-        $urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
+        $urlTemplateList = self::WEB_PPFS_ONGLET_LIST;
         $titre = 'Gradés';
         
         $strHeader = $this->getBalise(self::TAG_TR, $this->getHeader());
@@ -314,7 +314,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
      */
     public function getListTeam()
     {
-        $urlTemplateList = 'web/pages/public/fragments/public-fragments-section-onglet-list.php';
+        $urlTemplateList = self::WEB_PPFS_ONGLET_LIST;
         $titre = 'A-Alpha / A-Beta / B-Epsilon';
         
         $strHeader = $this->getBalise(self::TAG_TR, $this->getHeader(false));

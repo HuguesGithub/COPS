@@ -84,7 +84,7 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
         }
         /////////////////////////////////////////
         
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-onglet.php';
+        $urlTemplate = self::WEB_PPFS_ONGLET;
         $attributes = array(
             // L'id de la page
             'section-bdd',

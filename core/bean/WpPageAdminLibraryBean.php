@@ -1,4 +1,11 @@
 <?php
+namespace core\bean;
+
+use core\domain\CopsIndexNatureClass;
+use core\domain\WpCategoryClass;
+use core\services\CopsIndexServices;
+use core\services\WpCategoryServices;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -17,7 +24,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         parent::__construct();
         /////////////////////////////////////////
         // Définition des services
-        $this->copsIndexServices  = new CopsIndexServices();
+        $this->objCopsIndexServices  = new CopsIndexServices();
         $this->wpCategoryServices = new WpCategoryServices();
         
         /////////////////////////////////////////
@@ -28,12 +35,12 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         $this->catSlug = $this->initVar(self::CST_CAT_SLUG);
         // Si catSlug est défini, on récupère la WpCategory associée.
         if ($this->catSlug=='') {
-            $this->objWpCategory = new WpCategory();
-            $this->objCopsIndexNature = new CopsIndexNature();
+            $this->objWpCategory = new WpCategoryClass();
+            $this->objCopsIndexNature = new CopsIndexNatureClass();
         } else {
             $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
             $name = $this->objWpCategory->getField('name');
-            $this->objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
+            $this->objCopsIndexNature = $this->objCopsIndexServices->getCopsIndexNatureByName($name);
         }
         
         /////////////////////////////////////////
@@ -69,7 +76,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
      */
     public function getOngletContent()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-article-onglet-menu-panel.php';
+        $urlTemplate = self::WEB_PPFS_ONGLET_MENU_PANEL;
         $strContent = '';
         foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
             $attributes = array(

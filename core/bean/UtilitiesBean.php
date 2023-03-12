@@ -1,4 +1,10 @@
 <?php
+namespace core\bean;
+
+use core\interfaceimpl\ConstantsInterface;
+use core\interfaceimpl\LabelsInterface;
+use core\interfaceimpl\UrlsInterface;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -145,7 +151,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     public function getButton($label, $attributes=array())
     {
         $buttonAttributes = array(
-            'type' => 'button',
+            self::ATTR_TYPE => self::TAG_BUTTON,
             self::ATTR_CLASS => 'btn btn-default btn-sm',
         );
         if (!empty($attributes)) {
@@ -270,7 +276,8 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
             case 'download' :
             case 'envelope' :
             case 'inbox' :
-            case 'square-plus' :
+                case 'square-pen' :
+                    case 'square-plus' :
             case 'trash-alt' :
                 $prefix .= 'fa-solid fa-';
             break;
@@ -310,13 +317,27 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      */
     public function getPublicFooter()
     {
-        $urlTemplate = 'web/pages/public/public-main-footer.php';
+        $urlTemplate = self::WEB_PP_MAIN_FOOTER;
 
         $args = array(
             // ajaxUrl - 1
             admin_url('admin-ajax.php'),
         );
         return $this->getRender($urlTemplate, $args);
+    }
+
+    /**
+     * Retourne une donnée du serveur après nettoyage
+     * @param string $field
+     * @return string
+     * @since 1.23.02.18
+     * @version 1.23.02.18
+     */
+    public static function fromServer($field)
+    {
+        // Sanitize
+        $strSanitized = htmlentities($_SERVER[$field], ENT_QUOTES, 'UTF-8');
+        return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 
 }
