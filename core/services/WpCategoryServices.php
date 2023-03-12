@@ -1,4 +1,8 @@
 <?php
+namespace core\services;
+
+use core\domain\WpCategoryClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -28,21 +32,21 @@ class WpCategoryServices extends LocalServices
     
     /**
      * @param int $catId
-     * @return WpCategory
+     * @return WpCategoryClass
      * @since 1.22.10.20
      * @version 1.22.10.20
      */
     public function getCategory($catId)
-    { return new WpCategory(get_term($catId)); }
+    { return new WpCategoryClass(get_term($catId)); }
 
     /**
      * @param int $catId
-     * @return WpCategory
+     * @return WpCategoryClass
      * @since 1.22.10.21
      * @version 1.22.10.21
      */
     public function getCategoryByField($field, $value)
-    { return new WpCategory(get_term_by($field, $value, 'category')); }
+    { return new WpCategoryClass(get_term_by($field, $value, 'category')); }
     
     /*
   public function __construct() { }

@@ -1,4 +1,6 @@
 <?php
+namespace core\services;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -8,7 +10,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.28
  * @version 1.22.05.20
  */
-class LocalServices extends GlobalServices implements ConstantsInterface
+class LocalServices extends GlobalServices
 {
   //////////////////////////////////////////////////
   // ATTRIBUTES

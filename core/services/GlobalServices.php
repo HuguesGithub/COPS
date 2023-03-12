@@ -1,6 +1,12 @@
 <?php
+namespace core\services;
+
+use core\interfaceimpl\ConstantsInterface;
+use core\interfaceimpl\LabelsInterface;
+use core\interfaceimpl\UrlsInterface;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe GlobalServices
@@ -8,8 +14,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.28
  * @version 1.22.04.28
  */
-class GlobalServices implements ConstantsInterface
+class GlobalServices implements ConstantsInterface, UrlsInterface, LabelsInterface
 {
 
 }
-?>

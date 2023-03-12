@@ -1,4 +1,6 @@
 <?php
+namespace core\services;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
