@@ -1,4 +1,6 @@
 <?php
+namespace core\interfaceimpl;
+
 /**
  * @author Hugues
  * @since 1.22.11.24
@@ -24,6 +26,7 @@ interface LabelsInterface
     const LABEL_INDEX          = 'Index';
     const LABEL_MONTHLY        = 'Mensuel';
     const LABEL_MESSAGERIE     = 'Messagerie';
+    const LABEL_EDIT_ENTRY     = 'Modifier cette entrée';
     const LABEL_NATURE         = 'Nature';
     const LABEL_NOM            = 'Nom';
     const LABEL_PARENTS        = 'Parents';

@@ -1,4 +1,6 @@
 <?php
+namespace core\interfaceimpl;
+
 /**
  * @author Hugues
  * @since 1.00.00
@@ -225,15 +227,27 @@ interface ConstantsInterface
   const FIELD_IDX_ENQUETE        = 'idxEnquete';
   const FIELD_DATA               = 'data';
 
-  // TABLE cops_index
-  const FIELD_NOM_IDX            = 'nomIdx';
-  const FIELD_NATURE_ID          = 'natureId';
-  const FIELD_DESCRIPTION_PJ     = 'descriptionPJ';
-  const FIELD_DESCRIPTION_MJ     = 'descriptionMJ';
-  const FIELD_CODE               = 'code';
-  // TABLE cops_index_nature
-  const FIELD_ID_IDX_NATURE      = 'idIdxNature';
-  const FIELD_NOM_IDX_NATURE     = 'nomIdxNature';
+    // TABLE cops_index
+    const FIELD_ID_IDX           = 'idIdx';
+    const FIELD_REF_IDX_ID       = 'referenceIdxId';
+    const FIELD_TOME_IDX_ID      = 'tomeIdxId';
+    const FIELD_PAGE             = 'page';
+    // TABLE cops_index_reference
+    const FIELD_ID_IDX_REF       = 'idIdxReference';
+    const FIELD_NOM_IDX          = 'nomIdxReference';
+    const FIELD_PRENOM_IDX       = 'prenomIdxReference';
+    const FIELD_AKA_IDX          = 'akaIdxReference';
+    const FIELD_NATURE_IDX_ID    = 'natureIdxId';
+    const FIELD_DESCRIPTION_PJ   = 'descriptionPJ';
+    const FIELD_DESCRIPTION_MJ   = 'descriptionMJ';
+    const FIELD_CODE             = 'code';
+    // TABLE cops_index_nature
+    const FIELD_ID_IDX_NATURE    = 'idIdxNature';
+    const FIELD_NOM_IDX_NATURE   = 'nomIdxNature';
+    // TABLE cops_index_tome
+    const FIELD_ID_IDX_TOME      = 'idIdxTome';
+    const FIELD_NOM_IDX_TOME     = 'nomIdxTome';
+    const FIELD_ABR_IDX_TOME     = 'abrIdxTome';
   
   /////////////////////////////////////////////////
   // Icons
@@ -242,8 +256,13 @@ interface ConstantsInterface
   const I_ANGLES_LEFT           = 'angles-left';
   const I_ARROWS_ROTATE         = 'arrows-rotate';
   const I_BACKWARD              = 'backward';
+  const I_CARET_LEFT           = 'caret-left';
+  const I_CARET_RIGHT          = 'caret-right';
   const I_CIRCLE                = 'circle';
   const I_DATABASE              = 'database';
+  const I_DELETE               = 'trash-can';
+  const I_DESKTOP              = 'desktop';
+  const I_DOWNLOAD             = 'download';
   const I_EDIT                  = 'edit';
   const I_FILE_CATEGORY         = 'folder-tree';
   const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
@@ -252,7 +271,13 @@ interface ConstantsInterface
   const I_FILE_OPENED           = 'folder-open';
   const I_FILE_CLOSED           = 'folder-closed';
   const I_FILE_COLDED           = 'folder';
-  
+  const I_FILTER_CIRCLE_XMARK  = 'filter-circle-xmark';
+  const I_GEAR                 = 'gear';
+  const I_REFRESH              = 'arrows-rotate';
+  const I_SQUARE_CHECK         = 'square-check';
+  const I_SQUARE_XMARK         = 'square-xmark';
+  const I_USERS                = 'users';
+
   /////////////////////////////////////////////////
   // Page d'administration
   const PAGE_ADMIN              = 'admin';
@@ -312,6 +337,7 @@ interface ConstantsInterface
   const WP_CAT_ID_SKILL        = 47;
   const WP_METAKEY             = 'meta_key';
   const WP_METAVALUENUM        = 'meta_value_num';
+  const WP_NAME                = 'name';
   const WP_POSTCONTENT         = 'post_content';
   const WP_POSTNAME            = 'post_name';
   const WP_POSTTITLE           = 'post_title';
