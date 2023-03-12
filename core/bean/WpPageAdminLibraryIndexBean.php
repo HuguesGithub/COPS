@@ -236,6 +236,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
         // Si on a une Catégorie spécifique, on va chercher son équivalent Nature dans la base.
+        $attributes = array();
         if (!$this->blnShowColNature) {
             $name = $this->objWpCategory->getField('name');
             $objCopsIndexNature = $this->copsIndexServices->getCopsIndexNatureByName($name);
@@ -246,6 +247,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $objsCopsIndex = $this->copsIndexServices->getIndexes($attributes);
         
         $listContent = '';
+        $strPagination = '';
         if (empty($objsCopsIndex)) {
             $listContent = '<tr><td class="text-center" colspan="3">'.self::LABEL_NO_RESULT.'</td></tr>';
         } else {

@@ -83,53 +83,37 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
       
         return $this->getDiv($strContent, array(self::ATTR_CLASS=>'row'));
     }
-
-  /**
-   * @since 1.22.06.27
-   * @version 1.22.06.27
-   *
-  public function getSubongletLapd()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-lapd.php';
-    $attributes = array(
-      // Normalement, plus rien après
-      '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
-  */
     
-  /**
-   * @since v1.22.11.11
-   * @version v1.22.11.11
-   */
-  public static function getStaticWpPageBean($slugSubContent)
-  {
-      switch ($slugSubContent) {
-          case self::CST_LIB_SKILL :
-              $objBean = new WpPageAdminLibrarySkillBean();
-              break;
+   /**
+    * @since v1.22.11.11
+    * @version v1.22.11.11
+    */
+    public static function getStaticWpPageBean($slugSubContent)
+    {
+        switch ($slugSubContent) {
+            case self::CST_LIB_SKILL :
+                $objBean = new WpPageAdminLibrarySkillBean();
+                break;
           case self::CST_LIB_STAGE :
-              $objBean = new WpPageAdminLibraryCourseBean();
-              break;
-          case self::CST_LIB_COPS :
-              $objBean = new WpPageAdminLibraryCopsBean();
-              break;
-          case self::CST_LIB_LAPD :
-              // TODO
-              //$objBean = new WpPageAdminLibraryLapsBean();
-              break;
-          case self::CST_LIB_BDD :
-              $objBean = new WpPageAdminLibraryBddBean();
-              break;
-          case self::CST_LIB_INDEX :
-              $objBean = new WpPageAdminLibraryIndexBean();
-              break;
-          default :
-              $objBean = new WpPageAdminLibraryBean();
-              break;
-      }
-      
-      return $objBean;
-  }
+                $objBean = new WpPageAdminLibraryCourseBean();
+                break;
+            case self::CST_LIB_COPS :
+                $objBean = new WpPageAdminLibraryCopsBean();
+                break;
+            case self::CST_LIB_LAPD :
+                // TODO
+                //$objBean = new WpPageAdminLibraryLapsBean();
+                break;
+            case self::CST_LIB_BDD :
+                $objBean = new WpPageAdminLibraryBddBean();
+                break;
+            case self::CST_LIB_INDEX :
+                $objBean = new WpPageAdminLibraryIndexBean();
+                break;
+            default :
+                $objBean = new WpPageAdminLibraryBean();
+                break;
+        }
+        return $objBean;
+    }
 }
