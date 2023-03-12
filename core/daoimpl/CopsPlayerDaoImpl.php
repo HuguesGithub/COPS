@@ -19,7 +19,7 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
   {
     ////////////////////////////////////
     // Définition des variables spécifiques
-    $this->ObjClass = new CopsPlayer();
+    //$this->ObjClass = new CopsPlayer();
     $this->dbTable  = "wp_7_cops_player";
     ////////////////////////////////////
 

@@ -1,20 +1,20 @@
 <?php
+namespace core\daoimpl;
+
+use core\interfaceimpl\ConstantsInterface;
+use core\interfaceimpl\LabelsInterface;
+use core\interfaceimpl\UrlsInterface;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
-/*
-define ('_SQL_PARAMS_WHERE_', 'where');
-define ('_SQL_PARAMS_REPLACE_', 'replace');
-define ('_SQL_PARAMS_LIMIT_', '__limit__');
-define ('_SQL_PARAMS_ORDERBY_', '__orderby__');
-*/
 /**
  * Classe GlobalDaoImpl
  * @author Hugues.
  * @since 1.22.04.28
  * @version 1.22.04.28
  */
-class GlobalDaoImpl
+class GlobalDaoImpl implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
 
   /**

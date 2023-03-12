@@ -1,18 +1,18 @@
 <?php
+namespace core\daoimpl;
+
+use core\domain\MySQLClass;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
-/*
-define('SQL_PARAMS_WHERE', 'where');
-define('SQL_PARAMS_ORDERBY', '__orderby__');
-*/
 /**
  * Classe LocalDaoImpl
  * @author Hugues
  * @since 1.22.04.28
  * @version 1.22.04.28
  */
-class LocalDaoImpl extends GlobalDaoImpl implements ConstantsInterface
+class LocalDaoImpl extends GlobalDaoImpl
 {
   /**
    * Requête de sélection en base
@@ -74,7 +74,7 @@ class LocalDaoImpl extends GlobalDaoImpl implements ConstantsInterface
     ////////////////////////////////////
     // Récupération des champs de l'objet en base
     $arrFields = array();
-    $rows = MySQL::wpdbSelect("DESCRIBE ".$dbTable.";");
+    $rows = MySQLClass::wpdbSelect("DESCRIBE ".$dbTable.";");
     foreach ($rows as $row) {
       $arrFields[] = $row->Field;
     }
@@ -85,7 +85,7 @@ class LocalDaoImpl extends GlobalDaoImpl implements ConstantsInterface
   public function getFields()
   {
       $arrFields = array();
-      $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable.";");
+      $rows = MySQLClass::wpdbSelect("DESCRIBE ".$this->dbTable.";");
       foreach ($rows as $row) {
           $arrFields[] = $row->Field;
       }
