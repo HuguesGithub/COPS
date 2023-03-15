@@ -1,4 +1,11 @@
 <?php
+namespace core\bean;
+
+use core\domain\MySQLClass;
+use core\domain\CopsStageClass;
+use core\domain\CopsStageCapaciteSpecialeClass;
+use core\domain\CopsStageCategorieClass;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -52,18 +59,18 @@ class CopsStageDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Exécution de la requête
-    $rows = MySQL::wpdbSelect($request);
+    $rows = MySQLClass::wpdbSelect($request);
     //////////////////////////////
 
     //////////////////////////////
     // Construction du résultat
-    $Items = array();
+    $objsItem = array();
     if (!empty($rows)) {
       foreach ($rows as $row) {
-        $Items[] = CopsStage::convertElement($row);
+        $objsItem[] = CopsStageClass::convertElement($row);
       }
     }
-    return $Items;
+    return $objsItem;
     //////////////////////////////
   }
 
@@ -74,18 +81,18 @@ class CopsStageDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Exécution de la requête
-    $rows = MySQL::wpdbSelect($request);
+    $rows = MySQLClass::wpdbSelect($request);
     //////////////////////////////
 
     //////////////////////////////
     // Construction du résultat
-    $Items = array();
+    $objsItem = array();
     if (!empty($rows)) {
       foreach ($rows as $row) {
-        $Items[] = CopsStageCategorie::convertElement($row);
+        $objsItem[] = CopsStageCategorieClass::convertElement($row);
       }
     }
-    return $Items;
+    return $objsItem;
     //////////////////////////////
   }
 
@@ -100,18 +107,18 @@ class CopsStageDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Exécution de la requête
-    $rows = MySQL::wpdbSelect($request);
+    $rows = MySQLClass::wpdbSelect($request);
     //////////////////////////////
 
     //////////////////////////////
     // Construction du résultat
-    $Items = array();
+    $objsItem = array();
     if (!empty($rows)) {
       foreach ($rows as $row) {
-        $Items[] = CopsStageCapaciteSpeciale::convertElement($row);
+        $objsItem[] = CopsStageCapaciteSpecialeClass::convertElement($row);
       }
     }
-    return $Items;
+    return $objsItem;
     //////////////////////////////
   }
 

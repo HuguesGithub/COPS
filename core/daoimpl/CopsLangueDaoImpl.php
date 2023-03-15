@@ -1,4 +1,8 @@
 <?php
+namespace core\daoimpl;
+
+use core\domain\CopsLangueClass;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -19,7 +23,7 @@ class CopsLangueDaoImpl extends LocalDaoImpl
   {
     ////////////////////////////////////
     // Définition des variables spécifiques
-    $this->ObjClass = new CopsLangue();
+    $this->ObjClass = new CopsLangueClass();
     $this->dbTable  = "wp_7_cops_langue";
     ////////////////////////////////////
 
@@ -50,18 +54,18 @@ class CopsLangueDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Exécution de la requête
-    $rows = MySQL::wpdbSelect($request);
+    $rows = MySQLClass::wpdbSelect($request);
     //////////////////////////////
 
     //////////////////////////////
     // Construction du résultat
-    $Items = array();
+    $objsItem = array();
     if (!empty($rows)) {
       foreach ($rows as $row) {
-        $Items[] = CopsLangue::convertElement($row);
+        $objsItem[] = CopsLangueClass::convertElement($row);
       }
     }
-    return $Items;
+    return $objsItem;
     //////////////////////////////
   }
 

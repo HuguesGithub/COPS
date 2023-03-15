@@ -1,4 +1,9 @@
 <?php
+namespace core\bean;
+
+use core\domain\MySQLClass;
+use core\domain\CopsPlayerClass;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -50,30 +55,30 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Exécution de la requête
-    $rows = MySQL::wpdbSelect($request);
+    $rows = MySQLClass::wpdbSelect($request);
     //////////////////////////////
 
     //////////////////////////////
     // Construction du résultat
-    $Items = array();
+    $objsItem = array();
     if (!empty($rows)) {
       foreach ($rows as $row) {
-        $Items[] = CopsPlayer::convertElement($row);
+        $objsItem[] = CopsPlayerClass::convertElement($row);
       }
     }
-    return $Items;
+    return $objsItem;
     //////////////////////////////
   }
 
-  public function insert($Obj)
+  public function insert($obj)
   {
-    $prepObject = $this->prepObject($Obj);
+    $prepObject = $this->prepObject($obj);
     $this->createEditDeleteEntry($this->insert, $prepObject);
   }
 
-  public function update($Obj)
+  public function update($obj)
   {
-    $prepObject = $this->prepObject($Obj, true);
+    $prepObject = $this->prepObject($obj, true);
     $this->createEditDeleteEntry($this->update." WHERE id='%s';", $prepObject);
   }
 
@@ -83,23 +88,23 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
    */
   protected function createEditDeleteEntry($requete, $arrParams=array())
   {
-    $sql = MySQL::wpdbPrepare($requete, $arrParams);
-    MySQL::wpdbQuery($sql);
+    $sql = MySQLClass::wpdbPrepare($requete, $arrParams);
+    MySQLClass::wpdbQuery($sql);
   }
 
-  public function prepObject($Obj, $isUpdate=false)
+  public function prepObject($obj, $isUpdate=false)
   {
     $arr = array();
-    $vars = $Obj->getClassVars();
+    $vars = $obj->getClassVars();
     if (!empty($vars)) {
       foreach ($vars as $key => $value) {
         if ($key=='id' || $key=='stringClass') {
             continue;
         }
-        $arr[] = $Obj->getField($key);
+        $arr[] = $obj->getField($key);
       }
       if ($isUpdate) {
-          $arr[] = $Obj->getField('id');
+          $arr[] = $obj->getField('id');
       }
     }
     return $arr;

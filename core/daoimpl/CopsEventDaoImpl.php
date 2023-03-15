@@ -1,4 +1,10 @@
 <?php
+namespace core\daoimpl;
+
+use core\domain\MysqlClass;
+use core\domain\CopsEventDateClass;
+use core\domaine\CopsEventCategorieClass;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -47,7 +53,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         //////////////////////////////
         // Exécution de la requête
-        $rows = MySQL::wpdbSelect($prepRequest);
+        $rows = MySQLClass::wpdbSelect($prepRequest);
         //////////////////////////////
 
         //////////////////////////////
@@ -55,7 +61,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $objItems = array();
         if (!empty($rows)) {
             foreach ($rows as $row) {
-                $objItems[] = CopsEventDate::convertElement($row);
+                $objItems[] = CopsEventDateClass::convertElement($row);
             }
         }
         return $objItems;
@@ -118,8 +124,8 @@ class CopsEventDaoImpl extends LocalDaoImpl
     {
         $request  = "INSERT INTO ".$this->dbTable_ced." (eventId, dStart, dEnd, tStart, tEnd) ";
         $request .= "VALUES ('%s', '%s', '%s', '%s', '%s');";
-        MySQL::wpdbQuery(MySQL::wpdbPrepare($request, $attributes));
-        return MySQL::getLastInsertId();
+        MySQLClass::wpdbQuery(MySQLClass::wpdbPrepare($request, $attributes));
+        return MySQLClass::getLastInsertId();
     }
 
     public function getCopsEventCategorie($id)
@@ -130,12 +136,12 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $prepRequest = vsprintf($request, array($id));
         //////////////////////////////
         // Exécution de la requête
-        $rows = MySQL::wpdbSelect($prepRequest);
+        $rows = MySQLClass::wpdbSelect($prepRequest);
         //////////////////////////////
 
         //////////////////////////////
         // Construction du résultat
-        return (empty($rows) ? new CopsEventCategorie() : CopsEventCategorie::convertElement($rows[0]));
+        return (empty($rows) ? new CopsEventCategorieClass() : CopsEventCategorieClass::convertElement($rows[0]));
         //////////////////////////////
     }
 
@@ -152,7 +158,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         //////////////////////////////
         // Exécution de la requête
-        $rows = MySQL::wpdbSelect($prepRequest);
+        $rows = MySQLClass::wpdbSelect($prepRequest);
         //////////////////////////////
       
         //////////////////////////////
@@ -160,7 +166,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $objItems = array();
         if (!empty($rows)) {
             foreach ($rows as $row) {
-                $objItems[] = CopsEventCategorie::convertElement($row);
+                $objItems[] = CopsEventCategorieClass::convertElement($row);
             }
         }
         return $objItems;

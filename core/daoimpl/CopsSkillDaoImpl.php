@@ -1,4 +1,10 @@
 <?php
+namespace core\bean;
+
+use core\domain\MySQLClass;
+use core\domain\CopsSkillClass;
+use core\domain\CopsSkillSpecClass;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
@@ -19,7 +25,7 @@ class CopsSkillDaoImpl extends LocalDaoImpl
   {
     ////////////////////////////////////
     // Définition des variables spécifiques
-    $this->ObjClass = new CopsSkill();
+    $this->ObjClass = new CopsSkillClass();
     $this->dbTable  = "wp_7_cops_skill";
     ////////////////////////////////////
 
@@ -27,7 +33,8 @@ class CopsSkillDaoImpl extends LocalDaoImpl
 
     ////////////////////////////////////
     // Personnalisation de la requête avec les filtres
-    $this->whereFilters .= "AND id LIKE '%s' AND skillName LIKE '%s' AND skillDescription LIKE '%s' AND specLevel LIKE '%s' AND panUsable LIKE '%s' ";
+    $this->whereFilters .= "AND id LIKE '%s' AND skillName LIKE '%s' AND skillDescription LIKE '%s' ";
+    $this->whereFilters .= "AND specLevel LIKE '%s' AND panUsable LIKE '%s' ";
     ////////////////////////////////////
   }
 
@@ -50,40 +57,41 @@ class CopsSkillDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Exécution de la requête
-    $rows = MySQL::wpdbSelect($request);
+    $rows = MySQLClass::wpdbSelect($request);
     //////////////////////////////
 
     //////////////////////////////
     // Construction du résultat
-    $Items = array();
+    $objsItem = array();
     if (!empty($rows)) {
       foreach ($rows as $row) {
-        $Items[] = CopsSkill::convertElement($row);
+        $objsItem[] = CopsSkillClass::convertElement($row);
       }
     }
-    return $Items;
+    return $objsItem;
     //////////////////////////////
   }
 
   public function getCopsSkillSpecs($attributes)
   {
-    $request  = vsprintf("SELECT id, specName, skillId FROM wp_7_cops_skill_spec WHERE skillId = '%s' ", $attributes[self::SQL_WHERE_FILTERS]);
+    $strSql = "SELECT id, specName, skillId FROM wp_7_cops_skill_spec WHERE skillId = '%s' ";
+    $request  = vsprintf($strSql, $attributes[self::SQL_WHERE_FILTERS]);
     $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
 
     //////////////////////////////
     // Exécution de la requête
-    $rows = MySQL::wpdbSelect($request);
+    $rows = MySQLClass::wpdbSelect($request);
     //////////////////////////////
 
     //////////////////////////////
     // Construction du résultat
-    $Items = array();
+    $objsItem = array();
     if (!empty($rows)) {
       foreach ($rows as $row) {
-        $Items[] = CopsSkillSpec::convertElement($row);
+        $objsItem[] = CopsSkillSpecClass::convertElement($row);
       }
     }
-    return $Items;
+    return $objsItem;
     //////////////////////////////
   }
 
