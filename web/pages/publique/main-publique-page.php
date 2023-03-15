@@ -22,6 +22,7 @@ $PageBean = WpPageBean::getPageBean();
     <link rel="stylesheet" href="<?php echo PLUGINS_COPS; ?>web/rsc/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="https://gones.jhugues.fr/wp-content/plugins/hj-gones/web/rsc/css/admin-transverse.min.css">
+    <link rel="icon" type="image/png" href="<?php echo PLUGINS_COPS; ?>web/rsc/img/favicon-32x32.png">
   </head>
   <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed"><!-- sidebar-collapse-->
     <div id="page">

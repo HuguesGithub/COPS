@@ -121,31 +121,36 @@ class AdminPageIndexBean extends AdminPageBean
 
   }
 
-  public function getLisReferenceCheckboxes()
-  {
-    $str_requete  = "SELECT nomIdxReference, abrIdxReference ";
-    $str_requete .= "FROM wp_7_cops_index_reference ORDER BY idIdxReference ASC;";
-    $rows = MySQL::wpdbSelect($str_requete);
-
-    $str_lis  = '';
-    foreach ($rows as $row) {
-      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->abrIdxReference.'">';
-      $str_lis .= '<label class="checkbox" title=""><input type="checkbox"> '.$row->nomIdxReference.'</label></a></li>';
+    public function getLi($abrIdxReference, $nomIdxReference)
+    {
+        $str  = '<li><a class="dropdown-item" href="#" data-abr="'.$abrIdxReference.'">';
+        $str .= '<label class="checkbox" title=""><input type="checkbox"> ';
+        $str .= $nomIdxReference.'</label></a></li>';
+        return $str;
     }
-    return $str_lis;
-  }
+    public function getLisReferenceCheckboxes()
+    {
+        $strRequete  = "SELECT nomIdxReference, abrIdxReference ";
+        $strRequete .= "FROM wp_7_cops_index_reference ORDER BY idIdxReference ASC;";
+        $rows = MySQLClass::wpdbSelect($strRequete);
+
+        $strLis  = '';
+        foreach ($rows as $row) {
+            $strLis .= $this->getLi($row->abrIdxReference, $row->nomIdxReference);
+        }
+        return $strLis;
+    }
 
   public function getLisNatureCheckboxes()
   {
-    $str_requete = "SELECT idIdxNature, nomIdxNature FROM wp_7_cops_index_nature ORDER BY nomIdxNature ASC;";
-    $rows = MySQL::wpdbSelect($str_requete);
+    $strRequete = "SELECT idIdxNature, nomIdxNature FROM wp_7_cops_index_nature ORDER BY nomIdxNature ASC;";
+    $rows = MySQLClass::wpdbSelect($strRequete);
 
-    $str_lis  = '';
+    $strLis  = '';
     foreach ($rows as $row) {
-      $str_lis .= '<li><a class="dropdown-item" href="#" data-abr="'.$row->idIdxNature.'">';
-      $str_lis .= '<label class="checkbox" title=""><input type="checkbox"> '.$row->nomIdxNature.'</label></a></li>';
+        $strLis .= $this->getLi($row->idIdxNature, $row->nomIdxNature);
     }
-    return $str_lis;
+    return $strLis;
   }
 
 }
