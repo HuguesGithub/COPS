@@ -192,11 +192,12 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
                 self::ATTR_VALUE => $objIndexNature->getField(self::FIELD_ID_IDX_NATURE),
             );
 
-            if ($objIndexNature->getField(self::FIELD_ID_IDX_NATURE)==$this->objIndex->getField(self::FIELD_NATURE_IDX_ID)) {
-//                || $this->objWpCategory->getField(self::WP_NAME)==$objIndexNature->getField(self::FIELD_NOM_IDX_NATURE)) {
+            $idNature = $objIndexNature->getField(self::FIELD_ID_IDX_NATURE);
+            $nomNature = $objIndexNature->getField(self::FIELD_NOM_IDX_NATURE);
+            if ($idNature==$this->objIndex->getField(self::FIELD_NATURE_IDX_ID)) {
+// || $this->objWpCategory->getField(self::WP_NAME)==$nomNature) {
                 $optionAttributes[self::CST_SELECTED] = self::CST_SELECTED;
             }
-            $nomNature = $objIndexNature->getField(self::FIELD_NOM_IDX_NATURE);
             $strSelect .= $this->getBalise(self::TAG_OPTION, $nomNature, $optionAttributes);
         }
         
@@ -306,7 +307,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             self::ATTR_DATA => array(
                 self::ATTR_DATA_TRIGGER => 'click',
                 self::ATTR_DATA_AJAX => 'csvExport',
-//                strtolower(self::FIELD_NATURE_IDX_ID) => $this->objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
+// strtolower(self::FIELD_NATURE_IDX_ID) => $this->objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
             ),
         );
         $strToolBar .= self::CST_NBSP.$this->getButton($this->getIcon('download'), $btnAttributes);

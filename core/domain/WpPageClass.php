@@ -32,23 +32,30 @@ class WpPageClass extends WpPostClass
     { return $this->getPostParent()==0 ? 0 : 1+$this->getParent()->getDepth(); }
 
     public function isCurrentWpPage()
-    { return (get_query_var('pagename')==$this->getPostName() || get_query_var('pagename')=='' && $this->getPostParent()==0 && $this->getMenuOrder()==1); }
+    {
+        $strPageName = get_query_var('pagename');
+        return ($strPageName==$this->getPostName()
+            || $strPageName=='' && $this->getPostParent()==0 && $this->getMenuOrder()==1);
+    }
 
     public function hasChildren()
     {
         if ($this->Children==null) {
-            $this->Children = $this->WpPostServices->getChildPagesByParentId($this->getID(), -1, array('orderby'=> 'menu_order'));
+            $attributes = array(self::SQL_ORDER_BY => self::WP_MENUORDER);
+            $this->Children = $this->WpPostServices->getChildPagesByParentId($this->getID(), -1, $attributes);
         }
         return $this->Children;
     }
 
     public function getChildrenHeaderNav()
     {
-        $str = '<li id="menu-item-%1$s" class="menu-item menu-item-%1$s menu-item-depth-%2$s"><a href="%3$s"><span>%4$s</span></a></li>';
-        $ulHeaderNav = '<ul class="sub-menu">';
+        $str  = '<li id="menu-item-%1$s" class="menu-item menu-item-%1$s menu-item-depth-%2$s">';
+        $str .= '<a href="%3$s"><span>%4$s</span></a></li>';
+        $ulHeaderNav = '';
         foreach ($this->Children as $Child) {
-            $ulHeaderNav .= vsprintf($str, array($Child->getId(), $Child->getDepth(), $Child->getPermalink(), $Child->getPostTitle()));
+            $attributes = array($Child->getId(), $Child->getDepth(), $Child->getPermalink(), $Child->getPostTitle());
+            $ulHeaderNav .= vsprintf($str, $attributes);
         }
-        return $ulHeaderNav .= '</ul>';
+        return '<ul class="sub-menu">'.$ulHeaderNav.'</ul>';
     }
 }

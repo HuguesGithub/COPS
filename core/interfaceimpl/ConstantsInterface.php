@@ -335,6 +335,7 @@ interface ConstantsInterface
   const WP_CAT                 = 'cat';
   const WP_CAT_ID_BDD          = 45;
   const WP_CAT_ID_SKILL        = 47;
+  const WP_MENUORDER           = 'menu_order';
   const WP_METAKEY             = 'meta_key';
   const WP_METAVALUENUM        = 'meta_value_num';
   const WP_NAME                = 'name';
@@ -363,7 +364,6 @@ interface ConstantsInterface
   const WP_EVENT_PLACE         = 'event_place';
   const WP_FIELD               = 'field';
   const WP_KEY                 = 'key';
-  const WP_MENUORDER           = 'menu_order';
   const WP_METAQUERY           = 'meta_query';
   const WP_METAVALUE           = 'meta_value';
   const WP_NUMBERPOSTS         = 'numberposts';
