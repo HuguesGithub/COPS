@@ -1,4 +1,8 @@
 <?php
+namespace core\bean;
+
+use core\domain\WpPostClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -13,8 +17,6 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
     public function __construct()
     {
         parent::__construct();
-        // On initialise les services
-        $this->objWpPostServices = new WpPostServices();
         
         $urlElements = array(
             self::CST_SUBONGLET => self::CST_LIB_BDD,
@@ -68,7 +70,7 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
             } else {
                 $blnSelected = false;
             }
-            $objBean = WpPost::getBean($objWpPost, self::WP_CAT_ID_BDD);
+            $objBean = WpPostClass::getBean($objWpPost, self::WP_CAT_ID_BDD);
             $menuContent .= $objBean->getCategoryNavItem($url, self::I_DATABASE, $blnSelected);
         }
         /////////////////////////////////////////
@@ -77,10 +79,9 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
         // Si on est sur la page d'accueil, on affiche la présentation des bases de données
         // Sinon, on affiche le détail de la base de données sélectionnée.
         if ($this->catSlug=='') {
-            $urlTemplate = 'web/pages/public/fragments/public-fragments-article-bdd-entete.php';
-            $mainContent = $this->getRender($urlTemplate);
+            $mainContent = $this->getRender(self::WEB_PPFS_BDD_ENTETE);
         } else {
-            $mainContent = WpPost::getBean($targetWpPost, self::WP_CAT_ID_BDD)->getContentDisplay();
+            $mainContent = WpPostClass::getBean($targetWpPost, self::WP_CAT_ID_BDD)->getContentDisplay();
         }
         /////////////////////////////////////////
         

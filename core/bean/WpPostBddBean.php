@@ -1,4 +1,6 @@
 <?php
+namespace core\bean;
+
 /**
  * WpPostBddBean
  * @author Hugues
@@ -10,7 +12,7 @@ class WpPostBddBean extends WpPostBean
 
     public function getContentDisplay()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-article-library-bdd.php';
+        $urlTemplate = self::WEB_PPFA_BDD;
         list($sigle) = explode(':', $this->WpPost->getField(self::WP_POSTTITLE));
         $attributes = array(
             // Le titre

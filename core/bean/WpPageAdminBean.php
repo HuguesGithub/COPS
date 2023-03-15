@@ -231,7 +231,7 @@ class WpPageAdminBean extends WpPageBean
             }
             $returned = $objBean->getBoard();
         } catch (\Exception $Exception) {
-            $returned = 'Error';
+            throw $Exception;
         }
         return $returned;
     }

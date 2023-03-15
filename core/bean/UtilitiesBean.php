@@ -139,7 +139,15 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @return string
      */
     public function getRender($urlTemplate, $args=array())
-    { return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args); }
+    {
+        if (file_exists(PLUGIN_PATH.$urlTemplate)) {
+            return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args);
+        } else {
+            $msgError = 'Fichier '.$urlTemplate
+                . ' introuvable.<br>Vérifier le chemin ou la présence.';
+            throw new \Exception($msgError);
+        }
+    }
 
     /**
      * @param string $label

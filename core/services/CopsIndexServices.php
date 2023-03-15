@@ -34,13 +34,6 @@ class CopsIndexServices extends LocalServices
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
-      
-    /*
-    public function updateIndex($objCopsIndex)
-    { $this->Dao->updateIndex($objCopsIndex); }
-    
-    
-    */
 
     //////////////////////////////////////////////////
     // WP_7_COPS_INDEX

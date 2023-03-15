@@ -435,7 +435,7 @@ border-color: #4b545c;
  .masthead .editions { left: 50%; margin-left: -84px; min-width: 150px; position: absolute; top: -16px; }
  .masthead .editions.tab { background-color: #ffffff; border-style: solid solid none; border-radius: 5px 5px 0 0; border-width: 1px 1px medium; height: 16px; font-size: 0.6875rem; text-align: center; }
  .masthead .editions .date { text-transform: capitalize; }
- .masthead .branding { font-family: PlainBlackNormal,helvetica; font-size: 3.25rem; font-weight: 400; line-height: 3.25rem; margin: 15px auto 5px; text-align: center; }
+ .masthead .branding { font-family: PlainBlackNormal, helvetica, sans-serif; font-size: 3.25rem; font-weight: 400; line-height: 3.25rem; margin: 15px auto 5px; text-align: center; }
  .masthead .mini-navigation { border-top: 1px solid #000000; margin-bottom: 0; margin-top: 2px; padding: 2px; text-align: center; }
  .quote.top-left-quote, .quote.top-right-quote { border: 1px solid; border-radius: 10px; display: block; font-size: 0.725rem; height: 78px; line-height: 14px; max-width: 205px; min-width: 184px; padding: 5px; }
  .quote.top-left-quote { float: left; }
@@ -576,7 +576,7 @@ border-color: #4b545c;
   .css-1wjnrbv:hover, .css-1wjnrbv:focus {
     background-color: #f7f7f7;
   }
-  .branding { font-family: PlainBlackNormal,helvetica; font-size: 3.25rem; font-weight: 400; line-height: 3.25rem; margin: 15px auto 5px; text-align: center; }
+  .branding { font-family: PlainBlackNormal, helvetica, sans-serif; font-size: 3.25rem; font-weight: 400; line-height: 3.25rem; margin: 15px auto 5px; text-align: center; }
 
 
 

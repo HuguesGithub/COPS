@@ -5,6 +5,7 @@ use core\domain\CopsIndexNatureClass;
 use core\domain\WpCategoryClass;
 use core\services\CopsIndexServices;
 use core\services\WpCategoryServices;
+use core\services\WpPostServices;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -26,6 +27,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         // Définition des services
         $this->objCopsIndexServices  = new CopsIndexServices();
         $this->wpCategoryServices = new WpCategoryServices();
+        $this->objWpPostServices = new WpPostServices();
         
         /////////////////////////////////////////
         // Initialisation des variables

@@ -53,7 +53,7 @@ class AdminPageBean extends UtilitiesBean
           break;
         }
       } catch (\Exception $Exception) {
-        $returned = 'Error';
+        $returned = 'Error APB';
       }
     }
     return $returned;

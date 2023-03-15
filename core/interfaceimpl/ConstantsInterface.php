@@ -338,9 +338,15 @@ interface ConstantsInterface
   const WP_METAKEY             = 'meta_key';
   const WP_METAVALUENUM        = 'meta_value_num';
   const WP_NAME                = 'name';
+  const WP_POST                = 'post';
   const WP_POSTCONTENT         = 'post_content';
   const WP_POSTNAME            = 'post_name';
+  const WP_POSTSTATUS          = 'post_status';
   const WP_POSTTITLE           = 'post_title';
+  const WP_POSTTYPE            = 'post_type';
+  const WP_POSTSPERPAGE        = 'posts_per_page';
+  const WP_PUBLISH             = 'publish';
+  const WP_SUPPRESS_FILTER     = 'suppress_filters';
 
   const WP_CF_ADRENALINE       = 'adrenaline';
   const WP_CF_CARACASSOCIEE    = 'caracteristique_associee';
@@ -363,14 +369,9 @@ interface ConstantsInterface
   const WP_NUMBERPOSTS         = 'numberposts';
   const WP_OFFSET              = 'offset';
   const WP_PAGE                = 'page';
-  const WP_POST                = 'post';
   const WP_POST_ID_HOME        = 356;
   const WP_POSTDATE            = 'post_date';
-  const WP_POSTSPERPAGE        = 'posts_per_page';
-  const WP_POSTSTATUS          = 'post_status';
   const WP_POSTTAG             = 'post_tag';
-  const WP_POSTTYPE            = 'post_type';
-  const WP_PUBLISH             = 'publish';
   const WP_SLIDE_ACTIVE        = 'active_slide';
   const WP_SLIDE_IMAGE         = 'slide_image';
   const WP_SLIDE_ORDER         = 'slide_order';

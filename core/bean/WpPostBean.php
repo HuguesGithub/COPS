@@ -1,4 +1,8 @@
 <?php
+namespace core\bean;
+
+use core\domain\WpPostClass;
+
 /**
  * WpPostBean
  * @author Hugues
@@ -21,7 +25,7 @@ class WpPostBean extends UtilitiesBean
         if ($post=='') {
             $post = get_post();
         }
-        $this->WpPost = WpPost::convertElement($post);
+        $this->WpPost = WpPostClass::convertElement($post);
     }
     
     /**

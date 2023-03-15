@@ -1,4 +1,8 @@
 <?php
+namespace core\bean;
+
+use core\domain\WpPostClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -13,8 +17,6 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
     public function __construct()
     {
         parent::__construct();
-        // On initialise les services
-        $this->objWpPostServices = new WpPostServices();
         
         $urlElements = array(
             self::CST_SUBONGLET => self::CST_LIB_SKILL,
@@ -64,12 +66,12 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
                 $strContent .= $this->getBalise(self::TAG_A, '', $aAttributes);
             }
             // On récupère le contenu de l'article pour afficher la compétence
-            $strContent .= WpPost::getBean($objWpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();
+            $strContent .= WpPostClass::getBean($objWpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();
         }
         /////////////////////////////////////////
         
         /////////////////////////////////////////
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-skills.php';
+        $urlTemplate = self::WEB_PPFS_LIB_SKILLS;
         $attributes = array(
             //
             'section-skill',

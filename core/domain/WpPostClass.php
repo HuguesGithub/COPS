@@ -1,6 +1,9 @@
 <?php
 namespace core\domain;
 
+use core\bean\WpPostBddBean;
+use core\bean\WpPostSkillBean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }

@@ -1,4 +1,6 @@
 <?php
+namespace core\bean;
+
 /**
  * WpPostSkillBean
  * @author Hugues
@@ -9,7 +11,7 @@ class WpPostSkillBean extends WpPostBean
 {
     public function getContentDisplay()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-article-library-skill.php';
+        $urlTemplate = self::WEB_PPFA_LIB_SKILL;
         $rkSpecialisation = $this->WpPost->getPostMeta(self::WP_CF_SPECIALISATION);
         if ($rkSpecialisation>0) {
             $strSpecialisation = $rkSpecialisation.'+ ('.$this->WpPost->getPostMeta(self::WP_CF_LSTSPECS).')';
