@@ -95,7 +95,13 @@ class CopsIndexServices extends LocalServices
      * @version 1.22.10.21
      */
     public function getIndexes($attributes)
-    { return $this->Dao->getIndexes($attributes); }
+    {
+        $builtAttributes = array();
+        if (!isset($builtAttributes[self::SQL_WHERE_FILTERS])) {
+            $builtAttributes[self::SQL_WHERE_FILTERS] = $attributes;
+        }
+        return $this->Dao->getIndexes($builtAttributes);
+    }
 
     //////////////////////////////////////////////////
     // WP_7_COPS_INDEX_REFERENCE
@@ -169,8 +175,11 @@ class CopsIndexServices extends LocalServices
      */
     public function getCopsIndexNatureByName($name)
     {
-        $attributes = array($name);
-        $items = $this->Dao->getCopsIndexNatures($attributes);
+        $attributes = array();
+        if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
+            $attributes[self::SQL_WHERE_FILTERS] = array($name);
+        }
+        $items = $this->Dao->getIndexNatures($attributes);
         return (empty($items) ? new CopsIndexNatureClass : new CopsIndexNatureClass($items[0]));
     }
 
@@ -179,10 +188,12 @@ class CopsIndexServices extends LocalServices
      * @since 1.23.02.20
      * @version 1.23.02.20
      */
-    public function getIndexNatures()
+    public function getIndexNatures(&$attributes=array())
     {
-        $attributes = array('%');
-        return $this->Dao->getCopsIndexNatures($attributes);
+        if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
+            $attributes[self::SQL_WHERE_FILTERS] = array('%');
+        }
+        return $this->Dao->getIndexNatures($attributes);
     }
     
     //////////////////////////////////////////////////

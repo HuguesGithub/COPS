@@ -2,7 +2,6 @@
 namespace core\domain;
 
 use core\domain\CopsAutopsieClass;
-use core\domain\MySQLClass;
 
 if (!defined('ABSPATH')) {
     die('Forbidden');
@@ -30,6 +29,16 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
         $this->dbTable = "wp_7_cops_autopsie";
         ////////////////////////////////////
     
+        ////////////////////////////////////
+        // Définition des champs spécifiques
+        $this->dbFields      = array(
+            self::FIELD_ID,
+            self::FIELD_IDX_ENQUETE,
+            self::FIELD_DATA,
+            self::FIELD_DSTART,
+        );
+        ////////////////////////////////////
+
         parent::__construct();
     }
 
@@ -48,12 +57,12 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
      */
     public function insertAutopsie(&$objAutopsie)
     {
+        // On récupère les champs
+        $fields = array_shift($this->dbFields);
         // On défini la requête d'insertion
-        $request  = "INSERT INTO ".$this->dbTable;
-        $request .= " (idxEnquete, data, dStart) ";
-        $request .= "VALUES ('%s', '%s', '%s');";
-        $this->insertDaoImpl($objAutopsie, $request);
-        $objAutopsie->setField(self::FIELD_ID, MySQLClass::getLastInsertId());
+        $request = $this->getInsertRequest($fields, $this->dbTable);
+        // On insère
+        $this->insertDaoImpl($objAutopsie, $request, self::FIELD_ID);
     }
     
     /**
@@ -63,11 +72,13 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
      */
     public function updateAutopsie($objAutopsie)
     {
+        // On récupère les champs
+        $dbFields = $this->dbFields;
+        $fieldId = array_pop($dbFields);
         // On défini la requête de mise à jour
-        $request  = "UPDATE ".$this->dbTable;
-        $request .= " SET idxEnquete='%s', data='%s', dStart='%s'";
-        $request .= " WHERE id = '%s';";
-        $this->updateDaoImpl($objAutopsie, $request, self::FIELD_ID);
+        $request = $this->getUpdateRequest($dbFields, $this->dbTable, $fieldId);
+        // On met à jour
+        $this->updateDaoImpl($objAutopsie, $request, $fieldId);
     }
 
     /**
@@ -77,9 +88,10 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
      */
     public function getAutopsie($prepObject)
     {
-        $request  = "SELECT idxEnquete, data, dStart";
-        $request .= " FROM ".$this->dbTable;
-        $request .= " WHERE id = '%s';";
+        // On récupère les champs
+        $fields = implode(', ', array_shift($this->dbFields));
+        // On défini la requête de sélection
+        $request  = $this->getSelectRequest($fields, $this->dbTable, self::FIELD_ID);
         return $this->selectDaoImpl($request, $prepObject);
     }
     
@@ -89,26 +101,13 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
      */
     public function getAutopsies($attributes)
     {
-        $request  = "SELECT id, idxEnquete, data, dStart";
-        $request .= " FROM ".$this->dbTable;
+        // On récupère les champs
+        $fields = implode(', ', $this->dbFields);
+        // On défini la requête de sélection
+        $request  = $this->getSelectRequest($fields, $this->dbTable);
         $request .= " WHERE idxEnquete LIKE '%s'";
         $request .= " ORDER BY dStart DESC;";
-        $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
-        
-        //////////////////////////////
-        // Exécution de la requête
-        $rows = MySQLClass::wpdbSelect($prepRequest);
-        //////////////////////////////
-        
-        //////////////////////////////
-        // Construction du résultat
-        $objItems = array();
-        if (!empty($rows)) {
-            foreach ($rows as $row) {
-                $objItems[] = CopsAutopsieClass::convertElement($row);
-            }
-        }
-        return $objItems;
+        return $this->selectListDaoImpl(new CopsAutopsieClass(), $request, $attributes[self::SQL_WHERE_FILTERS]);
     }
     
 }

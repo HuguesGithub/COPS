@@ -98,7 +98,7 @@ class LocalDaoImpl extends GlobalDaoImpl
      * @since 1.23.03.15
      * @version 1.23.03.15
      */
-    public function insertDaoImpl(&$objMixed, $request)
+    public function insertDaoImpl(&$objMixed, $request, $fieldId)
     {
         // On prépare les paramètres, en excluant le premier (l'id)
         $prepObject = array();
@@ -114,6 +114,7 @@ class LocalDaoImpl extends GlobalDaoImpl
         // On prépare la requête, l'exécute et met à jour l'id de l'objet créé.
         $sql = MySQLClass::wpdbPrepare($request, $prepObject);
         MySQLClass::wpdbQuery($sql);
+        $objMixed->setField($fieldId, MySQLClass::getLastInsertId());
     }
 
     public function updateDaoImpl($objStd, $request, $fieldId)
@@ -142,5 +143,52 @@ class LocalDaoImpl extends GlobalDaoImpl
         //////////////////////////////
         // Exécution de la requête
         return MySQLClass::wpdbSelect($prepRequest);
+    }
+
+    public function selectListDaoImpl($objMixed, $request, $attributes)
+    {
+        //////////////////////////////
+        // Préparation de la requête
+        $prepRequest = vsprintf($request, $attributes);
+        
+        //////////////////////////////
+        // Exécution de la requête
+        $rows = MySQLClass::wpdbSelect($prepRequest);
+        //////////////////////////////
+        
+        //////////////////////////////
+        // Construction du résultat
+        $objItems = array();
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $objItems[] = $objMixed::convertElement($row);
+            }
+        }
+        return $objItems;
+    }
+
+
+    public function getSelectRequest($fields, $tableName, $fieldId='')
+    {
+        $request = "SELECT $fields FROM $tableName ";
+        if ($fieldId!='') {
+            $request .= "WHERE $fieldId = '%s'";
+        }
+        return $request;
+    }
+
+    public function getInsertRequest($fields, $tableName)
+    {
+        $request  = "INSERT INTO $tableName (".implode(', ', $fields);
+        $request .= ") VALUES (".implode(', ', array_fill(0, count($fields), "'%s'")).");";
+        return $request;
+    }
+
+    public function getUpdateRequest($dbFields, $tableName, $fieldId)
+    {
+        $request  = "UPDATE $tableName SET ";
+        $request .= implode("='%s', ", $dbFields)."='%s'";
+        $request .= " WHERE $fieldId = '%s';";
+        return $request;
     }
 }
