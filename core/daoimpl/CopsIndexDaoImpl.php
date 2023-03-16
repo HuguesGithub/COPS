@@ -46,19 +46,48 @@ class CopsIndexDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     // WP_7_COPS_INDEX
     //////////////////////////////////////////////////
+
+    /**
+     * @param CopsIndexClass [E|S]
+     * @since 1.23.02.20
+     * @version 1.23.03.15
+     */
+    public function insertIndex(&$objCopsIndex)
+    {
+        // On défini la requête d'insertion
+        $request  = "INSERT INTO ".$this->dbTable;
+        $request .= " (referenceIdxId, tomeIdxId, page) ";
+        $request .= "VALUES ('%s', '%s', '%s');";
+        $this->insertDaoImpl($objCopsIndex, $request);
+        $objCopsIndex->setField(self::FIELD_ID, MySQLClass::getLastInsertId());
+    }
+
+    /**
+     * @param CopsIndexClass
+     * @since 1.22.10.21
+     * @version 1.22.10.21
+     */
+    public function updateIndex($objCopsIndex)
+    {
+        // On défini la requête de mise à jour
+        $request  = "UPDATE ".$this->dbTable;
+        $request .= " SET referenceIdxId='%s', tomeIdxId='%s', page='%s'";
+        $request .= " WHERE id = '%s';";
+        $this->updateDaoImpl($objCopsIndex, $request, self::FIELD_ID);
+    }
+
     /**
      * @param array
+     * @return array
      * @since 1.22.10.21
      * @version 1.22.10.21
      */
     public function getIndex($prepObject)
     {
-        $request  = $this->select."WHERE id = '%s';";
-        $prepRequest  = MySQLClass::wpdbPrepare($request, $prepObject);
-        
-        //////////////////////////////
-        // Exécution de la requête
-        return MySQLClass::wpdbSelect($prepRequest);
+        $request  = "SELECT idIdx, referenceIdxId, tomeIdxId, page";
+        $request .= " FROM ".$this->dbTable;
+        $request .= " WHERE id = '%s';";
+        return $this->selectDaoImpl($request, $prepObject);
     }
   
     /**
@@ -69,10 +98,11 @@ class CopsIndexDaoImpl extends LocalDaoImpl
      */
     public function getIndexes($attributes)
     {
-        $request  = "SELECT idIdx, referenceIdxId, tomeIdxId, page FROM ".$this->dbTable;
+        $request  = "SELECT idIdx, referenceIdxId, tomeIdxId, page";
+        $request .= " FROM ".$this->dbTable;
         $request .= " INNER JOIN ".$this->dbTable_cit." ON tomeIdxId = idIdxTome ";
-        $request .= " WHERE referenceIdxId LIKE '%s' ";
-        $request .= "ORDER BY idIdxTome ASC;";
+        $request .= " WHERE referenceIdxId LIKE '%s'";
+        $request .= " ORDER BY idIdxTome ASC;";
         $prepRequest = vsprintf($request, $attributes);
         
         //////////////////////////////
@@ -91,57 +121,40 @@ class CopsIndexDaoImpl extends LocalDaoImpl
         return $objItems;
     }
 
-    /**
-     * @since 1.22.10.21
-     * @version 1.22.10.21
-     *
-    public function updateIndex($objStd)
-    {
-        $request  = $this->update."WHERE id = '%s';";
-
-        $prepObject = array();
-        $arrFields  = $this->getFields();
-        array_shift($arrFields);
-        foreach ($arrFields as $field) {
-            $prepObject[] = $objStd->getField($field);
-        }
-        $prepObject[] = $objStd->getField(self::FIELD_ID);
-
-        $sql = MySQL::wpdbPrepare($request, $prepObject);
-        MySQL::wpdbQuery($sql);
-    }
-    */
-
-    /**
-     * @param CopsIndex [E|S]
-     * @since 1.23.02.20
-     * @version 1.23.02.20
-     */
-    public function insertIndex(&$obCopsIndex)
-    {
-        // On défini la requête d'insertion
-        $request  = "INSERT INTO ".$this->dbTable." (referenceIdxId, tomeIdxId, page) VALUES ('%s', '%s', '%s');";
-        
-        // On prépare les paramètres, en excluant le premier (l'id)
-        $prepObject = array();
-        $arrFields  = $obCopsIndex->getFields();
-        array_shift($arrFields);
-        foreach ($arrFields as $field => $value) {
-            if ($field=='stringClass') {
-                continue;
-            }
-            $prepObject[] = $obCopsIndex->getField($field);
-        }
-
-        // On prépare la requête, l'exécute et met à jour l'id de l'objet créé.
-        $sql = MySQLClass::wpdbPrepare($request, $prepObject);
-        MySQLClass::wpdbQuery($sql);
-        $obCopsIndex->setField(self::FIELD_ID, MySQLClass::getLastInsertId());
-    }
-
     //////////////////////////////////////////////////
     // WP_7_COPS_INDEX_REFERENCE
     //////////////////////////////////////////////////
+
+    /**
+     * @param CopsIndexReferenceClass $objCopsIndexReference [E|S]
+     * @since 1.23.02.20
+     * @version 1.23.03.16
+     */
+    public function insertIndexReference(&$objCopsIndexReference)
+    {
+        // On défini la requête d'insertion
+        $request  = "INSERT INTO ".$this->dbTable_cir;
+        $request .= " (nomIdxReference, prenomIdxReference, akaIdxReference, natureIdxId, descriptionPJ";
+        $request .= ", descriptionMJ, code) ";
+        $request .= "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');";
+        $this->insertDaoImpl($objCopsIndexReference, $request);
+        $objCopsIndexReference->setField(self::FIELD_ID_IDX_REF, MySQLClass::getLastInsertId());
+    }
+
+    /**
+     * @param CopsIndexReferenceClass
+     * @since 1.23.02.20
+     * @version 1.23.02.20
+     */
+    public function updateIndexReference($objCopsIndexReference)
+    {
+        // On défini la requête de mise à jour
+        $request  = "UPDATE ".$this->dbTable_cir;
+        $request .= " SET nomIdxReference = '%s', prenomIdxReference = '%s', akaIdxReference = '%s',";
+        $request .= " natureIdxId = '%s', descriptionPJ = '%s', descriptionMJ = '%s', reference = '%s', code = '%s'";
+        $request .= " WHERE idIdxReference = '%s';";
+        $this->updateDaoImpl($objCopsIndexReference, $request, self::FIELD_ID_IDX_REF);
+    }
 
     /**
      * @param array $attributes
@@ -155,11 +168,7 @@ class CopsIndexDaoImpl extends LocalDaoImpl
         $request .= "descriptionPJ, descriptionMJ, reference, code ";
         $request .= "FROM ".$this->dbTable_cir." ";
         $request .= "WHERE idIdxReference LIKE '%s';";
-        $prepRequest = vsprintf($request, $attributes);
-        
-        //////////////////////////////
-        // Exécution de la requête
-        return MySQLClass::wpdbSelect($prepRequest);
+        return $this->selectDaoImpl($request, $prepObject);
     }
 
     /**
@@ -191,59 +200,6 @@ class CopsIndexDaoImpl extends LocalDaoImpl
             }
         }
         return $objItems;
-    }
-
-    /**
-     * @param array $objCopsIndexReference
-     * @since 1.23.02.20
-     * @version 1.23.02.20
-     */
-    public function updateIndexReference($objCopsIndexReference)
-    {
-        $request  = "UPDATE ".$this->dbTable_cir." SET ";
-        $request .= " nomIdxReference = '%s', prenomIdxReference = '%s', akaIdxReference = '%s',";
-        $request .= " natureIdxId = '%s', descriptionPJ = '%s', descriptionMJ = '%s',";
-        $request .= " reference = '%s', code = '%s' ";
-        $request .= " WHERE idIdxReference = '%s';";
-
-        $prepObject = array();
-        $arrFields  = $objCopsIndexReference->getFields();
-        array_shift($arrFields);
-        foreach ($arrFields as $field => $value) {
-            if ($field=='stringClass') {
-                continue;
-            }
-            $prepObject[] = $objCopsIndexReference->getField($field);
-        }
-        $prepObject[] = $objCopsIndexReference->getField(self::FIELD_ID_IDX_REF);
-
-        $sql = MySQLClass::wpdbPrepare($request, $prepObject);
-        MySQLClass::wpdbQuery($sql);
-    }
-
-    /**
-     * @param array $objCopsIndexReference
-     * @since 1.23.02.20
-     * @version 1.23.02.20
-     */
-    public function insertIndexReference($objCopsIndexReference)
-    {
-        $request  = "INSERT INTO ".$this->dbTable_cir." (nomIdxReference, prenomIdxReference, akaIdxReference ";
-        $request .= ", natureIdxId, descriptionPJ, descriptionMJ, code) VALUES ('%s', '%s', '%s', '%s', ";
-        $request .= "'%s', '%s', '%s');";
-
-        $prepObject = array();
-        $arrFields  = $objCopsIndexReference->getFields();
-        array_shift($arrFields);
-        foreach ($arrFields as $field => $value) {
-            if ($field=='stringClass') {
-                continue;
-            }
-            $prepObject[] = $objCopsIndexReference->getField($field);
-        }
-        $sql = MySQLClass::wpdbPrepare($request, $prepObject);
-        MySQLClass::wpdbQuery($sql);
-        $objCopsIndexReference->setField(self::FIELD_ID_IDX_REF, MySQLClass::getLastInsertId());
     }
 
     //////////////////////////////////////////////////

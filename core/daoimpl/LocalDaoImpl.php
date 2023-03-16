@@ -91,4 +91,56 @@ class LocalDaoImpl extends GlobalDaoImpl
       }
       return $arrFields;
   }
+        
+    /**
+     * @param mixed [E|S]
+     * @param strin $request
+     * @since 1.23.03.15
+     * @version 1.23.03.15
+     */
+    public function insertDaoImpl(&$objMixed, $request)
+    {
+        // On prépare les paramètres, en excluant le premier (l'id)
+        $prepObject = array();
+        $arrFields  = $objMixed->getFields();
+        array_shift($arrFields);
+        foreach ($arrFields as $field) {
+            if ($field=='stringClass') {
+                continue;
+            }
+            $prepObject[] = $objMixed->getField($field);
+        }
+
+        // On prépare la requête, l'exécute et met à jour l'id de l'objet créé.
+        $sql = MySQLClass::wpdbPrepare($request, $prepObject);
+        MySQLClass::wpdbQuery($sql);
+    }
+
+    public function updateDaoImpl($objStd, $request, $fieldId)
+    {
+        $prepObject = array();
+        $arrFields  = $objStd->getFields();
+        array_shift($arrFields);
+        foreach ($arrFields as $field) {
+            if ($field=='stringClass') {
+                continue;
+            }
+            $prepObject[] = $objStd->getField($field);
+        }
+        $prepObject[] = $objStd->getField($fieldId);
+
+        $sql = MySQLClass::wpdbPrepare($request, $prepObject);
+        MySQLClass::wpdbQuery($sql);
+    }
+
+    public function selectDaoImpl($request, $prepObject)
+    {
+        //////////////////////////////
+        // Préparation de la requête
+        $prepRequest  = MySQLClass::wpdbPrepare($request, $prepObject);
+        
+        //////////////////////////////
+        // Exécution de la requête
+        return MySQLClass::wpdbSelect($prepRequest);
+    }
 }

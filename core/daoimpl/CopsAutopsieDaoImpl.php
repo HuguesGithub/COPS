@@ -1,4 +1,9 @@
 <?php
+namespace core\domain;
+
+use core\domain\CopsAutopsieClass;
+use core\domain\MySQLClass;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -6,7 +11,7 @@ if (!defined('ABSPATH')) {
  * Classe CopsAutopsieDaoImpl
  * @author Hugues
  * @since 1.22.10.09
- * @version 1.22.10.09
+ * @version 1.23.03.15
  */
 class CopsAutopsieDaoImpl extends LocalDaoImpl
 {
@@ -35,19 +40,47 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     // WP_7_COPS_AUTOPSIE
     //////////////////////////////////////////////////
+    
+    /**
+     * @param CopsAutopsieClass [E|S]
+     * @since 1.22.10.10
+     * @version 1.23.03.16
+     */
+    public function insertAutopsie(&$objAutopsie)
+    {
+        // On défini la requête d'insertion
+        $request  = "INSERT INTO ".$this->dbTable;
+        $request .= " (idxEnquete, data, dStart) ";
+        $request .= "VALUES ('%s', '%s', '%s');";
+        $this->insertDaoImpl($objAutopsie, $request);
+        $objAutopsie->setField(self::FIELD_ID, MySQLClass::getLastInsertId());
+    }
+    
+    /**
+     * @param CopsAutopsieClass
+     * @since 1.22.10.10
+     * @version 1.22.10.10
+     */
+    public function updateAutopsie($objAutopsie)
+    {
+        // On défini la requête de mise à jour
+        $request  = "UPDATE ".$this->dbTable;
+        $request .= " SET idxEnquete='%s', data='%s', dStart='%s'";
+        $request .= " WHERE id = '%s';";
+        $this->updateDaoImpl($objAutopsie, $request, self::FIELD_ID);
+    }
+
     /**
      * @param array
      * @since 1.22.10.09
-     * @version 1.22.10.09
+     * @version 1.23.03.15
      */
     public function getAutopsie($prepObject)
     {
-        $request  = $this->select."WHERE id = '%s';";
-        $prepRequest  = MySQL::wpdbPrepare($request, $prepObject);
-        
-        //////////////////////////////
-        // Exécution de la requête
-        return MySQL::wpdbSelect($prepRequest);
+        $request  = "SELECT idxEnquete, data, dStart";
+        $request .= " FROM ".$this->dbTable;
+        $request .= " WHERE id = '%s';";
+        return $this->selectDaoImpl($request, $prepObject);
     }
     
     /**
@@ -56,17 +89,15 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
      */
     public function getAutopsies($attributes)
     {
-        $arrFields  = $this->getFields();
-        $request  = "SELECT ".implode(', ', $arrFields)." ";
-        $request .= "FROM ".$this->dbTable." ";
-        $request .= "WHERE idxEnquete LIKE '%s' ";
-        $request .= "ORDER BY dStart DESC;";
-        
+        $request  = "SELECT id, idxEnquete, data, dStart";
+        $request .= " FROM ".$this->dbTable;
+        $request .= " WHERE idxEnquete LIKE '%s'";
+        $request .= " ORDER BY dStart DESC;";
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         
         //////////////////////////////
         // Exécution de la requête
-        $rows = MySQL::wpdbSelect($prepRequest);
+        $rows = MySQLClass::wpdbSelect($prepRequest);
         //////////////////////////////
         
         //////////////////////////////
@@ -74,49 +105,10 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
         $objItems = array();
         if (!empty($rows)) {
             foreach ($rows as $row) {
-                $objItems[] = CopsAutopsie::convertElement($row);
+                $objItems[] = CopsAutopsieClass::convertElement($row);
             }
         }
         return $objItems;
-    }
-    
-    /**
-     * @since 1.22.10.10
-     * @version 1.22.10.10
-     */
-    public function updateAutopsie($objStd)
-    {
-        $request  = $this->update."WHERE id = '%s';";
-        
-        $prepObject = array();
-        $arrFields  = $this->getFields();
-        array_shift($arrFields);
-        foreach ($arrFields as $field) {
-            $prepObject[] = $objStd->getField($field);
-        }
-        $prepObject[] = $objStd->getField(self::FIELD_ID);
-        
-        $sql = MySQL::wpdbPrepare($request, $prepObject);
-        MySQL::wpdbQuery($sql);
-    }
-    
-    /**
-     * @since 1.22.10.10
-     * @version 1.22.10.10
-     */
-    public function insertAutopsie(&$objStd)
-    {
-        $request  = $this->insert;
-        
-        $prepObject = array();
-        $arrFields  = $this->getFields();
-        array_shift($arrFields);
-        foreach ($arrFields as $field) {
-            $prepObject[] = $objStd->getField($field);
-        }
-        $sql = MySQL::wpdbPrepare($request, $prepObject);
-        MySQL::wpdbQuery($sql);
-        $objStd->setField(self::FIELD_ID, MySQL::getLastInsertId());
     }
     
 }
