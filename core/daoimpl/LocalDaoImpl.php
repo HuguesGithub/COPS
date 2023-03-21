@@ -139,6 +139,7 @@ class LocalDaoImpl extends GlobalDaoImpl
         //////////////////////////////
         // Préparation de la requête
         $prepRequest  = MySQLClass::wpdbPrepare($request, $prepObject);
+        $this->traceRequest($prepRequest);
         
         //////////////////////////////
         // Exécution de la requête
@@ -150,6 +151,7 @@ class LocalDaoImpl extends GlobalDaoImpl
         //////////////////////////////
         // Préparation de la requête
         $prepRequest = vsprintf($request, $attributes);
+        $this->traceRequest($prepRequest);
         
         //////////////////////////////
         // Exécution de la requête
@@ -190,5 +192,28 @@ class LocalDaoImpl extends GlobalDaoImpl
         $request .= implode("='%s', ", $dbFields)."='%s'";
         $request .= " WHERE $fieldId = '%s';";
         return $request;
+    }
+
+    private function traceRequest($prepRequest)
+    {
+        // On récupère le nom de base et on le suffixe avec la date du jour
+        $baseName = PLUGIN_PATH.self::WEB_LOG_REQUEST;
+        $todayName = substr($baseName, 0, -4).'_'.date('Ymd').'.log';
+
+        // S'il existe et qu'il est trop gros, on l'archive et on en créé un nouveau.
+        $fileSize = filesize($todayName);
+        if ($fileSize>10*1024*1024) {
+            $copyName = substr($todayName, 0, -4).'_01.log';
+            rename($todayName, $copyName);
+        }
+
+        // Sinon, on continue à utiliser l'existant
+        $fp = fopen($todayName, 'a');
+        if (!$fp) {
+            return;
+        }
+        $strMessage = "[".date('Y-m-d H:i:s')."] - ".$prepRequest."\r\n";
+        fwrite($fp, $strMessage);
+        fclose($fp);
     }
 }

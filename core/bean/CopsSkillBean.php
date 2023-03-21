@@ -44,7 +44,7 @@ class CopsSkillBean extends UtilitiesBean
       // Niveau spécialisation
       $strSpecialisation,
       // Adrénaline
-      ($this->CopsSkill->getField(self::FIELD_PAD_USABLE)==1?'Oui':'Non'),
+      ($this->CopsSkill->getField(self::FIELD_PAN_USABLE)==1?'Oui':'Non'),
       // La description de la compétence
       str_replace("\r\n", '<br>', $this->CopsSkill->getField(self::FIELD_SKILL_DESC)),
       // Exemples d'utilisation

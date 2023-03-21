@@ -4,6 +4,7 @@ namespace core\bean;
 use core\domain\CopsIndexNatureClass;
 use core\domain\WpCategoryClass;
 use core\services\CopsIndexServices;
+use core\services\CopsStageServices;
 use core\services\WpCategoryServices;
 use core\services\WpPostServices;
 
@@ -26,6 +27,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Définition des services
         $this->objCopsIndexServices  = new CopsIndexServices();
+        $this->objCopsStageServices  = new CopsStageServices();
         $this->wpCategoryServices = new WpCategoryServices();
         $this->objWpPostServices = new WpPostServices();
         

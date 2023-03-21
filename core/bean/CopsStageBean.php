@@ -1,6 +1,11 @@
 <?php
+namespace core\bean;
+
+use core\domain\CopsStageClass;
+use core\services\CopsStageServices;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * CopsStageBean
@@ -10,46 +15,45 @@ if (!defined('ABSPATH')) {
  */
 class CopsStageBean extends UtilitiesBean
 {
-  public function __construct($Obj=null)
-  {
-    $this->CopsStageServices = new CopsStageServices();
-    $this->CopsStage = ($Obj==null ? new CopsStage() : $Obj);
-  }
+    public function __construct($obj=null)
+    {
+        $this->objStage = ($obj==null ? new CopsStageClass() : $obj);
 
-  /**
-   * @since 1.22.06.03
-   * @version 1.22.06.03
-   */
-  public function getStageDisplay()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-article-library-stage.php';
-
-    $strCapacitesSpeciales = '';
-    $CapsSpecs = $this->CopsStageServices->getStageSpecs($this->CopsStage->getField(self::FIELD_ID));
-    while (!empty($CapsSpecs)) {
-      $CapSpe = array_shift($CapsSpecs);
-      $strCapacitesSpeciales .= '<dt>'.$CapSpe->getField(self::FIELD_SPEC_NAME).'</dt>';
-      $strCapacitesSpeciales .= '<dd>'.$CapSpe->getField(self::FIELD_SPEC_DESC).'</dd>';
+        $this->objCopsStageServices = new CopsStageServices();
     }
 
-    $attributes = array(
-      // Le nom du stage
-      $this->CopsStage->getField(self::FIELD_STAGE_LIBELLE),
-      // Le niveau du stage
-      'lvl'.$this->CopsStage->getField(self::FIELD_STAGE_LEVEL),
-      // Les Pré Requis
-      $this->CopsStage->getField(self::FIELD_STAGE_REQUIS),
-      // Le Cumul éventuel
-      $this->CopsStage->getField(self::FIELD_STAGE_CUMUL),
-      // La Description
-      $this->CopsStage->getField(self::FIELD_STAGE_DESC),
-      // Le Bonus éventuel
-      $this->CopsStage->getField(self::FIELD_STAGE_BONUS),
-      // La liste des capacités spéciales
-      '<dl>'.$strCapacitesSpeciales.'</dl>',
-      //
-      '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
+    /**
+     * @since 1.22.06.03
+     * @version 1.22.06.03
+     */
+    public function getStageDisplay()
+    {
+        $urlTemplate = self::WEB_PPFA_LIB_COURSE;
+
+        $strCapacitesSpeciales = '';
+        $objsCapaSpec = $this->objCopsStageServices->getStageSpecs($this->objStage->getField(self::FIELD_ID));
+        while (!empty($objsCapaSpec)) {
+            $objCapaSpec = array_shift($objsCapaSpec);
+            $strCapacitesSpeciales .= '<dt>'.$objCapaSpec->getField(self::FIELD_SPEC_NAME).'</dt>';
+            $strCapacitesSpeciales .= '<dd>'.$objCapaSpec->getField(self::FIELD_SPEC_DESC).'</dd>';
+        }
+
+        $attributes = array(
+            // Le nom du stage
+            $this->objStage->getField(self::FIELD_STAGE_LIBELLE),
+            // Le niveau du stage
+            'lvl'.$this->objStage->getField(self::FIELD_STAGE_LEVEL),
+            // Les Pré Requis
+            $this->objStage->getField(self::FIELD_STAGE_REQUIS),
+            // Le Cumul éventuel
+            $this->objStage->getField(self::FIELD_STAGE_CUMUL),
+            // La Description
+            $this->objStage->getField(self::FIELD_STAGE_DESC),
+            // Le Bonus éventuel
+            $this->objStage->getField(self::FIELD_STAGE_BONUS),
+            // La liste des capacités spéciales
+            '<dl>'.$strCapacitesSpeciales.'</dl>',
+        );
+        return $this->getRender($urlTemplate, $attributes);
+    }
 }

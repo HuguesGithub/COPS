@@ -68,7 +68,13 @@ class CopsIndexReferenceBean extends CopsBean
         $label = $this->obj->getField(self::FIELD_DESCRIPTION_PJ);
         $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-name'));
         $arrColumns[] = $cell;
-        // TODO : Ca serait bien de récupérer la description MJ...
+
+        // La description MJ
+        if ($hasCopsEditor) {
+            $label = $this->obj->getField(self::FIELD_DESCRIPTION_MJ);
+            $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-name'));
+            $arrColumns[] = $cell;
+        }
 
         // La référence
         $label = $this->getReferences();

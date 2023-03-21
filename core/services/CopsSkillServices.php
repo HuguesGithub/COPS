@@ -1,6 +1,10 @@
 <?php
+namespace core\services;
+
+use core\daoimpl\CopsSkillDaoImpl;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe CopsSkillServices
@@ -84,11 +88,11 @@ class CopsSkillServices extends LocalServices
    * @since 1.22.05.30
    * @version 1.22.05.30
    */
-  public function getCopsSkills($attributes=array())
-  {
-    $this->initFilters($attributes);
-    return $this->Dao->getCopsSkills($attributes);
-  }
+    public function getSkills($attributes=array())
+    {
+        $this->initFilters($attributes);
+        return $this->Dao->getSkills($attributes);
+    }
 
   /*
    * @since 1.22.05.30

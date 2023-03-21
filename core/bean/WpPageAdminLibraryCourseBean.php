@@ -1,4 +1,6 @@
 <?php
+namespace core\bean;
+
 if (!defined('ABSPATH')) {
     die('Forbidden');
 }
@@ -13,8 +15,6 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
     public function __construct()
     {
         parent::__construct();
-        // On initialise les services
-        $this->objCopsStageServices = new CopsStageServices();
         
         $urlElements = array(
             self::CST_SUBONGLET => self::CST_LIB_STAGE,
@@ -31,7 +31,7 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
      */
     public function getOngletContent()
     {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-section-library-stages.php';
+        $urlTemplate = self::WEB_PPFS_LIB_COURSES;
         $strContent = '';
         // On doit récupérer l'ensemble des stages et les afficher.
         $objStages = $this->objCopsStageServices->getCopsStageCategories();

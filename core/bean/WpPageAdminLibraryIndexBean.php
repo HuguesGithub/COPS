@@ -247,6 +247,10 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         }
         $headerContent .= $this->getTh(self::LABEL_DESCRIPTION, $thAttributes);
         $thAttributes[self::ATTR_STYLE] = 'width:250px;';
+        if ($this->hasCopsEditor) {
+            $headerContent .= $this->getTh(self::LABEL_DESCRIPTION, $thAttributes);
+            $thAttributes[self::ATTR_STYLE] = 'width:250px;';
+        }
         $headerContent .= $this->getTh(self::LABEL_REFERENCE, $thAttributes);
         unset($thAttributes[self::ATTR_STYLE]);
         if ($this->hasCopsEditor) {
@@ -272,7 +276,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $listContent = '';
         $strPagination = '';
         if (empty($objsCopsIndex)) {
-            $listContent = '<tr><td class="text-center" colspan="5">'.self::LABEL_NO_RESULT.'</td></tr>';
+            $listContent  = '<tr><td class="text-center" colspan="'.($this->hasCopsEditor?6:5).'">';
+            $listContent .= self::LABEL_NO_RESULT.'</td></tr>';
         } else {
             /////////////////////////////////////////////:
             // Pagination

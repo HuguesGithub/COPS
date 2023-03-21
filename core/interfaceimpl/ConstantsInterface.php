@@ -154,7 +154,7 @@ interface ConstantsInterface
   const FIELD_SKILL_DESC         = 'skillDescription';
   const FIELD_SKILL_USES         = 'skillUses';
   const FIELD_SPEC_LEVEL         = 'specLevel';
-  const FIELD_PAD_USABLE         = 'padUsable';
+  const FIELD_PAN_USABLE         = 'panUsable';
   const FIELD_DEFAULT_ABILITY    = 'defaultAbility';
 
   // TABLE cops_skill_spec

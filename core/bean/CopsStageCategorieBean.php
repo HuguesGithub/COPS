@@ -1,6 +1,10 @@
 <?php
+namespace core\bean;
+
+use core\domain\CopsStageCategorieClass;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * CopsStageCategorieBean
@@ -10,35 +14,32 @@ if (!defined('ABSPATH')) {
  */
 class CopsStageCategorieBean extends UtilitiesBean
 {
-  public function __construct($Obj=null)
-  {
-    $this->CopsStageCategorie = ($Obj==null ? new CopsStageCategorie() : $Obj);
-  }
-
-  /**
-   * @since 1.22.05.30
-   * @version 1.22.06.03
-   */
-  public function getStageCategoryDisplay()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-article-library-stage-categorie.php';
-    $strContent  = '';
-
-    $Stages = $this->CopsStageCategorie->getCopsStages();
-    while (!empty($Stages)) {
-      $Stage = array_shift($Stages);
-      $strContent .= $Stage->getBean()->getStageDisplay();
+    public function __construct($obj=null)
+    {
+        $this->objCopsStageCategorie = ($obj==null ? new CopsStageCategorieClass() : $obj);
     }
 
-    $attributes = array(
-      // Le nom de la compétence
-      $this->CopsStageCategorie->getField(self::FIELD_STAGE_CAT_NAME),
-      // Liste des Stages de cette Catégorie
-      $strContent,
+    /**
+     * @since 1.22.05.30
+     * @version 1.22.06.03
+     */
+    public function getStageCategoryDisplay()
+    {
+        $urlTemplate = self::WEB_PPFA_LIB_COURSE_CATEG;
+        $strContent  = '';
 
-      // Normalement, plus rien après
-      '', '', '', '', '', '',
-    );
-    return $this->getRender($urlTemplate, $attributes);
-  }
+        $objsStage = $this->objCopsStageCategorie->getStages();
+        while (!empty($objsStage)) {
+            $objStage = array_shift($objsStage);
+            $strContent .= $objStage->getBean()->getStageDisplay();
+        }
+
+        $attributes = array(
+            // Le nom de la compétence
+            $this->objCopsStageCategorie->getField(self::FIELD_STAGE_CAT_NAME),
+            // Liste des Stages de cette Catégorie
+            $strContent,
+        );
+        return $this->getRender($urlTemplate, $attributes);
+    }
 }

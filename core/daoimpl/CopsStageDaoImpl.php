@@ -1,5 +1,5 @@
 <?php
-namespace core\bean;
+namespace core\daoimpl;
 
 use core\domain\MySQLClass;
 use core\domain\CopsStageClass;
@@ -7,7 +7,7 @@ use core\domain\CopsStageCapaciteSpecialeClass;
 use core\domain\CopsStageCategorieClass;
 
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe CopsStageDaoImpl
@@ -17,30 +17,77 @@ if (!defined('ABSPATH')) {
  */
 class CopsStageDaoImpl extends LocalDaoImpl
 {
-  /**
-   * Class constructor
-   * @since 1.22.06.02
-   * @version 1.22.06.02
-   */
-  public function __construct()
-  {
-    ////////////////////////////////////
-    // Définition des variables spécifiques
-    //$this->ObjClass = new CopsStage();
-    $this->dbTable  = "wp_7_cops_stage";
-    $this->dbTable_csc  = "wp_7_cops_stage_categorie";
-    $this->dbTable_css  = "wp_7_cops_stage_spec";
-    ////////////////////////////////////
+    //////////////////////////////////////////////////
+    // CONSTRUCT
+    //////////////////////////////////////////////////
+    /**
+     * Class constructor
+     * @since 1.22.06.02
+     * @version 1.22.06.02
+     */
+    public function __construct()
+    {
+        ////////////////////////////////////
+        // Définition des variables spécifiques
+        $this->dbTable      = "wp_7_cops_stage";
+        $this->dbTable_csc  = "wp_7_cops_stage_categorie";
+        $this->dbTable_css  = "wp_7_cops_stage_spec";
+        ////////////////////////////////////
 
-    parent::__construct();
+        ////////////////////////////////////
+        // Définition des champs spécifiques
+        $this->dbFields      = array(
+            self::FIELD_ID,
+            self::FIELD_STAGE_CAT_ID,
+            self::FIELD_STAGE_LIBELLE,
+            self::FIELD_STAGE_LEVEL,
+            self::FIELD_STAGE_REFERENCE,
+            self::FIELD_STAGE_REQUIS,
+            'stagePreRequis',
+            self::FIELD_STAGE_CUMUL,
+            self::FIELD_STAGE_DESC,
+            self::FIELD_STAGE_BONUS,
+        );
+        $this->dbFields_csc  = array(
+            self::FIELD_ID,
+            self::FIELD_STAGE_CAT_NAME,
+        );
+        $this->dbFields_css  = array(
+            self::FIELD_ID,
+            'specName',
+            self::FIELD_SPEC_DESC,
+            'stageId',
+        );
+        ////////////////////////////////////
 
-    ////////////////////////////////////
-    // Personnalisation de la requête avec les filtres
-    $this->whereFilters .= "AND id LIKE '%s' AND stageCategorieId LIKE '%s' AND stageNiveau LIKE '%s' ";
-    ////////////////////////////////////
-  }
+        parent::__construct();
 
-  public function getCopsStages($attributes)
+      ////////////////////////////////////
+      // Personnalisation de la requête avec les filtres
+      $this->whereFilters .= "AND id LIKE '%s' AND stageCategorieId LIKE '%s' AND stageNiveau LIKE '%s' ";
+      ////////////////////////////////////
+    }
+
+
+    //////////////////////////////////////////////////
+    // METHODS
+    //////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////
+    // WP_7_COPS_STAGE
+    //////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////
+    // WP_7_COPS_STAGE_CATEGORIE
+    //////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////
+    // WP_7_COPS_STAGE_SPEC
+    //////////////////////////////////////////////////
+
+
+
+  public function getStages($attributes)
   {
     //////////////////////////////
     // Construction de la requête

@@ -1,12 +1,12 @@
 <?php
-namespace core\bean;
+namespace core\daoimpl;
 
 use core\domain\MySQLClass;
 use core\domain\CopsSkillClass;
 use core\domain\CopsSkillSpecClass;
 
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe CopsSkillDaoImpl
@@ -16,61 +16,77 @@ if (!defined('ABSPATH')) {
  */
 class CopsSkillDaoImpl extends LocalDaoImpl
 {
-  /**
-   * Class constructor
-   * @since 1.22.05.30
-   * @version 1.22.05.30
-   */
-  public function __construct()
-  {
-    ////////////////////////////////////
-    // Définition des variables spécifiques
-    $this->ObjClass = new CopsSkillClass();
-    $this->dbTable  = "wp_7_cops_skill";
-    ////////////////////////////////////
+    //////////////////////////////////////////////////
+    // CONSTRUCT
+    //////////////////////////////////////////////////
+    /**
+     * Class constructor
+     * @since 1.22.05.30
+     * @version 1.22.05.30
+     */
+    public function __construct()
+    {
+        ////////////////////////////////////
+        // Définition des variables spécifiques
+        $this->dbTable      = "wp_7_cops_skill";
+        $this->dbTable_css  = "wp_7_cops_skill_spec";
+        ////////////////////////////////////
 
-    parent::__construct();
+        ////////////////////////////////////
+        // Définition des champs spécifiques
+        $this->dbFields      = array(
+            self::FIELD_ID,
+            self::FIELD_SKILL_NAME,
+            self::FIELD_SKILL_DESC,
+            self::FIELD_SKILL_USES,
+            self::FIELD_SPEC_LEVEL,
+            self::FIELD_PAN_USABLE,
+            self::FIELD_REFERENCE,
+            self::FIELD_DEFAULT_ABILITY,
+        );
+        $this->dbFields_css  = array(
+            self::FIELD_ID,
+            self::FIELD_SPEC_NAME,
+            self::FIELD_SKILL_ID,
+        );
+        ////////////////////////////////////
 
-    ////////////////////////////////////
-    // Personnalisation de la requête avec les filtres
-    $this->whereFilters .= "AND id LIKE '%s' AND skillName LIKE '%s' AND skillDescription LIKE '%s' ";
-    $this->whereFilters .= "AND specLevel LIKE '%s' AND panUsable LIKE '%s' ";
-    ////////////////////////////////////
-  }
+        parent::__construct();
 
-  public function getCopsSkills($attributes)
-  {
-    //////////////////////////////
-    // Construction de la requête
-    $request  = $this->select.vsprintf($this->whereFilters, $attributes[self::SQL_WHERE_FILTERS]);
-    // On trie la liste
-    // TODO : si $attributes[self::SQL_ORDER_BY] est un array
-    // vérifier que $attributes[self::SQL_ORDER] est bien un array aussi dont la taille correspond
-    // et construit l'order by en adéquation
-    $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER]." ";
-    // On limite si nécessaire
-    if ($attributes[self::SQL_LIMIT]!=-1) {
-      $request .= "LIMIT ".$attributes[self::SQL_LIMIT]." ";
     }
-    $request .= ";";
-    //////////////////////////////
 
-    //////////////////////////////
-    // Exécution de la requête
-    $rows = MySQLClass::wpdbSelect($request);
-    //////////////////////////////
-
-    //////////////////////////////
-    // Construction du résultat
-    $objsItem = array();
-    if (!empty($rows)) {
-      foreach ($rows as $row) {
-        $objsItem[] = CopsSkillClass::convertElement($row);
-      }
+    //////////////////////////////////////////////////
+    // METHODS
+    //////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////
+    // WP_7_COPS_SKILL
+    //////////////////////////////////////////////////
+  
+    /**
+     * @param array $attributes
+     * @return array [CopsSkill]
+     * @since 1.23.03.18
+     * @version 1.23.03.18
+     */
+    public function getSkills($attributes)
+    {
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
+        $request .= " WHERE id LIKE '%s' AND skillName LIKE '%s' AND skillDescription LIKE '%s' ";
+        $request .= "AND specLevel LIKE '%s' AND panUsable LIKE '%s'";
+        $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER]." ";
+        // On limite si nécessaire
+        if ($attributes[self::SQL_LIMIT]!=-1) {
+          $request .= "LIMIT ".$attributes[self::SQL_LIMIT]." ";
+        }
+        $request .= ";";
+        return $this->selectListDaoImpl(new CopsSkillClass(), $request, $attributes[self::SQL_WHERE_FILTERS]);
     }
-    return $objsItem;
-    //////////////////////////////
-  }
+    
+    //////////////////////////////////////////////////
+    // WP_7_COPS_SKILL_SPEC
+    //////////////////////////////////////////////////
+
 
   public function getCopsSkillSpecs($attributes)
   {

@@ -1,6 +1,10 @@
 <?php
+namespace core\services;
+
+use core\daoimpl\CopsStageDaoImpl;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * Classe CopsStageServices
@@ -74,10 +78,10 @@ class CopsStageServices extends LocalServices
    * @since 1.22.06.02
    * @version 1.22.06.02
    */
-  public function getCopsStages($attributes=array())
+  public function getStages($attributes=array())
   {
     $this->initFilters($attributes);
-    return $this->Dao->getCopsStages($attributes);
+    return $this->Dao->getStages($attributes);
   }
 
   /**
