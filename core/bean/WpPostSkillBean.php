@@ -11,6 +11,9 @@ use core\services\CopsSkillServices;
  */
 class WpPostSkillBean extends WpPostBean
 {
+    /**
+     * @return string
+     */
     public function getContentDisplay()
     {
         ///////////////////////////////////////////////////////////////
@@ -38,8 +41,9 @@ class WpPostSkillBean extends WpPostBean
         ///////////////////////////////////////////////////////////////
         // Si on a une occurrence, on met à jour l'entrée si nécessaire.
         if (count($objsCopsSkill)==1) {
-            $blnUpdate = false;
             $objCopsSkill = array_shift($objsCopsSkill);
+            $this->backUp($objCopsSkill);
+            $blnUpdate = false;
             // TODO : Le content et les usages sont dans le content du Post. A gérer.
             // $postContent
             // $objCopsSkill->getField(self::FIELD_SKILL_DESC)
@@ -88,7 +92,8 @@ class WpPostSkillBean extends WpPostBean
             ($padUsable ? 'Oui' : 'Non'),
             // La description de la compétence et les exemples d'utilisation
             $postContent,
-            '',//str_replace("\r\n", '<br>', $this->CopsSkill->getField(self::FIELD_SKILL_DESC)),
+            //str_replace("\r\n", '<br>', $this->CopsSkill->getField(self::FIELD_SKILL_DESC)),
+            '',
         );
         return $this->getRender($urlTemplate, $attributes);
     }

@@ -69,18 +69,25 @@ class WpPostClass extends LocalDomainClass
     public function setPostSubtype($objWpPostClass)
     { $this->postSubtype = $objWpPostClass; }
 
-    public static function getBean($WpPost, $catId=45)
+    /**
+     * @param WpPostClass $objWpPost
+     * @param int $catId
+     * @return mixed
+     * @since 1.23.03.22
+     * @version 1.23.03.22
+     */
+    public static function getBean($objWpPost, $catId=self::WP_CAT_ID_BDD)
     {
         switch ($catId) {
-            case '47' :
-            $Bean = new WpPostSkillBean($WpPost);
+            case self::WP_CAT_ID_SKILL :
+            $objBean = new WpPostSkillBean($objWpPost);
             break;
-            case '45' :
+            case self::WP_CAT_ID_BDD :
             default :
-            $Bean = new WpPostBddBean($WpPost);
+            $objBean = new WpPostBddBean($objWpPost);
             break;
         }
-        return $Bean;
+        return $objBean;
     }
 
     public function getPostMeta($key='')
@@ -131,13 +138,7 @@ class WpPostClass extends LocalDomainClass
     { return get_attached_media($type, $this->ID); }
 
     public function getUrlOrUri()
-    {
-        $secondsperDay = 60*60*24;
-        $tresholdDays = 100;
-        $s = $this->getPostDate();
-        $daysElapsed = (time()-mktime(0, 0, 0, substr($s, 5, 2), substr($s, 8, 2), substr($s, 0, 4)))/$secondsperDay;
-        return (self::isAdmin() ? $this->getGuid() : $this->getPostMeta('article_url'));
-    }
+    { return (static::isAdmin() ? $this->getGuid() : $this->getUrl()); }
 
     public function getUrl()
     { return $this->getPostMeta('article_url'); }
@@ -160,8 +161,8 @@ class WpPostClass extends LocalDomainClass
             $this->WpCategories = array();
             $categories = wp_get_post_categories($this->ID);
             while (!empty($categories)) {
-                $cat_id = array_shift($categories);
-                $category = get_category($cat_id);
+                $catId = array_shift($categories);
+                $category = get_category($catId);
                 array_push($this->WpCategories, WpCategoryClass::convertElement($category));
             }
         }
@@ -183,10 +184,10 @@ class WpPostClass extends LocalDomainClass
 
     public function hasTag($tag)
     {
-        $WpTags = $this->getTags();
-        while (!empty($WpTags)) {
-            $WpTag = array_shift($WpTags);
-            if ($WpTag->getName()==$tag || $WpTag->getSlug()==$tag) {
+        $objsWpTag = $this->getTags();
+        while (!empty($objsWpTag)) {
+            $objWpTag = array_shift($objsWpTag);
+            if ($objWpTag->getName()==$tag || $objWpTag->getSlug()==$tag) {
                 return true;
             }
         }

@@ -241,15 +241,15 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         );
         $headerContent  = $this->getTh(self::LABEL_NOM, $thAttributes);
         if ($this->blnShowColNature) {
-            $thAttributes[self::ATTR_STYLE] = 'width:150px;';
+            $thAttributes[self::ATTR_STYLE] = 'width:100px;';
             $headerContent .= $this->getTh(self::LABEL_NATURE, $thAttributes);
             unset($thAttributes[self::ATTR_STYLE]);
         }
-        $headerContent .= $this->getTh(self::LABEL_DESCRIPTION, $thAttributes);
         $thAttributes[self::ATTR_STYLE] = 'width:250px;';
+        $headerContent .= $this->getTh(self::LABEL_DESCRIPTION, $thAttributes);
         if ($this->hasCopsEditor) {
             $headerContent .= $this->getTh(self::LABEL_DESCRIPTION, $thAttributes);
-            $thAttributes[self::ATTR_STYLE] = 'width:250px;';
+            $thAttributes[self::ATTR_STYLE] = 'width:150px;';
         }
         $headerContent .= $this->getTh(self::LABEL_REFERENCE, $thAttributes);
         unset($thAttributes[self::ATTR_STYLE]);

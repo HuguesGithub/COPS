@@ -82,7 +82,7 @@ class CopsIndexReferenceClass extends LocalDomainClass
             || $this->getNature()->getField(self::FIELD_ID_IDX_NATURE)==''
         ) {
             $blnOk = false;
-        } else  {
+        } else {
             // TODO : les Références associées existent-elles ?
         }
         return $blnOk;
