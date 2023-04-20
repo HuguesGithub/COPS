@@ -16,8 +16,12 @@ if (!defined('ABSPATH')) {
  */
 class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
-    public $arrFullMonths = [1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-    public $arrShortMonths = [1=>'Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+    public $arrFullMonths = [1=>'Janvier', 'Février', 'Mars',
+        'Avril', 'Mai', 'Juin',
+        'Juillet', 'Août', 'Septembre',
+        'Octobre', 'Novembre', 'Décembre'];
+    public $arrShortMonths = [1=>'Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin',
+        'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
     public $arrFullDays = [0=>'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
     public $arrShortDays = [0=>'Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
     public $arrShortEnglishDays = [0=>'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -25,41 +29,52 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     /**
      * @return bool
      */
-    public static function isAdmin()
-    { return current_user_can('manage_options'); }
+    public static function isAdmin(): bool
+    {
+        return current_user_can('manage_options');
+    }
+
     /**
      * @return bool
      */
-    public static function isLogged()
-    { return is_user_logged_in(); }
+    public static function isLogged(): bool
+    {
+        return is_user_logged_in();
+    }
+
     /**
      * @return bool
      */
-    public static function isCopsLogged()
+    public static function isCopsLogged(): bool
     {
       // On va checker dans les variables de SESSION si les infos relatives à Cops y sont stockées.
       return (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='err_login');
     }
+
     /**
      * @return bool
      */
-    public static function isCopsEditor()
+    public static function isCopsEditor(): bool
     {
       // On va checker dans les variables de SESSION si les infos relatives à Cops y sont stockées.
       return (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest');
     }
+
     /**
      * @return int
      */
-    public static function getWpUserId()
-    { return get_current_user_id(); }
+    public static function getWpUserId(): int
+    {
+        return get_current_user_id();
+    }
+
     /**
      * @param string
      * @return string
      */
-    public static function getCopsDate($format)
+    public static function getCopsDate(string $format): string
     {
-        $strCopsDate = get_option('cops_date');
+        $strCopsDate = get_option(self::CST_CAL_COPSDATE);
         $h = substr((string) $strCopsDate, 0, 2);
         $i = substr((string) $strCopsDate, 3, 2);
         $s = substr((string) $strCopsDate, 6, 2);
@@ -72,25 +87,26 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
         $objUtilitiesBean = new UtilitiesBean();
 
         switch ($format) {
-            case 'strJour' :
-                $attributes = [$objUtilitiesBean->arrFullDays[date('N', $tsCops)], $d, $objUtilitiesBean->arrFullMonths[$m*1], $y];
+            case self::FORMAT_STRJOUR :
+                $strJour = $objUtilitiesBean->arrFullDays[date('N', $tsCops)];
+                $attributes = [$strJour, $d, $objUtilitiesBean->arrFullMonths[$m*1], $y];
                 $formatted = implode(' ', $attributes);
                 break;
-            case 'strSbDown' :
+            case self::FORMAT_SIDEBAR_DATE :
                 $formatted = $objUtilitiesBean->arrShortDays[date('N', $tsCops)].' '.$dmy.'<br>'.$his;
                 break;
-            case 'tsnow' :
+            case self::FORMAT_TS_NOW :
                 $formatted = mktime($h, $i, $s, $m, $d, $y);
                 break;
-            case 'tsStart' :
+            case self::FORMAT_TS_START_DAY :
                 $formatted = mktime(0, 0, 0, $m, $d, $y);
                 break;
-            case 'H:i:s'   :
-            case 'D m-d-Y' :
-            case 'Y-m-d'   :
-            case 'm-d-Y'  :
-            case 'd-m-Y'  :
-            case 'Y-m-d h:i:s'  :
+            case self::FORMAT_DATE_HIS    :
+            case self::FORMAT_DATE_DMDY   :
+            case self::FORMAT_DATE_YMD    :
+            case self::FORMAT_DATE_MDY    :
+            case self::FORMAT_DATE_DMY    :
+            case self::FORMAT_DATE_YMDHIS :
                 $formatted = date($format, mktime($h, $i, $s, $m, $d, $y));
                 break;
             default :
@@ -104,7 +120,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @param array $attributes
      * @return array
      */
-    private function getExtraAttributesString($attributes)
+    private function getExtraAttributesString(array $attributes): array
     {
         $extraAttributes = '';
         if (!empty($attributes)) {
@@ -127,14 +143,17 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @param array $attributes
      * @return string
      */
-    public function getBalise($balise, $label='', $attributes=[])
-    { return '<'.$balise.$this->getExtraAttributesString($attributes).'>'.$label.'</'.$balise.'>'; }
+    public function getBalise(string $balise, string $label='', array $attributes=[]): string
+    {
+        return '<'.$balise.$this->getExtraAttributesString($attributes).'>'.$label.'</'.$balise.'>';
+    }
+
     /**
      * @param string $urlTemplate
      * @param array $args
      * @return string
      */
-    public function getRender($urlTemplate, $args=[])
+    public function getRender(string $urlTemplate, array $args=[]): string
     {
         if (file_exists(PLUGIN_PATH.$urlTemplate)) {
             return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args);
@@ -152,7 +171,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getButton($label, $attributes=[])
+    public function getButton(string $label, array $attributes=[]): string
     {
         $buttonAttributes = [self::ATTR_TYPE => self::TAG_BUTTON, self::ATTR_CLASS => 'btn btn-default btn-sm'];
         if (!empty($attributes)) {
@@ -161,6 +180,8 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
                     $buttonAttributes[$key]  = $value;
                 } elseif ($key==self::ATTR_CLASS) {
                     $buttonAttributes[$key] .= ' '.$value;
+                } else {
+                    // TODO
                 }
             }
         }
@@ -175,7 +196,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since v1.22.11.26
      * @version v1.22.11.26
      */
-    public function getOption($label, $value, $blnChecked=false)
+    public function getOption(string $label, string $value, bool $blnChecked=false): string
     {
         $attributes = [self::ATTR_VALUE => $value];
         if ($blnChecked) {
@@ -191,7 +212,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getTh($label, $attributes=[])
+    public function getTh(string $label, array $attributes=[]): string
     {
         $buttonAttributes = ['scope' => 'col'];
         if (!empty($attributes)) {
@@ -210,7 +231,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getLink($label, $href, $classe, $extraAttributes=[])
+    public function getLink(string $label, string $href, string $classe, array $extraAttributes=[]): string
     {
         $attributes = [self::ATTR_HREF => $href, self::ATTR_CLASS => $classe];
         if (!empty($extraAttributes)) {
@@ -228,7 +249,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getDiv($label, $attributes=[])
+    public function getDiv(string $label, array $attributes=[]): string
     {
         $divAttributes = [];
         if (!empty($attributes)) {
@@ -244,66 +265,64 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @return string
      * @version 1.22.10.06
      */
-    public function getIcon($tag, $prefix='', $label='')
+    public function getIcon(string $tag, string $prefix='', string $label=''): string
     {
-      if ($prefix!='') {
-        $prefix .= ' ';
-      }
-        switch ($tag) {
-            case self::I_ANGLE_LEFT :
-            case self::I_ANGLES_LEFT :
-            case self::I_BACKWARD :
-            case self::I_CIRCLE :
-            case self::I_DATABASE :
-            case self::I_FILE_CATEGORY :
-            case self::I_FILE_OPENED :
-            case self::I_FILE_CLOSED :
-            case self::I_FILE_COLDED :
-            case self::I_FILE_CIRCLE_CHECK :
-            case self::I_FILE_CIRCLE_PLUS :
-            case self::I_FILE_CIRCLE_XMARK :
-            case 'arrows-rotate' :
-            case 'book' :
-            case 'box-archive' :
-            case 'calendar-days' :
-            case 'caret-left' :
-            case 'caret-right' :
-            case 'desktop' :
-            case 'download' :
-            case 'envelope' :
-            case 'inbox' :
-                case 'square-pen' :
-                    case 'square-plus' :
-            case 'trash-alt' :
-                $prefix .= 'fa-solid fa-';
-            break;
-            default :
-                $prefix .= 'fa-solid fa-biohazard';
-                $tag = '';
-            break;
+        $allowedTags = [
+            self::I_ANGLE_LEFT,
+            self::I_ANGLES_LEFT,
+            self::I_ARROWS_ROTATE,
+            self::I_BACKWARD,
+            self::I_CARET_LEFT,
+            self::I_CARET_RIGHT,
+            self::I_CIRCLE,
+            self::I_DATABASE,
+            self::I_DESKTOP,
+            self::I_DOWNLOAD,
+            self::I_FILE_CATEGORY,
+            self::I_FILE_OPENED,
+            self::I_FILE_CLOSED,
+            self::I_FILE_COLDED,
+            self::I_FILE_CIRCLE_CHECK,
+            self::I_FILE_CIRCLE_PLUS,
+            self::I_FILE_CIRCLE_XMARK,
+            'book',
+            'box-archive',
+            'calendar-days',
+            'envelope',
+            'inbox',
+            'square-pen',
+            'square-plus',
+            'trash-alt',
+        ];
+        if ($prefix!='') {
+            $prefix .= ' ';
         }
-        return $this->getBalise(self::TAG_I, $label, [self::ATTR_CLASS=>$prefix.$tag]);
+        $prefix .= 'fa-solid fa-'.(in_array($tag, $allowedTags) ? $tag : 'biohazard');
+
+        return $this->getBalise(self::TAG_I, $label, [self::ATTR_CLASS=>$prefix]);
     }
+
     /**
      * @param string $id
      * @param string $default
      * @return mixed
      */
-    public function initVar($id, $default='')
+    public function initVar(string $id, mixed $default=''): mixed
     {
-        if (isset($_POST[$id])) {
-            return $_POST[$id];
+        $value = $this->fromPost($id);
+        if ($value=='') {
+            $value = $this->fromGet($id);
+            if ($value=='') {
+                $value = $default;
+            }
         }
-        if (isset($_GET[$id])) {
-            return $_GET[$id];
-        }
-        return $default;
+        return $value;
     }
 
     /**
      * @return string
      */
-    public function getPublicHeader()
+    public function getPublicHeader(): string
     {
         return '';
     }
@@ -311,7 +330,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     /**
      * @return string
      */
-    public function getPublicFooter()
+    public function getPublicFooter(): string
     {
         $urlTemplate = self::WEB_PP_MAIN_FOOTER;
 
@@ -329,10 +348,24 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.23.02.18
      * @version 1.23.02.18
      */
-    public static function fromServer($field)
+    public static function fromServer(string $field): string
     {
         // Sanitize
         $strSanitized = htmlentities((string) $_SERVER[$field], ENT_QUOTES, 'UTF-8');
+        return filter_var($strSanitized, FILTER_SANITIZE_URL);
+    }
+
+    public static function fromPost(string $key): mixed
+    {
+        // Sanitize
+        $strSanitized = htmlentities((string) $_POST[$key], ENT_QUOTES, 'UTF-8');
+        return filter_var($strSanitized, FILTER_SANITIZE_URL);
+    }
+
+    public static function fromGet(string $key): mixed
+    {
+        // Sanitize
+        $strSanitized = htmlentities((string) $_GET[$key], ENT_QUOTES, 'UTF-8');
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 

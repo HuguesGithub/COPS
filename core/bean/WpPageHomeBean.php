@@ -22,8 +22,12 @@ class WpPageHomeBean extends WpPageBean
         $urlTemplate = self::WEB_PP_HOME_CONTENT;
 
         $args = [
-            // La date Cops du jour
-            static::getCopsDate('strJour'),
+            // La date Cops du jour, format : Dimanche 12 Mars 2023
+            static::getCopsDate(self::FORMAT_STRJOUR),
+            // Le type de météo
+            // La température
+            // La température max
+            // La température min
         ];
         return $this->getRender($urlTemplate, $args);
     }

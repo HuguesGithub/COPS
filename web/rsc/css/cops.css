@@ -430,6 +430,25 @@ border-color: #4b545c;
     margin-bottom: 5px;
   }
 
+.masthead .masthead-bar-one-widgets {
+    display: unset;
+}
+.masthead .weather-widget {
+    color: #121212;
+    font-size: 12px;
+    font-family: nyt-franklin,helvetica,arial,sans-serif;
+    font-weight: 500;
+    margin-bottom: 6px;
+    width: 105px;
+    line-height: 10px;
+}
+.masthead .weather-temp-max-min {
+    color: rgb(114,114,114);
+    font-size: 10px;
+}
+
+
+
 
  .masthead .masthead-meta { border-bottom: 2px solid #000000; border-top: 1px solid #000000; height: 96px; margin: 20px auto 0; padding: 8px 5px; position: relative; }
  .masthead .editions { left: 50%; margin-left: -84px; min-width: 150px; position: absolute; top: -16px; }
@@ -464,14 +483,9 @@ border-color: #4b545c;
   }
 
   .css-103zufb {
-    display: unset;
+    
   }
   .css-i1s3vq {
-    color: #121212;
-    font-size: 12px;
-    font-family: nyt-franklin,helvetica,arial,sans-serif;
-    font-weight: 500;
-    margin-bottom: 6px;
   }
   .css-dey754 {
     display: flex;
@@ -483,8 +497,6 @@ border-color: #4b545c;
     font-size: 0.625rem;
   }
   .css-1lire5m {
-    font-weight: bold;
-    font-size: 0.8125rem;
   }
   .css-6vr0ez {
     margin-left: 2px;

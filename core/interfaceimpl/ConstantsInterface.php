@@ -250,6 +250,19 @@ interface ConstantsInterface
     public const FIELD_ABR_IDX_TOME     = 'abrIdxTome';
   
     /////////////////////////////////////////////////
+    // Formats
+    public const FORMAT_STRJOUR          = 'strJour';
+    public const FORMAT_SIDEBAR_DATE     = 'strSbDown';
+    public const FORMAT_TS_NOW           = 'tsnow';
+    public const FORMAT_TS_START_DAY     = 'tsStart';
+    public const FORMAT_DATE_HIS         = 'H:i:s';
+    public const FORMAT_DATE_DMDY        = 'D m-d-Y';
+    public const FORMAT_DATE_YMD         = 'Y-m-d';
+    public const FORMAT_DATE_MDY         = 'm-d-Y';
+    public const FORMAT_DATE_DMY         = 'd-m-Y';
+    public const FORMAT_DATE_YMDHIS      = 'Y-m-d h:i:s';
+
+    /////////////////////////////////////////////////
     // Icons
     public const I_ANGLE_LEFT            = 'angle-left';
     public const I_ANGLE_RIGHT           = 'angle-right';

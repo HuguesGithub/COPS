@@ -1,6 +1,14 @@
 <?php
+declare(strict_types=1);
+
+namespace core\actions;
+
+use core\services\CopsEnqueteServices;
+use core\domain\CopsEnqueteClass;
+use core\bean\UtilitiesBean;
+
 if (!defined('ABSPATH')) {
-  die('Forbidden');
+    die('Forbidden');
 }
 /**
  * CopsEnqueteActions
@@ -13,15 +21,6 @@ class CopsEnqueteActions extends LocalActions
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
-    /**
-     * @since 1.22.09.24
-     * @version 1.22.09.24
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->CopsEnqueteServices = new CopsEnqueteServices();
-    }
 
     // TODO :
     // Gérer les données relatives aux tables annexes.
@@ -35,16 +34,16 @@ class CopsEnqueteActions extends LocalActions
      * @since 1.22.09.24
      * @version 1.22.09.24
      */
-    public static function insertEnquete($urlParams)
+    public static function insertEnquete(array $urlParams): CopsEnqueteClass
     {
         ////////////////////////////////////////////
         // On créé le Service
         $objCopsEnqueteServices = new CopsEnqueteServices();
         // On définit le timestamp du jeu
-        $tsNow = UtilitiesBean::getCopsDate('tsnow');
+        $tsNow = UtilitiesBean::getCopsDate(self::FORMAT_TS_NOW);
         ////////////////////////////////////////////
         // On créé l'objet
-        $objCopsEnquete = new CopsEnquete();
+        $objCopsEnquete = new CopsEnqueteClass();
         ////////////////////////////////////////////
         // On récupère les données passées en paramètres spécifiques à l'objet Enquete
         // Et on les enrichit de données supplémentaires.
@@ -55,13 +54,17 @@ class CopsEnqueteActions extends LocalActions
         // L'id du District Attorney
         $objCopsEnquete->setField(self::FIELD_IDX_DISTRICT_ATT, $urlParams[self::FIELD_IDX_DISTRICT_ATT]);
         // Le résumé des faits
-        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, stripslashes((string) $urlParams[self::FIELD_RESUME_FAITS]));
+        $content = stripslashes((string) $urlParams[self::FIELD_RESUME_FAITS]);
+        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, $content);
         // La description de la scène de crime
-        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, stripslashes((string) $urlParams[self::FIELD_DESC_SCENE_CRIME]));
+        $content = stripslashes((string) $urlParams[self::FIELD_DESC_SCENE_CRIME]);
+        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, $content);
         // Les pistes et les démarches
-        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, stripslashes((string) $urlParams[self::FIELD_PISTES_DEMARCHES]));
+        $content = stripslashes((string) $urlParams[self::FIELD_PISTES_DEMARCHES]);
+        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, $content);
         // Les notes diverses
-        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, stripslashes((string) $urlParams[self::FIELD_NOTES_DIVERSES]));
+        $content = stripslashes((string) $urlParams[self::FIELD_NOTES_DIVERSES]);
+        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, $content);
         // Le statut à ouvert par défaut
         $objCopsEnquete->setField(self::FIELD_STATUT_ENQUETE, self::CST_ENQUETE_OPENED);
         // La date de création
@@ -79,13 +82,13 @@ class CopsEnqueteActions extends LocalActions
      * @since 1.22.09.24
      * @version 1.22.09.24
      */
-    public static function updateEnquete($urlParams)
+    public static function updateEnquete(array $urlParams): CopsEnqueteClass
     {
         ////////////////////////////////////////////
         // On créé le Service
         $objCopsEnqueteServices = new CopsEnqueteServices();
         // On définit le timestamp du jeu
-        $tsNow = UtilitiesBean::getCopsDate('tsnow');
+        $tsNow = UtilitiesBean::getCopsDate(self::FORMAT_TS_NOW);
         ////////////////////////////////////////////
         // On récupère l'objet présent en base
         $objCopsEnquete = $objCopsEnqueteServices->getEnquete($urlParams[self::FIELD_ID]);
@@ -98,13 +101,17 @@ class CopsEnqueteActions extends LocalActions
         // L'id du District Attorney
         $objCopsEnquete->setField(self::FIELD_IDX_DISTRICT_ATT, $urlParams[self::FIELD_IDX_DISTRICT_ATT]);
         // Le résumé des faits
-        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, stripslashes((string) $urlParams[self::FIELD_RESUME_FAITS]));
+        $content = stripslashes((string) $urlParams[self::FIELD_RESUME_FAITS]);
+        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, $content);
         // La description de la scène de crime
-        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, stripslashes((string) $urlParams[self::FIELD_DESC_SCENE_CRIME]));
+        $content = stripslashes((string) $urlParams[self::FIELD_DESC_SCENE_CRIME]);
+        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, $content);
         // Les pistes et les démarches
-        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, stripslashes((string) $urlParams[self::FIELD_PISTES_DEMARCHES]));
+        $content = stripslashes((string) $urlParams[self::FIELD_PISTES_DEMARCHES]);
+        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, $content);
         // Les notes diverses
-        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, stripslashes((string) $urlParams[self::FIELD_NOTES_DIVERSES]));
+        $content = stripslashes((string) $urlParams[self::FIELD_NOTES_DIVERSES]);
+        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, $content);
         // Le statut ne change pas
         // La date de création ne change pas
         // La date de dernière modification
