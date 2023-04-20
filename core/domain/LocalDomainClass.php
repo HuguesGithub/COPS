@@ -17,7 +17,7 @@ class LocalDomainClass extends GlobalDomainClass
      * @since 1.22.05.08
      * @version 1.22.05.08
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes=[])
     { parent::__construct($attributes); }
     
     /**

@@ -27,50 +27,46 @@ class CopsPlayerBean extends UtilitiesBean
 
   public function getCopsPlayerCarac($isCreation=false)
   {
-    $selectAttributes = array(
-      'class'         => 'form-control ajaxAction',
-      'data-trigger'  => 'change',
-      'data-ajax'     => 'saveData,checkLangue',
-    );
+    $selectAttributes = ['class'         => 'form-control ajaxAction', 'data-trigger'  => 'change', 'data-ajax'     => 'saveData,checkLangue'];
 
     $urlTemplate  = 'web/pages/public/fragments/public-fragments-section-caracteristiques-panel';
     $urlTemplate .= ($isCreation ? '-edit' : '').'.php';
-    $attributes = array(
-      // Carrure
-      $this->CopsPlayer->getField('carac_carrure'),
-      // Charme
-      2,
-      // Coordination
-      2,
-      // Education
-      2,
-      // Perception
-      2,
-      // Réflexes
-      2,
-      // Sang-froid
-      2,
-      // Points de vie max
-      26,
-      // Points d'adrénaline
-      0,
-      // Points d'ancienneté
-      0,
-      // Langue 2
-      $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, array('name'=>'carac-langue-02', 'id'=>'carac-langue-02',))),
-      // Langue 3
-      $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, array('name'=>'carac-langue-03', 'id'=>'carac-langue-03', 'style'=>'display:none;'))),
-      // Langue 4
-      $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, array('name'=>'carac-langue-04', 'id'=>'carac-langue-04', 'style'=>'display:none;'))),
-      // Langue 5
-      $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, array('name'=>'carac-langue-05', 'id'=>'carac-langue-05', 'style'=>'display:none;'))),
-      // Points de vie current
-      26,
-      // Points d'adrénaline current
-      0,
-      // Points d'ancienneté current
-      0,
-    );
+    $attributes = [
+        // Carrure
+        $this->CopsPlayer->getField('carac_carrure'),
+        // Charme
+        2,
+        // Coordination
+        2,
+        // Education
+        2,
+        // Perception
+        2,
+        // Réflexes
+        2,
+        // Sang-froid
+        2,
+        // Points de vie max
+        26,
+        // Points d'adrénaline
+        0,
+        // Points d'ancienneté
+        0,
+        // Langue 2
+        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-02', 'id'=>'carac-langue-02'])),
+        // Langue 3
+        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-03', 'id'=>'carac-langue-03', 'style'=>'display:none;'])),
+        // Langue 4
+        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-04', 'id'=>'carac-langue-04', 'style'=>'display:none;'])),
+        // Langue 5
+        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-05', 'id'=>'carac-langue-05', 'style'=>'display:none;'])),
+        // Points de vie current
+        26,
+        // Points d'adrénaline current
+        0,
+        // Points d'ancienneté current
+        0,
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 
@@ -81,64 +77,50 @@ class CopsPlayerBean extends UtilitiesBean
      */
   public function getLibraryRow($href, $blnDisplaySection=true)
     {
-        $arrColumns = array();
+        $arrColumns = [];
         // Checkbox ?
 
         // Le matricule.
         $section = $this->CopsPlayer->getField(self::FIELD_SECTION);
-        if (in_array($section, array('A-Alpha', 'B-Epsilon')) || $section=='') {
+        if (in_array($section, ['A-Alpha', 'B-Epsilon']) || $section=='') {
             $id = $this->CopsPlayer->getField(self::FIELD_ID);
             $mask = 'masks/mask-'.$id.($id=='51' ? '.png' : '.jpg');
         } else {
             $mask = 'masks/mask-000.jpg';
         }
-        $imgAttributes = array(
-            self::ATTR_CLASS => 'mask',
-            self::ATTR_SRC => 'https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/'.$mask,
-        );
+        $imgAttributes = [self::ATTR_CLASS => 'mask', self::ATTR_SRC => 'https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/'.$mask];
         $tdContent = $this->getBalise(self::TAG_IMG, '', $imgAttributes);
-        switch ($this->CopsPlayer->getField(self::FIELD_GRADE)) {
-            case 'Capitaine' :
-                $color = 'gold';
-                break;
-            case 'Lieutenant' :
-                $color = 'silver';
-                break;
-            case 'Détective' :
-                $color = '#cd7f32';
-                break;
-            default :
-                $color = '';
-                break;
-        }
-        $cellAttributes = array(
-            self::ATTR_CLASS => 'mailbox-name',
-            self::ATTR_STYLE => 'border-left: 10px solid '.$color,
-        );
+        $color = match ($this->CopsPlayer->getField(self::FIELD_GRADE)) {
+            'Capitaine' => 'gold',
+            'Lieutenant' => 'silver',
+            'Détective' => '#cd7f32',
+            default => '',
+        };
+        $cellAttributes = [self::ATTR_CLASS => 'mailbox-name', self::ATTR_STYLE => 'border-left: 10px solid '.$color];
         $cell = $this->getBalise(self::TAG_TD, $tdContent, $cellAttributes);
         $arrColumns[] = $cell;
 
         // Le matricule
-        $label = substr($this->CopsPlayer->getField(self::FIELD_MATRICULE), 4);
-        $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+        $label = substr((string) $this->CopsPlayer->getField(self::FIELD_MATRICULE), 4);
+        $cell = $this->getBalise(self::TAG_TD, $label, [self::ATTR_CLASS=>'mailbox-date']);
         $arrColumns[] = $cell;
 
         // Le nom
         $label = $this->CopsPlayer->getField(self::FIELD_NOM).' '.$this->CopsPlayer->getField(self::FIELD_PRENOM);
         $href .= self::CST_AMP.self::FIELD_ID.'='.$this->CopsPlayer->getField(self::FIELD_ID);
         $tdContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-        $cell = $this->getBalise(self::TAG_TD, $tdContent, array(self::ATTR_CLASS=>'mailbox-date'));
+        $cell = $this->getBalise(self::TAG_TD, $tdContent, [self::ATTR_CLASS=>'mailbox-date']);
         $arrColumns[] = $cell;
         
         // Le surnom
         $label = $this->CopsPlayer->getField(self::FIELD_SURNOM);
-        $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+        $cell = $this->getBalise(self::TAG_TD, $label, [self::ATTR_CLASS=>'mailbox-date']);
         $arrColumns[] = $cell;
         
         if ($blnDisplaySection) {
             // La section
             $label = ($section=='' ? 'N/A' : $section);
-            $cell = $this->getBalise(self::TAG_TD, $label, array(self::ATTR_CLASS=>'mailbox-date'));
+            $cell = $this->getBalise(self::TAG_TD, $label, [self::ATTR_CLASS=>'mailbox-date']);
             $arrColumns[] = $cell;
         }
         
@@ -173,14 +155,14 @@ class CopsPlayerBean extends UtilitiesBean
       break;
     }
     ////////////////////////////////////////////////////////////////////
-    if (in_array($section, array('N/A', 'A-Alpha', 'B-Epsilon'))) {
+    if (in_array($section, ['N/A', 'A-Alpha', 'B-Epsilon'])) {
       $id = $this->CopsPlayer->getField(self::FIELD_ID);
       $mask = 'masks/mask-'.$id.($id=='51' ? '.png' : '.jpg');
     } else {
       $mask = 'masks/mask-000.jpg';
     }
     ////////////////////////////////////////////////////////////////////
-    $matriculeId = substr($this->CopsPlayer->getField(self::FIELD_MATRICULE), 4);
+    $matriculeId = substr((string) $this->CopsPlayer->getField(self::FIELD_MATRICULE), 4);
     ////////////////////////////////////////////////////////////////////
     $surnom = $this->CopsPlayer->getField(self::FIELD_SURNOM);
     if ($surnom=='') {
@@ -189,20 +171,20 @@ class CopsPlayerBean extends UtilitiesBean
     ////////////////////////////////////////////////////////////////////
 
     $urlTemplate  = 'web/pages/public/fragments/public-fragments-article-library-cops-extract.php';
-    $attributes = array(
-      // Couleur bordure    : warning / primary / ??
-      $bordure,
-      // Nom                : Skripnick Jason
-      $this->CopsPlayer->getField(self::FIELD_NOM).' '.$this->CopsPlayer->getField(self::FIELD_PRENOM),
-      // Masque ou Portrait : masks/mask-001.jpg
-      $mask,
-      // Surnom             : Capitaine
-      $surnom,
-      // Matricule          : 001
-      $matriculeId,
-      // Section            : N/A / A-Alpha
-      $section,
-    );
+    $attributes = [
+        // Couleur bordure    : warning / primary / ??
+        $bordure,
+        // Nom                : Skripnick Jason
+        $this->CopsPlayer->getField(self::FIELD_NOM).' '.$this->CopsPlayer->getField(self::FIELD_PRENOM),
+        // Masque ou Portrait : masks/mask-001.jpg
+        $mask,
+        // Surnom             : Capitaine
+        $surnom,
+        // Matricule          : 001
+        $matriculeId,
+        // Section            : N/A / A-Alpha
+        $section,
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 }

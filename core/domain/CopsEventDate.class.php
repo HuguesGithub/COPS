@@ -37,7 +37,7 @@ class CopsEventDate extends LocalDomain
      * @version 1.22.06.13
      * @since 1.22.06.13
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'CopsEventDate';
@@ -122,5 +122,5 @@ class CopsEventDate extends LocalDomain
   { $this->CopsEventServices->saveEventDate($this); }
 
   public function getInsertAttributes()
-  { return array($this->eventId, $this->dStart, $this->dEnd, $this->tStart, $this->tEnd); }
+  { return [$this->eventId, $this->dStart, $this->dEnd, $this->tStart, $this->tEnd]; }
 }

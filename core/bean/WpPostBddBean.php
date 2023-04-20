@@ -13,15 +13,15 @@ class WpPostBddBean extends WpPostBean
     public function getContentDisplay()
     {
         $urlTemplate = self::WEB_PPFA_BDD;
-        list($sigle) = explode(':', $this->WpPost->getField(self::WP_POSTTITLE));
-        $attributes = array(
+        [$sigle] = explode(':', (string) $this->WpPost->getField(self::WP_POSTTITLE));
+        $attributes = [
             // Le titre
             $this->WpPost->getField(self::WP_POSTTITLE),
             // Le contenu
             $this->WpPost->getField(self::WP_POSTCONTENT),
             // L'ancre
             trim($sigle),
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 

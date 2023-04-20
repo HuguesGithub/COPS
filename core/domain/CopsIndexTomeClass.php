@@ -31,7 +31,7 @@ class CopsIndexTomeClass extends LocalDomainClass
      * @version 1.23.02.15
      * @since 1.23.02.15
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsIndexTomeClass';

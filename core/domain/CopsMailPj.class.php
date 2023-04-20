@@ -27,7 +27,7 @@ class CopsMailPj extends LocalDomain
    * @since 1.22.05.01
    * @version 1.22.05.01
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsMailPj';

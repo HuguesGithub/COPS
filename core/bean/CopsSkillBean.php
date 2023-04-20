@@ -36,20 +36,20 @@ class CopsSkillBean extends UtilitiesBean
       $strSpecialisation = 'Aucune';
     }
 
-    $attributes = array(
-      // Le nom de la compétence
-      $this->CopsSkill->getField(self::FIELD_SKILL_NAME),
-      // Caractéristique associée
-      $this->CopsSkill->getField(self::FIELD_DEFAULT_ABILITY),
-      // Niveau spécialisation
-      $strSpecialisation,
-      // Adrénaline
-      ($this->CopsSkill->getField(self::FIELD_PAN_USABLE)==1?'Oui':'Non'),
-      // La description de la compétence
-      str_replace("\r\n", '<br>', $this->CopsSkill->getField(self::FIELD_SKILL_DESC)),
-      // Exemples d'utilisation
-      str_replace("\r\n", '<br>', $this->CopsSkill->getField(self::FIELD_SKILL_USES)),
-    );
+    $attributes = [
+        // Le nom de la compétence
+        $this->CopsSkill->getField(self::FIELD_SKILL_NAME),
+        // Caractéristique associée
+        $this->CopsSkill->getField(self::FIELD_DEFAULT_ABILITY),
+        // Niveau spécialisation
+        $strSpecialisation,
+        // Adrénaline
+        ($this->CopsSkill->getField(self::FIELD_PAN_USABLE)==1?'Oui':'Non'),
+        // La description de la compétence
+        str_replace("\r\n", '<br>', (string) $this->CopsSkill->getField(self::FIELD_SKILL_DESC)),
+        // Exemples d'utilisation
+        str_replace("\r\n", '<br>', (string) $this->CopsSkill->getField(self::FIELD_SKILL_USES)),
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 }

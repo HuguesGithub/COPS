@@ -60,7 +60,7 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Construction du résultat
-    $objsItem = array();
+    $objsItem = [];
     if (!empty($rows)) {
       foreach ($rows as $row) {
         $objsItem[] = CopsPlayerClass::convertElement($row);
@@ -86,7 +86,7 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
    * Créé, Edite, Supprime une Entrée
    * @since 1.0.00
    */
-  protected function createEditDeleteEntry($requete, $arrParams=array())
+  protected function createEditDeleteEntry($requete, $arrParams=[])
   {
     $sql = MySQLClass::wpdbPrepare($requete, $arrParams);
     MySQLClass::wpdbQuery($sql);
@@ -94,7 +94,7 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
 
   public function prepObject($obj, $isUpdate=false)
   {
-    $arr = array();
+    $arr = [];
     $vars = $obj->getClassVars();
     if (!empty($vars)) {
       foreach ($vars as $key => $value) {

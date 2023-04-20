@@ -26,7 +26,7 @@ class AjaxActions extends LocalActions
           $returned = CopsIndexActions::dealWithStatic($_POST);
           break;
       default :
-        $saisie = stripslashes($_POST[self::AJAX_ACTION]);
+        $saisie = stripslashes((string) $_POST[self::AJAX_ACTION]);
         $returned  = 'Erreur dans AjaxActions le $_POST['.self::AJAX_ACTION.'] : '.$saisie.'<br>';
       break;
     }

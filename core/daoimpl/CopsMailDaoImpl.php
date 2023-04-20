@@ -55,7 +55,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
         $arrFields = $this->getFields();
         ////////////////////////////////////
 
-        $prepObject = array();
+        $prepObject = [];
         $request  = "UPDATE ".$this->dbTable." SET ";
         foreach ($arrFields as $field) {
             $request .= $field."='%s', ";
@@ -78,7 +78,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
         $arrFields = $this->getFields();
         ////////////////////////////////////
 
-        $prepObject = array();
+        $prepObject = [];
         $request  = "INSERT INTO ".$this->dbTable." (";
         $requestValues = '';
         foreach ($arrFields as $field) {
@@ -192,14 +192,14 @@ class CopsMailDaoImpl extends LocalDaoImpl
     {
         ////////////////////////////////////
         // Récupération des champs de l'objet en base
-        $arrFields = array();
+        $arrFields = [];
         $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
         foreach ($rows as $row) {
             $arrFields[] = $row->Field;
         }
         ////////////////////////////////////
 
-        $prepObject = array();
+        $prepObject = [];
         $request  = "UPDATE ".$this->dbTable_cmj." SET ";
         foreach ($arrFields as $field) {
             $request .= $field."='%s', ";
@@ -221,7 +221,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
     {
         ////////////////////////////////////
         // Récupération des champs de l'objet en base
-        $arrFields = array();
+        $arrFields = [];
         $rows = MySQL::wpdbSelect("DESCRIBE ".$this->dbTable_cmj.";");
         foreach ($rows as $row) {
             if ($row->Field=='id') {
@@ -231,7 +231,7 @@ class CopsMailDaoImpl extends LocalDaoImpl
         }
         ////////////////////////////////////
 
-        $prepObject = array();
+        $prepObject = [];
         $request  = "INSERT INTO ".$this->dbTable_cmj." (";
         $requestValues = '';
         foreach ($arrFields as $field) {

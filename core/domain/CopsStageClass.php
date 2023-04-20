@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace core\domain;
 
 use core\bean\CopsStageBean;
@@ -43,7 +45,7 @@ class CopsStageClass extends LocalDomainClass
      * @version 1.22.06.03
      * @since 1.22.06.03
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsStageClass';
@@ -51,19 +53,17 @@ class CopsStageClass extends LocalDomainClass
 
     /**
      * @param array $row
-     * @return CopsStageClass
      * @version 1.22.06.03
      * @since 1.22.06.03
      */
-    public static function convertElement($row)
+    public static function convertElement($row): CopsStageClass
     { return parent::convertRootElement(new CopsStageClass(), $row); }
 
     /**
-     * @return CopsStageBean
      * @version 1.22.06.03
      * @since 1.22.06.03
      */
-    public function getBean()
+    public function getBean(): CopsStageBean
     { return new CopsStageBean($this); }
 
     //////////////////////////////////////////////////

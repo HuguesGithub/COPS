@@ -34,12 +34,12 @@ class CopsStageCategorieBean extends UtilitiesBean
             $strContent .= $objStage->getBean()->getStageDisplay();
         }
 
-        $attributes = array(
+        $attributes = [
             // Le nom de la compétence
             $this->objCopsStageCategorie->getField(self::FIELD_STAGE_CAT_NAME),
             // Liste des Stages de cette Catégorie
             $strContent,
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 }

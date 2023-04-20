@@ -93,7 +93,7 @@ class CopsPlayerClass extends LocalDomain
    * @version 1.22.04.27
    * @since 1.22.04.27
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     //$this->Services              = new GonePresenceServices();
@@ -141,12 +141,9 @@ class CopsPlayerClass extends LocalDomain
    */
   public static function getCurrentCopsPlayer()
   {
+    $attributes = [];
     if (isset($_SESSION[self::FIELD_MATRICULE])) {
-      $attributes[self::SQL_WHERE_FILTERS] = array(
-        self::FIELD_ID => self::SQL_JOKER_SEARCH,
-        self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
-        self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH,
-      );
+      $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE], self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH];
       $Services = new CopsPlayerServices();
       $CopsPlayers = $Services->getCopsPlayers($attributes);
       $CopsPlayer = array_shift($CopsPlayers);
@@ -161,7 +158,7 @@ class CopsPlayerClass extends LocalDomain
     $strFormatted = '';
     switch ($format) {
       case 'd/m/Y' :
-        $strFormatted = substr($this->birth_date, 8, 2).'/'.substr($this->birth_date, 5, 2).'/'.substr($this->birth_date, 0, 4);
+        $strFormatted = substr((string) $this->birth_date, 8, 2).'/'.substr((string) $this->birth_date, 5, 2).'/'.substr((string) $this->birth_date, 0, 4);
       break;
     }
     return $strFormatted;

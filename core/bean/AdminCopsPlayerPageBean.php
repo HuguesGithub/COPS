@@ -20,27 +20,31 @@ class AdminCopsPlayerPageBean extends WpPageAdminBean
     public function getBoard()
     {
         $isCreation = true;
-        switch ($this->urlParams[self::CST_SUBONGLET]) {
-            case 'player-carac' :
-                $strContent = $this->CopsPlayer->getBean()->getCopsPlayerCarac($isCreation);
-            break;
-            case 'player-comps' :
-                $strContent = $this->CopsPlayer->getBean()->getCopsPlayerComps();
-            break;
-            default :
-                $strContent = '';
-            break;
-        }
+        $strContent = match ($this->urlParams[self::CST_SUBONGLET]) {
+            'player-carac' => $this->CopsPlayer->getBean()->getCopsPlayerCarac($isCreation),
+            'player-comps' => $this->CopsPlayer->getBean()->getCopsPlayerComps(),
+            default => '',
+        };
 
         // Soit on est loggué et on affiche le contenu du bureau du cops
         $urlTemplate = self::WEB_PP_BOARD;
-        $attributes = array(
+        $attributes = [
             // La sidebar
             $this->getSidebar(),
             // Le contenu de la page
             $strContent,
-            '', '', '', '', '', '', '', '', '', '', '',
-        );
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 

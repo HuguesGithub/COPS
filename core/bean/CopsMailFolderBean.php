@@ -27,25 +27,25 @@ class CopsMailFolderBean extends UtilitiesBean
   public function getMenuFolder($activeSlug='')
   {
     $slug = $this->CopsMailFolder->getField(self::FIELD_SLUG);
-    $nbMailsNonLus = $this->CopsMailFolder->getNombreMailsNonLus(array(self::FIELD_SLUG=>$slug));
+    $nbMailsNonLus = $this->CopsMailFolder->getNombreMailsNonLus([self::FIELD_SLUG=>$slug]);
     if ($nbMailsNonLus!=0) {
-        $badgeAttr = array(self::ATTR_CLASS=>'badge bg-primary float-right');
+        $badgeAttr = [self::ATTR_CLASS=>'badge bg-primary float-right'];
       $strBadge = $this->getBalise(self::TAG_SPAN, $nbMailsNonLus, $badgeAttr);
     } else {
       $strBadge = '';
     }
 
     $urlTemplate = 'web/pages/public/fragments/public-fragments-li-menu-folder.php';
-    $attributes = array(
-      // Menu sélectionné ou pas ?
-      ($slug==$activeSlug ? ' '.self::CST_ACTIVE : ''),
-      // L'url du folder
-      '/admin?onglet=inbox&amp;subOnglet='.$slug,
-      // L'icône
-      $this->CopsMailFolder->getField(self::FIELD_ICON),
-      // Le libellé + l'éventuel badge
-      $this->CopsMailFolder->getField(self::FIELD_LABEL).$strBadge,
-    );
+    $attributes = [
+        // Menu sélectionné ou pas ?
+        ($slug==$activeSlug ? ' '.self::CST_ACTIVE : ''),
+        // L'url du folder
+        '/admin?onglet=inbox&amp;subOnglet='.$slug,
+        // L'icône
+        $this->CopsMailFolder->getField(self::FIELD_ICON),
+        // Le libellé + l'éventuel badge
+        $this->CopsMailFolder->getField(self::FIELD_LABEL).$strBadge,
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 

@@ -58,7 +58,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = CopsEventDateClass::convertElement($row);
@@ -84,7 +84,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = CopsEvent::convertElement($row);
@@ -99,7 +99,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $request  = "SELECT * FROM ".$this->dbTable." ";
         $request .= "WHERE id = '%s';";
 
-        $prepRequest = vsprintf($request, array($id));
+        $prepRequest = vsprintf($request, [$id]);
         //////////////////////////////
         // Exécution de la requête
         $rows = MySQL::wpdbSelect($prepRequest);
@@ -133,7 +133,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $request  = "SELECT id, categorieLibelle, categorieCouleur FROM ".$this->dbTable_cec." ";
         $request .= "WHERE id = '%s';";
 
-        $prepRequest = vsprintf($request, array($id));
+        $prepRequest = vsprintf($request, [$id]);
         //////////////////////////////
         // Exécution de la requête
         $rows = MySQLClass::wpdbSelect($prepRequest);
@@ -163,7 +163,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = CopsEventCategorieClass::convertElement($row);

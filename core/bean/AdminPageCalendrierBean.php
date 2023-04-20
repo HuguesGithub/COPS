@@ -41,11 +41,11 @@ class AdminPageCalendrierBean extends AdminPageBean
   public function getContentPage()
   {
       if (isset($_POST['changeDate'])) {
-          $str_copsDate  = str_pad($_POST['sel-h'], 2, '0', STR_PAD_LEFT).':';
-          $str_copsDate .= str_pad($_POST['sel-i'], 2, '0', STR_PAD_LEFT).':';
-          $str_copsDate .= str_pad($_POST['sel-s'], 2, '0', STR_PAD_LEFT);
-          $str_copsDate .= ' '.str_pad($_POST['sel-d'], 2, '0', STR_PAD_LEFT).'/';
-          $str_copsDate .= str_pad($_POST['sel-m'], 2, '0', STR_PAD_LEFT).'/'.$_POST['sel-y'];
+          $str_copsDate  = str_pad((string) $_POST['sel-h'], 2, '0', STR_PAD_LEFT).':';
+          $str_copsDate .= str_pad((string) $_POST['sel-i'], 2, '0', STR_PAD_LEFT).':';
+          $str_copsDate .= str_pad((string) $_POST['sel-s'], 2, '0', STR_PAD_LEFT);
+          $str_copsDate .= ' '.str_pad((string) $_POST['sel-d'], 2, '0', STR_PAD_LEFT).'/';
+          $str_copsDate .= str_pad((string) $_POST['sel-m'], 2, '0', STR_PAD_LEFT).'/'.$_POST['sel-y'];
             update_option('cops_date', $str_copsDate);
       } elseif (isset($_GET['action']) && $_GET['action']=='add') {
         $tsNow = self::getCopsDate('tsnow');
@@ -68,31 +68,31 @@ class AdminPageCalendrierBean extends AdminPageBean
       
       $tsNow = self::getCopsDate('tsnow');
         $dLis = '';
-        for ($i=1; $i<=31; $i++) {
+        for ($i=1; $i<=31; ++$i) {
             $dLis .= $this->addOption($i, date('d', $tsNow)*1==$i, str_pad($i, 2, '0', STR_PAD_LEFT));
         }
         $mLis = '';
-        for ($i=1; $i<=12; $i++) {
+        for ($i=1; $i<=12; ++$i) {
             $mLis .= $this->addOption($i, date('m', $tsNow)*1==$i, $this->arrFullMonths[$i]);
         }
         $yLis = '';
-        for ($i=2030; $i<=2035; $i++) {
+        for ($i=2030; $i<=2035; ++$i) {
             $yLis .= $this->addOption($i, date('Y', $tsNow)*1==$i, $i);
         }
         $hLis = '';
-        for ($i=0; $i<=23; $i++) {
+        for ($i=0; $i<=23; ++$i) {
             $hLis .= $this->addOption($i, date('h', $tsNow)*1==$i, str_pad($i, 2, '0', STR_PAD_LEFT));
         }
         $iLis = '';
-        for ($i=0; $i<=59; $i++) {
+        for ($i=0; $i<=59; ++$i) {
             $iLis .= $this->addOption($i, date('i', $tsNow)*1==$i, str_pad($i, 2, '0', STR_PAD_LEFT));
         }
         $sLis = '';
-        for ($i=0; $i<=59; $i++) {
+        for ($i=0; $i<=59; ++$i) {
             $sLis .= $this->addOption($i, date('s', $tsNow)*1==$i, str_pad($i, 2, '0', STR_PAD_LEFT));
         }
         
-    $attributes = array(
+    $attributes = [
         // Jour courant
         $dLis,
         // Mois courant
@@ -107,8 +107,22 @@ class AdminPageCalendrierBean extends AdminPageBean
         $sLis,
         // Url
         '/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=calendrier',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    );
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+    ];
     return $this->getRender($this->urlTemplateAdminPageCalendrier, $attributes);
   }
 

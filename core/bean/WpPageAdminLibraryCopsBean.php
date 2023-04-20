@@ -19,113 +19,33 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $this->lineHeight = 14;
 
         // On défini le menu latéral gauche
-        $this->arrMenu = array(
-            'ranked' => 'Gradés',
-            'alpha' => 'A-Alpha',
-            'beta' => 'A-Beta',
-            'epsilon' => 'B-Epsilon',
-            'rotation' => 'Rotation COPS',
-            'accueil' => 'Rotation Accueil',
-        );
+        $this->arrMenu = ['ranked' => 'Gradés', 'alpha' => 'A-Alpha', 'beta' => 'A-Beta', 'epsilon' => 'B-Epsilon', 'rotation' => 'Rotation COPS', 'accueil' => 'Rotation Accueil'];
 
         // Le tableau des auxiliaires civils va tourner en fonction de la semaine.
         // Puisqu'il sont 7, on a 7 configurations possibles.
-        $this->arrAuxiliairesCivils = array(
-            '0' => 'ANDRES Guillermo',
-            'ASHLEY Ruby',
-            'FIELDS Sonia',
-            'COOK James',
-            'JENNINGS Crystal',
-            'MARRERO Rose',
-            'TYLER Ramona',
-        );
+        $this->arrAuxiliairesCivils = ['0' => 'ANDRES Guillermo', 'ASHLEY Ruby', 'FIELDS Sonia', 'COOK James', 'JENNINGS Crystal', 'MARRERO Rose', 'TYLER Ramona'];
         
         // La rotation des Auxiliaires Civils
-        $this->arrRotationsAC = array(
-            'Mon' => array(array(2), array(1, 3, 4), array(5)),
-            'Tue' => array(array(2), array(0, 1, 3), array(4)),
-            'Wed' => array(array(5), array(0, 1, 6), array(2)),
-            'Thu' => array(array(3), array(0, 4, 6), array(5)),
-            'Fri' => array(array(2), array(3, 4, 6), array(5)),
-            'W-e' => array(array(0), array(1)),
-        );
+        $this->arrRotationsAC = ['Mon' => [[2], [1, 3, 4], [5]], 'Tue' => [[2], [0, 1, 3], [4]], 'Wed' => [[5], [0, 1, 6], [2]], 'Thu' => [[3], [0, 4, 6], [5]], 'Fri' => [[2], [3, 4, 6], [5]], 'W-e' => [[0], [1]]];
         
         // Les officiers de police présents à l'accueil de l'étage du COPS
-        $this->arrOfficiersPolice = array(
-            'A' => 'McLURE Humphrey',
-            'B' => 'HARRY Lise',
-            'C' => 'BRADLEY Robert',
-            'D' => 'FULLERTON Brad',
-            'E' => 'RIVERO Hector',
-            'F' => 'ROSHAN Lynda',
-        );
+        $this->arrOfficiersPolice = ['A' => 'McLURE Humphrey', 'B' => 'HARRY Lise', 'C' => 'BRADLEY Robert', 'D' => 'FULLERTON Brad', 'E' => 'RIVERO Hector', 'F' => 'ROSHAN Lynda'];
         
         // La rotation des Officiers de Police
-        $this->arrRotationsOP = array(
-            0 => array(
-                'Mon' => array('am'=>array('C'), 'noon'=>array('A', 'B'), 'pm'=>array('D')),
-                'Tue' => array('am'=>array('E'), 'noon'=>array('A', 'B'), 'pm'=>array('F')),
-                'Wed' => array('am'=>array('C'), 'noon'=>array('B', 'D'), 'pm'=>array('A')),
-                'Thu' => array('am'=>array('E'), 'noon'=>array('A', 'F'), 'pm'=>array('C')),
-                'Fri' => array('am'=>array('D'), 'noon'=>array('B', 'E'), 'pm'=>array('F')),
-                'W-e' => array('am'=>array('A'), 'pm'=>array('B')),
-            ),
-            1 => array(
-                'Mon' => array('am'=>array('C'), 'noon'=>array('A', 'B'), 'pm'=>array('D')),
-                'Tue' => array('am'=>array('E'), 'noon'=>array('A', 'B'), 'pm'=>array('F')),
-                'Wed' => array('am'=>array('C'), 'noon'=>array('A', 'D'), 'pm'=>array('B')),
-                'Thu' => array('am'=>array('E'), 'noon'=>array('B', 'F'), 'pm'=>array('C')),
-                'Fri' => array('am'=>array('D'), 'noon'=>array('A', 'E'), 'pm'=>array('F')),
-                'W-e' => array('am'=>array('C'), 'pm'=>array('D')),
-            ),
-            2 => array(
-                'Mon' => array('am'=>array('E'), 'noon'=>array('A', 'B'), 'pm'=>array('F')),
-                'Tue' => array('am'=>array('C'), 'noon'=>array('A', 'B'), 'pm'=>array('D')),
-                'Wed' => array('am'=>array('E'), 'noon'=>array('B', 'F'), 'pm'=>array('A')),
-                'Thu' => array('am'=>array('C'), 'noon'=>array('A', 'D'), 'pm'=>array('E')),
-                'Fri' => array('am'=>array('F'), 'noon'=>array('B', 'C'), 'pm'=>array('D')),
-                'W-e' => array('am'=>array('E'), 'pm'=>array('F')),
-            ),
-            3 => array(
-                'Mon' => array('am'=>array('D'), 'noon'=>array('A', 'B'), 'pm'=>array('C')),
-                'Tue' => array('am'=>array('F'), 'noon'=>array('A', 'B'), 'pm'=>array('E')),
-                'Wed' => array('am'=>array('D'), 'noon'=>array('B', 'C'), 'pm'=>array('A')),
-                'Thu' => array('am'=>array('F'), 'noon'=>array('A', 'E'), 'pm'=>array('D')),
-                'Fri' => array('am'=>array('C'), 'noon'=>array('B', 'F'), 'pm'=>array('E')),
-                'W-e' => array('am'=>array('A'), 'pm'=>array('B')),
-            ),
-            4 => array(
-                'Mon' => array('am'=>array('D'), 'noon'=>array('A', 'B'), 'pm'=>array('C')),
-                'Tue' => array('am'=>array('F'), 'noon'=>array('A', 'B'), 'pm'=>array('E')),
-                'Wed' => array('am'=>array('D'), 'noon'=>array('A', 'C'), 'pm'=>array('B')),
-                'Thu' => array('am'=>array('F'), 'noon'=>array('B', 'E'), 'pm'=>array('D')),
-                'Fri' => array('am'=>array('C'), 'noon'=>array('A', 'F'), 'pm'=>array('E')),
-                'W-e' => array('am'=>array('D'), 'pm'=>array('C')),
-            ),
-            5 => array(
-                'Mon' => array('am'=>array('F'), 'noon'=>array('A', 'B'), 'pm'=>array('E')),
-                'Tue' => array('am'=>array('D'), 'noon'=>array('A', 'B'), 'pm'=>array('C')),
-                'Wed' => array('am'=>array('F'), 'noon'=>array('B', 'E'), 'pm'=>array('A')),
-                'Thu' => array('am'=>array('D'), 'noon'=>array('A', 'C'), 'pm'=>array('F')),
-                'Fri' => array('am'=>array('E'), 'noon'=>array('B', 'D'), 'pm'=>array('C')),
-                'W-e' => array('am'=>array('F'), 'pm'=>array('E')),
-            ),
-        );
+        $this->arrRotationsOP = [0 => ['Mon' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']], 'Tue' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']], 'Wed' => ['am'=>['C'], 'noon'=>['B', 'D'], 'pm'=>['A']], 'Thu' => ['am'=>['E'], 'noon'=>['A', 'F'], 'pm'=>['C']], 'Fri' => ['am'=>['D'], 'noon'=>['B', 'E'], 'pm'=>['F']], 'W-e' => ['am'=>['A'], 'pm'=>['B']]], 1 => ['Mon' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']], 'Tue' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']], 'Wed' => ['am'=>['C'], 'noon'=>['A', 'D'], 'pm'=>['B']], 'Thu' => ['am'=>['E'], 'noon'=>['B', 'F'], 'pm'=>['C']], 'Fri' => ['am'=>['D'], 'noon'=>['A', 'E'], 'pm'=>['F']], 'W-e' => ['am'=>['C'], 'pm'=>['D']]], 2 => ['Mon' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']], 'Tue' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']], 'Wed' => ['am'=>['E'], 'noon'=>['B', 'F'], 'pm'=>['A']], 'Thu' => ['am'=>['C'], 'noon'=>['A', 'D'], 'pm'=>['E']], 'Fri' => ['am'=>['F'], 'noon'=>['B', 'C'], 'pm'=>['D']], 'W-e' => ['am'=>['E'], 'pm'=>['F']]], 3 => ['Mon' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']], 'Tue' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']], 'Wed' => ['am'=>['D'], 'noon'=>['B', 'C'], 'pm'=>['A']], 'Thu' => ['am'=>['F'], 'noon'=>['A', 'E'], 'pm'=>['D']], 'Fri' => ['am'=>['C'], 'noon'=>['B', 'F'], 'pm'=>['E']], 'W-e' => ['am'=>['A'], 'pm'=>['B']]], 4 => ['Mon' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']], 'Tue' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']], 'Wed' => ['am'=>['D'], 'noon'=>['A', 'C'], 'pm'=>['B']], 'Thu' => ['am'=>['F'], 'noon'=>['B', 'E'], 'pm'=>['D']], 'Fri' => ['am'=>['C'], 'noon'=>['A', 'F'], 'pm'=>['E']], 'W-e' => ['am'=>['D'], 'pm'=>['C']]], 5 => ['Mon' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']], 'Tue' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']], 'Wed' => ['am'=>['F'], 'noon'=>['B', 'E'], 'pm'=>['A']], 'Thu' => ['am'=>['D'], 'noon'=>['A', 'C'], 'pm'=>['F']], 'Fri' => ['am'=>['E'], 'noon'=>['B', 'D'], 'pm'=>['C']], 'W-e' => ['am'=>['F'], 'pm'=>['E']]]];
         
-        $this->arrPlanning = array();
+        $this->arrPlanning = [];
         
-        $urlElements = array(
-            self::CST_SUBONGLET => self::CST_LIB_COPS,
-        );
+        $urlElements = [self::CST_SUBONGLET => self::CST_LIB_COPS];
         
         $buttonContent = $this->getLink('COPS', $this->getUrl($urlElements), self::CST_TEXT_WHITE);
-        $buttonAttributes = array(self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark));
+        $buttonAttributes = [self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         
         $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
         if ($this->catSlug=='individual') {
             $id = $this->initVar(self::FIELD_ID);
-            $attributes = array();
+            $attributes = [];
             $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = $id;
             $objsCops = $this->CopsPlayerServices->getCopsPlayers($attributes);
             $this->objCops = array_shift($objsCops);
@@ -133,12 +53,12 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             $urlElements[self::FIELD_ID] = $id;
             
             $buttonContent = $this->getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
-            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+            $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
             $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         } elseif ($this->catSlug!='') {
             $name = $this->arrMenu[$this->catSlug];
             $buttonContent = $this->getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
-            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+            $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
             $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         }
     }
@@ -185,13 +105,9 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     public function getHeader($blnRanked=true)
     {
         // On va construire le Header du tableau
-        $thAttributes = array(
-            self::ATTR_STYLE => 'width:50px',
-        );
+        $thAttributes = [self::ATTR_STYLE => 'width:50px'];
         $headerContent  = $this->getTh('Masque', $thAttributes);
-        $thAttributes = array(
-            self::ATTR_CLASS => 'mailbox-name',
-        );
+        $thAttributes = [self::ATTR_CLASS => 'mailbox-name'];
         $headerContent .= $this->getTh('Matricule', $thAttributes);
         $headerContent .= $this->getTh('Nom', $thAttributes);
         $headerContent .= $this->getTh('Surnom', $thAttributes);
@@ -216,14 +132,11 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $strClass = 'nav-link text-white';
         foreach ($this->arrMenu as $key => $value) {
             $aContent = '<i class="fa-solid fa-user-police-tie"></i>'.self::CST_NBSP.$value;
-            $urlElements = array(
-                self::CST_SUBONGLET => self::CST_LIB_COPS,
-                self::CST_CAT_SLUG => $key,
-            );
+            $urlElements = [self::CST_SUBONGLET => self::CST_LIB_COPS, self::CST_CAT_SLUG => $key];
             $href = $this->getUrl($urlElements);
             $liContent = $this->getLink($aContent, $href, $strClass);
             $strLiClass = 'nav-item'.($key==$this->catSlug ? ' '.self::CST_ACTIVE : '');
-            $menuContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>$strLiClass));
+            $menuContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>$strLiClass]);
         }
         /////////////////////////////////////////
         return $menuContent;
@@ -238,7 +151,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     public function getContent($mainContent)
     {
         $urlTemplate = self::WEB_PPFS_ONGLET;
-        $attributes = array(
+        $attributes = [
             // L'id de la page
             'section-cops',
             // Le bouton éventuel de création / retour...
@@ -249,7 +162,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             $this->getMenuContent(),
             // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
             $mainContent,
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -260,6 +173,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
      */
     public function getListRanked()
     {
+        $attributes = [];
         $urlTemplateList = self::WEB_PPFS_ONGLET_LIST;
         $titre = 'Gradés';
         
@@ -267,11 +181,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
 
         $listContent = '';
-        $attributes[self::SQL_WHERE_FILTERS] = array(
-            self::FIELD_ID => self::SQL_JOKER_SEARCH,
-            self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
-            self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH,
-        );
+        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH, self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH];
         
         //////////////////////////////////////////////////////////
         // Gestion du Capitaine (potentiellement des Capitaines)
@@ -281,26 +191,24 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
         $objLieutenants = $this->CopsPlayerServices->getCopsPlayers($attributes);
         $objCopsPlayers = array_merge($objCaptains, $objLieutenants);
-        $aAttributes = array(
-            self::CST_SUBONGLET => $this->slugSubOnglet,
-            self::CST_CAT_SLUG => 'individual',
-        );
+        $aAttributes = [self::CST_SUBONGLET => $this->slugSubOnglet, self::CST_CAT_SLUG => 'individual'];
         $href = $this->getUrl($aAttributes);
 
         while (!empty($objCopsPlayers)) {
             $objCopsPlayer = array_shift($objCopsPlayers);
             $section = $objCopsPlayer->getField(self::FIELD_SECTION);
-            if (in_array($section, array('', 'A-Alpha', 'A-Beta', 'B-Epsilon'))) { // A terme, à supprimer
+            if (in_array($section, ['', 'A-Alpha', 'A-Beta', 'B-Epsilon'])) { // A terme, à supprimer
                 $listContent .= $objCopsPlayer->getBean()->getLibraryRow($href);
             }
         }
         
-        $listAttributes = array(
+        $listAttributes = [
             $titre,
-            '', // Pas de pagination
+            '',
+            // Pas de pagination
             $strHeader,
             $listContent,
-        );
+        ];
         /////////////////////////////////////////
         $mainContent = $this->getRender($urlTemplateList, $listAttributes);
         
@@ -314,6 +222,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
      */
     public function getListTeam()
     {
+        $attributes = [];
         $urlTemplateList = self::WEB_PPFS_ONGLET_LIST;
         $titre = 'A-Alpha / A-Beta / B-Epsilon';
         
@@ -321,11 +230,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
 
         $listContent = '';
-        $attributes[self::SQL_WHERE_FILTERS] = array(
-            self::FIELD_ID => self::SQL_JOKER_SEARCH,
-            self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
-            self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH,
-        );
+        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH, self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH];
         
         //////////////////////////////////////////////////////////
         // Gestion du Lieutenant
@@ -337,10 +242,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM;
         $objDetectives = $this->CopsPlayerServices->getCopsPlayers($attributes);
         $objCopsPlayers = array_merge($objLieutenants, $objDetectives);
-        $aAttributes = array(
-            self::CST_SUBONGLET => $this->slugSubOnglet,
-            self::CST_CAT_SLUG => 'individual',
-        );
+        $aAttributes = [self::CST_SUBONGLET => $this->slugSubOnglet, self::CST_CAT_SLUG => 'individual'];
         $href = $this->getUrl($aAttributes);
         
         while (!empty($objCopsPlayers)) {
@@ -355,12 +257,13 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             }
         }
 
-        $listAttributes = array(
+        $listAttributes = [
             $titre,
-            '', // Pas de pagination
+            '',
+            // Pas de pagination
             $strHeader,
             $listContent,
-        );
+        ];
         /////////////////////////////////////////
         $mainContent = $this->getRender($urlTemplateList, $listAttributes);
         
@@ -378,7 +281,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         // Si la date n'est pas définie, on récupère celle du jour.
         // Sinon, on récupère la date passée en paramètre.
-        list($dDate, $mDate, $yDate) = explode('-', $this->initVar('strDate', $this->getCopsDate('d-m-Y')));
+        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', $this->getCopsDate('d-m-Y')));
         $tsNow = mktime(0, 0, 0, $mDate, $dDate, $yDate);
         
         // Si la date en question n'est pas un lundi, on récupère le lundi précédent.
@@ -387,28 +290,28 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
 
         // Header - 4 semaines concernées
         $strHeader = '';
-        for ($i=0; $i<4; $i++) {
+        for ($i=0; $i<4; ++$i) {
             $strDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust+$i*7, $yDate));
-            $href = $this->getUrl(array(self::CST_CAT_SLUG=>'rotation', 'strDate'=>$strDate));
+            $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$strDate]);
             $divContent = $this->getLink($strDate, $href, self::CST_TEXT_WHITE);
-            $strHeader .= $this->getDiv($divContent, array(self::ATTR_CLASS=>'col-3 table-bordered'));
+            $strHeader .= $this->getDiv($divContent, [self::ATTR_CLASS=>'col-3 table-bordered']);
         }
 
         // Bouton précédent
         $prevDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust-7, $yDate));
         $aContent = $this->getIcon('caret-left');
-        $href = $this->getUrl(array(self::CST_CAT_SLUG=>'rotation', 'strDate'=>$prevDate));
+        $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$prevDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
-        $prevBtn  = $this->getButton($btnContent, array(self::ATTR_CLASS=>self::CST_TEXT_WHITE));
+        $prevBtn  = $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
         $prevBtn .= self::CST_NBSP.$prevDate;
         
         // Bouton suivant
         $nextDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust+7, $yDate));
         $aContent = $this->getIcon('caret-right');
-        $href = $this->getUrl(array(self::CST_CAT_SLUG=>'rotation', 'strDate'=>$nextDate));
+        $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$nextDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
         $nextBtn  = $nextDate.self::CST_NBSP;
-        $nextBtn .= $this->getButton($btnContent, array(self::ATTR_CLASS=>self::CST_TEXT_WHITE));
+        $nextBtn .= $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
         
         // Décalage de semaines
         $tsStart = mktime(0, 0, 0, 6, 3, 2030);
@@ -418,12 +321,8 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         }
         
         // Roulement des équipes
-        $arrSections = array(
-            'A' => array('Alpha', 'Beta', 'Gamma', self::CST_NBSP),
-            'B' => array('Epsilon', 'Theta', 'Mu', 'Delta'),
-            'C' => array('Sigma', 'Tau', self::CST_NBSP, 'Pi'),
-        );
-        for ($i=0; $i<$nbDiffWeeks; $i++) {
+        $arrSections = ['A' => ['Alpha', 'Beta', 'Gamma', self::CST_NBSP], 'B' => ['Epsilon', 'Theta', 'Mu', 'Delta'], 'C' => ['Sigma', 'Tau', self::CST_NBSP, 'Pi']];
+        for ($i=0; $i<$nbDiffWeeks; ++$i) {
             $strSection = array_pop($arrSections['A']);
             array_unshift($arrSections['A'], $strSection);
             $strSection = array_pop($arrSections['B']);
@@ -432,24 +331,17 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             array_unshift($arrSections['C'], $strSection);
         }
         
-        $divAttributes = array(self::ATTR_CLASS=>'col-1 table-bordered');
+        $divAttributes = [self::ATTR_CLASS=>'col-1 table-bordered'];
         $strRowA = '';
         $strRowB = '';
         $strRowC = '';
-        for ($i=0; $i<12; $i++) {
+        for ($i=0; $i<12; ++$i) {
             $strRowA .= $this->getDiv($arrSections['A'][$i%4], $divAttributes);
             $strRowB .= $this->getDiv($arrSections['B'][$i%4], $divAttributes);
             $strRowC .= $this->getDiv($arrSections['C'][$i%4], $divAttributes);
         }
         
-        $attributes = array(
-            $strHeader,
-            $prevBtn,
-            $nextBtn,
-            $strRowA,
-            $strRowB,
-            $strRowC,
-        );
+        $attributes = [$strHeader, $prevBtn, $nextBtn, $strRowA, $strRowB, $strRowC];
         $mainContent = $this->getRender($urlTemplate, $attributes);
         
         return $this->getContent($mainContent);
@@ -466,7 +358,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         // Si la date n'est pas définie, on récupère celle du jour.
         // Sinon, on récupère la date passée en paramètre.
-        list($dDate, $mDate, $yDate) = explode('-', $this->initVar('strDate', $this->getCopsDate('d-m-Y')));
+        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', $this->getCopsDate('d-m-Y')));
         $tsNow = mktime(0, 0, 0, $mDate, $dDate, $yDate);
         
         // Bandeau de la semaine
@@ -476,26 +368,26 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         // Bouton précédent
         $prevDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate-7, $yDate));
         $aContent = $this->getIcon('caret-left');
-        $href = $this->getUrl(array(self::CST_CAT_SLUG=>'accueil', 'strDate'=>$prevDate));
+        $href = $this->getUrl([self::CST_CAT_SLUG=>'accueil', 'strDate'=>$prevDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
-        $prevBtn  = $this->getButton($btnContent, array(self::ATTR_CLASS=>self::CST_TEXT_WHITE));
+        $prevBtn  = $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
         $prevBtn .= self::CST_NBSP.$prevDate;
 
         // Bouton suivant
         $nextDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+7, $yDate));
         $aContent = $this->getIcon('caret-right');
-        $href = $this->getUrl(array(self::CST_CAT_SLUG=>'accueil', 'strDate'=>$nextDate));
+        $href = $this->getUrl([self::CST_CAT_SLUG=>'accueil', 'strDate'=>$nextDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
         $nextBtn  = $nextDate.self::CST_NBSP;
-        $nextBtn .= $this->getButton($btnContent, array(self::ATTR_CLASS=>self::CST_TEXT_WHITE));
+        $nextBtn .= $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
                 
         ///////////////////////////////////////////////////////
         // Gestion des Offiers de Police
         // Décalage de semaines
         $tsStart = mktime(0, 0, 0, 6, 3, 2030);
-        $nbDiffWeeks = (($tsNow-$tsStart)/60/60/24/7)%count($this->arrRotationsOP);
+        $nbDiffWeeks = (($tsNow-$tsStart)/60/60/24/7)%(is_countable($this->arrRotationsOP) ? count($this->arrRotationsOP) : 0);
         if ($nbDiffWeeks<0) {
-            $nbDiffWeeks = count($this->arrRotationsOP)+$nbDiffWeeks;
+            $nbDiffWeeks = (is_countable($this->arrRotationsOP) ? count($this->arrRotationsOP) : 0)+$nbDiffWeeks;
         }
         foreach ($this->arrRotationsOP[$nbDiffWeeks] as $key => $arrRotationOP) {
             $this->buildDayColumnContentOP($key, $arrRotationOP);
@@ -510,7 +402,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         if ($nbDiffDays<0) {
             $nbDiffDays = 7+$nbDiffDays;
         }
-        for ($i=0; $i<$nbDiffDays; $i++) {
+        for ($i=0; $i<$nbDiffDays; ++$i) {
             $strAuxCiv = array_pop($this->arrAuxiliairesCivils);
             array_unshift($this->arrAuxiliairesCivils, $strAuxCiv);
         }
@@ -519,12 +411,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         }
         ///////////////////////////////////////////////////////
         
-        $attributes = array(
-            $strBandeau,
-            $prevBtn,
-            $nextBtn,
-            $this->buildWeekGrid(),
-        );
+        $attributes = [$strBandeau, $prevBtn, $nextBtn, $this->buildWeekGrid()];
         $mainContent = $this->getRender($urlTemplate, $attributes);
         
         return $this->getContent($mainContent);
@@ -576,10 +463,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
      */
     public function buildWeekGrid()
     {
-        $ulAttributes = array(
-            self::ATTR_CLASS => 'p-0',
-            self::ATTR_STYLE => 'list-style-type: none;',
-        );
+        $ulAttributes = [self::ATTR_CLASS => 'p-0', self::ATTR_STYLE => 'list-style-type: none;'];
         $strContent = '';
         foreach ($this->arrPlanning as $key => $arrDay) {
             $divDayContent = '';
@@ -589,16 +473,13 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
                 $strHoraire = '';
                 $this->defineExtras($key, $quand, $strClass, $strStyle, $strHoraire);
                 
-                $divCreneauContent = $this->getDiv($strHoraire, array(self::ATTR_CLASS=>'bg-dark mr-1 ml-1'));
+                $divCreneauContent = $this->getDiv($strHoraire, [self::ATTR_CLASS=>'bg-dark mr-1 ml-1']);
                 $divCreneauContent .= $this->getBalise(self::TAG_UL, $str, $ulAttributes);
                 
-                $divAttributes = array(
-                    self::ATTR_CLASS => 'col-6 p-0'.$strClass,
-                    self::ATTR_STYLE => $strStyle,
-                );
+                $divAttributes = [self::ATTR_CLASS => 'col-6 p-0'.$strClass, self::ATTR_STYLE => $strStyle];
                 $divDayContent .= $this->getDiv($divCreneauContent, $divAttributes);
             }
-            $strContent .= $this->getDiv($divDayContent, array(self::ATTR_CLASS=>'col-2 table-bordered'));
+            $strContent .= $this->getDiv($divDayContent, [self::ATTR_CLASS=>'col-2 table-bordered']);
         }
         return $strContent;
     }
@@ -613,19 +494,19 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     {
         while (!empty($arrRotationAC[0])) {
             $index = array_shift($arrRotationAC[0]);
-            list($nom) = explode(' ', $this->arrAuxiliairesCivils[$index]);
+            [$nom] = explode(' ', (string) $this->arrAuxiliairesCivils[$index]);
             $this->arrPlanning[$key]['am'] .= $this->getLiACOP($nom);
         }
 
         while (!empty($arrRotationAC[1])) {
             $index = array_shift($arrRotationAC[1]);
-            list($nom) = explode(' ', $this->arrAuxiliairesCivils[$index]);
+            [$nom] = explode(' ', (string) $this->arrAuxiliairesCivils[$index]);
             $this->arrPlanning[$key][($key!='W-e' ? 'noon' : 'pm')] .= $this->getLiACOP($nom);
         }
         
         while (!empty($arrRotationAC[2])) {
             $index = array_shift($arrRotationAC[2]);
-            list($nom) = explode(' ', $this->arrAuxiliairesCivils[$index]);
+            [$nom] = explode(' ', (string) $this->arrAuxiliairesCivils[$index]);
             $this->arrPlanning[$key]['pm'] .= $this->getLiACOP($nom);
         }
     }
@@ -657,19 +538,19 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
 
         while (!empty($arrRotationOP['am'])) {
             $index = array_shift($arrRotationOP['am']);
-            list($nom) = explode(' ', $this->arrOfficiersPolice[$index]);
+            [$nom] = explode(' ', (string) $this->arrOfficiersPolice[$index]);
             $this->arrPlanning[$key]['am'] .= $this->getLiACOP($nom);
         }
 
         while (!empty($arrRotationOP['noon'])) {
             $index = array_shift($arrRotationOP['noon']);
-            list($nom) = explode(' ', $this->arrOfficiersPolice[$index]);
+            [$nom] = explode(' ', (string) $this->arrOfficiersPolice[$index]);
             $this->arrPlanning[$key]['noon'] .= $this->getLiACOP($nom);
         }
         
         while (!empty($arrRotationOP['pm'])) {
             $index = array_shift($arrRotationOP['pm']);
-            list($nom) = explode(' ', $this->arrOfficiersPolice[$index]);
+            [$nom] = explode(' ', (string) $this->arrOfficiersPolice[$index]);
             $this->arrPlanning[$key]['pm'] .= $this->getLiACOP($nom);
         }
     }
@@ -682,16 +563,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     public function getIndividual()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-article-cops-individual.php';
-        $attributes = array(
-            $this->objCops->getField(self::FIELD_NOM).' '.$this->objCops->getField(self::FIELD_PRENOM),
-            $this->objCops->getField(self::FIELD_SURNOM),
-            $this->objCops->getField(self::FIELD_MATRICULE),
-            $this->objCops->getField(self::FIELD_BIRTH_DATE),
-            $this->objCops->getField(self::FIELD_TAILLE)/100,
-            $this->objCops->getField(self::FIELD_POIDS),
-            
-            '', '', '', '',
-        );
+        $attributes = [$this->objCops->getField(self::FIELD_NOM).' '.$this->objCops->getField(self::FIELD_PRENOM), $this->objCops->getField(self::FIELD_SURNOM), $this->objCops->getField(self::FIELD_MATRICULE), $this->objCops->getField(self::FIELD_BIRTH_DATE), $this->objCops->getField(self::FIELD_TAILLE)/100, $this->objCops->getField(self::FIELD_POIDS), '', '', '', ''];
         return $this->getRender($urlTemplate, $attributes);
     }
 }

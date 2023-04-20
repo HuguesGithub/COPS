@@ -49,27 +49,18 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         
         /////////////////////////////////////////
         // Construction du menu
-        $this->arrSubOnglets = array(
-            self::CST_LIB_INDEX => array(self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX),
-            self::CST_LIB_BDD   => array(self::FIELD_ICON => 'database', self::FIELD_LABEL => self::LABEL_DATABASES),
-            self::CST_LIB_SKILL => array(self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS),
-            self::CST_LIB_STAGE => array(self::FIELD_ICON => 'file-lines', self::FIELD_LABEL => self::LABEL_COURSES),
-            self::CST_LIB_COPS  => array(self::FIELD_ICON => 'users', self::FIELD_LABEL => 'COPS'),
-            //self::CST_LIB_LAPD  => array(self::FIELD_ICON => 'building-shield', self::FIELD_LABEL => 'LAPD'),
-        );
+        $this->arrSubOnglets = [self::CST_LIB_INDEX => [self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX], self::CST_LIB_BDD   => [self::FIELD_ICON => 'database', self::FIELD_LABEL => self::LABEL_DATABASES], self::CST_LIB_SKILL => [self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS], self::CST_LIB_STAGE => [self::FIELD_ICON => 'file-lines', self::FIELD_LABEL => self::LABEL_COURSES], self::CST_LIB_COPS  => [self::FIELD_ICON => 'users', self::FIELD_LABEL => 'COPS']];
         /////////////////////////////////////////
 
         /////////////////////////////////////////
         // Construction du Breadcrumbs
         if ($this->slugSubOnglet=='') {
-            $spanAttributes = array(
-                self::ATTR_CLASS => self::CST_TEXT_WHITE,
-            );
+            $spanAttributes = [self::ATTR_CLASS => self::CST_TEXT_WHITE];
             $buttonContent = $this->getBalise(self::TAG_SPAN, $this->titreOnglet, $spanAttributes);
-            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+            $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         } else {
             $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
-            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDark));
+            $buttonAttributes = [self::ATTR_CLASS=>($this->btnDark)];
         }
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }
@@ -83,16 +74,11 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         $urlTemplate = self::WEB_PPFS_ONGLET_MENU_PANEL;
         $strContent = '';
         foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
-            $attributes = array(
-                self::ONGLET_LIBRARY,
-                $subOnglet,
-                $arrSubOnglet[self::FIELD_LABEL],
-                $arrSubOnglet[self::FIELD_ICON]
-            );
+            $attributes = [self::ONGLET_LIBRARY, $subOnglet, $arrSubOnglet[self::FIELD_LABEL], $arrSubOnglet[self::FIELD_ICON]];
             $strContent .= $this->getRender($urlTemplate, $attributes);
         }
       
-        return $this->getDiv($strContent, array(self::ATTR_CLASS=>'row'));
+        return $this->getDiv($strContent, [self::ATTR_CLASS=>'row']);
     }
     
    /**
@@ -101,6 +87,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
     */
     public static function getStaticWpPageBean($slugSubContent)
     {
+        $objBean = null;
         switch ($slugSubContent) {
             case self::CST_LIB_SKILL :
                 $objBean = new WpPageAdminLibrarySkillBean();

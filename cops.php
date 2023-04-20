@@ -14,7 +14,7 @@ class Cops
 {
   public function __construct()
   {
-    add_filter('template_include', array($this,'template_loader'));
+    add_filter('template_include', [$this, 'template_loader']);
   }
 
   public function template_loader()
@@ -34,15 +34,8 @@ $Cops = new Cops();
 spl_autoload_register(PLUGIN_PACKAGE.'_autoloader');
 function cops_autoloader($classname)
 {
-    $matches = array();
-    $arr = array(
-        'Actions' => 'actions',
-        'Bean' => 'bean',
-        'Class' => 'domain',
-        'DaoImpl' => 'daoimpl',
-        'Interface' => 'interfaceimpl',
-        'Services' => 'services',
-    );
+    $matches = [];
+    $arr = ['Actions' => 'actions', 'Bean' => 'bean', 'Class' => 'domain', 'DaoImpl' => 'daoimpl', 'Interface' => 'interfaceimpl', 'Services' => 'services'];
     $pattern = "/(Actions|Bean|Class|DaoImpl|Interface|Services)/";
     if (preg_match($pattern, $classname, $matches)) {
         if (strpos($classname, '\\')!==false) {
@@ -71,12 +64,7 @@ function cops_menu()
     $pluginName = 'COPS';
     add_menu_page($pluginName, $pluginName, $uploadFiles, $urlRoot, '', plugins_url('/hj-cops/web/rsc/img/icons/favicon.ico'));
     if (function_exists('add_submenu_page')) {
-      $arrUrlSubMenu = array(
-        'index' => 'Index',
-        'calendrier' => 'Calendrier',
-        'meteo' => 'Météo',
-        '-'              => '-----------------',
-      );
+      $arrUrlSubMenu = ['index' => 'Index', 'calendrier' => 'Calendrier', 'meteo' => 'Météo', '-'              => '-----------------'];
       foreach ($arrUrlSubMenu as $key => $value) {
         $urlSubMenu = $urlRoot.'&amp;onglet='.$key;
         add_submenu_page($urlRoot, $value, $value, $uploadFiles, $urlSubMenu, $key);

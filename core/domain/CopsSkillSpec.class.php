@@ -34,7 +34,7 @@ class CopsSkillSpec extends LocalDomain
    * @version 1.22.05.30
    * @since 1.22.05.30
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsSkillSpec';

@@ -19,7 +19,7 @@ class MySQLClass
      * @param $args
      * @return Resource
      */
-    public static function wpdbPrepare($requete, $args=array())
+    public static function wpdbPrepare($requete, $args=[])
     {
         global $wpdb;
         return $wpdb->prepare($requete, $args);

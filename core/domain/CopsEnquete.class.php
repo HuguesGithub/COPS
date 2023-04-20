@@ -46,7 +46,7 @@ class CopsEnquete extends LocalDomain
    * @version 1.22.09.16
    * @since 1.22.09.16
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsEnquete';

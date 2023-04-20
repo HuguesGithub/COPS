@@ -31,10 +31,10 @@ class CopsAutopsieServices extends LocalServices
      * @since 1.22.10.09
      * @version 1.22.10.09
      */
-    public function initFilters(&$attributes=array())
+    public function initFilters(&$attributes=[])
     {
         if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = array();
+            $attributes[self::SQL_WHERE_FILTERS] = [];
         }
         if (!isset($attributes[self::SQL_WHERE_FILTERS]['idxEnquete'])) {
             $attributes[self::SQL_WHERE_FILTERS]['idxEnquete'] = self::SQL_JOKER_SEARCH;
@@ -70,7 +70,7 @@ class CopsAutopsieServices extends LocalServices
      */
     public function getAutopsie($autopsieId=-1)
     {
-        $attributes = array($autopsieId);
+        $attributes = [$autopsieId];
         $row = $this->Dao->getAutopsie($attributes);
         return new CopsAutopsie($row[0]);
     }

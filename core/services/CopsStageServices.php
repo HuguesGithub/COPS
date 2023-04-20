@@ -38,14 +38,14 @@ class CopsStageServices extends LocalServices
   public function initFilters(&$attributes)
   {
     if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = array(
-        // Id
-        self::SQL_JOKER_SEARCH,
-        // stageCategorieId
-        self::SQL_JOKER_SEARCH,
-        // stageNiveau
-        self::SQL_JOKER_SEARCH,
-      );
+      $attributes[self::SQL_WHERE_FILTERS] = [
+          // Id
+          self::SQL_JOKER_SEARCH,
+          // stageCategorieId
+          self::SQL_JOKER_SEARCH,
+          // stageNiveau
+          self::SQL_JOKER_SEARCH,
+      ];
     } else {
       if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = self::SQL_JOKER_SEARCH;
@@ -78,7 +78,7 @@ class CopsStageServices extends LocalServices
    * @since 1.22.06.02
    * @version 1.22.06.02
    */
-  public function getStages($attributes=array())
+  public function getStages($attributes=[])
   {
     $this->initFilters($attributes);
     return $this->Dao->getStages($attributes);
@@ -94,17 +94,17 @@ class CopsStageServices extends LocalServices
    * @since 1.22.06.02
    * @version 1.22.06.02
    */
-  public function getCopsStageCategories($attributes=array())
+  public function getCopsStageCategories($attributes=[])
   {
     if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = array(
-        // Id
-        self::SQL_JOKER_SEARCH,
-      );
-    } else {
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            // Id
+            self::SQL_JOKER_SEARCH,
+        ];
+    } elseif (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = self::SQL_JOKER_SEARCH;
-      }
+    } else {
+        // TODO
     }
     if (!isset($attributes[self::SQL_ORDER_BY])) {
       $attributes[self::SQL_ORDER_BY] = self::FIELD_STAGE_CAT_NAME;
@@ -125,7 +125,8 @@ class CopsStageServices extends LocalServices
    */
   public function getStageSpecs($stageId)
   {
-    $attributes[self::SQL_WHERE_FILTERS] = array($stageId);
+    $attributes = [];
+    $attributes[self::SQL_WHERE_FILTERS] = [$stageId];
 
     if (!isset($attributes[self::SQL_ORDER_BY])) {
       $attributes[self::SQL_ORDER_BY] = self::FIELD_ID;

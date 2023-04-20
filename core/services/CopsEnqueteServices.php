@@ -31,10 +31,10 @@ class CopsEnqueteServices extends LocalServices
      * @since 1.22.09.20
      * @version 1.22.09.24
      */
-    public function initFilters(&$attributes=array())
+    public function initFilters(&$attributes=[])
     {
         if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = array();
+            $attributes[self::SQL_WHERE_FILTERS] = [];
         }
         if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_STATUT_ENQUETE])) {
             $attributes[self::SQL_WHERE_FILTERS][self::FIELD_STATUT_ENQUETE] = self::SQL_JOKER_SEARCH;
@@ -70,7 +70,7 @@ class CopsEnqueteServices extends LocalServices
      */
     public function getEnquete($enqueteId=-1)
     {
-        $attributes = array($enqueteId);
+        $attributes = [$enqueteId];
         $row = $this->Dao->getEnquete($attributes);
         return new CopsEnquete($row[0]);
     }

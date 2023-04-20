@@ -27,14 +27,10 @@ class CopsPlayerActions extends LocalActions
   public static function dealWithStatic($params)
   {
     $CopsPlayerActions = new CopsPlayerActions();
-    switch ($params[self::AJAX_ACTION]) {
-      case 'saveData' :
-        $returned = $CopsPlayerActions->updateCopsPlayer($params);
-      break;
-      default :
-        $returned = self::getErrorActionContent($params[self::AJAX_ACTION]);
-      break;
-    }
+    $returned = match ($params[self::AJAX_ACTION]) {
+        'saveData' => $CopsPlayerActions->updateCopsPlayer($params),
+        default => self::getErrorActionContent($params[self::AJAX_ACTION]),
+    };
     return $returned;
   }
 
@@ -44,10 +40,10 @@ class CopsPlayerActions extends LocalActions
    */
   public function updateCopsPlayer($params)
   {
-    $value  = isset($params['value']) ? $params['value'] : '';
+    $value  = $params['value'] ?? '';
     $id     = $params['id'];
-    $field  = substr($params['field'], 6);
-    $CopsPlayers = $this->CopsPlayerServices->getCopsPlayers(array(self::SQL_WHERE_FILTERS=>array(self::FIELD_ID=>$id)));
+    $field  = substr((string) $params['field'], 6);
+    $CopsPlayers = $this->CopsPlayerServices->getCopsPlayers([self::SQL_WHERE_FILTERS=>[self::FIELD_ID=>$id]]);
     $CopsPlayer = array_shift($CopsPlayers);
     if ($CopsPlayer->getField(self::FIELD_ID)=='') {
       $returned = $this->getToastContentJson('danger', 'Erreur', 'Cet identifiant <strong>'.$id.'</strong> ne correspond à aucun personnage.');

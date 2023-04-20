@@ -43,8 +43,8 @@ class AdminPageMeteoBean extends AdminPageBean
         $strDate = $this->urlParams['date'];
         // S'il n'est pas nul, on va faire le traitement.
         if (!empty($strDate)) {
-            $intYear  = substr($strDate, 0, 4);
-            $intMonth = substr($strDate, 4, 2)*1;
+            $intYear  = substr((string) $strDate, 0, 4);
+            $intMonth = substr((string) $strDate, 4, 2)*1;
             // On construit l'url ciblée
             $url  = 'https://www.timeanddate.com/scripts/cityajax.php?n=usa/los-angeles&mode=historic&hd=';
             $url .= $strDate.'&month='.$intMonth.'&year='.$intYear;
@@ -64,7 +64,7 @@ class AdminPageMeteoBean extends AdminPageBean
     
         // On va afficher la dernière donnée enregistrée
         // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
-        $attributes = array(
+        $attributes = [
             // La dernière saisie - 1
             $objCopsMeteo->getLastInsertFormatted(),
             // Le bouton pour lancer la saisie suivante - 2
@@ -73,7 +73,7 @@ class AdminPageMeteoBean extends AdminPageBean
             ($strCompteRendu=='' ? 'Le script s\'est bien déroulé.' : $strCompteRendu),
             // Le graphe Météo du mois
             $this->getGrapheMeteo(),
-        );
+        ];
         return $this->getRender($this->urlTemplateAdminPageMeteo, $attributes);
     }
   
@@ -82,7 +82,7 @@ class AdminPageMeteoBean extends AdminPageBean
         $strLeftTemps = '';
         $strSectionColumns = '';
         $this->buildGraph($strLeftTemps, $strSectionColumns);
-        $attributes = array(
+        $attributes = [
             // Le mois visualisé
             'septembre 2022 Weather in Los Angeles — Graph',
             // Les valeurs de températures sur la colonne de gauche
@@ -91,7 +91,7 @@ class AdminPageMeteoBean extends AdminPageBean
             $strSectionColumns,
             //
             '',
-        );
+        ];
         return $this->getRender($this->urlTemplateGrapheMeteo, $attributes);
     
   }
@@ -128,10 +128,10 @@ class AdminPageMeteoBean extends AdminPageBean
         
         $y = substr($strDateMeteo, 0, 4);
         $m = substr($strDateMeteo, 4, 2)*1;
-        for ($i=0; $i<$nbDays; $i++) {
+        for ($i=0; $i<$nbDays; ++$i) {
             $n = date('w', mktime(0, 0, 0, $m, $i+1, $y));
     
-            for ($j=0; $j<4; $j++) {
+            for ($j=0; $j<4; ++$j) {
                 // on récupère les données du jour entre deux créneaux horaires.
                 $strSql =  "SELECT * FROM wp_7_cops_meteo WHERE dateMeteo = '$strDateMeteo";
                 $strSql .= str_pad(1+$i, 2, '0', STR_PAD_LEFT)."' AND heureMeteo BETWEEN '";
@@ -143,16 +143,16 @@ class AdminPageMeteoBean extends AdminPageBean
                 $minDayT = 100;
                 $sumForceVent = 0;
                 $nbMesures = 0;
-                $arrWeather = array();
+                $arrWeather = [];
                 while (!empty($rows)) {
                     $row = array_shift($rows);
                     $temperature = $row->temperature;
                     $maxDayT = max($maxDayT, $temperature);
                     $minDayT = min($minDayT, $temperature);
                     $sumForceVent += $row->forceVent;
-                    $nbMesures++;
+                    ++$nbMesures;
                     if (isset($arrWeather[$row->weatherId])) {
-                        $arrWeather[$row->weatherId]++;
+                        ++$arrWeather[$row->weatherId];
                     } else {
                         $arrWeather[$row->weatherId] = 1;
                     }
@@ -174,7 +174,7 @@ class AdminPageMeteoBean extends AdminPageBean
                     $posMax = 120;
                 }
               
-                $attributes = array(
+                $attributes = [
                     // L'identifiant
                     $i*4+$j,
                     // La date 'jeu 1 sep'
@@ -197,7 +197,7 @@ class AdminPageMeteoBean extends AdminPageBean
                     '',
                     // Force du vent
                     ($nbMesures==0 ? 0 : round($sumForceVent/$nbMesures, 0)),
-                );
+                ];
                 $strSectionColumns .= $this->getRender($this->urlTemplateGrapheMeteoColumn, $attributes);
             }
         }

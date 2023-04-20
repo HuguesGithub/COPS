@@ -40,23 +40,19 @@ class CopsIndexActions extends LocalActions
      */
     public function csvExport($params)
     {
+        $objCopsIndex = null;
         // Définir la première ligne du CSV
-        $arrHeader = array(self::LABEL_NOM);
+        $arrHeader = [self::LABEL_NOM];
         
         // Récupération des paramètres
-        $attributes = array();
+        $attributes = [];
         if (isset($params[self::FIELD_NATURE_ID]) && $params[self::FIELD_NATURE_ID]!='') {
             $attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_ID] = $params[self::FIELD_NATURE_ID];
         } else {
             $arrHeader[] = self::LABEL_NATURE;
         }
         if (self::isAdmin()) {
-            $arrToMerge = array(
-                self::LABEL_CODE,
-                self::LABEL_DESCRIPTION_PJ,
-                self::LABEL_DESCRIPTION_MJ,
-                self::LABEL_REFERENCE,
-            );
+            $arrToMerge = [self::LABEL_CODE, self::LABEL_DESCRIPTION_PJ, self::LABEL_DESCRIPTION_MJ, self::LABEL_REFERENCE];
             $arrHeader = array_merge($arrHeader, $arrToMerge);
         } else {
             $arrHeader[] = self::LABEL_DESCRIPTION_PJ;
@@ -69,17 +65,12 @@ class CopsIndexActions extends LocalActions
         // Définir chaque ligne du CSV, à partir de la liste à exporter
         while (!empty($objsCopsIndex)) {
             $objCopsIndex = array_shift($objsCopsIndex);
-            $arrLine = array($objCopsIndex->getField(self::FIELD_NOM_IDX));
+            $arrLine = [$objCopsIndex->getField(self::FIELD_NOM_IDX)];
             if (!isset($params[self::FIELD_NATURE_ID]) || $params[self::FIELD_NATURE_ID]=='') {
                 $arrLine[] = $objCopsIndex->getNature()->getField(self::FIELD_NOM_IDX_NATURE);
             }
             if (self::isAdmin()) {
-                $arrToMerge = array(
-                    $objCopsIndex->getStrCode(),
-                    $objCopsIndex->getField(self::FIELD_DESCRIPTION_PJ),
-                    $objCopsIndex->getField(self::FIELD_DESCRIPTION_MJ),
-                    $objCopsIndex->getField(self::FIELD_REFERENCE),
-                );
+                $arrToMerge = [$objCopsIndex->getStrCode(), $objCopsIndex->getField(self::FIELD_DESCRIPTION_PJ), $objCopsIndex->getField(self::FIELD_DESCRIPTION_MJ), $objCopsIndex->getField(self::FIELD_REFERENCE)];
                 $arrLine = array_merge($arrLine, $arrToMerge);
             } else {
                 $arrLine[] = $objCopsIndex->getField(self::FIELD_DESCRIPTION_PJ);

@@ -64,7 +64,7 @@ class CopsLangue extends LocalDomain
    * @version 1.22.04.28
    * @since 1.22.04.28
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsLangue';

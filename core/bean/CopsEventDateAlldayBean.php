@@ -57,7 +57,7 @@ class CopsEventDateAlldayBean extends CopsEventDateBean
         }
         
         $urlTemplate = self::WEB_PPFD_ALLDAY_EVENT;
-        $attributes = array(
+        $attributes = [
             // Titre
             $this->objCopsEvent->getField(self::FIELD_EVENT_LIBELLE),
             // getRgbCategorie()
@@ -70,7 +70,7 @@ class CopsEventDateAlldayBean extends CopsEventDateBean
             $fcDayClass,
             // D'autres attributs.
             $divAttributes,
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
     

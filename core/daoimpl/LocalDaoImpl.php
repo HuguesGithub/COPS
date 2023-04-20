@@ -73,7 +73,7 @@ class LocalDaoImpl extends GlobalDaoImpl
   {
     ////////////////////////////////////
     // Récupération des champs de l'objet en base
-    $arrFields = array();
+    $arrFields = [];
     $rows = MySQLClass::wpdbSelect("DESCRIBE ".$dbTable.";");
     foreach ($rows as $row) {
       $arrFields[] = $row->Field;
@@ -84,7 +84,7 @@ class LocalDaoImpl extends GlobalDaoImpl
   
   public function getFields()
   {
-      $arrFields = array();
+      $arrFields = [];
       $rows = MySQLClass::wpdbSelect("DESCRIBE ".$this->dbTable.";");
       foreach ($rows as $row) {
           $arrFields[] = $row->Field;
@@ -101,7 +101,7 @@ class LocalDaoImpl extends GlobalDaoImpl
     public function insertDaoImpl(&$objMixed, $request, $fieldId)
     {
         // On prépare les paramètres, en excluant le premier (l'id)
-        $prepObject = array();
+        $prepObject = [];
         $arrFields  = $objMixed->getFields();
         array_shift($arrFields);
         foreach ($arrFields as $field) {
@@ -119,7 +119,7 @@ class LocalDaoImpl extends GlobalDaoImpl
 
     public function updateDaoImpl($objStd, $request, $fieldId)
     {
-        $prepObject = array();
+        $prepObject = [];
         $arrFields  = $objStd->getFields();
         array_shift($arrFields);
         foreach ($arrFields as $field) {
@@ -160,7 +160,7 @@ class LocalDaoImpl extends GlobalDaoImpl
         
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = $objMixed::convertElement($row);
@@ -182,7 +182,7 @@ class LocalDaoImpl extends GlobalDaoImpl
     public function getInsertRequest($fields, $tableName)
     {
         $request  = "INSERT INTO $tableName (".implode(', ', $fields);
-        $request .= ") VALUES (".implode(', ', array_fill(0, count($fields), "'%s'")).");";
+        $request .= ") VALUES (".implode(', ', array_fill(0, is_countable($fields) ? count($fields) : 0, "'%s'")).");";
         return $request;
     }
 

@@ -8,353 +8,353 @@ namespace core\interfaceimpl;
  */
 interface ConstantsInterface
 {
-    const VERSION              = 'v1.22.10.09';
+    public const VERSION              = 'v1.22.10.09';
   /////////////////////////////////////////////////
   // Ajax Infos
-  const AJAX_ACTION            = 'ajaxAction';
+    public const AJAX_ACTION            = 'ajaxAction';
 
   /////////////////////////////////////////////////
   // Tag's Attributes
-  const ATTR_ALT               = 'alt';
-  const ATTR_CLASS             = 'class';
-  const ATTR_HREF              = 'href';
-  const ATTR_NAME              = 'name';
-  const ATTR_ROLE              = 'role';
-  const ATTR_SRC               = 'src';
-  const ATTR_STYLE             = 'style';
-  const ATTR_TITLE             = 'title';
-  const ATTR_TYPE              = 'type';
-  const ATTR_VALUE             = 'value';
+    public const ATTR_ALT               = 'alt';
+    public const ATTR_CLASS             = 'class';
+    public const ATTR_HREF              = 'href';
+    public const ATTR_NAME              = 'name';
+    public const ATTR_ROLE              = 'role';
+    public const ATTR_SRC               = 'src';
+    public const ATTR_STYLE             = 'style';
+    public const ATTR_TITLE             = 'title';
+    public const ATTR_TYPE              = 'type';
+    public const ATTR_VALUE             = 'value';
 
-  const ATTR_DATA              = 'data';
-  const ATTR_DATA_AJAX         = 'ajax';
-  const ATTR_DATA_DATE         = 'data-date';
-  const ATTR_DATA_TRIGGER      = 'trigger';
+    public const ATTR_DATA              = 'data';
+    public const ATTR_DATA_AJAX         = 'ajax';
+    public const ATTR_DATA_DATE         = 'data-date';
+    public const ATTR_DATA_TRIGGER      = 'trigger';
 
   /////////////////////////////////////////////////
   // Constantes
-  const CST_ACTIVE             = 'active';
+    public const CST_ACTIVE             = 'active';
   // Subonglet Calendar
-  const CST_CAL_COPSDATE       = 'cops_date';
-  const CST_CAL_CURDAY         = 'curday';
-  const CST_CAL_DAY            = 'day';
-  const CST_CAL_EVENT          = 'calendar-event';
-  const CST_CAL_MONTH          = 'month';
-  const CST_CAL_PARAM          = 'calendar-parameters';
-  const CST_CAL_WEEK           = 'week';
-  // Subonglet File
-  const CST_FILE_OPENED        = 'opened';
-  const CST_FILE_CLOSED        = 'closed';
-  const CST_FILE_COLDED        = 'colded';
-  // Subonglet Mail
-  const CST_FOLDER_ALERT       = 'alert';
-  const CST_FOLDER_DRAFT       = 'draft';
-  const CST_FOLDER_EVENTS      = 'events';
-  const CST_MAIL_INBOX         = 'inbox';
-  const CST_FOLDER_SENT        = 'sent';
-  const CST_FOLDER_SPAM        = 'spam';
-  const CST_MAIL_TRASH         = 'trash';
-  const CST_MAIL_READ          = 'read';
-  const CST_MAIL_WRITE         = 'write';
-  // Subonglet Library
-  const CST_LIB_INDEX          = 'index';
-  const CST_LIB_BDD            = 'bdd';
-  const CST_LIB_COPS           = 'cops';
-  const CST_LIB_LAPD           = 'lapd';
-  const CST_LIB_SKILL          = 'skill';
-  const CST_LIB_STAGE          = 'stage';
-  // Subonglet Profile
-  const CST_PFL_ABILITIES      = 'abilities';
-  const CST_PFL_BACKGROUND     = 'background';
-  const CST_PFL_CONTACTS       = 'contacts';
-  const CST_PFL_EQUIPMENT      = 'equipment';
-  const CST_PFL_IDENTITY       = 'identity';
-  const CST_PFL_SKILLS         = 'skills';
-  // Subonglet Enquête
-  const CST_ENQUETE_OPENED     = 1;
-  const CST_ENQUETE_CLOSED     = 2;
-  const CST_ENQUETE_COLDED     = 0;
-  const CST_ENQUETE_READ       = 'read';
-  const CST_ENQUETE_WRITE      = 'write';
-  // Subonglet Autopsie
-  const CST_AUTOPSIE_ARCHIVE   = 'archive';
-  // Subonglet Index
-  const CST_CAT_SLUG           = 'catSlug';
-  const CST_CURPAGE            = 'curPage';
-  
-  const CST_ACTION             = 'action';
-  const CST_CHECKED            = 'checked';
-  const CST_CHILDREN           = 'children';
-  const CST_DISABLED           = 'disabled';
-  const CST_EDIT               = 'edit';
-  const CST_LIST               = 'list';
-  const CST_ONGLET             = 'onglet';
-  const CST_SELECTED           = 'selected';
-  const CST_SUBONGLET          = 'subOnglet';
-  const CST_TEXT_WHITE         = 'text-white';
-  const CST_URL                = 'url';
-  const CST_WRITE              = 'write';
-  const CST_WRITE_ACTION       = 'writeAction';
-  
-  /////////////////////////////////////////////////
-  // Fields
-  // TABLE multiples
-  const FIELD_ID               = 'id';
-  const FIELD_REFERENCE          = 'reference';
-  
-  // Provenance ?
-  const FIELD_ICON             = 'icon';
-  const FIELD_FOLDER_ID        = 'folderId';
-  const FIELD_FROM_ID          = 'fromId';
-  const FIELD_LABEL            = 'label';
-  const FIELD_LIBELLE          = 'libelle';
-  const FIELD_LU               = 'lu';
-  const FIELD_MAIL             = 'mail';
-  const FIELD_MAIL_ID          = 'mailId';
-  const FIELD_MAIL_CONTENT     = 'mail_content';
-  const FIELD_MAIL_DATE_ENVOI  = 'mail_dateEnvoi';
-  const FIELD_MAIL_SUBJECT     = 'mail_subject';
-  const FIELD_NB_PJS           = 'nbPjs';
-  const FIELD_SLUG             = 'slug';
-  const FIELD_TO_ID            = 'toId';
+    public const CST_CAL_COPSDATE       = 'cops_date';
+    public const CST_CAL_CURDAY         = 'curday';
+    public const CST_CAL_DAY            = 'day';
+    public const CST_CAL_EVENT          = 'calendar-event';
+    public const CST_CAL_MONTH          = 'month';
+    public const CST_CAL_PARAM          = 'calendar-parameters';
+    public const CST_CAL_WEEK           = 'week';
+    // Subonglet File
+    public const CST_FILE_OPENED        = 'opened';
+    public const CST_FILE_CLOSED        = 'closed';
+    public const CST_FILE_COLDED        = 'colded';
+    // Subonglet Mail
+    public const CST_FOLDER_ALERT       = 'alert';
+    public const CST_FOLDER_DRAFT       = 'draft';
+    public const CST_FOLDER_EVENTS      = 'events';
+    public const CST_MAIL_INBOX         = 'inbox';
+    public const CST_FOLDER_SENT        = 'sent';
+    public const CST_FOLDER_SPAM        = 'spam';
+    public const CST_MAIL_TRASH         = 'trash';
+    public const CST_MAIL_READ          = 'read';
+    public const CST_MAIL_WRITE         = 'write';
+    // Subonglet Library
+    public const CST_LIB_INDEX          = 'index';
+    public const CST_LIB_BDD            = 'bdd';
+    public const CST_LIB_COPS           = 'cops';
+    public const CST_LIB_LAPD           = 'lapd';
+    public const CST_LIB_SKILL          = 'skill';
+    public const CST_LIB_STAGE          = 'stage';
+    // Subonglet Profile
+    public const CST_PFL_ABILITIES      = 'abilities';
+    public const CST_PFL_BACKGROUND     = 'background';
+    public const CST_PFL_CONTACTS       = 'contacts';
+    public const CST_PFL_EQUIPMENT      = 'equipment';
+    public const CST_PFL_IDENTITY       = 'identity';
+    public const CST_PFL_SKILLS         = 'skills';
+    // Subonglet Enquête
+    public const CST_ENQUETE_OPENED     = 1;
+    public const CST_ENQUETE_CLOSED     = 2;
+    public const CST_ENQUETE_COLDED     = 0;
+    public const CST_ENQUETE_READ       = 'read';
+    public const CST_ENQUETE_WRITE      = 'write';
+    // Subonglet Autopsie
+    public const CST_AUTOPSIE_ARCHIVE   = 'archive';
+    // Subonglet Index
+    public const CST_CAT_SLUG           = 'catSlug';
+    public const CST_CURPAGE            = 'curPage';
 
-  // TABLE cops_player
-  const FIELD_MATRICULE          = 'matricule';
-  const FIELD_PASSWORD           = 'password';
-  const FIELD_NOM                = 'nom';
-  const FIELD_PRENOM             = 'prenom';
-  const FIELD_SURNOM             = 'surnom';
-  const FIELD_CARAC_CARRURE      = 'carac_carrure';
-  const FIELD_CARAC_CHARME       = 'carac_charme';
-  const FIELD_CARAC_COORDINATION = 'carac_coordination';
-  const FIELD_CARAC_EDUCATION    = 'carac_education';
-  const FIELD_CARAC_PERCEPTION   = 'carac_perception';
-  const FIELD_CARAC_REFLEXES     = 'carac_reflexes';
-  const FIELD_CARAC_SANG_FROID   = 'carac_sangfroid';
-  const FIELD_BIRTH_DATE         = 'birth_date';
-  const FIELD_PV_MAX             = 'pv_max';
-  const FIELD_PV_CUR             = 'pv_cur';
-  const FIELD_PAD_MAX            = 'pad_max';
-  const FIELD_PAD_CUR            = 'pad_cur';
-  const FIELD_PAN_MAX            = 'pan_max';
-  const FIELD_PAN_CUR            = 'pan_cur';
-  const FIELD_TAILLE             = 'taille';
-  const FIELD_POIDS              = 'poids';
-  const FIELD_GRADE              = 'grade';
-  const FIELD_GRADE_ECHELON      = 'grade_echelon';
-  const FIELD_GRADE_RANG         = 'grade_rang';
-  const FIELD_INTEGRATION_DATE   = 'integration_date';
-  const FIELD_SECTION            = 'section';
-  const FIELD_SECTION_LIEUTENANT = 'section_lieutenant';
-  const FIELD_BACKGROUND         = 'background';
-  const FIELD_PX_CUR             = 'px_cur';
+    public const CST_ACTION             = 'action';
+    public const CST_CHECKED            = 'checked';
+    public const CST_CHILDREN           = 'children';
+    public const CST_DISABLED           = 'disabled';
+    public const CST_EDIT               = 'edit';
+    public const CST_LIST               = 'list';
+    public const CST_ONGLET             = 'onglet';
+    public const CST_SELECTED           = 'selected';
+    public const CST_SUBONGLET          = 'subOnglet';
+    public const CST_TEXT_WHITE         = 'text-white';
+    public const CST_URL                = 'url';
+    public const CST_WRITE              = 'write';
+    public const CST_WRITE_ACTION       = 'writeAction';
 
-  // TABLE cops_skill
-  const FIELD_SKILL_NAME         = 'skillName';
-  const FIELD_SKILL_DESC         = 'skillDescription';
-  const FIELD_SKILL_USES         = 'skillUses';
-  const FIELD_SPEC_LEVEL         = 'specLevel';
-  const FIELD_PAN_USABLE         = 'panUsable';
-  const FIELD_DEFAULT_ABILITY    = 'defaultAbility';
+    /////////////////////////////////////////////////
+    // Fields
+    // TABLE multiples
+    public const FIELD_ID               = 'id';
+    public const FIELD_REFERENCE          = 'reference';
 
-  // TABLE cops_skill_spec
-  const FIELD_SPEC_NAME          = 'specName';
-  const FIELD_SKILL_ID           = 'skillId';
+    // Provenance ?
+    public const FIELD_ICON             = 'icon';
+    public const FIELD_FOLDER_ID        = 'folderId';
+    public const FIELD_FROM_ID          = 'fromId';
+    public const FIELD_LABEL            = 'label';
+    public const FIELD_LIBELLE          = 'libelle';
+    public const FIELD_LU               = 'lu';
+    public const FIELD_MAIL             = 'mail';
+    public const FIELD_MAIL_ID          = 'mailId';
+    public const FIELD_MAIL_CONTENT     = 'mail_content';
+    public const FIELD_MAIL_DATE_ENVOI  = 'mail_dateEnvoi';
+    public const FIELD_MAIL_SUBJECT     = 'mail_subject';
+    public const FIELD_NB_PJS           = 'nbPjs';
+    public const FIELD_SLUG             = 'slug';
+    public const FIELD_TO_ID            = 'toId';
 
-  // TABLE cops_stage_categorie
-  const FIELD_STAGE_CAT_NAME     = 'stageCategorie';
+    // TABLE cops_player
+    public const FIELD_MATRICULE          = 'matricule';
+    public const FIELD_PASSWORD           = 'password';
+    public const FIELD_NOM                = 'nom';
+    public const FIELD_PRENOM             = 'prenom';
+    public const FIELD_SURNOM             = 'surnom';
+    public const FIELD_CARAC_CARRURE      = 'carac_carrure';
+    public const FIELD_CARAC_CHARME       = 'carac_charme';
+    public const FIELD_CARAC_COORDINATION = 'carac_coordination';
+    public const FIELD_CARAC_EDUCATION    = 'carac_education';
+    public const FIELD_CARAC_PERCEPTION   = 'carac_perception';
+    public const FIELD_CARAC_REFLEXES     = 'carac_reflexes';
+    public const FIELD_CARAC_SANG_FROID   = 'carac_sangfroid';
+    public const FIELD_BIRTH_DATE         = 'birth_date';
+    public const FIELD_PV_MAX             = 'pv_max';
+    public const FIELD_PV_CUR             = 'pv_cur';
+    public const FIELD_PAD_MAX            = 'pad_max';
+    public const FIELD_PAD_CUR            = 'pad_cur';
+    public const FIELD_PAN_MAX            = 'pan_max';
+    public const FIELD_PAN_CUR            = 'pan_cur';
+    public const FIELD_TAILLE             = 'taille';
+    public const FIELD_POIDS              = 'poids';
+    public const FIELD_GRADE              = 'grade';
+    public const FIELD_GRADE_ECHELON      = 'grade_echelon';
+    public const FIELD_GRADE_RANG         = 'grade_rang';
+    public const FIELD_INTEGRATION_DATE   = 'integration_date';
+    public const FIELD_SECTION            = 'section';
+    public const FIELD_SECTION_LIEUTENANT = 'section_lieutenant';
+    public const FIELD_BACKGROUND         = 'background';
+    public const FIELD_PX_CUR             = 'px_cur';
 
-  // TABLE cops_stage_spec
-  const FIELD_SPEC_DESC          = 'specDescription';
+    // TABLE cops_skill
+    public const FIELD_SKILL_NAME         = 'skillName';
+    public const FIELD_SKILL_DESC         = 'skillDescription';
+    public const FIELD_SKILL_USES         = 'skillUses';
+    public const FIELD_SPEC_LEVEL         = 'specLevel';
+    public const FIELD_PAN_USABLE         = 'panUsable';
+    public const FIELD_DEFAULT_ABILITY    = 'defaultAbility';
 
-  // TABLE cops_stage
-  const FIELD_STAGE_CAT_ID       = 'stageCategorieId';
-  const FIELD_STAGE_LIBELLE      = 'stageLibelle';
-  const FIELD_STAGE_LEVEL        = 'stageNiveau';
-  const FIELD_STAGE_REFERENCE    = 'stageReference';
-  const FIELD_STAGE_REQUIS       = 'stagePreRequis';
-  const FIELD_STAGE_CUMUL        = 'stageCumul';
-  const FIELD_STAGE_DESC         = 'stageDescription';
-  const FIELD_STAGE_BONUS        = 'stageBonus';
+    // TABLE cops_skill_spec
+    public const FIELD_SPEC_NAME          = 'specName';
+    public const FIELD_SKILL_ID           = 'skillId';
 
-  // TABLE cops_event_date
-  const FIELD_EVENT_LIBELLE      = 'eventLibelle';
-  const FIELD_CATEG_ID           = 'categorieId';
-  const FIELD_DATE_DEBUT         = 'dateDebut';
-  const FIELD_DATE_FIN           = 'dateFin';
-  const FIELD_ALL_DAY_EVENT      = 'allDayEvent';
-  const FIELD_HEURE_DEBUT        = 'heureDebut';
-  const FIELD_HEURE_FIN          = 'heureFin';
-  const FIELD_REPEAT_STATUS      = 'repeatStatus';
-  const FIELD_REPEAT_TYPE        = 'repeatType';
-  const FIELD_REPEAT_INTERVAL    = 'repeatInterval';
-  const FIELD_REPEAT_END         = 'repeatEnd';
-  const FIELD_REPEAT_END_VALUE   = 'repeatEndValue';
-  const FIELD_MINUTE_DEBUT         = 'minuteDebut';
-  const FIELD_MINUTE_FIN           = 'minuteFin';
-  const FIELD_ENDDATE_VALUE         = 'endDateValue';
-    const CST_EVENT_RT_NEVER        = 'never';
-    const CST_EVENT_RT_ENDDATE      = 'endDate';
-    const CST_EVENT_RT_ENDREPEAT    = 'endRepeat';
-    const CST_EVENT_RT_DAILY        = 'daily';
-    const CST_EVENT_RT_WEEKLY       = 'weekly';
-    const CST_EVENT_RT_MONTHLY      = 'monthly';
-    const CST_EVENT_RT_YEARLY       = 'yearly';
+    // TABLE cops_stage_categorie
+    public const FIELD_STAGE_CAT_NAME     = 'stageCategorie';
+
+    // TABLE cops_stage_spec
+    public const FIELD_SPEC_DESC          = 'specDescription';
+
+    // TABLE cops_stage
+    public const FIELD_STAGE_CAT_ID       = 'stageCategorieId';
+    public const FIELD_STAGE_LIBELLE      = 'stageLibelle';
+    public const FIELD_STAGE_LEVEL        = 'stageNiveau';
+    public const FIELD_STAGE_REFERENCE    = 'stageReference';
+    public const FIELD_STAGE_REQUIS       = 'stagePreRequis';
+    public const FIELD_STAGE_CUMUL        = 'stageCumul';
+    public const FIELD_STAGE_DESC         = 'stageDescription';
+    public const FIELD_STAGE_BONUS        = 'stageBonus';
+
+    // TABLE cops_event_date
+    public const FIELD_EVENT_LIBELLE      = 'eventLibelle';
+    public const FIELD_CATEG_ID           = 'categorieId';
+    public const FIELD_DATE_DEBUT         = 'dateDebut';
+    public const FIELD_DATE_FIN           = 'dateFin';
+    public const FIELD_ALL_DAY_EVENT      = 'allDayEvent';
+    public const FIELD_HEURE_DEBUT        = 'heureDebut';
+    public const FIELD_HEURE_FIN          = 'heureFin';
+    public const FIELD_REPEAT_STATUS      = 'repeatStatus';
+    public const FIELD_REPEAT_TYPE        = 'repeatType';
+    public const FIELD_REPEAT_INTERVAL    = 'repeatInterval';
+    public const FIELD_REPEAT_END         = 'repeatEnd';
+    public const FIELD_REPEAT_END_VALUE   = 'repeatEndValue';
+    public const FIELD_MINUTE_DEBUT         = 'minuteDebut';
+    public const FIELD_MINUTE_FIN           = 'minuteFin';
+    public const FIELD_ENDDATE_VALUE         = 'endDateValue';
+    public const CST_EVENT_RT_NEVER        = 'never';
+    public const CST_EVENT_RT_ENDDATE      = 'endDate';
+    public const CST_EVENT_RT_ENDREPEAT    = 'endRepeat';
+    public const CST_EVENT_RT_DAILY        = 'daily';
+    public const CST_EVENT_RT_WEEKLY       = 'weekly';
+    public const CST_EVENT_RT_MONTHLY      = 'monthly';
+    public const CST_EVENT_RT_YEARLY       = 'yearly';
     
-  // TABLE cops_event_date
-  const FIELD_EVENT_ID           = 'eventId';
-  const FIELD_DSTART             = 'dStart';
-  const FIELD_DEND               = 'dEnd';
-  const FIELD_TSTART             = 'tStart';
-  const FIELD_TEND               = 'tEnd';
+    // TABLE cops_event_date
+    public const FIELD_EVENT_ID           = 'eventId';
+    public const FIELD_DSTART             = 'dStart';
+    public const FIELD_DEND               = 'dEnd';
+    public const FIELD_TSTART             = 'tStart';
+    public const FIELD_TEND               = 'tEnd';
 
-  // TABLE cops_event_categorie
-  const FIELD_CATEG_LIBELLE      = 'categorieLibelle';
-  const FIELD_CATEG_COLOR        = 'categorieCouleur';
-  
-  // TABLE cops_enquete
-  const FIELD_NOM_ENQUETE        = 'nomEnquete';
-  const FIELD_IDX_ENQUETEUR      = 'idxEnqueteur';
-  const FIELD_IDX_DISTRICT_ATT   = 'idxDistrictAttorney';
-  const FIELD_RESUME_FAITS       = 'resumeFaits';
-  const FIELD_DESC_SCENE_CRIME   = 'descSceneDeCrime';
-  const FIELD_PISTES_DEMARCHES   = 'pistesDemarches';
-  const FIELD_NOTES_DIVERSES     = 'notesDiverses';
-  const FIELD_STATUT_ENQUETE     = 'statutEnquete';
-  const FIELD_DLAST              = 'dLast';
+    // TABLE cops_event_categorie
+    public const FIELD_CATEG_LIBELLE      = 'categorieLibelle';
+    public const FIELD_CATEG_COLOR        = 'categorieCouleur';
 
-  // TABLE cops_autopsie
-  const FIELD_IDX_ENQUETE        = 'idxEnquete';
-  const FIELD_DATA               = 'data';
+    // TABLE cops_enquete
+    public const FIELD_NOM_ENQUETE        = 'nomEnquete';
+    public const FIELD_IDX_ENQUETEUR      = 'idxEnqueteur';
+    public const FIELD_IDX_DISTRICT_ATT   = 'idxDistrictAttorney';
+    public const FIELD_RESUME_FAITS       = 'resumeFaits';
+    public const FIELD_DESC_SCENE_CRIME   = 'descSceneDeCrime';
+    public const FIELD_PISTES_DEMARCHES   = 'pistesDemarches';
+    public const FIELD_NOTES_DIVERSES     = 'notesDiverses';
+    public const FIELD_STATUT_ENQUETE     = 'statutEnquete';
+    public const FIELD_DLAST              = 'dLast';
+
+    // TABLE cops_autopsie
+    public const FIELD_IDX_ENQUETE        = 'idxEnquete';
+    public const FIELD_DATA               = 'data';
 
     // TABLE cops_index
-    const FIELD_ID_IDX           = 'idIdx';
-    const FIELD_REF_IDX_ID       = 'referenceIdxId';
-    const FIELD_TOME_IDX_ID      = 'tomeIdxId';
-    const FIELD_PAGE             = 'page';
+    public const FIELD_ID_IDX           = 'idIdx';
+    public const FIELD_REF_IDX_ID       = 'referenceIdxId';
+    public const FIELD_TOME_IDX_ID      = 'tomeIdxId';
+    public const FIELD_PAGE             = 'page';
     // TABLE cops_index_reference
-    const FIELD_ID_IDX_REF       = 'idIdxReference';
-    const FIELD_NOM_IDX          = 'nomIdxReference';
-    const FIELD_PRENOM_IDX       = 'prenomIdxReference';
-    const FIELD_AKA_IDX          = 'akaIdxReference';
-    const FIELD_NATURE_IDX_ID    = 'natureIdxId';
-    const FIELD_DESCRIPTION_PJ   = 'descriptionPJ';
-    const FIELD_DESCRIPTION_MJ   = 'descriptionMJ';
-    const FIELD_CODE             = 'code';
+    public const FIELD_ID_IDX_REF       = 'idIdxReference';
+    public const FIELD_NOM_IDX          = 'nomIdxReference';
+    public const FIELD_PRENOM_IDX       = 'prenomIdxReference';
+    public const FIELD_AKA_IDX          = 'akaIdxReference';
+    public const FIELD_NATURE_IDX_ID    = 'natureIdxId';
+    public const FIELD_DESCRIPTION_PJ   = 'descriptionPJ';
+    public const FIELD_DESCRIPTION_MJ   = 'descriptionMJ';
+    public const FIELD_CODE             = 'code';
     // TABLE cops_index_nature
-    const FIELD_ID_IDX_NATURE    = 'idIdxNature';
-    const FIELD_NOM_IDX_NATURE   = 'nomIdxNature';
+    public const FIELD_ID_IDX_NATURE    = 'idIdxNature';
+    public const FIELD_NOM_IDX_NATURE   = 'nomIdxNature';
     // TABLE cops_index_tome
-    const FIELD_ID_IDX_TOME      = 'idIdxTome';
-    const FIELD_NOM_IDX_TOME     = 'nomIdxTome';
-    const FIELD_ABR_IDX_TOME     = 'abrIdxTome';
+    public const FIELD_ID_IDX_TOME      = 'idIdxTome';
+    public const FIELD_NOM_IDX_TOME     = 'nomIdxTome';
+    public const FIELD_ABR_IDX_TOME     = 'abrIdxTome';
   
-  /////////////////////////////////////////////////
-  // Icons
-  const I_ANGLE_LEFT            = 'angle-left';
-  const I_ANGLE_RIGHT           = 'angle-right';
-  const I_ANGLES_LEFT           = 'angles-left';
-  const I_ARROWS_ROTATE         = 'arrows-rotate';
-  const I_BACKWARD              = 'backward';
-  const I_CARET_LEFT           = 'caret-left';
-  const I_CARET_RIGHT          = 'caret-right';
-  const I_CIRCLE                = 'circle';
-  const I_DATABASE              = 'database';
-  const I_DELETE               = 'trash-can';
-  const I_DESKTOP              = 'desktop';
-  const I_DOWNLOAD             = 'download';
-  const I_EDIT                  = 'edit';
-  const I_FILE_CATEGORY         = 'folder-tree';
-  const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
-  const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
-  const I_FILE_CIRCLE_XMARK     = 'file-circle-xmark';
-  const I_FILE_OPENED           = 'folder-open';
-  const I_FILE_CLOSED           = 'folder-closed';
-  const I_FILE_COLDED           = 'folder';
-  const I_FILTER_CIRCLE_XMARK  = 'filter-circle-xmark';
-  const I_GEAR                 = 'gear';
-  const I_REFRESH              = 'arrows-rotate';
-  const I_SQUARE_CHECK         = 'square-check';
-  const I_SQUARE_XMARK         = 'square-xmark';
-  const I_USERS                = 'users';
+    /////////////////////////////////////////////////
+    // Icons
+    public const I_ANGLE_LEFT            = 'angle-left';
+    public const I_ANGLE_RIGHT           = 'angle-right';
+    public const I_ANGLES_LEFT           = 'angles-left';
+    public const I_ARROWS_ROTATE         = 'arrows-rotate';
+    public const I_BACKWARD              = 'backward';
+    public const I_CARET_LEFT           = 'caret-left';
+    public const I_CARET_RIGHT          = 'caret-right';
+    public const I_CIRCLE                = 'circle';
+    public const I_DATABASE              = 'database';
+    public const I_DELETE               = 'trash-can';
+    public const I_DESKTOP              = 'desktop';
+    public const I_DOWNLOAD             = 'download';
+    public const I_EDIT                  = 'edit';
+    public const I_FILE_CATEGORY         = 'folder-tree';
+    public const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
+    public const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
+    public const I_FILE_CIRCLE_XMARK     = 'file-circle-xmark';
+    public const I_FILE_OPENED           = 'folder-open';
+    public const I_FILE_CLOSED           = 'folder-closed';
+    public const I_FILE_COLDED           = 'folder';
+    public const I_FILTER_CIRCLE_XMARK  = 'filter-circle-xmark';
+    public const I_GEAR                 = 'gear';
+    public const I_REFRESH              = 'arrows-rotate';
+    public const I_SQUARE_CHECK         = 'square-check';
+    public const I_SQUARE_XMARK         = 'square-xmark';
+    public const I_USERS                = 'users';
 
-  /////////////////////////////////////////////////
-  // Page d'administration
-  const PAGE_ADMIN              = 'admin';
-  
-  /////////////////////////////////////////////////
-  // Onglets
-  const ONGLET_ARCHIVE         = 'archive';
-  const ONGLET_AUTOPSIE        = 'autopsie';
-  const ONGLET_CALENDAR        = 'calendar';
-  const ONGLET_ENQUETE         = 'enquete';
-  const ONGLET_INBOX           = 'inbox';
-  const ONGLET_LIBRARY         = 'library';
-  const ONGLET_PROFILE         = 'profile';
-  const ONGLET_DESK            = 'desk';
+    /////////////////////////////////////////////////
+    // Page d'administration
+    public const PAGE_ADMIN              = 'admin';
 
-  /////////////////////////////////////////////////
-  // Rôles
-  const ROLE_GUEST             = 1;
-  const ROLE_PJ                = 10;
-  const ROLE_MJ                = 100;
-  const ROLE_ADMIN             = 999;
+    /////////////////////////////////////////////////
+    // Onglets
+    public const ONGLET_ARCHIVE         = 'archive';
+    public const ONGLET_AUTOPSIE        = 'autopsie';
+    public const ONGLET_CALENDAR        = 'calendar';
+    public const ONGLET_ENQUETE         = 'enquete';
+    public const ONGLET_INBOX           = 'inbox';
+    public const ONGLET_LIBRARY         = 'library';
+    public const ONGLET_PROFILE         = 'profile';
+    public const ONGLET_DESK            = 'desk';
 
-  /////////////////////////////////////////////////
-  // SQL
-  const SQL_JOKER_SEARCH       = '%';
-  const SQL_LIMIT              = 'limit';
-  const SQL_ORDER              = 'order';
-  const SQL_ORDER_ASC          = 'ASC';
-  const SQL_ORDER_BY           = 'orderby';
-  const SQL_ORDER_DESC         = 'DESC';
-  const SQL_WHERE_FILTERS      = 'whereFilters';
+    /////////////////////////////////////////////////
+    // Rôles
+    public const ROLE_GUEST             = 1;
+    public const ROLE_PJ                = 10;
+    public const ROLE_MJ                = 100;
+    public const ROLE_ADMIN             = 999;
 
-  /////////////////////////////////////////////////
-  // Tags
-  const TAG_A                  = 'a';
-  const TAG_BUTTON             = 'button';
-  const TAG_DIV                = 'div';
-  const TAG_I                  = 'i';
-  const TAG_IMG                = 'img';
-  const TAG_INPUT              = 'input';
-  const TAG_LABEL              = 'label';
-  const TAG_LI                 = 'li';
-  const TAG_OPTION             = 'option';
-  const TAG_P                  = 'p';
-  const TAG_SELECT             = 'select';
-  const TAG_SPAN               = 'span';
-  const TAG_STRONG             = 'strong';
-  const TAG_TD                 = 'td';
-  const TAG_TH                 = 'th';
-  const TAG_TR                 = 'tr';
-  const TAG_UL                 = 'ul';
-  
-  /////////////////////////////////////////////////
-  // Wordpress
-  const WP_CAT                 = 'cat';
-  const WP_CAT_ID_BDD          = 45;
-  const WP_CAT_ID_SKILL        = 47;
-  const WP_MENUORDER           = 'menu_order';
-  const WP_METAKEY             = 'meta_key';
-  const WP_METAVALUENUM        = 'meta_value_num';
-  const WP_NAME                = 'name';
-  const WP_POST                = 'post';
-  const WP_POSTCONTENT         = 'post_content';
-  const WP_POSTNAME            = 'post_name';
-  const WP_POSTSTATUS          = 'post_status';
-  const WP_POSTTITLE           = 'post_title';
-  const WP_POSTTYPE            = 'post_type';
-  const WP_POSTSPERPAGE        = 'posts_per_page';
-  const WP_PUBLISH             = 'publish';
-  const WP_SUPPRESS_FILTER     = 'suppress_filters';
+    /////////////////////////////////////////////////
+    // SQL
+    public const SQL_JOKER_SEARCH       = '%';
+    public const SQL_LIMIT              = 'limit';
+    public const SQL_ORDER              = 'order';
+    public const SQL_ORDER_ASC          = 'ASC';
+    public const SQL_ORDER_BY           = 'orderby';
+    public const SQL_ORDER_DESC         = 'DESC';
+    public const SQL_WHERE_FILTERS      = 'whereFilters';
 
-  const WP_CF_ADRENALINE       = 'adrenaline';
-  const WP_CF_CARACASSOCIEE    = 'caracteristique_associee';
-  const WP_CF_LSTSPECS         = 'liste_specialisation';
-  const WP_CF_ORDREDAFFICHAGE  = 'ordre_daffichage';
-  const WP_CF_SPECIALISATION   = 'specialisation';
-  const WP_CF_UTILITE          = 'utilite';
+    /////////////////////////////////////////////////
+    // Tags
+    public const TAG_A                  = 'a';
+    public const TAG_BUTTON             = 'button';
+    public const TAG_DIV                = 'div';
+    public const TAG_I                  = 'i';
+    public const TAG_IMG                = 'img';
+    public const TAG_INPUT              = 'input';
+    public const TAG_LABEL              = 'label';
+    public const TAG_LI                 = 'li';
+    public const TAG_OPTION             = 'option';
+    public const TAG_P                  = 'p';
+    public const TAG_SELECT             = 'select';
+    public const TAG_SPAN               = 'span';
+    public const TAG_STRONG             = 'strong';
+    public const TAG_TD                 = 'td';
+    public const TAG_TH                 = 'th';
+    public const TAG_TR                 = 'tr';
+    public const TAG_UL                 = 'ul';
+
+    /////////////////////////////////////////////////
+    // Wordpress
+    public const WP_CAT                 = 'cat';
+    public const WP_CAT_ID_BDD          = 45;
+    public const WP_CAT_ID_SKILL        = 47;
+    public const WP_MENUORDER           = 'menu_order';
+    public const WP_METAKEY             = 'meta_key';
+    public const WP_METAVALUENUM        = 'meta_value_num';
+    public const WP_NAME                = 'name';
+    public const WP_POST                = 'post';
+    public const WP_POSTCONTENT         = 'post_content';
+    public const WP_POSTNAME            = 'post_name';
+    public const WP_POSTSTATUS          = 'post_status';
+    public const WP_POSTTITLE           = 'post_title';
+    public const WP_POSTTYPE            = 'post_type';
+    public const WP_POSTSPERPAGE        = 'posts_per_page';
+    public const WP_PUBLISH             = 'publish';
+    public const WP_SUPPRESS_FILTER     = 'suppress_filters';
+
+    public const WP_CF_ADRENALINE       = 'adrenaline';
+    public const WP_CF_CARACASSOCIEE    = 'caracteristique_associee';
+    public const WP_CF_LSTSPECS         = 'liste_specialisation';
+    public const WP_CF_ORDREDAFFICHAGE  = 'ordre_daffichage';
+    public const WP_CF_SPECIALISATION   = 'specialisation';
+    public const WP_CF_UTILITE          = 'utilite';
 
   /*
   const WP_CAT_ID_NEWS         = 2;
@@ -386,9 +386,9 @@ interface ConstantsInterface
   /////////////////////////////////////////////////
   // Divers
   */
-  const CST_AMP          = '&amp;';
-  const CST_NBSP         = '&nbsp;';
-  const CSV_EOL          = "\r\n";
-  const CSV_SEP          = ';';
+    public const CST_AMP          = '&amp;';
+    public const CST_NBSP         = '&nbsp;';
+    public const CSV_EOL          = "\r\n";
+    public const CSV_SEP          = ';';
   
 }

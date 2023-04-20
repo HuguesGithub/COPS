@@ -18,12 +18,10 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
     {
         parent::__construct();
         
-        $urlElements = array(
-            self::CST_SUBONGLET => self::CST_LIB_SKILL,
-        );
+        $urlElements = [self::CST_SUBONGLET => self::CST_LIB_SKILL];
         
         $buttonContent = $this->getLink('Compétences', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
-        $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+        $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }
     
@@ -35,12 +33,13 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
     {
         /////////////////////////////////////////
         // Récupération des articles Wordpress liés à la catégorie "Compétences"
-        $attributes = array(
+        $attributes = [
             // Catégorie "Compétences".
-            self::WP_CAT       => self::WP_CAT_ID_SKILL, // 47
+            self::WP_CAT       => self::WP_CAT_ID_SKILL,
+            // 47
             self::SQL_ORDER_BY => self::WP_POSTTITLE,
             self::SQL_ORDER    => self::SQL_ORDER_ASC,
-        );
+        ];
         $objWpPosts = $this->objWpPostServices->getPosts($attributes);
         /////////////////////////////////////////
 
@@ -51,18 +50,15 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
         while (!empty($objWpPosts)) {
             $objWpPost = array_shift($objWpPosts);
             // On récupère le titre du post et sa première lettre, pour vérifier si on doit créer une nouvelle ancre.
-            $postTitle = str_replace('É', 'E', $objWpPost->getField(self::WP_POSTTITLE));
+            $postTitle = str_replace('É', 'E', (string) $objWpPost->getField(self::WP_POSTTITLE));
             $postAnchor = substr($postTitle, 0, 1);
             if ($prevAncre!=$postAnchor) {
                 $prevAncre = $postAnchor;
                 $btnContent = $this->getLink($postAnchor, '#anchor-'.$postAnchor, 'nav-link text-white');
-                $btnAttributes = array(
-                    self::ATTR_CLASS=>'btn-dark btn-xs',
-                    self::ATTR_STYLE=>'width: -webkit-fill-available'
-                );
+                $btnAttributes = [self::ATTR_CLASS=>'btn-dark btn-xs', self::ATTR_STYLE=>'width: -webkit-fill-available'];
                 $liContent = $this->getButton($btnContent, $btnAttributes);
-                $strAncres .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
-                $aAttributes = array(self::ATTR_CLASS=>'col-12', self::FIELD_ID=>'anchor-'.$postAnchor);
+                $strAncres .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
+                $aAttributes = [self::ATTR_CLASS=>'col-12', self::FIELD_ID=>'anchor-'.$postAnchor];
                 $strContent .= $this->getBalise(self::TAG_A, '', $aAttributes);
             }
             // On récupère le contenu de l'article pour afficher la compétence
@@ -72,14 +68,14 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
 
         /////////////////////////////////////////
         $urlTemplate = self::WEB_PPFS_LIB_SKILLS;
-        $attributes = array(
+        $attributes = [
             //
             'section-skill',
             // La liste alphabétique des ancres du haut de page
             $strAncres,
             // La liste des compétences
             $strContent,
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
         /////////////////////////////////////////
     }

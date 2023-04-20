@@ -49,11 +49,9 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // On initialise l'id Wordpress de la Catégory "Index"
         $this->wpCategoryId = 48;
 
-        $urlElements = array(
-            self::CST_SUBONGLET => self::CST_LIB_INDEX,
-        );
+        $urlElements = [self::CST_SUBONGLET => self::CST_LIB_INDEX];
         $buttonContent = $this->getLink('Index', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
-        $buttonAttributes = array(self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark));
+        $buttonAttributes = [self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         
         if ($this->catSlug=='') {
@@ -65,7 +63,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             
             $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
             $buttonContent = $this->getLink($name, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
-            $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+            $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
             $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         }
         
@@ -93,10 +91,10 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             $strButtonCreation .= $this->getLink($label, $this->getRefreshUrl(), $classe);
         }
         if ($this->hasCopsEditor || $blnExtraButton) {
-            $href = $this->getRefreshUrl(array(self::CST_ACTION=>self::CST_WRITE));
+            $href = $this->getRefreshUrl([self::CST_ACTION=>self::CST_WRITE]);
             $strButtonCreation .= $this->getLink(self::LABEL_CREER_ENTREE, $href, $classe);
         }
-        $strButtonCreation = $this->getDiv($strButtonCreation, array(self::ATTR_CLASS=>'btn-group d-flex'));
+        $strButtonCreation = $this->getDiv($strButtonCreation, [self::ATTR_CLASS=>'btn-group d-flex']);
         /////////////////////////////////////////
         
         /////////////////////////////////////////
@@ -123,7 +121,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
         
         $urlTemplate = self::WEB_PPFS_ONGLET;
-        $attributes = array(
+        $attributes = [
             // L'id de la page
             'section-index',
             // Le bouton éventuel de création / retour...
@@ -134,7 +132,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             $menuContent,
             // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
             $mainContent,
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -147,18 +145,12 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $this->objIndex = $this->objCopsIndexServices->getIndexReference($this->initVar(self::FIELD_ID));
 
         // On défini les champs éditables par n'importe qui.
-        $arrFields = array(
-            self::FIELD_NOM_IDX,
-            self::FIELD_PRENOM_IDX,
-            self::FIELD_AKA_IDX,
-            self::FIELD_NATURE_IDX_ID,
-            self::FIELD_DESCRIPTION_PJ
-        );
+        $arrFields = [self::FIELD_NOM_IDX, self::FIELD_PRENOM_IDX, self::FIELD_AKA_IDX, self::FIELD_NATURE_IDX_ID, self::FIELD_DESCRIPTION_PJ];
         // On ajoute les champs qui nécessite des droits spécifiques
         if ($this->hasCopsEditor) {
             $arrFields = array_merge(
                 $arrFields,
-                array(self::FIELD_DESCRIPTION_MJ, self::FIELD_CODE)
+                [self::FIELD_DESCRIPTION_MJ, self::FIELD_CODE]
             );
         }
         // On met à jour l'objet
@@ -188,9 +180,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $strSelect = '';
         while (!empty($objsIndexNature)) {
             $objIndexNature = array_shift($objsIndexNature);
-            $optionAttributes = array(
-                self::ATTR_VALUE => $objIndexNature->getField(self::FIELD_ID_IDX_NATURE),
-            );
+            $optionAttributes = [self::ATTR_VALUE => $objIndexNature->getField(self::FIELD_ID_IDX_NATURE)];
 
             $idNature = $objIndexNature->getField(self::FIELD_ID_IDX_NATURE);
             $nomNature = $objIndexNature->getField(self::FIELD_NOM_IDX_NATURE);
@@ -201,22 +191,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
             $strSelect .= $this->getBalise(self::TAG_OPTION, $nomNature, $optionAttributes);
         }
         
-        $attributes = array(
-            $this->objIndex->getField(self::FIELD_ID_IDX_REF),
-            $this->urlRefresh,
-            $this->objIndex->getField(self::FIELD_NOM_IDX),
-            $strSelect,
-            $this->objIndex->getField(self::FIELD_DESCRIPTION_PJ),
-            ($this->hasCopsEditor ? $this->objIndex->getField(self::FIELD_DESCRIPTION_MJ) : ''),
-            ($this->hasCopsEditor ? $this->objIndex->getBean()->getReferences() : ''),
-            ($this->hasCopsEditor ? '' : ' d-none'),
-            ($this->objIndex->getField(self::FIELD_CODE)==2 ? ' '.self::CST_CHECKED : ''),
-            ($this->objIndex->getField(self::FIELD_CODE)==1 ? ' '.self::CST_CHECKED : ''),
-            ($this->objIndex->getField(self::FIELD_CODE)==0 ? ' '.self::CST_CHECKED : ''),
-            ($this->objIndex->getField(self::FIELD_CODE)==-1 ? ' '.self::CST_CHECKED : ''),
-            $this->objIndex->getField(self::FIELD_PRENOM_IDX),
-            $this->objIndex->getField(self::FIELD_AKA_IDX),
-        );
+        $attributes = [$this->objIndex->getField(self::FIELD_ID_IDX_REF), $this->urlRefresh, $this->objIndex->getField(self::FIELD_NOM_IDX), $strSelect, $this->objIndex->getField(self::FIELD_DESCRIPTION_PJ), ($this->hasCopsEditor ? $this->objIndex->getField(self::FIELD_DESCRIPTION_MJ) : ''), ($this->hasCopsEditor ? $this->objIndex->getBean()->getReferences() : ''), ($this->hasCopsEditor ? '' : ' d-none'), ($this->objIndex->getField(self::FIELD_CODE)==2 ? ' '.self::CST_CHECKED : ''), ($this->objIndex->getField(self::FIELD_CODE)==1 ? ' '.self::CST_CHECKED : ''), ($this->objIndex->getField(self::FIELD_CODE)==0 ? ' '.self::CST_CHECKED : ''), ($this->objIndex->getField(self::FIELD_CODE)==-1 ? ' '.self::CST_CHECKED : ''), $this->objIndex->getField(self::FIELD_PRENOM_IDX), $this->objIndex->getField(self::FIELD_AKA_IDX)];
         return $this->getRender($urlTemplateEdit, $attributes);
     }
     
@@ -236,9 +211,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $titre = ($this->blnShowColNature ? self::LABEL_INDEX : $this->objWpCategory->getField(self::WP_NAME));
         
         // On va construire le Header du tableau
-        $thAttributes = array(
-            self::ATTR_CLASS => 'mailbox-name',
-        );
+        $thAttributes = [self::ATTR_CLASS => 'mailbox-name'];
         $headerContent  = $this->getTh(self::LABEL_NOM, $thAttributes);
         if ($this->blnShowColNature) {
             $thAttributes[self::ATTR_STYLE] = 'width:100px;';
@@ -254,7 +227,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $headerContent .= $this->getTh(self::LABEL_REFERENCE, $thAttributes);
         unset($thAttributes[self::ATTR_STYLE]);
         if ($this->hasCopsEditor) {
-            $thAttributes = array(self::ATTR_STYLE=>'width:60px;');
+            $thAttributes = [self::ATTR_STYLE=>'width:60px;'];
             $headerContent .= $this->getTh(self::CST_NBSP, $thAttributes);
         }
         $header = $this->getBalise(self::TAG_TR, $headerContent);
@@ -263,13 +236,11 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
         // Si on a une Catégorie spécifique, on va chercher son équivalent Nature dans la base.
-        $attributes = array();
+        $attributes = [];
         if (!$this->blnShowColNature) {
             $name = $this->objWpCategory->getField(self::WP_NAME);
             $objCopsIndexNature = $this->objCopsIndexServices->getCopsIndexNatureByName($name);
-            $attributes[self::SQL_WHERE_FILTERS] = array(
-                self::FIELD_NATURE_IDX_ID => $objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
-            );
+            $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_NATURE_IDX_ID => $objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE)];
         }
         $objsCopsIndex = $this->objCopsIndexServices->getIndexReferences($attributes);
         
@@ -295,37 +266,24 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // Toolbar & Pagination
         // Bouton pour recharger la liste
         $label = $this->getLink($this->getIcon('arrows-rotate'), $this->getRefreshUrl(), self::CST_TEXT_WHITE);
-        $btnAttributes = array(self::ATTR_TITLE => self::LABEL_REFRESH_LIST);
+        $btnAttributes = [self::ATTR_TITLE => self::LABEL_REFRESH_LIST];
         $strToolBar = $this->getButton($label, $btnAttributes);
         
         // Bouton pour créer une nouvelle entrée, si droits d'édition
         if ($this->hasCopsEditor) {
-            $href = $this->getRefreshUrl(array(self::CST_ACTION=>self::CST_WRITE));
+            $href = $this->getRefreshUrl([self::CST_ACTION=>self::CST_WRITE]);
             $label = $this->getLink($this->getIcon('square-plus'), $href, self::CST_TEXT_WHITE);
-            $btnAttributes = array(self::ATTR_TITLE => self::LABEL_CREER_ENTREE);
+            $btnAttributes = [self::ATTR_TITLE => self::LABEL_CREER_ENTREE];
             $strToolBar .= self::CST_NBSP.$this->getButton($label, $btnAttributes);
         }
         // Bouton pour effectuer un export Excel
-        $btnAttributes = array(
-            self::ATTR_CLASS => self::AJAX_ACTION,
-            self::ATTR_TITLE => self::LABEL_EXPORT_LIST,
-            self::ATTR_DATA => array(
-                self::ATTR_DATA_TRIGGER => 'click',
-                self::ATTR_DATA_AJAX => 'csvExport',
-// strtolower(self::FIELD_NATURE_IDX_ID) => $this->objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE),
-            ),
-        );
+        $btnAttributes = [self::ATTR_CLASS => self::AJAX_ACTION, self::ATTR_TITLE => self::LABEL_EXPORT_LIST, self::ATTR_DATA => [self::ATTR_DATA_TRIGGER => 'click', self::ATTR_DATA_AJAX => 'csvExport']];
         $strToolBar .= self::CST_NBSP.$this->getButton($this->getIcon('download'), $btnAttributes);
         // Ajout de la pagination
-        $strToolBar .= $this->getDiv($strPagination, array(self::ATTR_CLASS=>'float-right'));
+        $strToolBar .= $this->getDiv($strPagination, [self::ATTR_CLASS=>'float-right']);
         /////////////////////////////////////////
         
-        $listAttributes = array(
-            $titre,
-            $strToolBar,
-            $header,
-            $listContent,
-        );
+        $listAttributes = [$titre, $strToolBar, $header, $listContent];
         /////////////////////////////////////////
         
         return $this->getRender($urlTemplateList, $listAttributes);
@@ -337,7 +295,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
      * @since v1.22.11.11
      * @version v1.22.11.11
      */
-    public function getRefreshUrl($urlElements=array())
+    public function getRefreshUrl($urlElements=[])
     {
         // Si catSlug est défini et non présent dans $urlElements, il doit être repris.
         if ($this->catSlug!='' && !isset($urlElements[self::CST_CAT_SLUG])) {

@@ -40,21 +40,19 @@ class LocalServices extends GlobalServices
   }
 
   /**
-   * @param mixed $Obj
    * @return mixed
    * @version 1.22.04.28
    * @since 1.22.04.28
    */
-  public function insert($Obj)
+  public function insert(mixed $Obj)
   { return $this->Dao->insert($Obj); }
 
   /**
-   * @param mixed $Obj
    * @return mixed
    * @version 1.22.05.20
    * @since 1.22.05.20
    */
-  public function update($Obj)
+  public function update(mixed $Obj)
   { return $this->Dao->update($Obj); }
 
 

@@ -35,22 +35,22 @@ class CopsMailJointBean extends UtilitiesBean
     // TODO
     $strSince = $since;//'5 mins ago';
 
-    $attributes = array(
-      // Bordure gauche pour mettre en évidence les nouveaux mails
-      ($bln_NonLu ? ' class="newMail border-primary"' : ''),
-      // L'id
-      $id,
-      // L'auteur
-      ($this->CopsMailJoint->getField('folderId')==2 ? 'Rédaction' : $auteur),
-      // Sujet
-      ($bln_NonLu ? '<strong>'.$sujet.'</strong>' : $sujet),
-      // Pièce jointe ?
-      ($bln_HasPjs ? '<i class="fa-solid fa-paperclip"></i>' : '&nbsp;'),
-      // Date envoi
-      $strSince,
-      // action sur le mail
-      ($this->CopsMailJoint->getField('folderId')==2 ? 'write' : 'read'),
-    );
+    $attributes = [
+        // Bordure gauche pour mettre en évidence les nouveaux mails
+        ($bln_NonLu ? ' class="newMail border-primary"' : ''),
+        // L'id
+        $id,
+        // L'auteur
+        ($this->CopsMailJoint->getField('folderId')==2 ? 'Rédaction' : $auteur),
+        // Sujet
+        ($bln_NonLu ? '<strong>'.$sujet.'</strong>' : $sujet),
+        // Pièce jointe ?
+        ($bln_HasPjs ? '<i class="fa-solid fa-paperclip"></i>' : '&nbsp;'),
+        // Date envoi
+        $strSince,
+        // action sur le mail
+        ($this->CopsMailJoint->getField('folderId')==2 ? 'write' : 'read'),
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 

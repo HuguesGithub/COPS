@@ -47,18 +47,18 @@ class AdminPageIndexBean extends AdminPageBean
 
     // On va afficher la dernière donnée enregistrée
     // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
-    $attributes = array(
-      //  - 1
-      $this->getSelectNature(),
-      //  - 2
-      $this->getLisReference(),
-      // - 3
-      $this->getListeIndex(),
-      // - 4
-      $this->getLisNatureCheckboxes(),
-      // - 5
-      $this->getLisReferenceCheckboxes(),
-    );
+    $attributes = [
+        //  - 1
+        $this->getSelectNature(),
+        //  - 2
+        $this->getLisReference(),
+        // - 3
+        $this->getListeIndex(),
+        // - 4
+        $this->getLisNatureCheckboxes(),
+        // - 5
+        $this->getLisReferenceCheckboxes(),
+    ];
     return $this->getRender($this->urlTemplateAdminPageIndex, $attributes);
   }
 

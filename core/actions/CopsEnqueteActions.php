@@ -55,13 +55,13 @@ class CopsEnqueteActions extends LocalActions
         // L'id du District Attorney
         $objCopsEnquete->setField(self::FIELD_IDX_DISTRICT_ATT, $urlParams[self::FIELD_IDX_DISTRICT_ATT]);
         // Le résumé des faits
-        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, stripslashes($urlParams[self::FIELD_RESUME_FAITS]));
+        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, stripslashes((string) $urlParams[self::FIELD_RESUME_FAITS]));
         // La description de la scène de crime
-        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, stripslashes($urlParams[self::FIELD_DESC_SCENE_CRIME]));
+        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, stripslashes((string) $urlParams[self::FIELD_DESC_SCENE_CRIME]));
         // Les pistes et les démarches
-        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, stripslashes($urlParams[self::FIELD_PISTES_DEMARCHES]));
+        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, stripslashes((string) $urlParams[self::FIELD_PISTES_DEMARCHES]));
         // Les notes diverses
-        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, stripslashes($urlParams[self::FIELD_NOTES_DIVERSES]));
+        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, stripslashes((string) $urlParams[self::FIELD_NOTES_DIVERSES]));
         // Le statut à ouvert par défaut
         $objCopsEnquete->setField(self::FIELD_STATUT_ENQUETE, self::CST_ENQUETE_OPENED);
         // La date de création
@@ -98,13 +98,13 @@ class CopsEnqueteActions extends LocalActions
         // L'id du District Attorney
         $objCopsEnquete->setField(self::FIELD_IDX_DISTRICT_ATT, $urlParams[self::FIELD_IDX_DISTRICT_ATT]);
         // Le résumé des faits
-        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, stripslashes($urlParams[self::FIELD_RESUME_FAITS]));
+        $objCopsEnquete->setField(self::FIELD_RESUME_FAITS, stripslashes((string) $urlParams[self::FIELD_RESUME_FAITS]));
         // La description de la scène de crime
-        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, stripslashes($urlParams[self::FIELD_DESC_SCENE_CRIME]));
+        $objCopsEnquete->setField(self::FIELD_DESC_SCENE_CRIME, stripslashes((string) $urlParams[self::FIELD_DESC_SCENE_CRIME]));
         // Les pistes et les démarches
-        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, stripslashes($urlParams[self::FIELD_PISTES_DEMARCHES]));
+        $objCopsEnquete->setField(self::FIELD_PISTES_DEMARCHES, stripslashes((string) $urlParams[self::FIELD_PISTES_DEMARCHES]));
         // Les notes diverses
-        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, stripslashes($urlParams[self::FIELD_NOTES_DIVERSES]));
+        $objCopsEnquete->setField(self::FIELD_NOTES_DIVERSES, stripslashes((string) $urlParams[self::FIELD_NOTES_DIVERSES]));
         // Le statut ne change pas
         // La date de création ne change pas
         // La date de dernière modification

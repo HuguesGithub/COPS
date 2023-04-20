@@ -34,16 +34,16 @@ class CopsPlayerServices extends LocalServices
   public function initFilters(&$attributes)
   {
     if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = array(
-        // Id
-        self::SQL_JOKER_SEARCH,
-        // Matricule
-        self::SQL_JOKER_SEARCH,
-        // Password
-        self::SQL_JOKER_SEARCH,
-        // Grade
-        self::SQL_JOKER_SEARCH,
-      );
+      $attributes[self::SQL_WHERE_FILTERS] = [
+          // Id
+          self::SQL_JOKER_SEARCH,
+          // Matricule
+          self::SQL_JOKER_SEARCH,
+          // Password
+          self::SQL_JOKER_SEARCH,
+          // Grade
+          self::SQL_JOKER_SEARCH,
+      ];
     } else {
       if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = self::SQL_JOKER_SEARCH;
@@ -79,7 +79,7 @@ class CopsPlayerServices extends LocalServices
    * @since 1.22.04.28
    * @version 1.22.04.28
    */
-  public function getCopsPlayers($attributes=array())
+  public function getCopsPlayers($attributes=[])
   {
     $this->initFilters($attributes);
     return $this->Dao->getCopsPlayers($attributes);

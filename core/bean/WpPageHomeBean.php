@@ -21,10 +21,10 @@ class WpPageHomeBean extends WpPageBean
     {
         $urlTemplate = self::WEB_PP_HOME_CONTENT;
 
-        $args = array(
+        $args = [
             // La date Cops du jour
-            $this->getCopsDate('strJour'),
-        );
+            static::getCopsDate('strJour'),
+        ];
         return $this->getRender($urlTemplate, $args);
     }
 

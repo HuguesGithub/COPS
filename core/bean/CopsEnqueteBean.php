@@ -55,7 +55,7 @@ class CopsEnqueteBean extends CopsBean
                 break;
         }
 
-        $attributes = array(
+        $attributes = [
             // Id
             $id,
             // Url de vision / édition, selon le statut.
@@ -68,7 +68,7 @@ class CopsEnqueteBean extends CopsBean
             $this->displayNiceDateSince($intLast),
             // Actions possibles
             $strActionsPossibles,
-        );
+        ];
 
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -131,7 +131,7 @@ class CopsEnqueteBean extends CopsBean
     $sel = $this->obj->getField(self::FIELD_IDX_DISTRICT_ATT);
     while (!empty($rows)) {
       $row = array_shift($rows);
-      $args = array(self::ATTR_VALUE=>$row->cbpId);
+      $args = [self::ATTR_VALUE=>$row->cbpId];
       if ($sel==$row->cbpId) {
           $args[self::CST_SELECTED] = self::CST_SELECTED;
       }
@@ -151,7 +151,7 @@ class CopsEnqueteBean extends CopsBean
             }
         }
 
-        $attributes = array(
+        $attributes = [
             // Id de l'enquête, s'il existe
             $this->obj->getField(self::FIELD_ID),
             // Url pour Annuler
@@ -180,10 +180,37 @@ class CopsEnqueteBean extends CopsBean
             '',
             // Chronologie
             '',
-
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-        );
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ];
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -223,7 +250,7 @@ class CopsEnqueteBean extends CopsBean
           $strSelectDistrictAttorneys = '';
         }
 
-        $attributes = array(
+        $attributes = [
             // Nom de l'enquête
             $this->obj->getField(self::FIELD_NOM_ENQUETE),
             // Select pour premier enquêteur
@@ -248,19 +275,45 @@ class CopsEnqueteBean extends CopsBean
             '',
             // Notes diverses
             $this->obj->getField(self::FIELD_NOTES_DIVERSES),
-
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-        );
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ];
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
     
     public function getCopsAutopsies()
     {
-        $attributes[self::SQL_WHERE_FILTERS] = array(
-            self::FIELD_IDX_ENQUETE => $this->obj->getField(self::FIELD_IDX_ENQUETE),
-        );
+        $attributes = [];
+        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_IDX_ENQUETE => $this->obj->getField(self::FIELD_IDX_ENQUETE)];
         return $this->objCopsAutopsieServices->getAutopsies($attributes);
     }
 

@@ -29,12 +29,7 @@ class WpPostSkillBean extends WpPostBean
         ///////////////////////////////////////////////////////////////
         // On recherche l'entrée correspondante en base
         $objCopsSkillServices = new CopsSkillServices();
-        $attributes = array(
-            self::SQL_WHERE_FILTERS => array(
-                self::FIELD_SKILL_ID => '%',
-                self::FIELD_SKILL_NAME => $postTitle,
-            ),
-        );
+        $attributes = [self::SQL_WHERE_FILTERS => [self::FIELD_SKILL_ID => '%', self::FIELD_SKILL_NAME => $postTitle]];
         $objsCopsSkill = $objCopsSkillServices->getSkills($attributes);
         ///////////////////////////////////////////////////////////////
 
@@ -81,7 +76,7 @@ class WpPostSkillBean extends WpPostBean
             $strSpecialisation = 'Aucune';
         }
 
-        $attributes = array(
+        $attributes = [
             // Le nom de la compétence
             $postTitle,
             // Caractéristique associée
@@ -94,7 +89,7 @@ class WpPostSkillBean extends WpPostBean
             $postContent,
             //str_replace("\r\n", '<br>', $this->CopsSkill->getField(self::FIELD_SKILL_DESC)),
             '',
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 

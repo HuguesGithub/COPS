@@ -27,7 +27,7 @@ class CopsMailFolder extends LocalDomain
    * @since 1.22.05.08
    * @version 1.22.05.08
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsMailFolder';
@@ -49,13 +49,13 @@ class CopsMailFolder extends LocalDomain
    * @version 1.22.05.02
    */
   public function getNombreMailsNonLus()
-  { return $this->CopsMailServices->getNombreMailsNonLus(array(self::FIELD_SLUG=>$this->slug)); }
+  { return $this->CopsMailServices->getNombreMailsNonLus([self::FIELD_SLUG=>$this->slug]); }
 
   /**
    * @since 1.22.05.02
    * @version 1.22.05.04
    */
   public function getFolderMails()
-  { return $this->CopsMailServices->getMailJoints(array(self::FIELD_SLUG=>$this->slug)); }
+  { return $this->CopsMailServices->getMailJoints([self::FIELD_SLUG=>$this->slug]); }
 
 }

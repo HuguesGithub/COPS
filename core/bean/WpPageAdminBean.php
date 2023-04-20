@@ -20,7 +20,7 @@ class WpPageAdminBean extends WpPageBean
     public $slugOnglet;
     public $slugSubOnglet;
     
-    public $arrSubOnglets = array();
+    public $arrSubOnglets = [];
 
     /**
      * Class Constructor
@@ -29,6 +29,7 @@ class WpPageAdminBean extends WpPageBean
      */
     public function __construct()
     {
+        $attributes = [];
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
@@ -42,11 +43,7 @@ class WpPageAdminBean extends WpPageBean
     
         if (isset($_POST[self::FIELD_MATRICULE])) {
             // On cherche a priori à se logguer
-            $attributes[self::SQL_WHERE_FILTERS] = array(
-                self::FIELD_ID => self::SQL_JOKER_SEARCH,
-                self::FIELD_MATRICULE => $_POST[self::FIELD_MATRICULE],
-                self::FIELD_PASSWORD  => ($_POST[self::FIELD_PASSWORD]=='' ? '' : md5($_POST[self::FIELD_PASSWORD])),
-            );
+            $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => $_POST[self::FIELD_MATRICULE], self::FIELD_PASSWORD  => ($_POST[self::FIELD_PASSWORD]=='' ? '' : md5((string) $_POST[self::FIELD_PASSWORD]))];
 //            $objsCopsPlayer = $this->CopsPlayerServices->getCopsPlayers($attributes);
 //            if (!empty($objsCopsPlayer)) {
 //                $this->CopsPlayer = array_shift($objsCopsPlayer);
@@ -61,34 +58,9 @@ class WpPageAdminBean extends WpPageBean
 //            $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
         }
         
-        $this->arrSidebarContent = array(
-            self::ONGLET_DESK => array(
-                self::FIELD_ICON  => 'desktop',
-                self::FIELD_LABEL => 'Bureau',
-            ),
-            self::ONGLET_LIBRARY => array(
-                self::FIELD_ICON  => 'book',
-                self::FIELD_LABEL => 'Bibliothèque',
-            ),
-        );
+        $this->arrSidebarContent = [self::ONGLET_DESK => [self::FIELD_ICON  => 'desktop', self::FIELD_LABEL => 'Bureau'], self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => 'Bibliothèque']];
     if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
-            $this->arrSidebarContentNonGuest = array(
-                self::ONGLET_INBOX => array(
-                    self::FIELD_ICON  => 'envelope',
-                    self::FIELD_LABEL => 'Messagerie',
-                ),
-                self::ONGLET_CALENDAR => array(
-                    self::FIELD_ICON   => 'calendar-days',
-                    self::FIELD_LABEL  => 'Calendrier',
-                    /*
-                    self::CST_CHILDREN => array(
-                        self::CST_CAL_MONTH  => 'Calendrier',
-                        self::CST_CAL_EVENT  => 'Événements',
-                        self::CST_CAL_PARAM  => 'Paramètres',
-                    ),
-                    */
-                ),
-            );
+            $this->arrSidebarContentNonGuest = [self::ONGLET_INBOX => [self::FIELD_ICON  => 'envelope', self::FIELD_LABEL => 'Messagerie'], self::ONGLET_CALENDAR => [self::FIELD_ICON   => 'calendar-days', self::FIELD_LABEL  => 'Calendrier']];
             $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
             /*
             $this->arrSidebarContent = array(
@@ -125,9 +97,9 @@ class WpPageAdminBean extends WpPageBean
         $aContent = $this->getIcon('desktop');
         $buttonContent = $this->getLink($aContent, '/'.self::PAGE_ADMIN, self::CST_TEXT_WHITE);
         if ($this->slugOnglet=='desk' || $this->slugOnglet=='') {
-            $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDisabled);
+            $buttonAttributes = [self::ATTR_CLASS=>$this->btnDisabled];
         } else {
-            $buttonAttributes = array(self::ATTR_CLASS=>$this->btnDark);
+            $buttonAttributes = [self::ATTR_CLASS=>$this->btnDark];
         }
         $this->breadCrumbsContent = $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
@@ -149,20 +121,20 @@ class WpPageAdminBean extends WpPageBean
     public function analyzeUri()
     {
         $uri = $_SERVER['REQUEST_URI'];
-        $pos = strpos($uri, '?');
+        $pos = strpos((string) $uri, '?');
         if ($pos!==false) {
-            $arrParams = explode('&', substr($uri, $pos+1, strlen($uri)));
+            $arrParams = explode('&', substr((string) $uri, $pos+1, strlen((string) $uri)));
             if (!empty($arrParams)) {
                 foreach ($arrParams as $param) {
-                    list($key, $value) = explode('=', $param);
+                    [$key, $value] = explode('=', $param);
                     $this->urlParams[$key] = $value;
                 }
             }
-            $uri = substr($uri, 0, $pos-1);
+            $uri = substr((string) $uri, 0, $pos-1);
         }
-        $pos = strpos($uri, '#');
+        $pos = strpos((string) $uri, '#');
         if ($pos!==false) {
-            $this->anchor = substr($uri, $pos+1, strlen($uri));
+            $this->anchor = substr((string) $uri, $pos+1, strlen((string) $uri));
         }
         if (isset($_POST)) {
             foreach ($_POST as $key => $value) {
@@ -192,43 +164,23 @@ class WpPageAdminBean extends WpPageBean
             } else {
                 $strNotification = '';
             }
-            $attributes = array(
-                ($strNotification=='' ? 'd-none' : ''),
-                $strNotification,
-            );
+            $attributes = [($strNotification=='' ? 'd-none' : ''), $strNotification];
             return $this->getRender($urlTemplate, $attributes);
         }
         try {
             if (!isset($this->urlParams[self::CST_ONGLET])) {
                 $this->urlParams[self::CST_ONGLET] = '';
              }
-                switch ($this->urlParams[self::CST_ONGLET]) {
-                case self::ONGLET_CALENDAR :
-                    $objBean = WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet);
-                    break;
-                case self::ONGLET_INBOX :
-                    $objBean = WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet);
-                    break;
-                case self::ONGLET_LIBRARY :
-                    $objBean = WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet);
-                    break;
-                case 'player' :
-                    $objBean = new AdminCopsPlayerPageBean();
-                    break;
-                case self::ONGLET_PROFILE :
-                    $objBean = new AdminCopsProfilePageBean();
-                    break;
-                case self::ONGLET_ENQUETE :
-                    $objBean = new WpPageAdminEnqueteBean();
-                    break;
-                case self::ONGLET_AUTOPSIE :
-                    $objBean = new WpPageAdminAutopsieBean();
-                    break;
-                case self::ONGLET_DESK   :
-                default       :
-                    $objBean = $this;
-                break;
-            }
+                $objBean = match ($this->urlParams[self::CST_ONGLET]) {
+                    self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
+                    self::ONGLET_INBOX => WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet),
+                    self::ONGLET_LIBRARY => WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet),
+                    'player' => new AdminCopsPlayerPageBean(),
+                    self::ONGLET_PROFILE => new AdminCopsProfilePageBean(),
+                    self::ONGLET_ENQUETE => new WpPageAdminEnqueteBean(),
+                    self::ONGLET_AUTOPSIE => new WpPageAdminAutopsieBean(),
+                    default => $this,
+                };
             $returned = $objBean->getBoard();
         } catch (\Exception $Exception) {
             throw $Exception;
@@ -246,23 +198,35 @@ class WpPageAdminBean extends WpPageBean
     {
         // Soit on est loggué et on affiche le contenu du bureau du cops
         $urlTemplate = self::WEB_PP_BOARD;
-        $attributes = array(
+        $attributes = [
             // La sidebar
             $this->getSideBar(),
             // Le contenu de la page
             $this->getOngletContent(),
             // L'id
-            '',//$this->CopsPlayer->getMaskMatricule(),
+            '',
+            //$this->CopsPlayer->getMaskMatricule(),
             // Le nom
-            '',//$this->CopsPlayer->getFullName(),
+            '',
+            //$this->CopsPlayer->getFullName(),
             // La barre de navigation
             $this->getNavigationBar(),
             // Header
             $this->getContentHeader(),
             // Version
             self::VERSION,
-            '', '', '', '', '', '', '', '', '', '', '',
-        );
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
     
@@ -289,10 +253,7 @@ class WpPageAdminBean extends WpPageBean
             // Construction du lien
             $aContent  = $this->getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
-            $aAttributes = array(
-                self::ATTR_HREF  => $this->urlOnglet.$strOnglet,
-                self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : ''),
-            );
+            $aAttributes = [self::ATTR_HREF  => $this->urlOnglet.$strOnglet, self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '')];
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
          
             // S'il a des enfants, on enrichit
@@ -306,29 +267,26 @@ class WpPageAdminBean extends WpPageBean
                         $extraClass = '';
                     }
                     $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
-                    $aAttributes = array(
-                        self::ATTR_HREF  => $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet,
-                        self::ATTR_CLASS => 'nav-link'.$extraClass,
-                    );
+                    $aAttributes = [self::ATTR_HREF  => $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet, self::ATTR_CLASS => 'nav-link'.$extraClass];
                     $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-                    $ulContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>'nav-item'));
+                    $ulContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
                 }
-                $liAttributes = array(self::ATTR_CLASS=>'nav nav-treeview');
+                $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
                 $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
             }
          
             // Construction de l'élément de la liste
-            $liAttributes = array(self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : ''));
+            $liAttributes = [self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : '')];
             $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
          }
          
-         $attributes = array(
-            $sidebarContent,
-            // La date
-            self::getCopsDate('D m-d-Y'),
-            // L'heure
-            self::getCopsDate('H:i:s'),
-         );
+         $attributes = [
+             $sidebarContent,
+             // La date
+             self::getCopsDate('D m-d-Y'),
+             // L'heure
+             self::getCopsDate('H:i:s'),
+         ];
          return $this->getRender($urlTemplate, $attributes);
      }
 
@@ -351,9 +309,10 @@ class WpPageAdminBean extends WpPageBean
 //        $nbMailsNonLus = $this->CopsMailServices->getNombreMailsNonLus();
 
         $urlTemplate = self::WEB_PPFS_CONTENT_NAVBAR;
-        $attributes = array(
+        $attributes = [
             // Nom Prénom de la personne logguée
-            '',//$this->CopsPlayer->getFullName(),
+            '',
+            //$this->CopsPlayer->getFullName(),
             // Si présence de notifications, le badge
             // <span class="badge badge-warning navbar-badge">0</span>
             '',
@@ -364,7 +323,7 @@ class WpPageAdminBean extends WpPageBean
             ($nbMailsNonLus!=0 ? '<span class="badge badge-success navbar-badge">'.$nbMailsNonLus.'</span>' : ''),
             // Si Guest, on cache des trucs.
             ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -375,12 +334,12 @@ class WpPageAdminBean extends WpPageBean
     public function getContentHeader()
     {
         $urlTemplate = self::WEB_PPFS_CONTENT_HEADER;
-        $attributes = array(
+        $attributes = [
             // Le Titre
             $this->strTitle,
             // Le BreadCrumb
-            $this->getDiv($this->breadCrumbsContent, array(self::ATTR_CLASS=>'btn-group float-sm-right')),
-        );
+            $this->getDiv($this->breadCrumbsContent, [self::ATTR_CLASS=>'btn-group float-sm-right']),
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
   
@@ -430,7 +389,7 @@ class WpPageAdminBean extends WpPageBean
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getOngletUrl($urlElements=array())
+    public function getOngletUrl($urlElements=[])
     {
         $url = $this->getPageUrl().'?'.self::CST_ONGLET.'='.$this->slugOnglet;
         if (isset($urlElements[self::CST_SUBONGLET])) {
@@ -453,7 +412,7 @@ class WpPageAdminBean extends WpPageBean
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getUrl($urlElements=array())
+    public function getUrl($urlElements=[])
     {
         $url = $this->getPageUrl();
         /////////////////////////////////////////////
@@ -504,7 +463,7 @@ class WpPageAdminBean extends WpPageBean
         $nbItemsPerPage = 10;
         $nbPages = ceil($nbItems/$nbItemsPerPage);
         $strPagination = '';
-        $arrUrl = array();
+        $arrUrl = [];
         if ($this->catSlug!='') {
             $arrUrl[self::CST_CAT_SLUG] = $this->catSlug;
         }
@@ -522,13 +481,13 @@ class WpPageAdminBean extends WpPageBean
                 $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
                 $btnContent = $label;
             }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $btnAttributes = [self::ATTR_CLASS=>$btnClass];
             $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
             
             // La chaine des éléments affichés
             $firstItem = ($this->curPage-1)*$nbItemsPerPage;
             $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
-            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, array($firstItem+1, $lastItem, $nbItems));
+            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, [$firstItem+1, $lastItem, $nbItems]);
             
             // Le bouton page suivante
             $label = $this->getIcon(self::I_CARET_RIGHT);
@@ -541,7 +500,7 @@ class WpPageAdminBean extends WpPageBean
                 $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
                 $btnContent = $label;
             }
-            $btnAttributes = array(self::ATTR_CLASS=>$btnClass);
+            $btnAttributes = [self::ATTR_CLASS=>$btnClass];
             $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
             $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
         }

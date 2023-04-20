@@ -34,21 +34,8 @@ class CopsSkillDaoImpl extends LocalDaoImpl
 
         ////////////////////////////////////
         // Définition des champs spécifiques
-        $this->dbFields      = array(
-            self::FIELD_ID,
-            self::FIELD_SKILL_NAME,
-            self::FIELD_SKILL_DESC,
-            self::FIELD_SKILL_USES,
-            self::FIELD_SPEC_LEVEL,
-            self::FIELD_PAN_USABLE,
-            self::FIELD_REFERENCE,
-            self::FIELD_DEFAULT_ABILITY,
-        );
-        $this->dbFields_css  = array(
-            self::FIELD_ID,
-            self::FIELD_SPEC_NAME,
-            self::FIELD_SKILL_ID,
-        );
+        $this->dbFields      = [self::FIELD_ID, self::FIELD_SKILL_NAME, self::FIELD_SKILL_DESC, self::FIELD_SKILL_USES, self::FIELD_SPEC_LEVEL, self::FIELD_PAN_USABLE, self::FIELD_REFERENCE, self::FIELD_DEFAULT_ABILITY];
+        $this->dbFields_css  = [self::FIELD_ID, self::FIELD_SPEC_NAME, self::FIELD_SKILL_ID];
         ////////////////////////////////////
 
         parent::__construct();
@@ -101,7 +88,7 @@ class CopsSkillDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Construction du résultat
-    $objsItem = array();
+    $objsItem = [];
     if (!empty($rows)) {
       foreach ($rows as $row) {
         $objsItem[] = CopsSkillSpecClass::convertElement($row);

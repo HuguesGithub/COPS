@@ -31,12 +31,7 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
     
         ////////////////////////////////////
         // Définition des champs spécifiques
-        $this->dbFields      = array(
-            self::FIELD_ID,
-            self::FIELD_IDX_ENQUETE,
-            self::FIELD_DATA,
-            self::FIELD_DSTART,
-        );
+        $this->dbFields      = [self::FIELD_ID, self::FIELD_IDX_ENQUETE, self::FIELD_DATA, self::FIELD_DSTART];
         ////////////////////////////////////
 
         parent::__construct();

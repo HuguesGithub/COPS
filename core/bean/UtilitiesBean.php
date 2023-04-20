@@ -16,13 +16,11 @@ if (!defined('ABSPATH')) {
  */
 class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
-    public $arrFullMonths = array(1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août',
-    'Septembre', 'Octobre', 'Novembre', 'Décembre');
-    public $arrShortMonths = array(1=>'Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep',
-    'Oct', 'Nov', 'Déc');
-    public $arrFullDays = array(0=>'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi');
-    public $arrShortDays = array(0=>'Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa');
-    public $arrShortEnglishDays = array(0=>'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat');
+    public $arrFullMonths = [1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    public $arrShortMonths = [1=>'Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+    public $arrFullDays = [0=>'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+    public $arrShortDays = [0=>'Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
+    public $arrShortEnglishDays = [0=>'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
     /**
      * @return bool
@@ -62,22 +60,20 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     public static function getCopsDate($format)
     {
         $strCopsDate = get_option('cops_date');
-        $h = substr($strCopsDate, 0, 2);
-        $i = substr($strCopsDate, 3, 2);
-        $s = substr($strCopsDate, 6, 2);
-        $his = substr($strCopsDate, 0, 8);
-        $d = substr($strCopsDate, 9, 2);
-        $m = substr($strCopsDate, 12, 2);
-        $y = substr($strCopsDate, 15);
-        $dmy = substr($strCopsDate, 9);
+        $h = substr((string) $strCopsDate, 0, 2);
+        $i = substr((string) $strCopsDate, 3, 2);
+        $s = substr((string) $strCopsDate, 6, 2);
+        $his = substr((string) $strCopsDate, 0, 8);
+        $d = substr((string) $strCopsDate, 9, 2);
+        $m = substr((string) $strCopsDate, 12, 2);
+        $y = substr((string) $strCopsDate, 15);
+        $dmy = substr((string) $strCopsDate, 9);
         $tsCops = mktime($h, $i, $s, $m, $d, $y);
         $objUtilitiesBean = new UtilitiesBean();
 
         switch ($format) {
             case 'strJour' :
-                $attributes = array(
-                    $objUtilitiesBean->arrFullDays[date('N', $tsCops)], $d,
-                    $objUtilitiesBean->arrFullMonths[$m*1], $y);
+                $attributes = [$objUtilitiesBean->arrFullDays[date('N', $tsCops)], $d, $objUtilitiesBean->arrFullMonths[$m*1], $y];
                 $formatted = implode(' ', $attributes);
                 break;
             case 'strSbDown' :
@@ -131,14 +127,14 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @param array $attributes
      * @return string
      */
-    public function getBalise($balise, $label='', $attributes=array())
+    public function getBalise($balise, $label='', $attributes=[])
     { return '<'.$balise.$this->getExtraAttributesString($attributes).'>'.$label.'</'.$balise.'>'; }
     /**
      * @param string $urlTemplate
      * @param array $args
      * @return string
      */
-    public function getRender($urlTemplate, $args=array())
+    public function getRender($urlTemplate, $args=[])
     {
         if (file_exists(PLUGIN_PATH.$urlTemplate)) {
             return vsprintf(file_get_contents(PLUGIN_PATH.$urlTemplate), $args);
@@ -156,12 +152,9 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getButton($label, $attributes=array())
+    public function getButton($label, $attributes=[])
     {
-        $buttonAttributes = array(
-            self::ATTR_TYPE => self::TAG_BUTTON,
-            self::ATTR_CLASS => 'btn btn-default btn-sm',
-        );
+        $buttonAttributes = [self::ATTR_TYPE => self::TAG_BUTTON, self::ATTR_CLASS => 'btn btn-default btn-sm'];
         if (!empty($attributes)) {
             foreach ($attributes as $key => $value) {
                 if (!isset($buttonAttributes[$key])) {
@@ -184,7 +177,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      */
     public function getOption($label, $value, $blnChecked=false)
     {
-        $attributes = array(self::ATTR_VALUE => $value);
+        $attributes = [self::ATTR_VALUE => $value];
         if ($blnChecked) {
             $attributes[self::CST_CHECKED] = self::CST_CHECKED;
         }
@@ -198,11 +191,9 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getTh($label, $attributes=array())
+    public function getTh($label, $attributes=[])
     {
-        $buttonAttributes = array(
-            'scope' => 'col',
-        );
+        $buttonAttributes = ['scope' => 'col'];
         if (!empty($attributes)) {
             foreach ($attributes as $key => $value) {
                 $buttonAttributes[$key]  = $value;
@@ -219,12 +210,9 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getLink($label, $href, $classe, $extraAttributes=array())
+    public function getLink($label, $href, $classe, $extraAttributes=[])
     {
-        $attributes = array(
-            self::ATTR_HREF => $href,
-            self::ATTR_CLASS => $classe,
-        );
+        $attributes = [self::ATTR_HREF => $href, self::ATTR_CLASS => $classe];
         if (!empty($extraAttributes)) {
             foreach ($extraAttributes as $key => $value) {
                 $attributes[$key]  = $value;
@@ -240,9 +228,9 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @since 1.22.10.28
      * @version 1.22.10.28
      */
-    public function getDiv($label, $attributes=array())
+    public function getDiv($label, $attributes=[])
     {
-        $divAttributes = array();
+        $divAttributes = [];
         if (!empty($attributes)) {
             foreach ($attributes as $key => $value) {
                 $divAttributes[$key]  = $value;
@@ -294,7 +282,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
                 $tag = '';
             break;
         }
-        return $this->getBalise(self::TAG_I, $label, array(self::ATTR_CLASS=>$prefix.$tag));
+        return $this->getBalise(self::TAG_I, $label, [self::ATTR_CLASS=>$prefix.$tag]);
     }
     /**
      * @param string $id
@@ -327,10 +315,10 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     {
         $urlTemplate = self::WEB_PP_MAIN_FOOTER;
 
-        $args = array(
+        $args = [
             // ajaxUrl - 1
             admin_url('admin-ajax.php'),
-        );
+        ];
         return $this->getRender($urlTemplate, $args);
     }
 
@@ -344,7 +332,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     public static function fromServer($field)
     {
         // Sanitize
-        $strSanitized = htmlentities($_SERVER[$field], ENT_QUOTES, 'UTF-8');
+        $strSanitized = htmlentities((string) $_SERVER[$field], ENT_QUOTES, 'UTF-8');
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 

@@ -36,7 +36,7 @@ class CopsMailServices extends LocalServices
    */
   public function getMail($mailId=-1)
   {
-    $attributes = array($mailId);
+    $attributes = [$mailId];
     $row = $this->Dao->getMail($attributes);
     return new CopsMail($row[0]);
   }
@@ -52,14 +52,11 @@ class CopsMailServices extends LocalServices
      * @since 1.22.05.04
      * @version 1.22.10.17
      */
-    public function getMailFolders($attributes=array())
+    public function getMailFolders($attributes=[])
     {
-        $prepAttributes = array(
-            (!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]),
-            (!isset($attributes[self::FIELD_SLUG]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_SLUG]),
-        );
+        $prepAttributes = [(!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]), (!isset($attributes[self::FIELD_SLUG]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_SLUG])];
         $rows = $this->Dao->getMailFolders($prepAttributes);
-        $objMailFolders = array();
+        $objMailFolders = [];
         while (!empty($rows)) {
             $objMailFolders[] = new CopsMailFolder(array_shift($rows));
         }
@@ -74,7 +71,7 @@ class CopsMailServices extends LocalServices
      */
     public function getMailFolder($slug=self::CST_MAIL_INBOX)
     {
-        $objMailFolders = $this->getMailFolders(array(self::FIELD_SLUG=>$slug));
+        $objMailFolders = $this->getMailFolders([self::FIELD_SLUG=>$slug]);
         return array_shift($objMailFolders);
     }
     ////////////////////////////////////
@@ -89,15 +86,11 @@ class CopsMailServices extends LocalServices
      * @since 1.22.05.04
      * @version 1.22.10.17
      */
-    public function getMailUsers($attributes=array())
+    public function getMailUsers($attributes=[])
     {
-        $prepAttributes = array(
-            (!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]),
-            (!isset($attributes[self::FIELD_MAIL]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_MAIL]),
-            (!isset($attributes['copsId']) ? self::SQL_JOKER_SEARCH : $attributes['copsId']),
-        );
+        $prepAttributes = [(!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]), (!isset($attributes[self::FIELD_MAIL]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_MAIL]), (!isset($attributes['copsId']) ? self::SQL_JOKER_SEARCH : $attributes['copsId'])];
         $rows = $this->Dao->getMailUsers($prepAttributes);
-        $objMailUsers = array();
+        $objMailUsers = [];
         while (!empty($rows)) {
             $objMailUsers[] = new CopsMailUser(array_shift($rows));
         }
@@ -115,7 +108,7 @@ class CopsMailServices extends LocalServices
         if ($id==-1) {
             return new CopsMailUser();
         }
-        $objMailUsers = $this->getMailUsers(array($id));
+        $objMailUsers = $this->getMailUsers([$id]);
         return array_shift($objMailUsers);
     }
     ////////////////////////////////////
@@ -130,17 +123,11 @@ class CopsMailServices extends LocalServices
      * @since 1.22.05.04
      * @version 1.22.10.17
      */
-    public function getMailJoints($attributes=array(), $blnBothFolders=false)
+    public function getMailJoints($attributes=[], $blnBothFolders=false)
     {
-        $prepAttributes = array(
-            (!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]),
-            (!isset($attributes[self::FIELD_TO_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_TO_ID]),
-            (!isset($attributes[self::FIELD_FROM_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FROM_ID]),
-            (!isset($attributes[self::FIELD_FOLDER_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FOLDER_ID]),
-            (!isset($attributes[self::FIELD_LU]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_LU]),
-        );
+        $prepAttributes = [(!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]), (!isset($attributes[self::FIELD_TO_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_TO_ID]), (!isset($attributes[self::FIELD_FROM_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FROM_ID]), (!isset($attributes[self::FIELD_FOLDER_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FOLDER_ID]), (!isset($attributes[self::FIELD_LU]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_LU])];
         $rows = $this->Dao->getMailJoints($prepAttributes, $blnBothFolders);
-        $objMailJoints = array();
+        $objMailJoints = [];
         while (!empty($rows)) {
             $objMailJoints[] = new CopsMailJoint(array_shift($rows));
         }
@@ -158,7 +145,7 @@ class CopsMailServices extends LocalServices
         if ($id==-1) {
             return new CopsMailJoint();
         }
-        $objMailJoints = $this->getMailJoints(array(self::FIELD_ID=>$id));
+        $objMailJoints = $this->getMailJoints([self::FIELD_ID=>$id]);
         return array_shift($objMailJoints);
     }
   
@@ -166,20 +153,17 @@ class CopsMailServices extends LocalServices
      * @since 1.22.04.29
      * @version 1.22.10.17
      */
-    public function getNombreMailsNonLus($attributes=array())
+    public function getNombreMailsNonLus($attributes=[])
     {
         // On vérifie la présence du slug pour le Folder, puis on récupère le Folder associé
-        $slug = (isset($attributes[self::FIELD_SLUG]) ? $attributes[self::FIELD_SLUG] : self::CST_MAIL_INBOX);
+        $slug = ($attributes[self::FIELD_SLUG] ?? self::CST_MAIL_INBOX);
         $objMailFolder = $this->getMailFolder($slug);
         // On récupère le User courant
         $objCopsPlayer = CopsPlayer::getCurrentCopsPlayer();
 
         // On défini les critères de recherche selon le Folder interrogé.
         $blnBothFolders = false;
-        $attributes = array(
-            self::FIELD_FOLDER_ID => $objMailFolder->getField(self::FIELD_ID),
-            self::FIELD_LU        => 0,
-        );
+        $attributes = [self::FIELD_FOLDER_ID => $objMailFolder->getField(self::FIELD_ID), self::FIELD_LU        => 0];
         switch ($slug) {
             case self::CST_FOLDER_DRAFT  :
             case self::CST_FOLDER_SENT   :
@@ -200,7 +184,7 @@ class CopsMailServices extends LocalServices
         }
 
         $objMailJoints = $this->getMailJoints($attributes, $blnBothFolders);
-        return count($objMailJoints);
+        return is_countable($objMailJoints) ? count($objMailJoints) : 0;
     }
   
     /**
@@ -210,9 +194,7 @@ class CopsMailServices extends LocalServices
     public function getPrevNextMailJoint($objCopsMailJoint, $prev=true)
     {
         $blnBothFolders=false;
-        $attributes = array(
-            $objCopsMailJoint->getField(self::FIELD_ID),
-        );
+        $attributes = [$objCopsMailJoint->getField(self::FIELD_ID)];
 
         switch ($objCopsMailJoint->getMailFolder()->getField(self::FIELD_SLUG)) {
             case self::CST_FOLDER_DRAFT  :

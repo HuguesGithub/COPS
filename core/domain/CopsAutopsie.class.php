@@ -35,7 +35,7 @@ class CopsAutopsie extends LocalDomain
    * @since 1.22.10.09
    * @version 1.22.10.14
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsAutopsie';

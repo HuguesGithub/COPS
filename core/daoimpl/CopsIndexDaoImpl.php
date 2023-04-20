@@ -37,31 +37,10 @@ class CopsIndexDaoImpl extends LocalDaoImpl
 
         ////////////////////////////////////
         // Définition des champs spécifiques
-        $this->dbFields      = array(
-            self::FIELD_ID,
-            self::FIELD_REF_IDX_ID,
-            self::FIELD_TOME_IDX_ID,
-            self::FIELD_PAGE,
-        );
-        $this->dbFields_cir  = array(
-            self::FIELD_ID_IDX_REF,
-            self::FIELD_NOM_IDX,
-            self::FIELD_PRENOM_IDX,
-            self::FIELD_AKA_IDX,
-            self::FIELD_NATURE_IDX_ID,
-            self::FIELD_DESCRIPTION_PJ,
-            self::FIELD_DESCRIPTION_MJ,
-            self::FIELD_CODE,
-        );
-        $this->dbFields_cin  = array(
-            self::FIELD_ID_IDX_NATURE,
-            self::FIELD_NOM_IDX_NATURE,
-        );
-        $this->dbFields_cit  = array(
-            self::FIELD_ID_IDX_TOME,
-            self::FIELD_NOM_IDX_TOME,
-            self::FIELD_ABR_IDX_TOME,
-        );
+        $this->dbFields      = [self::FIELD_ID, self::FIELD_REF_IDX_ID, self::FIELD_TOME_IDX_ID, self::FIELD_PAGE];
+        $this->dbFields_cir  = [self::FIELD_ID_IDX_REF, self::FIELD_NOM_IDX, self::FIELD_PRENOM_IDX, self::FIELD_AKA_IDX, self::FIELD_NATURE_IDX_ID, self::FIELD_DESCRIPTION_PJ, self::FIELD_DESCRIPTION_MJ, self::FIELD_CODE];
+        $this->dbFields_cin  = [self::FIELD_ID_IDX_NATURE, self::FIELD_NOM_IDX_NATURE];
+        $this->dbFields_cit  = [self::FIELD_ID_IDX_TOME, self::FIELD_NOM_IDX_TOME, self::FIELD_ABR_IDX_TOME];
         ////////////////////////////////////
         
         parent::__construct();

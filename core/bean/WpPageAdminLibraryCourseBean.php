@@ -16,12 +16,10 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
     {
         parent::__construct();
         
-        $urlElements = array(
-            self::CST_SUBONGLET => self::CST_LIB_STAGE,
-        );
+        $urlElements = [self::CST_SUBONGLET => self::CST_LIB_STAGE];
         
         $buttonContent = $this->getLink('Stages', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
-        $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+        $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }
     
@@ -39,10 +37,10 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
             $strContent .= $objStage->getBean()->getStageCategoryDisplay();
         }
         
-        $attributes = array(
+        $attributes = [
             // La liste des stages
             $strContent,
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 }

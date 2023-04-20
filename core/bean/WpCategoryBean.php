@@ -33,15 +33,10 @@ class WpCategoryBean extends UtilitiesBean
         $aContent = $strIcon.self::CST_NBSP.$label;
         
         $url    .= '&amp;'.self::CST_CAT_SLUG.'='.$this->wpCategory->getField('slug');
-        $aAttributes = array(
-            self::ATTR_CLASS => 'nav-link text-white',
-            self::ATTR_HREF  => $url,
-        );
+        $aAttributes = [self::ATTR_CLASS => 'nav-link text-white', self::ATTR_HREF  => $url];
         $lien    = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
         
-        $liAttributes = array(
-            self::ATTR_CLASS => 'nav-item'.($blnSelected ? ' '.self::CST_ACTIVE : ''),
-        );
+        $liAttributes = [self::ATTR_CLASS => 'nav-item'.($blnSelected ? ' '.self::CST_ACTIVE : '')];
         return $this->getBalise(self::TAG_LI, $lien, $liAttributes);
     }
 

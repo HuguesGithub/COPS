@@ -31,7 +31,7 @@ class CopsMailJoint extends LocalDomain
    * @version 1.22.05.01
    * @since 1.22.05.01
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsMailJoint';
@@ -46,7 +46,7 @@ class CopsMailJoint extends LocalDomain
   //////////////////////////////////////////////////
   public function getMailFolder()
   {
-    $MailFolders = $this->CopsMailServices->getMailFolders(array(self::FIELD_ID=>$this->folderId));
+    $MailFolders = $this->CopsMailServices->getMailFolders([self::FIELD_ID=>$this->folderId]);
     return array_shift($MailFolders);
   }
   public function getMail()

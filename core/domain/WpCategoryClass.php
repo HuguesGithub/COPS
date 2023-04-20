@@ -38,6 +38,6 @@ class WpCategoryClass extends WpTagClass
 
     
     public static function compCategories($a, $b)
-    { return strtolower($a->name) <=> strtolower($b->name); }
+    { return strtolower((string) $a->name) <=> strtolower((string) $b->name); }
     
 }

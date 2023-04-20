@@ -36,23 +36,16 @@ class AdminPageBean extends UtilitiesBean
    */
   public function getContentPage()
   {
+    $returned = null;
     if (self::isAdmin() || current_user_can('editor')) {
       try {
-        switch ($this->urlParams[self::CST_ONGLET]) {
-          case 'meteo' : //self::PAGE_ADMIN_CALENDRIER :
-            $returned = AdminPageMeteoBean::getStaticContentPage($this->urlParams);
-          break;
-          case 'index' : //self::PAGE_ADMIN_CALENDRIER :
-            $returned = AdminPageIndexBean::getStaticContentPage($this->urlParams);
-          break;
-          case 'calendrier' : //self::PAGE_ADMIN_CALENDRIER :
-            $returned = AdminPageCalendrierBean::getStaticContentPage($this->urlParams);
-          break;
-          default       :
-            $returned = $this;
-          break;
-        }
-      } catch (\Exception $Exception) {
+        $returned = match ($this->urlParams[self::CST_ONGLET]) {
+            'meteo' => AdminPageMeteoBean::getStaticContentPage($this->urlParams),
+            'index' => AdminPageIndexBean::getStaticContentPage($this->urlParams),
+            'calendrier' => AdminPageCalendrierBean::getStaticContentPage($this->urlParams),
+            default => $this,
+        };
+      } catch (\Exception) {
         $returned = 'Error APB';
       }
     }

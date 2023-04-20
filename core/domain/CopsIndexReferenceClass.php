@@ -40,7 +40,7 @@ class CopsIndexReferenceClass extends LocalDomainClass
      * @version 1.23.02.15
      * @since 1.23.02.15
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsIndexReferenceClass';
@@ -105,20 +105,12 @@ class CopsIndexReferenceClass extends LocalDomainClass
      */
     public function getStrCode()
     {
-        switch ($this->code) {
-            case 2 :
-                $strCode = 'Rouge';
-                break;
-            case 1 :
-                $strCode = 'Bleu';
-                break;
-            case -1 :
-                $strCode = 'Hors Storyline';
-                break;
-            default :
-                $strCode = 'Standard';
-                break;
-        }
+        $strCode = match ($this->code) {
+            2 => 'Rouge',
+            1 => 'Bleu',
+            -1 => 'Hors Storyline',
+            default => 'Standard',
+        };
         return $strCode;
     }
 

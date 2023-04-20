@@ -18,7 +18,7 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
     if (isset($_POST) && !empty($_POST)) {
       $CopsEvent = new CopsEvent();
 
-      if (trim($_POST['eventLibelle'])!='') {
+      if (trim((string) $_POST['eventLibelle'])!='') {
         $CopsEvent->setField('eventLibelle', $_POST['eventLibelle']);
         $CopsEvent->setField('categorieId', 1);
         $CopsEvent->setDateDebut($_POST['dateDebut']);
@@ -28,11 +28,11 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
           $CopsEvent->setField('allDayEvent', 1);
         } else {
           $CopsEvent->setField('allDayEvent', 0);
-          $valeur  = str_pad($_POST['heureDebut'], 2, '0', STR_PAD_LEFT);
-          $valeur .= ':'.str_pad($_POST['minuteDebut'], 2, '0', STR_PAD_LEFT);
+          $valeur  = str_pad((string) $_POST['heureDebut'], 2, '0', STR_PAD_LEFT);
+          $valeur .= ':'.str_pad((string) $_POST['minuteDebut'], 2, '0', STR_PAD_LEFT);
           $CopsEvent->setField('heureDebut', $valeur);
-          $valeur  = str_pad($_POST['heureFin'], 2, '0', STR_PAD_LEFT);
-          $valeur .= ':'.str_pad($_POST['minuteFin'], 2, '0', STR_PAD_LEFT);
+          $valeur  = str_pad((string) $_POST['heureFin'], 2, '0', STR_PAD_LEFT);
+          $valeur .= ':'.str_pad((string) $_POST['minuteFin'], 2, '0', STR_PAD_LEFT);
           $CopsEvent->setField('heureFin', $valeur);
         }
 
@@ -75,12 +75,12 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-form-event.php';
         ///////////////////////////////////////////////////////
         // Contenu du formulaire
-        $attributes = array(
+        $attributes = [
             // Id du Form
             'creerNewEvent',
             // Affichage du form
             'display: none;',
-        );
+        ];
         $strForm = $this->getRender($urlTemplate, $attributes);
         ///////////////////////////////////////////////////////
         
@@ -95,12 +95,12 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
         }
         ///////////////////////////////////////////////////////
     
-        $attributes = array(
-          // Les lignes à afficher
-          $strContent,
-          // Formulaire
-          $strForm,
-        );
+        $attributes = [
+            // Les lignes à afficher
+            $strContent,
+            // Formulaire
+            $strForm,
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 

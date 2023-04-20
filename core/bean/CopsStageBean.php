@@ -38,7 +38,7 @@ class CopsStageBean extends UtilitiesBean
             $strCapacitesSpeciales .= '<dd>'.$objCapaSpec->getField(self::FIELD_SPEC_DESC).'</dd>';
         }
 
-        $attributes = array(
+        $attributes = [
             // Le nom du stage
             $this->objStage->getField(self::FIELD_STAGE_LIBELLE),
             // Le niveau du stage
@@ -53,7 +53,7 @@ class CopsStageBean extends UtilitiesBean
             $this->objStage->getField(self::FIELD_STAGE_BONUS),
             // La liste des capacités spéciales
             '<dl>'.$strCapacitesSpeciales.'</dl>',
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 }

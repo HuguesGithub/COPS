@@ -44,17 +44,17 @@ class CopsIndexServices extends LocalServices
      * @since 1.22.10.21
      * @version 1.23.02.15
      */
-    public function initFilters(&$attributes=array())
+    public function initFilters(&$attributes=[])
     {
         if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = array(
+            $attributes[self::SQL_WHERE_FILTERS] = [
                 // natureIdxId
                 self::SQL_JOKER_SEARCH,
-            );
+            ];
+        } elseif (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_IDX_ID])) {
+            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_IDX_ID] = self::SQL_JOKER_SEARCH;
         } else {
-            if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_IDX_ID])) {
-                $attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_IDX_ID] = self::SQL_JOKER_SEARCH;
-            }
+            // TODO
         }
         if (!isset($attributes[self::SQL_ORDER_BY])) {
             $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM_IDX;
@@ -75,7 +75,7 @@ class CopsIndexServices extends LocalServices
      */
     public function getIndex($indexId=-1)
     {
-        $attributes = array($indexId);
+        $attributes = [$indexId];
         $row = $this->Dao->getIndex($attributes);
         return (empty($row) ? new CopsIndexClass() : new CopsIndexClass($row[0]));
     }
@@ -96,7 +96,7 @@ class CopsIndexServices extends LocalServices
      */
     public function getIndexes($attributes)
     {
-        $builtAttributes = array();
+        $builtAttributes = [];
         if (!isset($builtAttributes[self::SQL_WHERE_FILTERS])) {
             $builtAttributes[self::SQL_WHERE_FILTERS] = $attributes;
         }
@@ -115,7 +115,7 @@ class CopsIndexServices extends LocalServices
      */
     public function getIndexReference($idxRefId)
     {
-        $attributes = array($idxRefId);
+        $attributes = [$idxRefId];
         $row = $this->Dao->getIndexReference($attributes);
         return (empty($row) ? new CopsIndexReferenceClass() : new CopsIndexReferenceClass($row[0]));
     }
@@ -161,7 +161,7 @@ class CopsIndexServices extends LocalServices
      */
     public function getCopsIndexNature($natureId)
     {
-        $attributes = array($natureId);
+        $attributes = [$natureId];
         $row = $this->Dao->getIndexNature($attributes);
         return (empty($row) ? new CopsIndexNatureClass() : new CopsIndexNatureClass($row[0]));
     }
@@ -175,9 +175,9 @@ class CopsIndexServices extends LocalServices
      */
     public function getCopsIndexNatureByName($name)
     {
-        $attributes = array();
+        $attributes = [];
         if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = array($name);
+            $attributes[self::SQL_WHERE_FILTERS] = [$name];
         }
         $items = $this->Dao->getIndexNatures($attributes);
         return (empty($items) ? new CopsIndexNatureClass : new CopsIndexNatureClass($items[0]));
@@ -188,10 +188,10 @@ class CopsIndexServices extends LocalServices
      * @since 1.23.02.20
      * @version 1.23.02.20
      */
-    public function getIndexNatures(&$attributes=array())
+    public function getIndexNatures(&$attributes=[])
     {
         if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = array('%');
+            $attributes[self::SQL_WHERE_FILTERS] = ['%'];
         }
         return $this->Dao->getIndexNatures($attributes);
     }
@@ -209,7 +209,7 @@ class CopsIndexServices extends LocalServices
      */
     public function getCopsIndexTome($tomeId)
     {
-        $attributes = array($tomeId);
+        $attributes = [$tomeId];
         $row = $this->Dao->getIndexTome($attributes);
         return (empty($row) ? new CopsIndexTomeClass() : new CopsIndexTomeClass($row[0]));
     }
@@ -223,7 +223,7 @@ class CopsIndexServices extends LocalServices
      */
     public function getIndexTomeByAbr($abr)
     {
-        $attributes = array($abr);
+        $attributes = [$abr];
         $items = $this->Dao->getIndexTomes($attributes);
         return (empty($items) ? new CopsIndexTomeClass : new CopsIndexTomeClass($items[0]));
     }

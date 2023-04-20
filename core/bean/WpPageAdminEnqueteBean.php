@@ -17,13 +17,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
         
         /////////////////////////////////////////
         // Construction du menu de l'inbox
-        $this->arrSubOnglets = array(
-            self::CST_FILE_OPENED => array(self::FIELD_ICON => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'),
-            self::CST_FILE_CLOSED => array(self::FIELD_ICON => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'),
-            self::CST_FILE_COLDED => array(self::FIELD_ICON => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'),
-            self::CST_ENQUETE_READ => array(self::FIELD_LABEL => 'Lire'),
-            self::CST_ENQUETE_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
-        );
+        $this->arrSubOnglets = [self::CST_FILE_OPENED => [self::FIELD_ICON => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'], self::CST_FILE_CLOSED => [self::FIELD_ICON => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'], self::CST_FILE_COLDED => [self::FIELD_ICON => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'], self::CST_ENQUETE_READ => [self::FIELD_LABEL => 'Lire'], self::CST_ENQUETE_WRITE => [self::FIELD_LABEL => 'Rédiger']];
         /////////////////////////////////////////
 
         /////////////////////////////////////////
@@ -98,36 +92,27 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
             $this->CopsEnquete->getField(self::FIELD_ID)!='' &&
             $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)!=self::CST_ENQUETE_OPENED) {
                 $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
-                $attributes = array (
-                    self::ATTR_HREF  => $this->getOngletUrl(),
-                    self::ATTR_CLASS => $strBtnClass,
-                );
+                $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             } elseif ($this->slugSubOnglet==self::CST_ENQUETE_WRITE) {
                 $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
-                $attributes = array (
-                    self::ATTR_HREF  => $this->getOngletUrl(),
-                    self::ATTR_CLASS => $strBtnClass,
-                );
+                $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
                 $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
             } else {
                 $strRightPanel   = $this->getFolderEnquetesList();
-                $attributes = array (
-                    self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE),
-                    self::ATTR_CLASS => $strBtnClass,
-                );
+                $attributes = [self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE), self::ATTR_CLASS => $strBtnClass];
                 $strContent = 'Ouvrir une enquête';
             }
         /////////////////////////////////////////
 
-        $attributes = array(
+        $attributes = [
             // Contenu du panneau latéral gauche
             $this->getFolderBlock(),
             // Contenu du panneau principal
             $strRightPanel,
             // Eventuel bouton de retour si on est en train de lire ou rédiger un message
             $this->getBalise(self::TAG_A, $strContent, $attributes),
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -138,27 +123,11 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
     public function getFolderEnquetesList()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes-list.php';
-        /////////////////////////////////////////
-        // Construction du panneau de droite
-        // Liste des dossiers pour une catégorie spécifique (En cours, Classées, Cold Case...)
-        switch ($this->slugSubOnglet) {
-            case self::CST_FILE_CLOSED :
-                $attributes = array(self::SQL_WHERE_FILTERS => array(
-                    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CLOSED,
-                ));
-            break;
-            case self::CST_FILE_COLDED :
-                $attributes = array(self::SQL_WHERE_FILTERS => array(
-                    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED,
-                ));
-             break;
-            case self::CST_FILE_OPENED :
-            default :
-                $attributes = array(self::SQL_WHERE_FILTERS => array(
-                    self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_OPENED,
-                ));
-            break;
-        }
+        $attributes = match ($this->slugSubOnglet) {
+            self::CST_FILE_CLOSED => [self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CLOSED]],
+            self::CST_FILE_COLDED => [self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED]],
+            default => [self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_OPENED]],
+        };
 
         $objsCopsEnquete = $this->CopsEnqueteServices->getEnquetes($attributes);
         if (empty($objsCopsEnquete)) {
@@ -174,7 +143,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
         $strPagination = '';
         /////////////////////////////////////////
 
-        $attributes = array(
+        $attributes = [
             // Titre du dossier affiché
             $this->arrSubOnglets[$this->slugSubOnglet][self::FIELD_LABEL],
             // Nombre de messages dans le dossier affiché : 1-50/200
@@ -183,7 +152,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
             $strContent,
             // Le slug du dossier affiché
             $this->getSubOngletUrl(),
-        );
+        ];
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }

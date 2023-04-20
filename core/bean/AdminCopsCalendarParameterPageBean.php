@@ -15,8 +15,8 @@ class AdminCopsCalendarParameterPageBean extends AdminCopsCalendarPageBean
     parent::__construct();
 
     if (isset($_POST) && !empty($_POST)) {
-      $newIngameDate  = str_pad($_POST['heureIngame'], 2, '0', STR_PAD_LEFT).':';
-      $newIngameDate .= str_pad($_POST['minuteIngame'], 2, '0', STR_PAD_LEFT).':00 ';
+      $newIngameDate  = str_pad((string) $_POST['heureIngame'], 2, '0', STR_PAD_LEFT).':';
+      $newIngameDate .= str_pad((string) $_POST['minuteIngame'], 2, '0', STR_PAD_LEFT).':00 ';
       $newIngameDate .= $_POST['dateIngame'];
       update_option(self::CST_CAL_COPSDATE, $newIngameDate);
     }
@@ -29,15 +29,15 @@ class AdminCopsCalendarParameterPageBean extends AdminCopsCalendarPageBean
   public function getOngletContent()
   {
     $str_copsDate = get_option(self::CST_CAL_COPSDATE);
-    $h = substr($str_copsDate, 0, 2);
-    $i = substr($str_copsDate, 3, 2);
-    $d = substr($str_copsDate, 9, 2);
-    $m = substr($str_copsDate, 12, 2);
-    $y = substr($str_copsDate, 15, 4);
+    $h = substr((string) $str_copsDate, 0, 2);
+    $i = substr((string) $str_copsDate, 3, 2);
+    $d = substr((string) $str_copsDate, 9, 2);
+    $m = substr((string) $str_copsDate, 12, 2);
+    $y = substr((string) $str_copsDate, 15, 4);
 
     // Construction Options Heures
     $strOptionsHeure = '';
-    for ($j=0; $j<24; $j++) {
+    for ($j=0; $j<24; ++$j) {
       $strOptionsHeure .= '<option value="'.$j.'"'.($j==$h ? ' selected="selected"' : '').'>'.$j.'</option>';
     }
 
@@ -49,14 +49,14 @@ class AdminCopsCalendarParameterPageBean extends AdminCopsCalendarPageBean
     }
 
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-calendar-parameters.php';
-    $attributes = array(
-      // Date Ingame
-      $d.'/'.$m.'/'.$y,
-      // Options Heures
-      $strOptionsHeure,
-      // Options Minutes
-      $strOptionsMinute,
-    );
+    $attributes = [
+        // Date Ingame
+        $d.'/'.$m.'/'.$y,
+        // Options Heures
+        $strOptionsHeure,
+        // Options Minutes
+        $strOptionsMinute,
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 

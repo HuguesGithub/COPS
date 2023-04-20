@@ -32,18 +32,13 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Construction du menu
         $extraUrl = self::CST_CAL_CURDAY.'='.$this->curStrDate;
-        $this->arrMenu = array(
-            self::CST_CAL_MONTH => array(self::FIELD_LABEL => 'Mensuel', self::CST_URL => $extraUrl),
-            self::CST_CAL_WEEK => array(self::FIELD_LABEL => 'Hebdomadaire', self::CST_URL => $extraUrl),
-            self::CST_CAL_DAY => array(self::FIELD_LABEL  => 'Quotidien', self::CST_URL => $extraUrl),
-            self::CST_CAL_EVENT => array(self::FIELD_LABEL  => 'Événements'),
-        );
+        $this->arrMenu = [self::CST_CAL_MONTH => [self::FIELD_LABEL => 'Mensuel', self::CST_URL => $extraUrl], self::CST_CAL_WEEK => [self::FIELD_LABEL => 'Hebdomadaire', self::CST_URL => $extraUrl], self::CST_CAL_DAY => [self::FIELD_LABEL  => 'Quotidien', self::CST_URL => $extraUrl], self::CST_CAL_EVENT => [self::FIELD_LABEL  => 'Événements']];
         /////////////////////////////////////////
 
         /////////////////////////////////////////
         // Construction du Breadcrumbs
         $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
-        $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDark));
+        $buttonAttributes = [self::ATTR_CLASS=>($this->btnDark)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
@@ -54,21 +49,12 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
      */
     public static function getStaticWpPageBean($slugSubContent)
     {
-        switch ($slugSubContent) {
-            case self::CST_CAL_EVENT :
-                $objBean = new WpPageAdminCalendarEventBean();
-                break;
-            case self::CST_CAL_DAY :
-                $objBean = new WpPageAdminCalendarDayBean();
-                break;
-            case self::CST_CAL_WEEK :
-                $objBean = new WpPageAdminCalendarWeekBean();
-                break;
-            case self::CST_CAL_MONTH :
-            default :
-                $objBean = new WpPageAdminCalendarMonthBean();
-                break;
-        }
+        $objBean = match ($slugSubContent) {
+            self::CST_CAL_EVENT => new WpPageAdminCalendarEventBean(),
+            self::CST_CAL_DAY => new WpPageAdminCalendarDayBean(),
+            self::CST_CAL_WEEK => new WpPageAdminCalendarWeekBean(),
+            default => new WpPageAdminCalendarMonthBean(),
+        };
         return $objBean;
     }
     
@@ -114,9 +100,9 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         $menuContent = '';
         foreach ($this->arrMenu as $key => $arrMenu) {
             $aContent = $arrMenu[self::FIELD_LABEL];
-            $urlElements = array(self::CST_SUBONGLET => $key);
+            $urlElements = [self::CST_SUBONGLET => $key];
             if (isset($arrMenu[self::CST_URL])) {
-                list($k, $v) = explode('=', $arrMenu[self::CST_URL]);
+                [$k, $v] = explode('=', (string) $arrMenu[self::CST_URL]);
                 $urlElements[$k] = $v;
             }
             $href = $this->getUrl($urlElements);
@@ -125,7 +111,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
             // Si le slug affiché vaut celui du menu ou qu'on est sur la vue par défaut est le menu est inbox
             $blnActive = ($this->slugSubOnglet==$key || $this->slugSubOnglet=='' && $key==self::CST_CAL_MONTH);
             $strLiClass = 'nav-item'.($blnActive ? ' '.self::CST_ACTIVE : '');
-            $menuContent .= $this->getBalise(self::TAG_LI, $liContent, array(self::ATTR_CLASS=>$strLiClass));
+            $menuContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>$strLiClass]);
         }
         /////////////////////////////////////////
         return $menuContent;
@@ -138,10 +124,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
      */
     public function getSectionCalendar($calendarHeader, $viewContent)
     {
-        $urlElements = array(
-            self::CST_ONGLET => self::ONGLET_CALENDAR,
-            self::CST_SUBONGLET => $this->slugSubOnglet,
-        );
+        $urlElements = [self::CST_ONGLET => self::ONGLET_CALENDAR, self::CST_SUBONGLET => $this->slugSubOnglet];
         $urlToday = $this->getUrl($urlElements);
         $urlElements[self::CST_CAL_CURDAY] = $this->prevCurday;
         $urlPrev  = $this->getUrl($urlElements);
@@ -158,7 +141,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         
         /////////////////////////////////////////
         $urlTemplate = self::PF_SECTION_CALENDAR;
-        $attributes = array(
+        $attributes = [
             // L'url pour accéder au mois/semaine/jour précédent
             $urlPrev,
             // L'url pour accéder au mois/semaine/jour suivant
@@ -181,7 +164,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
             $urlDay,
             // Le contenu du calendrier à visionner
             $viewContent,
-        );
+        ];
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -192,32 +175,20 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
      */
     public function getColumnHoraire($h)
     {
-        $hPadded = str_pad($h, 2, '0', STR_PAD_LEFT);
-        $cushionAttributes = array(self::ATTR_CLASS=>'fc-timegrid-slot-label-cushion fc-scrollgrid-shrink-cushion');
+        $hPadded = str_pad((string) $h, 2, '0', STR_PAD_LEFT);
+        $cushionAttributes = [self::ATTR_CLASS=>'fc-timegrid-slot-label-cushion fc-scrollgrid-shrink-cushion'];
         $shrinkCushion = $this->getDiv(date('ga', mktime($h, 0, 0)), $cushionAttributes);
-        $frameAttributes = array(self::ATTR_CLASS=>'fc-timegrid-slot-label-frame fc-scrollgrid-shrink-frame');
+        $frameAttributes = [self::ATTR_CLASS=>'fc-timegrid-slot-label-frame fc-scrollgrid-shrink-frame'];
         $shrinkFrame = $this->getDiv($shrinkCushion, $frameAttributes);
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink',
-            'data-time' => $hPadded.':00:00',
-        );
+        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink', 'data-time' => $hPadded.':00:00'];
         $firstRow = $this->getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
         
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane',
-            'data-time' => $hPadded.':00:00',
-        );
+        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane', 'data-time' => $hPadded.':00:00'];
         $firstRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00',
-        );
+        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor', 'data-time' => $hPadded.':30:00'];
         $secondRow = $this->getBalise(self::TAG_TD, '', $tdAttributes);
-        $tdAttributes = array(
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00',
-        );
+        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor', 'data-time' => $hPadded.':30:00'];
         $secondRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         
         return $this->getBalise(self::TAG_TR, $firstRow).$this->getBalise(self::TAG_TR, $secondRow);

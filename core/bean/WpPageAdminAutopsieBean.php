@@ -17,11 +17,7 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
 
         /////////////////////////////////////////
         // Construction du menu
-        $this->arrSubOnglets = array(
-            self::CST_AUTOPSIE_ARCHIVE => array(self::FIELD_ICON => 'box-archive', self::FIELD_LABEL => 'Archive'),
-            self::CST_ENQUETE_READ => array(self::FIELD_LABEL => 'Lire'),
-            self::CST_ENQUETE_WRITE => array(self::FIELD_LABEL => 'Rédiger'),
-        );
+        $this->arrSubOnglets = [self::CST_AUTOPSIE_ARCHIVE => [self::FIELD_ICON => 'box-archive', self::FIELD_LABEL => 'Archive'], self::CST_ENQUETE_READ => [self::FIELD_LABEL => 'Lire'], self::CST_ENQUETE_WRITE => [self::FIELD_LABEL => 'Rédiger']];
         /////////////////////////////////////////
         
         /////////////////////////////////////////
@@ -70,30 +66,24 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
         if ($this->slugSubOnglet==self::CST_ENQUETE_WRITE) {
             // Si on est en mode écriture
             $strRightPanel   = $this->objCopsAutopsie->getBean()->getWriteAutopsieBlock();
-            $attributes = array (
-                self::ATTR_HREF  => $this->getOngletUrl(),
-                self::ATTR_CLASS => $strBtnClass,
-            );
+            $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
             $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
         } else {
             // Si on est sur la page de listing des autopsies
             $strRightPanel   = $this->getFolderAutopsiesList();
-            $attributes = array (
-                self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE),
-                self::ATTR_CLASS => $strBtnClass,
-            );
+            $attributes = [self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE), self::ATTR_CLASS => $strBtnClass];
             $strContent = 'Débuter une autopsie';
         }
         /////////////////////////////////////////
 
-        $attributes = array(
+        $attributes = [
             // Contenu du panneau latéral gauche
             $this->getFolderBlock(),
             // Contenu du panneau principal
             $strRightPanel,
             // Eventuel bouton de retour si on est en train de lire ou rédiger un message
             $this->getBalise(self::TAG_A, $strContent, $attributes),
-        );
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -106,7 +96,7 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-autopsies-list.php';
         /////////////////////////////////////////
         // Construction du panneau de droite
-        $attributes = array();
+        $attributes = [];
         $objsCopsAutopsie = $this->CopsAutopsieServices->getAutopsies($attributes);
         if (empty($objsCopsAutopsie)) {
             $strContent = '<tr><td class="text-center">Aucune autopsie.<br></td></tr>';
@@ -123,7 +113,7 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
         $strPagination = '';
         /////////////////////////////////////////
 
-        $attributes = array(
+        $attributes = [
             // Titre du dossier affiché
             'Autopsies',
             // Nombre d'autopsies : 1-50/200
@@ -132,7 +122,7 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
             $strContent,
             // L'url de retour
             $this->getSubOngletUrl(),
-        );
+        ];
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }

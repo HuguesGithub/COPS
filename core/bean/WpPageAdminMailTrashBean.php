@@ -14,9 +14,9 @@ class WpPageAdminMailTrashBean extends WpPageAdminMailBean
     {
         parent::__construct();
         
-        $spanAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
+        $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         $buttonContent = $this->getBalise(self::TAG_SPAN, self::LABEL_TRASH, $spanAttributes);
-        $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
+        $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
 

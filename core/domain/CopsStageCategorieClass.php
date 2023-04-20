@@ -33,7 +33,7 @@ class CopsStageCategorieClass extends LocalDomainClass
      * @version 1.22.06.02
      * @since 1.22.06.02
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsStageCategorieClass';
@@ -66,11 +66,8 @@ class CopsStageCategorieClass extends LocalDomainClass
      */
     public function getStages()
     {
-        $attributes[self::SQL_WHERE_FILTERS] = array(
-            self::FIELD_ID           => self::SQL_JOKER_SEARCH,
-            self::FIELD_STAGE_CAT_ID => $this->id,
-            self::FIELD_STAGE_LEVEL  => self::SQL_JOKER_SEARCH,
-        );
+        $attributes = [];
+        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID           => self::SQL_JOKER_SEARCH, self::FIELD_STAGE_CAT_ID => $this->id, self::FIELD_STAGE_LEVEL  => self::SQL_JOKER_SEARCH];
         return $this->objCopsStageServices->getStages($attributes);
     }
 }

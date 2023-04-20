@@ -34,14 +34,14 @@ class CopsEventServices extends LocalServices
   public function initFilters(&$attributes)
   {
     if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = array(
-        // Id
-        self::SQL_JOKER_SEARCH,
-        // dStart
-        '2030-01-01',
-        // dEnd
-        '2049-12-31',
-      );
+      $attributes[self::SQL_WHERE_FILTERS] = [
+          // Id
+          self::SQL_JOKER_SEARCH,
+          // dStart
+          '2030-01-01',
+          // dEnd
+          '2049-12-31',
+      ];
     } else {
       if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = self::SQL_JOKER_SEARCH;
@@ -74,13 +74,13 @@ class CopsEventServices extends LocalServices
    * @since 1.22.06.13
    * @version 1.22.06.13
    */
-  public function getCopsEventDates($attributes=array())
+  public function getCopsEventDates($attributes=[])
   {
     $this->initFilters($attributes);
     return $this->Dao->getCopsEventDates($attributes);
   }
 
-  public function getCopsEvents($attributes=array())
+  public function getCopsEvents($attributes=[])
   {
     if (!isset($attributes[self::SQL_ORDER_BY])) {
       $attributes[self::SQL_ORDER_BY] = 'dateDebut';
@@ -117,7 +117,7 @@ class CopsEventServices extends LocalServices
    * @since v1.22.11.26
    * @version v1.22.11.26
    */
-  public function getCopsEventCategories($attributes=array())
+  public function getCopsEventCategories($attributes=[])
   {
       if (!isset($attributes[self::SQL_ORDER_BY])) {
           $attributes[self::SQL_ORDER_BY] = self::FIELD_CATEG_LIBELLE;

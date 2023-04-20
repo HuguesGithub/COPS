@@ -34,7 +34,7 @@ class CopsEventCategorie extends LocalDomain
    * @version 1.22.06.25
    * @since 1.22.06.25
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsEventCategorie';

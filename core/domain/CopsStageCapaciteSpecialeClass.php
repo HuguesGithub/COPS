@@ -36,7 +36,7 @@ class CopsStageCapaciteSpecialeClass extends LocalDomainClass
      * @version 1.22.07.06
      * @since 1.22.07.06
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsStageCapaciteSpecialeClass';

@@ -59,7 +59,7 @@ class CopsLangueDaoImpl extends LocalDaoImpl
 
     //////////////////////////////
     // Construction du résultat
-    $objsItem = array();
+    $objsItem = [];
     if (!empty($rows)) {
       foreach ($rows as $row) {
         $objsItem[] = CopsLangueClass::convertElement($row);

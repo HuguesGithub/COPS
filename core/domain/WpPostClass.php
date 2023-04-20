@@ -78,15 +78,10 @@ class WpPostClass extends LocalDomainClass
      */
     public static function getBean($objWpPost, $catId=self::WP_CAT_ID_BDD)
     {
-        switch ($catId) {
-            case self::WP_CAT_ID_SKILL :
-            $objBean = new WpPostSkillBean($objWpPost);
-            break;
-            case self::WP_CAT_ID_BDD :
-            default :
-            $objBean = new WpPostBddBean($objWpPost);
-            break;
-        }
+        $objBean = match ($catId) {
+            self::WP_CAT_ID_SKILL => new WpPostSkillBean($objWpPost),
+            default => new WpPostBddBean($objWpPost),
+        };
         return $objBean;
     }
 
@@ -104,12 +99,12 @@ class WpPostClass extends LocalDomainClass
     public function getStrPostDate()
     {
         $s = $this->post_date;
-        return substr($s, 8, 2).'/'.substr($s, 5, 2).' à '.substr($s, 11, 2).'h'.substr($s, 14, 2);
+        return substr((string) $s, 8, 2).'/'.substr((string) $s, 5, 2).' à '.substr((string) $s, 11, 2).'h'.substr((string) $s, 14, 2);
     }
     public function getStrDate()
     {
-        $arrDate = explode('-', substr($this->post_date, 0, 10));
-        $arrMois = array(1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre');
+        $arrDate = explode('-', substr((string) $this->post_date, 0, 10));
+        $arrMois = [1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
         return $arrDate[2].' '.$arrMois[$arrDate[1]*1].' '.$arrDate[0];
     }
 
@@ -158,7 +153,7 @@ class WpPostClass extends LocalDomainClass
     public function getCategories()
     {
         if (empty($this->WpCategories)) {
-            $this->WpCategories = array();
+            $this->WpCategories = [];
             $categories = wp_get_post_categories($this->ID);
             while (!empty($categories)) {
                 $catId = array_shift($categories);
@@ -172,7 +167,7 @@ class WpPostClass extends LocalDomainClass
     public function getTags()
     {
         if (empty($this->WpTags)) {
-            $this->WpTags = array();
+            $this->WpTags = [];
             $tags = wp_get_post_tags($this->ID);
             while (!empty($tags)) {
                 $tag = array_shift($tags);

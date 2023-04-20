@@ -28,7 +28,7 @@ class CopsAutopsieBean extends CopsBean
     {
         $data = unserialize($this->obj->getField(self::FIELD_DATA));
         $url = $this->urlSubOnglet.'read&amp;id='.$this->obj->getField(self::FIELD_ID);
-        $attributesLi = array(self::ATTR_HREF=>$url, self::ATTR_CLASS=>'text-white');
+        $attributesLi = [self::ATTR_HREF=>$url, self::ATTR_CLASS=>'text-white'];
         $labelLi = $this->getBalise(self::TAG_A, $data['numDossier'], $attributesLi);
         return $this->getBalise(self::TAG_LI, $labelLi);
     }
@@ -48,7 +48,7 @@ class CopsAutopsieBean extends CopsBean
         $numDossier  = $data['numDossier'];
         $objCopsEnquete = $this->obj->getCopsEnquete();
 
-        $attributes = array(
+        $attributes = [
             // Id
             $id,
             // Url édition
@@ -57,7 +57,7 @@ class CopsAutopsieBean extends CopsBean
             $numDossier,
             // Nom de l'enquête
             $objCopsEnquete->getField(self::FIELD_NOM_ENQUETE),
-        );
+        ];
 
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -78,7 +78,7 @@ class CopsAutopsieBean extends CopsBean
 
         $this->data = unserialize($this->obj->getField(self::FIELD_DATA));
 
-        $attributes = array(
+        $attributes = [
             // L'id de l'autopsie
             $this->obj->getField(self::FIELD_ID),
             // Le Numéro de dossier qui est répété sur la 2è page
@@ -97,14 +97,97 @@ class CopsAutopsieBean extends CopsBean
             $this->getCardOdontologie(),
             // La Card du Signalement
             $this->getCardSignalement(),
-
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-        );
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ];
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -121,17 +204,9 @@ class CopsAutopsieBean extends CopsBean
         /////////////////////////////////////////////
         // Corpulence
         $strCorpulence = '';
-        $arrCorpulence = array(
-            '1' => 'Maigre',
-            '2' => 'Mince',
-            '3' => 'Moyenne',
-            '4' => 'Forte',
-            '5' => 'Athlétique',
-        );
+        $arrCorpulence = ['1' => 'Maigre', '2' => 'Mince', '3' => 'Moyenne', '4' => 'Forte', '5' => 'Athlétique'];
         foreach ($arrCorpulence as $value => $label) {
-            $attributes = array(
-                self::ATTR_VALUE => $value,
-            );
+            $attributes = [self::ATTR_VALUE => $value];
             if ($value==$this->data['corpulence']) {
                 $attributes['selected'] = self::CST_SELECTED;
             }
@@ -142,16 +217,9 @@ class CopsAutopsieBean extends CopsBean
         /////////////////////////////////////////////
         // Cheveux
         $strLongueurCheveux = '';
-        $arrLongueurCheveux = array(
-            '1' => 'Longs',
-            '2' => 'Courts',
-            '3' => 'Calvitie',
-            '4' => 'Chauve',
-        );
+        $arrLongueurCheveux = ['1' => 'Longs', '2' => 'Courts', '3' => 'Calvitie', '4' => 'Chauve'];
         foreach ($arrLongueurCheveux as $value => $label) {
-            $attributes = array(
-                self::ATTR_VALUE => $value,
-            );
+            $attributes = [self::ATTR_VALUE => $value];
             if ($value==$this->data['cheveux_longueur']) {
                 $attributes['selected'] = self::CST_SELECTED;
             }
@@ -159,15 +227,9 @@ class CopsAutopsieBean extends CopsBean
         }
         /////////////////////////////////////////////
         $strCoiffureCheveux = '';
-        $arrCoiffureCheveux = array(
-            '1' => 'Raides',
-            '2' => 'Ondulés',
-            '3' => 'Frisés',
-        );
+        $arrCoiffureCheveux = ['1' => 'Raides', '2' => 'Ondulés', '3' => 'Frisés'];
         foreach ($arrCoiffureCheveux as $value => $label) {
-            $attributes = array(
-                self::ATTR_VALUE => $value,
-            );
+            $attributes = [self::ATTR_VALUE => $value];
             if ($value==$this->data['cheveux_coiffure']) {
                 $attributes['selected'] = self::CST_SELECTED;
             }
@@ -175,7 +237,7 @@ class CopsAutopsieBean extends CopsBean
         }
         /////////////////////////////////////////////
 
-        $attributes = array(
+        $attributes = [
             // Général 1 à 4
             $this->data['sexe'],
             $this->data['ethnie'],
@@ -200,9 +262,37 @@ class CopsAutopsieBean extends CopsBean
             isset($this->data['barbe']) ? ' '.self::CST_CHECKED : '',
             isset($this->data['moustache']) ? ' '.self::CST_CHECKED : '',
             // Signes particuliers
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-        );
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ];
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -236,12 +326,7 @@ class CopsAutopsieBean extends CopsBean
         $strMandibuleG   = $strModele;
         $strMandibuleD   = $strModele;
 
-        $attributes = array(
-            $strMaxilliaireG,
-            $strMaxilliaireD,
-            $strMandibuleG,
-            $strMandibuleD,
-        );
+        $attributes = [$strMaxilliaireG, $strMaxilliaireD, $strMandibuleG, $strMandibuleD];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -253,15 +338,7 @@ class CopsAutopsieBean extends CopsBean
     public function getCardDossier()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-dossier.php';
-        $attributes = array(
-            stripslashes($this->data['numDossier']),
-            stripslashes($this->data['dateHeureExamen']),
-            stripslashes($this->data['praticiensMedicoLegaux']),
-            stripslashes($this->data['nomPrenomVictime']),
-            stripslashes($this->data['ageApparent']),
-            stripslashes($this->data['circDecouverte']),
-            stripslashes($this->data['dateHeureDeces']),
-        );
+        $attributes = [stripslashes((string) $this->data['numDossier']), stripslashes((string) $this->data['dateHeureExamen']), stripslashes((string) $this->data['praticiensMedicoLegaux']), stripslashes((string) $this->data['nomPrenomVictime']), stripslashes((string) $this->data['ageApparent']), stripslashes((string) $this->data['circDecouverte']), stripslashes((string) $this->data['dateHeureDeces'])];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -273,19 +350,7 @@ class CopsAutopsieBean extends CopsBean
     public function getCardMedicoLegal()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-medicolegal.php';
-        $attributes = array(
-            stripslashes($this->data['poidsCoeur']),
-            stripslashes($this->data['poidsRate']),
-            stripslashes($this->data['poidsEncephale']),
-            stripslashes($this->data['poidsFoie']),
-            stripslashes($this->data['poidsPoumonG']),
-            stripslashes($this->data['poidsReinG']),
-            stripslashes($this->data['poidsPoumonD']),
-            stripslashes($this->data['poidsReinD']),
-            stripslashes($this->data['toxicologie']),
-            stripslashes($this->data['serologie']),
-            stripslashes($this->data['anapath']),
-        );
+        $attributes = [stripslashes((string) $this->data['poidsCoeur']), stripslashes((string) $this->data['poidsRate']), stripslashes((string) $this->data['poidsEncephale']), stripslashes((string) $this->data['poidsFoie']), stripslashes((string) $this->data['poidsPoumonG']), stripslashes((string) $this->data['poidsReinG']), stripslashes((string) $this->data['poidsPoumonD']), stripslashes((string) $this->data['poidsReinD']), stripslashes((string) $this->data['toxicologie']), stripslashes((string) $this->data['serologie']), stripslashes((string) $this->data['anapath'])];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -299,14 +364,12 @@ class CopsAutopsieBean extends CopsBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-enquete.php';
 
         $objServices = new CopsEnqueteServices();
-        $objsCopsEnquete = $objServices->getEnquetes(array());
+        $objsCopsEnquete = $objServices->getEnquetes([]);
 
         $strContent = '';
         while (!empty($objsCopsEnquete)) {
             $objCopsEnquete = array_shift($objsCopsEnquete);
-            $attributes = array(
-                self::ATTR_VALUE => $objCopsEnquete->getField(self::FIELD_ID),
-            );
+            $attributes = [self::ATTR_VALUE => $objCopsEnquete->getField(self::FIELD_ID)];
             if ($objCopsEnquete->getField(self::FIELD_ID)==$this->obj->getField(self::FIELD_IDX_ENQUETE)) {
                 $attributes['selected'] = 'selected';
             }
@@ -314,9 +377,7 @@ class CopsAutopsieBean extends CopsBean
             $strContent .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
 
-        $attributes = array(
-            $strContent,
-        );
+        $attributes = [$strContent];
         return $this->getRender($urlTemplate, $attributes);
     }
 

@@ -34,10 +34,10 @@ class CopsLangueServices extends LocalServices
   public function initFilters(&$attributes)
   {
     if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = array(
-        // Libellé
-        self::SQL_JOKER_SEARCH,
-      );
+      $attributes[self::SQL_WHERE_FILTERS] = [
+          // Libellé
+          self::SQL_JOKER_SEARCH,
+      ];
 
     }
     if (!isset($attributes[self::SQL_ORDER_BY])) {
@@ -61,7 +61,7 @@ class CopsLangueServices extends LocalServices
    * @since 1.22.04.28
    * @version 1.22.04.28
    */
-  public function getCopsLangues($attributes=array())
+  public function getCopsLangues($attributes=[])
   {
     $this->initFilters($attributes);
     return $this->Dao->getCopsLangues($attributes);
@@ -77,13 +77,13 @@ class CopsLangueServices extends LocalServices
    * @since 1.22.04.28
    * @version 1.22.04.28
    */
-  public function getSelectHtml($selectAttributes=array(), $requestAttributes=array())
+  public function getSelectHtml($selectAttributes=[], $requestAttributes=[])
   {
     $Bean = new UtilitiesBean();
     $CopsLangues = $this->getCopsLangues($requestAttributes);
     $selectHtml  = $Bean->getBalise(self::TAG_OPTION);
     foreach ($CopsLangues as $CopsLangue) {
-      $selectHtml .= $Bean->getBalise(self::TAG_OPTION, $CopsLangue->getField(self::FIELD_LIBELLE), array(self::ATTR_VALUE=>$CopsLangue->getField(self::FIELD_ID)));
+      $selectHtml .= $Bean->getBalise(self::TAG_OPTION, $CopsLangue->getField(self::FIELD_LIBELLE), [self::ATTR_VALUE=>$CopsLangue->getField(self::FIELD_ID)]);
     }
     return $Bean->getBalise(self::TAG_SELECT, $selectHtml, $selectAttributes);
   }

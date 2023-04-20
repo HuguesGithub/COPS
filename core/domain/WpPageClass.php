@@ -41,7 +41,7 @@ class WpPageClass extends WpPostClass
     public function hasChildren()
     {
         if ($this->Children==null) {
-            $attributes = array(self::SQL_ORDER_BY => self::WP_MENUORDER);
+            $attributes = [self::SQL_ORDER_BY => self::WP_MENUORDER];
             $this->Children = $this->WpPostServices->getChildPagesByParentId($this->getID(), -1, $attributes);
         }
         return $this->Children;
@@ -53,7 +53,7 @@ class WpPageClass extends WpPostClass
         $str .= '<a href="%3$s"><span>%4$s</span></a></li>';
         $ulHeaderNav = '';
         foreach ($this->Children as $Child) {
-            $attributes = array($Child->getId(), $Child->getDepth(), $Child->getPermalink(), $Child->getPostTitle());
+            $attributes = [$Child->getId(), $Child->getDepth(), $Child->getPermalink(), $Child->getPostTitle()];
             $ulHeaderNav .= vsprintf($str, $attributes);
         }
         return '<ul class="sub-menu">'.$ulHeaderNav.'</ul>';

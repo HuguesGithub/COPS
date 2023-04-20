@@ -38,18 +38,18 @@ class CopsSkillServices extends LocalServices
   public function initFilters(&$attributes)
   {
     if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = array(
-        // Id
-        self::SQL_JOKER_SEARCH,
-        // skillName
-        self::SQL_JOKER_SEARCH,
-        // skillDescription
-        self::SQL_JOKER_SEARCH,
-        // specLevel
-        self::SQL_JOKER_SEARCH,
-        // panUsable
-        self::SQL_JOKER_SEARCH,
-      );
+      $attributes[self::SQL_WHERE_FILTERS] = [
+          // Id
+          self::SQL_JOKER_SEARCH,
+          // skillName
+          self::SQL_JOKER_SEARCH,
+          // skillDescription
+          self::SQL_JOKER_SEARCH,
+          // specLevel
+          self::SQL_JOKER_SEARCH,
+          // panUsable
+          self::SQL_JOKER_SEARCH,
+      ];
     } else {
       if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = self::SQL_JOKER_SEARCH;
@@ -88,7 +88,7 @@ class CopsSkillServices extends LocalServices
    * @since 1.22.05.30
    * @version 1.22.05.30
    */
-    public function getSkills($attributes=array())
+    public function getSkills($attributes=[])
     {
         $this->initFilters($attributes);
         return $this->Dao->getSkills($attributes);
@@ -100,7 +100,8 @@ class CopsSkillServices extends LocalServices
    */
   public function getSkillSpecs($skillId)
   {
-    $attributes[self::SQL_WHERE_FILTERS] = array($skillId);
+    $attributes = [];
+    $attributes[self::SQL_WHERE_FILTERS] = [$skillId];
 
     if (!isset($attributes[self::SQL_ORDER_BY])) {
       $attributes[self::SQL_ORDER_BY] = self::FIELD_SPEC_NAME;

@@ -27,7 +27,7 @@ class LocalActions extends GlobalActions implements ConstantsInterface, LabelsIn
    * @version 1.22.05.19
    */
   public function getToastContentJson($type, $title, $msg)
-  { return '{"toastContent": '.json_encode($this->getToastContent($type, $title, $msg)).'}'; }
+  { return '{"toastContent": '.json_encode($this->getToastContent($type, $title, $msg), JSON_THROW_ON_ERROR).'}'; }
 
   /**
    * @since 1.22.05.19

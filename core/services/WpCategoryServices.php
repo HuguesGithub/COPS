@@ -22,7 +22,7 @@ class WpCategoryServices extends LocalServices
     public function getCategoryChildren($parentId)
     {
         $arrChildren = get_term_children($parentId, 'category');
-        $arrItems = array();
+        $arrItems = [];
         while (!empty($arrChildren)) {
             $catId = array_shift($arrChildren);
             $arrItems[] = $this->getCategory($catId);

@@ -73,7 +73,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
 
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = CopsEnquete::convertElement($row);
@@ -90,7 +90,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     {
         $request  = $this->update."WHERE id = '%s';";
 
-        $prepObject = array();
+        $prepObject = [];
         $arrFields  = $this->getFields();
         array_shift($arrFields);
         foreach ($arrFields as $field) {
@@ -110,7 +110,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     {
         $request  = $this->insert;
         
-        $prepObject = array();
+        $prepObject = [];
         $arrFields  = $this->getFields();
         array_shift($arrFields);
         foreach ($arrFields as $field) {
@@ -141,7 +141,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
         
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = CopsEnqueteChronologie::convertElement($row);
@@ -169,7 +169,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
         
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = CopsEnquetePersonnalite::convertElement($row);
@@ -197,7 +197,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
         
         //////////////////////////////
         // Construction du résultat
-        $objItems = array();
+        $objItems = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $objItems[] = CopsEnqueteTemoignage::convertElement($row);
@@ -208,7 +208,7 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     
     private function buildSelectRequest($dbTable)
     {
-        $arrFields = array();
+        $arrFields = [];
         $rows = MySQL::wpdbSelect("DESCRIBE ".$dbTable.";");
         foreach ($rows as $row) {
             $arrFields[] = $row->Field;

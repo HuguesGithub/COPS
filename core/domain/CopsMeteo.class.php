@@ -42,7 +42,7 @@ class CopsMeteo extends LocalDomain
    * @version 1.22.09.05
    * @since 1.22.09.05
    */
-  public function __construct($attributes=array())
+  public function __construct($attributes=[])
   {
     parent::__construct($attributes);
     $this->stringClass = 'CopsMeteo';
@@ -72,7 +72,7 @@ class CopsMeteo extends LocalDomain
     {
         $strCompteRendu = '';
         // On recherche le pattern dans la ligne
-        if (preg_match_all($this->pattern, $str, $matches)) {
+        if (preg_match_all($this->pattern, (string) $str, $matches)) {
             // Si on le trouve, on a une entrée à saisir. Sauf si elle est déjà présente.
             $this->dateMeteo    = $strDate;
             $this->heureMeteo   = $matches[1][0];
@@ -121,7 +121,7 @@ class CopsMeteo extends LocalDomain
         $requete = "SHOW COLUMNS FROM wp_7_cops_meteo LIKE 'weather';";
         $rows = MySQL::wpdbSelect($requete);
         $strEnumType = $rows[0]->Type;
-        preg_match('/enum\((.*)\)$/', $strEnumType, $matches);
+        preg_match('/enum\((.*)\)$/', (string) $strEnumType, $matches);
         $arrVals = explode(',', $matches[1]);
         if (!in_array("'".$this->weather."'", $arrVals)) {
             $requete  = "ALTER TABLE wp_7_cops_meteo MODIFY COLUMN weather ENUM (";
@@ -184,9 +184,9 @@ class CopsMeteo extends LocalDomain
     public function getUrlForNextInsert()
     {
         $strLastInsert = $this->getLastInsertFormatted();
-        $m = substr($strLastInsert, 4, 2);
-        $d = substr($strLastInsert, 6)+1;
-        $y = substr($strLastInsert, 0, 4);
+        $m = substr((string) $strLastInsert, 4, 2);
+        $d = substr((string) $strLastInsert, 6)+1;
+        $y = substr((string) $strLastInsert, 0, 4);
         return date('Ymd', mktime(0, 0, 0, $m, $d, $y));
     }
 }
