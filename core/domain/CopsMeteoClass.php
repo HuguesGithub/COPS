@@ -1,14 +1,19 @@
 <?php
+namespace core\domain;
+
+use core\bean\UtilitiesBean;
+use core\services\CopsMeteoServices;
+
 if (!defined('ABSPATH')) {
   die('Forbidden');
 }
 /**
- * Classe CopsMeteo
+ * Classe CopsMeteoClass
  * @author Hugues
  * @version 1.22.09.05
  * @since 1.22.09.05
  */
-class CopsMeteo extends LocalDomain
+class CopsMeteoClass extends LocalDomainClass
 {
   //////////////////////////////////////////////////
   // ATTRIBUTES
@@ -42,33 +47,105 @@ class CopsMeteo extends LocalDomain
    * @version 1.22.09.05
    * @since 1.22.09.05
    */
-  public function __construct($attributes=[])
-  {
-    parent::__construct($attributes);
-    $this->stringClass = 'CopsMeteo';
+    public function __construct($attributes=[])
+    {
+        parent::__construct($attributes);
+        $this->stringClass = 'core\domain\CopsMeteoClass';
 
-    // Pattern des données issues du site web extérieur
-    $this->pattern = "/th>([0-9:]*).*title=\"([a-zA-Z\. ]*).*wt-([0-9]*).*>([0-9]*)&nbsp;°.*>(N\/A|No wind|[0-9]* km\/h)<.*comp sa([0-9]*)\".*>([0-9]*)%.*>(N\/A|([0-9]*) mbar).*>(N\/A|([0-9]*)&nbsp;km).*</";
-  }
+        // Pattern des données issues du site web extérieur
+        $this->pattern = "/th>([0-9:]*).*title=\"([a-zA-Z\. ]*).*wt-([0-9]*).*>([0-9]*)&nbsp;°.*>(N\/A|No wind|[0-9]* km\/h)<.*comp sa([0-9]*)\".*>([0-9]*)%.*>(N\/A|([0-9]*) mbar).*>(N\/A|([0-9]*)&nbsp;km).*</";
+    }
+
   /**
    * @param array $row
    * @return CopsMeteo
    * @version 1.22.09.05
    * @since 1.22.09.05
    */
-  public static function convertElement($row)
-  { return parent::convertRootElement(new CopsMeteo(), $row); }
+    public static function convertElement($row): CopsMeteoClass
+    {
+        return parent::convertRootElement(new CopsMeteoClass(), $row);
+    }
 
   //////////////////////////////////////////////////
   // METHODES
   //////////////////////////////////////////////////
 
     /**
+     * @since 1.23.4.20
+     * @version 1.23.4.20
+     */
+    public function init(): void
+    {
+        $strDate = UtilitiesBean::getCopsDate(self::FORMAT_DATE_YMDHIS);
+        [$strJour, $strHeure] = explode(' ', $strDate);
+        [$Y, $m, $d] = explode('-', $strJour);
+        [$H, $i, ] = explode(':', $strHeure);
+
+        $objCopsMeteoServices = new CopsMeteoServices();
+        //$this->objCopsSoleil = $objCopsMeteoServices->getSoleil($strJour);
+        // TODO : supprimer le -8.
+        $objsCopsMeteo = $objCopsMeteoServices->getMeteos(($Y-8).$m.$d);
+
+        //$this->id = $this->objCopsSoleil->getField(self::FIELD_ID);
+        $this->dateMeteo = $Y.$m.$d;
+
+        $this->maxTemp = -15;
+        $this->minTemp = 55;
+        while (!empty($objsCopsMeteo)) {
+            $objCopsMeteo = array_shift($objsCopsMeteo);
+            $heureMeteo = $objCopsMeteo->getField(self::FIELD_HEURE_METEO);
+            $temperature = $objCopsMeteo->getField(self::FIELD_TEMPERATURE);
+
+            if ($temperature>$this->maxTemp) {
+                $this->maxTemp = $temperature;
+            }
+            if ($temperature<$this->minTemp) {
+                $this->minTemp = $temperature;
+            }
+
+            if ($heureMeteo>$H.':'.$i) {
+                continue;
+            }
+
+            $this->heureMeteo = $heureMeteo;
+            $this->temperature = $temperature;
+            $this->weather = $objCopsMeteo->getField(self::FIELD_WEATHER);
+            $this->weatherId = $objCopsMeteo->getField(self::FIELD_WEATHER_ID);
+        }
+    }
+
+    public function getStrHour(): string
+    {
+        return UtilitiesBean::getCopsDate(self::FORMAT_DATE_HIS);
+    }
+
+    public function getStrDate(): string
+    {
+        return UtilitiesBean::getCopsDate(self::FORMAT_STRJOUR);
+    }
+
+    public function getAltStr(): string
+    {
+        return 'Météo : '.$this->temperature.'°C - '.$this->weather;
+    }
+
+    public function getMaxTemp(): int
+    {
+        return $this->maxTemp;
+    }
+
+    public function getMinTemp(): int
+    {
+        return $this->minTemp;
+    }
+
+    /**
      * @return string
      * @since 1.22.09.05
      * @version 1.22.10.17
      */
-    public function parseData($str, $strDate)
+    public function parseData(string $str, string $strDate): string
     {
         $strCompteRendu = '';
         // On recherche le pattern dans la ligne
@@ -96,7 +173,7 @@ class CopsMeteo extends LocalDomain
                 $strCompteRendu .= "Cette donnée (".$this->dateMeteo.", ".$this->heureMeteo.") existe déjà.<br>";
             } else {
                 // Sinon, on doit l'insérer
-                $strCompteRendu .= $this->insertCopsMeteo();
+                $this->insertCopsMeteo();
             }
         } else {
             $strCompteRendu .= "<strong>/!\</strong> Erreur d'analyse dans la chaîne suivante :<br>$str<br><br>";
@@ -116,38 +193,38 @@ class CopsMeteo extends LocalDomain
      * @since 1.22.09.05
      * @version 1.22.10.17
      */
-    public function controlerWeather()
+    public function controlerWeather(): string
     {
         $requete = "SHOW COLUMNS FROM wp_7_cops_meteo LIKE 'weather';";
-        $rows = MySQL::wpdbSelect($requete);
+        $rows = MySQLClass::wpdbSelect($requete);
         $strEnumType = $rows[0]->Type;
         preg_match('/enum\((.*)\)$/', (string) $strEnumType, $matches);
         $arrVals = explode(',', $matches[1]);
         if (!in_array("'".$this->weather."'", $arrVals)) {
             $requete  = "ALTER TABLE wp_7_cops_meteo MODIFY COLUMN weather ENUM (";
             $requete .= implode(",", $arrVals).", '".$this->weather."');";
-            MySQL::wpdbQuery($requete);
+            MySQLClass::wpdbQuery($requete);
             $strAlert  = '<strong>/!\</strong> Attention, nouvelle valeur pour le champ weather <em>';
             $strAlert .= $this->weather.'</em>.<br>';
             return $strAlert;
         }
     }
 
-  public function checkIfExists()
-  {
-    $requete  = "SELECT id FROM wp_7_cops_meteo WHERE ";
-    $requete .= "dateMeteo = '".$this->dateMeteo."' AND ";
-    $requete .= "heureMeteo = '".$this->heureMeteo."';";
-    $rows = MySQL::wpdbSelect($requete);
-    return !empty($rows);
-  }
+    public function checkIfExists(): bool
+    {
+        $requete  = "SELECT id FROM wp_7_cops_meteo WHERE ";
+        $requete .= "dateMeteo = '".$this->dateMeteo."' AND ";
+        $requete .= "heureMeteo = '".$this->heureMeteo."';";
+        $rows = MySQLClass::wpdbSelect($requete);
+        return !empty($rows);
+    }
 
     /**
      * @return string
      * @since 1.22.09.05
      * @version 1.22.10.17
      */
-    public function insertCopsMeteo()
+    public function insertCopsMeteo(): void
     {
         $requete  = "INSERT INTO wp_7_cops_meteo ";
         $requete .= "(dateMeteo, heureMeteo, temperature, weather, weatherId, forceVent, ";
@@ -165,23 +242,22 @@ class CopsMeteo extends LocalDomain
         $requete .= "'".$this->visibilite."'";   // La visibilité
         $requete .= ");";
 
-        MySQL::wpdbQuery($requete);
-        return '';
+        MySQLClass::wpdbQuery($requete);
     }
 
-  public function getLastInsertFormatted()
-  {
-    $requete  = "SELECT dateMeteo FROM wp_7_cops_meteo ORDER BY dateMeteo DESC;";
-    $rows = MySQL::wpdbSelect($requete);
-    return $rows[0]->dateMeteo;
-  }
+    public function getLastInsertFormatted(): string
+    {
+        $requete  = "SELECT dateMeteo FROM wp_7_cops_meteo ORDER BY dateMeteo DESC;";
+        $rows = MySQLClass::wpdbSelect($requete);
+        return $rows[0]->dateMeteo;
+    }
 
     /**
      * @return string
      * @since 1.22.09.05
      * @version 1.22.10.17
      */
-    public function getUrlForNextInsert()
+    public function getUrlForNextInsert(): string
     {
         $strLastInsert = $this->getLastInsertFormatted();
         $m = substr((string) $strLastInsert, 4, 2);

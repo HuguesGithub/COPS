@@ -447,6 +447,50 @@ border-color: #4b545c;
     font-size: 10px;
 }
 
+.masthead .masthead-mini-nav {
+    border-top: 1px solid #ebebeb;
+    display: block;
+    border-bottom: 1px solid #000;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.masthead .mini-nav {
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 5px 0 4px;
+    margin: 0 60px;
+}
+.masthead .mini-nav-item {
+    display: inline-block;
+    font-family: nyt-franklin,helvetica,arial,sans-serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+}
+.masthead .mini-nav-item a {
+    border-radius: 3px;
+    display: inline-block;
+    padding: 4px;
+    -webkit-transition: background 0.6s ease;
+    transition: background 0.6s ease;
+    vertical-align: middle;
+  }
+  .masthead .mini-nav-item a:hover, .masthead .mini-nav-item a:focus {
+    background-color: #f7f7f7;
+    color: rgb(18, 18, 18) !important;
+  }
+
 
 
 
@@ -532,30 +576,11 @@ border-color: #4b545c;
     background: #fff;
   }
   .css-umysuv {
-    border-top: 1px solid #ebebeb;
-    display: block;
-    border-bottom: 1px solid #000;
-    padding-top: 2px;
-    padding-bottom: 2px;
   }
   ol, ul {
     list-style: none;
   }
   .css-192g0mx {
-    -webkit-align-items: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: 5px 0 4px;
-    margin: 0 60px;
   }
   .css-umysuv::after {
     content: '';
@@ -563,11 +588,6 @@ border-color: #4b545c;
     display: block;
   }
   .css-cwdrld {
-    display: inline-block;
-    font-family: nyt-franklin,helvetica,arial,sans-serif;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 500;
   }
   a {
     text-decoration: none;
@@ -577,18 +597,12 @@ border-color: #4b545c;
     text-decoration: none;
     color: black !important;
   }
-  .css-1wjnrbv {
-    border-radius: 3px;
-    display: inline-block;
-    padding: 4px;
-    -webkit-transition: background 0.6s ease;
-    transition: background 0.6s ease;
-    vertical-align: middle;
-  }
-  .css-1wjnrbv:hover, .css-1wjnrbv:focus {
-    background-color: #f7f7f7;
-  }
+
   .branding { font-family: PlainBlackNormal, helvetica, sans-serif; font-size: 3.25rem; font-weight: 400; line-height: 3.25rem; margin: 15px auto 5px; text-align: center; }
+
+  .branding a:hover {
+    color: rgb(18, 18, 18) !important;
+  }
 
 
 

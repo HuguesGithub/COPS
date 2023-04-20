@@ -56,7 +56,7 @@ class CopsStageClass extends LocalDomainClass
      * @version 1.22.06.03
      * @since 1.22.06.03
      */
-    public static function convertElement($row): CopsStageClass
+    public static function convertElement(array $row): CopsStageClass
     { return parent::convertRootElement(new CopsStageClass(), $row); }
 
     /**

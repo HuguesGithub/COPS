@@ -248,6 +248,22 @@ interface ConstantsInterface
     public const FIELD_ID_IDX_TOME      = 'idIdxTome';
     public const FIELD_NOM_IDX_TOME     = 'nomIdxTome';
     public const FIELD_ABR_IDX_TOME     = 'abrIdxTome';
+
+    // TABLE cops_meteo
+    public const FIELD_DATE_METEO       = 'dateMeteo';
+    public const FIELD_HEURE_METEO      = 'heureMeteo';
+    public const FIELD_TEMPERATURE      = 'temperature';
+    public const FIELD_WEATHER          = 'weather';
+    public const FIELD_WEATHER_ID       = 'weatherId';
+    public const FIELD_FORCE_VENT       = 'forceVent';
+    public const FIELD_SENS_VENT        = 'sensVent';
+    public const FIELD_HUMIDITE         = 'humidite';
+    public const FIELD_BAROMETRE        = 'barometre';
+    public const FIELD_VISIBILITE       = 'visibilite';
+    // TABLE cops_soleil
+    public const FIELD_DATE_SOLEIL      = 'dateSoleil';
+    public const FIELD_HEURE_LEVER      = 'heureLever';
+    public const FIELD_HEURE_COUCHER    = 'heureCoucher';
   
     /////////////////////////////////////////////////
     // Formats
