@@ -18,15 +18,15 @@ class CopsEnqueteChronologie extends LocalDomain
      * @var int $id
      */
     protected $id;
-    
+
     protected $idxEnquete;
     protected $dateHeure;
     protected $faits;
-    
+
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
     //////////////////////////////////////////////////
-    
+
     //////////////////////////////////////////////////
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
@@ -48,7 +48,7 @@ class CopsEnqueteChronologie extends LocalDomain
      */
     public static function convertElement($row)
     { return parent::convertRootElement(new CopsEnqueteChronologie(), $row); }
-    
+
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////

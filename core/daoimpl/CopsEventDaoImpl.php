@@ -154,13 +154,13 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $request  = "SELECT id, categorieLibelle, categorieCouleur FROM ".$this->dbTable_cec." ";
         $request .= "WHERE 1=1 ";
         $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
-      
+
         $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
         //////////////////////////////
         // Exécution de la requête
         $rows = MySQLClass::wpdbSelect($prepRequest);
         //////////////////////////////
-      
+
         //////////////////////////////
         // Construction du résultat
         $objItems = array();

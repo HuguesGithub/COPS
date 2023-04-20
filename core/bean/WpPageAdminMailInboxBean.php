@@ -13,7 +13,7 @@ class WpPageAdminMailInboxBean extends WpPageAdminMailBean
     public function __construct()
     {
         parent::__construct();
-        
+
         $spanAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
         $buttonContent = $this->getBalise(self::TAG_SPAN, self::LABEL_INBOX, $spanAttributes);
         $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));

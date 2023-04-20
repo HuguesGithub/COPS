@@ -69,7 +69,7 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
             $strContent .= WpPostClass::getBean($objWpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();
         }
         /////////////////////////////////////////
-        
+
         /////////////////////////////////////////
         $urlTemplate = self::WEB_PPFS_LIB_SKILLS;
         $attributes = array(

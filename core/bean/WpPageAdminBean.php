@@ -100,7 +100,7 @@ class WpPageAdminBean extends WpPageBean
                     self::FIELD_ICON  => self::I_FILE_CATEGORY,
                     self::FIELD_LABEL => 'Enquêtes',
                 ),
-                
+
                 self::ONGLET_ARCHIVE => array(
                     self::FIELD_ICON  => 'box-archive',
                     self::FIELD_LABEL => 'Archives',

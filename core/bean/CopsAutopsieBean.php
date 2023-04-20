@@ -32,7 +32,7 @@ class CopsAutopsieBean extends CopsBean
         $labelLi = $this->getBalise(self::TAG_A, $data['numDossier'], $attributesLi);
         return $this->getBalise(self::TAG_LI, $labelLi);
     }
-    
+
     /**
      * @return string
      * @since 1.22.10.14
@@ -43,11 +43,11 @@ class CopsAutopsieBean extends CopsBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-tr-autopsie-row.php';
         $id          = $this->obj->getField(self::FIELD_ID);
         $data        = unserialize($this->obj->getField(self::FIELD_DATA));
-        
+
         $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE . '&amp;id=' . $id;
         $numDossier  = $data['numDossier'];
         $objCopsEnquete = $this->obj->getCopsEnquete();
-        
+
         $attributes = array(
             // Id
             $id,
@@ -72,10 +72,10 @@ class CopsAutopsieBean extends CopsBean
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-autopsie-write.php';
         /////////////////////////////////////////
         // Construction du panneau de droite
-        
+
         // On récupère les infos relatives à l'id.
         // On doit avoir les droits pour pouvoir éditer l'autopsie
-        
+
         $this->data = unserialize($this->obj->getField(self::FIELD_DATA));
 
         $attributes = array(
@@ -97,7 +97,7 @@ class CopsAutopsieBean extends CopsBean
             $this->getCardOdontologie(),
             // La Card du Signalement
             $this->getCardSignalement(),
-            
+
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -117,7 +117,7 @@ class CopsAutopsieBean extends CopsBean
     public function getCardSignalement()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-signalement.php';
-        
+
         /////////////////////////////////////////////
         // Corpulence
         $strCorpulence = '';
@@ -174,7 +174,7 @@ class CopsAutopsieBean extends CopsBean
             $strCoiffureCheveux .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
         /////////////////////////////////////////////
-        
+
         $attributes = array(
             // Général 1 à 4
             $this->data['sexe'],
@@ -206,7 +206,7 @@ class CopsAutopsieBean extends CopsBean
         /////////////////////////////////////////
         return $this->getRender($urlTemplate, $attributes);
     }
-    
+
     /**
      * @return string
      * @since 1.22.10.14
@@ -215,12 +215,12 @@ class CopsAutopsieBean extends CopsBean
     public function getCardOdontologie()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-odontologie.php';
-        
+
         $strMaxilliaireG = '';
         $strMaxilliaireD = '';
         $strMandibuleG   = '';
         $strMandibuleD   = '';
-        
+
         $strModele = '<input type="text" class="form-control col-1 offset-2 teeth text-center">
                       <input type="text" class="form-control col-1 teeth text-center">
                       <input type="text" class="form-control col-1 teeth text-center">
@@ -230,12 +230,12 @@ class CopsAutopsieBean extends CopsBean
                       <input type="text" class="form-control col-1 teeth text-center">
                       <input type="text" class="form-control col-1 teeth text-center">
                       <input type="text" class="form-control col-1 teeth text-center">';
-        
+
         $strMaxilliaireG = $strModele;
         $strMaxilliaireD = $strModele;
         $strMandibuleG   = $strModele;
         $strMandibuleD   = $strModele;
-        
+
         $attributes = array(
             $strMaxilliaireG,
             $strMaxilliaireD,
@@ -244,7 +244,7 @@ class CopsAutopsieBean extends CopsBean
         );
         return $this->getRender($urlTemplate, $attributes);
     }
-    
+
     /**
      * @return string
      * @since 1.22.10.14
@@ -288,7 +288,7 @@ class CopsAutopsieBean extends CopsBean
         );
         return $this->getRender($urlTemplate, $attributes);
     }
-    
+
     /**
      * @return string
      * @since 1.22.10.14
@@ -297,10 +297,10 @@ class CopsAutopsieBean extends CopsBean
     public function getCardEnquete()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-enquete.php';
-        
+
         $objServices = new CopsEnqueteServices();
         $objsCopsEnquete = $objServices->getEnquetes(array());
-        
+
         $strContent = '';
         while (!empty($objsCopsEnquete)) {
             $objCopsEnquete = array_shift($objsCopsEnquete);
@@ -313,7 +313,7 @@ class CopsAutopsieBean extends CopsBean
             $label = $objCopsEnquete->getField(self::FIELD_NOM_ENQUETE);
             $strContent .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
         }
-        
+
         $attributes = array(
             $strContent,
         );

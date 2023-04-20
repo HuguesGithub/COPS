@@ -15,20 +15,20 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         parent::__construct();
         /////////////////////////////////////////
         // Définition des services
-        
+
         /////////////////////////////////////////
         // Initialisation des variables
         $this->slugOnglet = self::ONGLET_CALENDAR;
         $this->titreOnglet = 'Calendrier';
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
-        
+
         // On récupère la date du jour
         if (isset($this->urlParams[self::CST_CAL_CURDAY])) {
             $this->curStrDate = $this->urlParams[self::CST_CAL_CURDAY];
         } else {
             $this->curStrDate = self::getCopsDate('m-d-Y');
         }
-        
+
         /////////////////////////////////////////
         // Construction du menu
         $extraUrl = self::CST_CAL_CURDAY.'='.$this->curStrDate;

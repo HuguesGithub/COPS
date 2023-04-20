@@ -29,7 +29,7 @@ class WpCategoryServices extends LocalServices
         }
         return $arrItems;
     }
-    
+
     /**
      * @param int $catId
      * @return WpCategoryClass
@@ -47,7 +47,7 @@ class WpCategoryServices extends LocalServices
      */
     public function getCategoryByField($field, $value)
     { return new WpCategoryClass(get_term_by($field, $value, 'category')); }
-    
+
     /*
   public function __construct() { }
 

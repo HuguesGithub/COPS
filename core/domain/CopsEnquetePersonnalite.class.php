@@ -18,7 +18,7 @@ class CopsEnqueteTemoignage extends LocalDomain
      * @var int $id
      */
     protected $id;
-    
+
     protected $idxEnquete;
     protected $nomTemoin;
     protected $idxBddDabis;
@@ -28,11 +28,11 @@ class CopsEnqueteTemoignage extends LocalDomain
     protected $notesTemoin;
     protected $verifTemoin;
     protected $relation;
-    
+
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
     //////////////////////////////////////////////////
-    
+
     //////////////////////////////////////////////////
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
@@ -54,7 +54,7 @@ class CopsEnqueteTemoignage extends LocalDomain
      */
     public static function convertElement($row)
     { return parent::convertRootElement(new CopsEnqueteTemoignage(), $row); }
-    
+
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////

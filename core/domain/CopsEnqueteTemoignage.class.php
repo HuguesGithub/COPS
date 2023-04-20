@@ -18,7 +18,7 @@ class CopsEnquetePersonnalite extends LocalDomain
      * @var int $id
      */
     protected $id;
-    
+
     protected $idxEnquete;
     protected $idxBddFcid;
     protected $idxBddDabis;
@@ -29,11 +29,11 @@ class CopsEnquetePersonnalite extends LocalDomain
     protected $cdndvDetail;
     protected $tDetail;
     protected $aDetail;
-    
+
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
     //////////////////////////////////////////////////
-    
+
     //////////////////////////////////////////////////
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
@@ -55,7 +55,7 @@ class CopsEnquetePersonnalite extends LocalDomain
      */
     public static function convertElement($row)
     { return parent::convertRootElement(new CopsEnquetePersonnalite(), $row); }
-    
+
     /**
      * @return CopsEnquetePersonnaliteBean
      * @version 1.22.09.23
@@ -63,7 +63,7 @@ class CopsEnquetePersonnalite extends LocalDomain
      */
     public function getBean()
     { return new CopsEnquetePersonnaliteBean($this); }
-    
+
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////

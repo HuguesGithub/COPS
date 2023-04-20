@@ -18,7 +18,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////
         // Définition des services
         $this->objCopsEventServices = new CopsEventServices();
-    
+
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
         $spanAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);

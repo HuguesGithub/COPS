@@ -18,14 +18,14 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////
         // Définition des services
         $this->objCopsEventServices = new CopsEventServices();
-        
+
         /////////////////////////////////////////
         // On initialise l'éventuelle pagination & on ajoute à l'url de Refresh
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         $this->action = $this->initVar(self::CST_ACTION);
         $id = $this->initVar(self::FIELD_ID);
         $this->objCopsEvent = $this->objCopsEventServices->getCopsEvent($id);
-        
+
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
         $spanAttributes = array(self::ATTR_CLASS=>self::CST_TEXT_WHITE);
@@ -33,11 +33,11 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         $buttonAttributes = array(self::ATTR_CLASS=>($this->btnDisabled));
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
-        
+
         if (isset($_POST) && isset($this->urlParams[self::CST_WRITE_ACTION])) {
             $this->dealWithWriteAction();
         }
-        
+
         /*
 
     if (isset($_POST) && !empty($_POST)) {
@@ -150,7 +150,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             $blnChecked = ($this->objCopsEvent->getField(self::FIELD_CATEG_ID==$value));
             $strOptsCategorie .= $this->getOption($label, $value, $blnChecked);
         }
-        
+
         ///////////////////////////////////////////////////////
         // Les options pour les heures vont de 00 à 23 par pas de 1
         $strOptsHeuresDebut = '';
@@ -162,7 +162,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             $hFin = $this->objCopsEvent->getField(self::FIELD_HEURE_FIN);
             $strOptsHeuresFin .= $this->getOption($label, $i, $i==$hFin);
         }
-        
+
         ///////////////////////////////////////////////////////
         // Les options pour les minutes vont de 00 à 55 par pas de 5
         $strOptsMinutesDebut = '';
@@ -197,23 +197,23 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
                 $inputAttributes[self::CST_CHECKED] = self::CST_CHECKED;
             }
             $strInput = $this->getBalise(self::TAG_INPUT, '', $inputAttributes);
-            
+
             $labelAttributes['for'] = 'repeat_'.$key;
             $strLabel = $this->getBalise(self::TAG_LABEL, $value, $labelAttributes);
-            
+
             $divAttributes = array(
                 self::ATTR_CLASS => 'custom-control custom-radio',
             );
             $strOptsPeriodicite .= $this->getDiv($strInput.$strLabel, $divAttributes);
         }
-        
+
         ///////////////////////////////////////////////////////
         // Initialisation des booléens
         $blnIsAlldayEvent = $this->objCopsEvent->isAllDayEvent();
         $blnIsRecurEvent = $this->objCopsEvent->isRepetitive();
         // Initialisation du type de fin de répétition
         $strRepeatType = $this->objCopsEvent->getField(self::FIELD_REPEAT_TYPE);
-        
+
         $urlTemplate = self::PF_FORM_EVENT;
         ///////////////////////////////////////////////////////
         // Contenu du formulaire
@@ -445,8 +445,8 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
                 $this->objCopsEvent->setField($field, stripslashes($this->urlParams[$field]));
             }
         }
-        
-        
+
+
         /*
         if (isset($this->urlParams[self::FIELD_REPEAT_END])) {
             if ($this->urlParams[self::FIELD_REPEAT_END]=='endDate' &&
@@ -462,7 +462,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         }
         */
         ///////////////////////////////////////////////////////
-        
+
         ///////////////////////////////////////////////////////
         // Si les contrôles sont ok, on insère ou on met à jour
         if ($this->objCopsEvent->checkFields()) {
@@ -472,7 +472,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             } else {
                 //$this->objCopsEventServices->updateEvent($this->objCopsEvent);
             }
-            
+
             // Une fois la mise à jour ou l'insertion faite, on doit gérer les event_date relatifs à l'event.
             //
         }
