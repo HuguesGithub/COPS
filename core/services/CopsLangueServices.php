@@ -77,15 +77,17 @@ class CopsLangueServices extends LocalServices
    * @since 1.22.04.28
    * @version 1.22.04.28
    */
-  public function getSelectHtml($selectAttributes=[], $requestAttributes=[])
-  {
-    $Bean = new UtilitiesBean();
-    $CopsLangues = $this->getCopsLangues($requestAttributes);
-    $selectHtml  = $Bean->getBalise(self::TAG_OPTION);
-    foreach ($CopsLangues as $CopsLangue) {
-      $selectHtml .= $Bean->getBalise(self::TAG_OPTION, $CopsLangue->getField(self::FIELD_LIBELLE), [self::ATTR_VALUE=>$CopsLangue->getField(self::FIELD_ID)]);
+    public function getSelectHtml(array $selectAttributes=[], array $requestAttributes=[]): string
+    {
+        $objBean = new UtilitiesBean();
+        $objsCopsLangue = $this->getCopsLangues($requestAttributes);
+        $selectHtml  = $objBean->getBalise(self::TAG_OPTION);
+        foreach ($objsCopsLangue as $objCopsLangue) {
+            $libelle = $objCopsLangue->getField(self::FIELD_LIBELLE);
+            $attributes = [self::ATTR_VALUE=>$objCopsLangue->getField(self::FIELD_ID)];
+            $selectHtml .= $objBean->getBalise(self::TAG_OPTION, $libelle, $attributes);
+        }
+        return $objBean->getBalise(self::TAG_SELECT, $selectHtml, $selectAttributes);
     }
-    return $Bean->getBalise(self::TAG_SELECT, $selectHtml, $selectAttributes);
-  }
 
 }

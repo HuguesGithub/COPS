@@ -36,7 +36,18 @@ class CopsStageDaoImpl extends LocalDaoImpl
 
         ////////////////////////////////////
         // Définition des champs spécifiques
-        $this->dbFields      = [self::FIELD_ID, self::FIELD_STAGE_CAT_ID, self::FIELD_STAGE_LIBELLE, self::FIELD_STAGE_LEVEL, self::FIELD_STAGE_REFERENCE, self::FIELD_STAGE_REQUIS, 'stagePreRequis', self::FIELD_STAGE_CUMUL, self::FIELD_STAGE_DESC, self::FIELD_STAGE_BONUS];
+        $this->dbFields      = [
+            self::FIELD_ID,
+            self::FIELD_STAGE_CAT_ID,
+            self::FIELD_STAGE_LIBELLE,
+            self::FIELD_STAGE_LEVEL,
+            self::FIELD_STAGE_REFERENCE,
+            self::FIELD_STAGE_REQUIS,
+            'stagePreRequis',
+            self::FIELD_STAGE_CUMUL,
+            self::FIELD_STAGE_DESC,
+            self::FIELD_STAGE_BONUS
+        ];
         $this->dbFields_csc  = [self::FIELD_ID, self::FIELD_STAGE_CAT_NAME];
         $this->dbFields_css  = [self::FIELD_ID, 'specName', self::FIELD_SPEC_DESC, 'stageId'];
         ////////////////////////////////////

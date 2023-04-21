@@ -14,7 +14,7 @@ class Cops
 {
   public function __construct()
   {
-    add_filter('template_include', [$this, 'template_loader']);
+    add_filter('template_include', $this->template_loader(...));
   }
 
   public function template_loader()
@@ -37,9 +37,9 @@ function cops_autoloader($classname)
     $matches = [];
     $arr = ['Actions' => 'actions', 'Bean' => 'bean', 'Class' => 'domain', 'DaoImpl' => 'daoimpl', 'Interface' => 'interfaceimpl', 'Services' => 'services'];
     $pattern = "/(Actions|Bean|Class|DaoImpl|Interface|Services)/";
-    if (preg_match($pattern, $classname, $matches)) {
-        if (strpos($classname, '\\')!==false) {
-            $classname = substr($classname, strrpos($classname, '\\')+1);
+    if (preg_match($pattern, (string) $classname, $matches)) {
+        if (str_contains((string) $classname, '\\')) {
+            $classname = substr((string) $classname, strrpos((string) $classname, '\\')+1);
         }
 
         if (isset($arr[$matches[1]])) {
@@ -81,7 +81,7 @@ add_action('admin_menu', 'cops_menu');
 */
 add_action('wp_ajax_dealWithAjax', 'dealWithAjax_callback');
 add_action('wp_ajax_nopriv_dealWithAjax', 'dealWithAjax_callback');
-function dealWithAjax_callback()
+function dealWithAjax_callback(): never
 {
   echo AjaxActions::dealWithAjax();
   die();

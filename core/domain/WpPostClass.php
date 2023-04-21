@@ -99,18 +99,25 @@ class WpPostClass extends LocalDomainClass
     public function getStrPostDate()
     {
         $s = $this->post_date;
-        return substr((string) $s, 8, 2).'/'.substr((string) $s, 5, 2).' à '.substr((string) $s, 11, 2).'h'.substr((string) $s, 14, 2);
+        $d = substr((string) $s, 8, 2);
+        $m = substr((string) $s, 5, 2);
+        return $d.'/'.$m.' à '.substr((string) $s, 11, 2).'h'.substr((string) $s, 14, 2);
     }
     public function getStrDate()
     {
         $arrDate = explode('-', substr((string) $this->post_date, 0, 10));
-        $arrMois = [1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        $arrMois = [
+            1=>'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+        ];
         return $arrDate[2].' '.$arrMois[$arrDate[1]*1].' '.$arrDate[0];
     }
 
     public function getPostMetas()
     {
-        if (!isset($this->metas)) { $this->metas = get_post_meta($this->ID); }
+        if (!isset($this->metas)) {
+            $this->metas = get_post_meta($this->ID);
+        }
         return $this->metas;
     }
 

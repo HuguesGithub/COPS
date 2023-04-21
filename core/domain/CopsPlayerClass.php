@@ -18,15 +18,8 @@ class CopsPlayerClass extends LocalDomain
    * @var int $id
    */
   protected $id;
-  /**
-   *
-   * @var string $matricule
-   */
+
   protected $matricule;
-  /**
-   *
-   * @var string $password
-   */
   protected $password;
   //
   protected $nom;
@@ -93,11 +86,10 @@ class CopsPlayerClass extends LocalDomain
    * @version 1.22.04.27
    * @since 1.22.04.27
    */
-  public function __construct($attributes=[])
+  public function __construct(array $attributes=[])
   {
     parent::__construct($attributes);
-    //$this->Services              = new GonePresenceServices();
-    $this->stringClass = 'CopsPlayer';
+    $this->stringClass = 'core\domain\CopsPlayerClass';
   }
   /**
    * @param array $row
@@ -136,33 +128,36 @@ class CopsPlayerClass extends LocalDomain
   { return $this->prenom.' '.$this->nom; }
 
   /**
-   * @since 1.22.04.29
-   * @version 1.22.04.29
+   * @since 1.23.04.21
    */
-  public static function getCurrentCopsPlayer()
-  {
-    $attributes = [];
-    if (isset($_SESSION[self::FIELD_MATRICULE])) {
-      $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE], self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH];
-      $Services = new CopsPlayerServices();
-      $CopsPlayers = $Services->getCopsPlayers($attributes);
-      $CopsPlayer = array_shift($CopsPlayers);
-    } else {
-      $CopsPlayer = new CopsPlayer();
+    public static function getCurrentCopsPlayer()
+    {
+        $attributes = [];
+        if (isset($_SESSION[self::FIELD_MATRICULE])) {
+            $attributes[self::SQL_WHERE_FILTERS] = [
+                self::FIELD_ID => self::SQL_JOKER_SEARCH,
+                self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
+                self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH
+            ];
+            $objCopsPlayerServices = new CopsPlayerServices();
+            $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
+            $objCopsPlayer = array_shift($objsCopsPlayer);
+        } else {
+            $objCopsPlayer = new CopsPlayerClass();
+        }
+        return $objCopsPlayer;
     }
-    return $CopsPlayer;
-  }
 
-  public function getStrPoids($format)
-  {
-    $strFormatted = '';
-    switch ($format) {
-      case 'd/m/Y' :
-        $strFormatted = substr((string) $this->birth_date, 8, 2).'/'.substr((string) $this->birth_date, 5, 2).'/'.substr((string) $this->birth_date, 0, 4);
-      break;
+    public function getStrPoids($format)
+    {
+        $strFormatted = '';
+        switch ($format) {
+            case 'd/m/Y' :
+            $strFormatted = substr((string) $this->birth_date, 8, 2).'/'.substr((string) $this->birth_date, 5, 2).'/'.substr((string) $this->birth_date, 0, 4);
+            break;
+        }
+        return $strFormatted;
     }
-    return $strFormatted;
-  }
 
   public function updateCopsPlayer()
   {  $this->Services->updateLocal($this); }

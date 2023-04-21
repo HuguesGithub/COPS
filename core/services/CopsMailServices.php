@@ -23,24 +23,24 @@ class CopsMailServices extends LocalServices
     $this->Dao = new CopsMailDaoImpl();
   }
 
-  //////////////////////////////////////////////////
-  // METHODS
-  //////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    // METHODS
+    //////////////////////////////////////////////////
 
-  ////////////////////////////////////
-  // WP_7_COPS_MAIL
-  ////////////////////////////////////
-  /**
-   * @since 1.22.05.04
-   * @version 1.22.05.04
-   */
-  public function getMail($mailId=-1)
-  {
-    $attributes = [$mailId];
-    $row = $this->Dao->getMail($attributes);
-    return new CopsMail($row[0]);
-  }
-  ////////////////////////////////////
+    ////////////////////////////////////
+    // WP_7_COPS_MAIL
+    ////////////////////////////////////
+    /**
+     * @since 1.22.05.04
+     * @version 1.22.05.04
+     */
+    public function getMail($mailId=-1)
+    {
+        $attributes = [$mailId];
+        $row = $this->Dao->getMail($attributes);
+        return new CopsMail($row[0]);
+    }
+    ////////////////////////////////////
 
     ////////////////////////////////////
     // WP_7_COPS_MAIL_FOLDER
@@ -54,9 +54,12 @@ class CopsMailServices extends LocalServices
      */
     public function getMailFolders($attributes=[])
     {
-        $prepAttributes = [(!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]), (!isset($attributes[self::FIELD_SLUG]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_SLUG])];
-        $rows = $this->Dao->getMailFolders($prepAttributes);
         $objMailFolders = [];
+        $prepAttributes = [
+            isset($attributes[self::FIELD_ID]) ?? self::SQL_JOKER_SEARCH,
+            isset($attributes[self::FIELD_SLUG]) ?? self::SQL_JOKER_SEARCH
+        ];
+        $rows = $this->Dao->getMailFolders($prepAttributes);
         while (!empty($rows)) {
             $objMailFolders[] = new CopsMailFolder(array_shift($rows));
         }
@@ -88,7 +91,11 @@ class CopsMailServices extends LocalServices
      */
     public function getMailUsers($attributes=[])
     {
-        $prepAttributes = [(!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]), (!isset($attributes[self::FIELD_MAIL]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_MAIL]), (!isset($attributes['copsId']) ? self::SQL_JOKER_SEARCH : $attributes['copsId'])];
+        $prepAttributes = [
+            (!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]),
+            (!isset($attributes[self::FIELD_MAIL]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_MAIL]),
+            (!isset($attributes['copsId']) ? self::SQL_JOKER_SEARCH : $attributes['copsId'])
+        ];
         $rows = $this->Dao->getMailUsers($prepAttributes);
         $objMailUsers = [];
         while (!empty($rows)) {
@@ -125,7 +132,13 @@ class CopsMailServices extends LocalServices
      */
     public function getMailJoints($attributes=[], $blnBothFolders=false)
     {
-        $prepAttributes = [(!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]), (!isset($attributes[self::FIELD_TO_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_TO_ID]), (!isset($attributes[self::FIELD_FROM_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FROM_ID]), (!isset($attributes[self::FIELD_FOLDER_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FOLDER_ID]), (!isset($attributes[self::FIELD_LU]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_LU])];
+        $prepAttributes = [
+            (!isset($attributes[self::FIELD_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_ID]),
+            (!isset($attributes[self::FIELD_TO_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_TO_ID]),
+            (!isset($attributes[self::FIELD_FROM_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FROM_ID]),
+            (!isset($attributes[self::FIELD_FOLDER_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FOLDER_ID]),
+            (!isset($attributes[self::FIELD_LU]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_LU])
+        ];
         $rows = $this->Dao->getMailJoints($prepAttributes, $blnBothFolders);
         $objMailJoints = [];
         while (!empty($rows)) {

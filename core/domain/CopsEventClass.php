@@ -1,14 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\domain;
+
 /**
- * Classe CopsEvent
+ * Classe CopsEventClass
  * @author Hugues
  * @version 1.22.06.13
  * @since 1.22.06.13
  */
-class CopsEvent extends LocalDomain
+class CopsEventClass extends LocalDomainClass
 {
   //////////////////////////////////////////////////
   // ATTRIBUTES
@@ -32,75 +31,84 @@ class CopsEvent extends LocalDomain
   protected $repeatEnd;
   protected $repeatEndValue;
 
-  //////////////////////////////////////////////////
-  // GETTERS & SETTERS
-  //////////////////////////////////////////////////
-  public function setDateDebut($dateDebut)
-  {
-    if (str_contains((string) $dateDebut, '-')) {
-      $this->dateDebut = $dateDebut;
-    } else {
-      [$d, $m, $Y] = explode('/', (string) $dateDebut);
-      $this->dateDebut = $Y.'-'.$m.'-'.$d;
+    //////////////////////////////////////////////////
+    // GETTERS & SETTERS
+    //////////////////////////////////////////////////
+    /**
+     * @since 1.23.04.21
+     */
+    public function setDateDebut(string $dateDebut): void
+    {
+        if (str_contains((string) $dateDebut, '-')) {
+            $this->dateDebut = $dateDebut;
+        } else {
+            [$d, $m, $Y] = explode('/', (string) $dateDebut);
+            $this->dateDebut = $Y.'-'.$m.'-'.$d;
+        }
     }
-  }
-  public function setDateFin($dateFin)
-  {
-    if (str_contains((string) $dateFin, '-')) {
-      $this->dateFin = $dateFin;
-    } else {
-      [$d, $m, $Y] = explode('/', (string) $dateFin);
-      $this->dateFin = $Y.'-'.$m.'-'.$d;
-    }
-  }
-  public function setRepeatEndValue($repeatEndValue)
-  {
-    if (str_contains((string) $repeatEndValue, '/')) {
-      [$d, $m, $Y] = explode('/', (string) $repeatEndValue);
-      $repeatEndValue = $Y.'-'.$m.'-'.$d;
-    }
-    $this->repeatEndValue = $repeatEndValue;
-  }
 
-  //////////////////////////////////////////////////
-  // CONSTRUCT - CLASSVARS - CONVERT - BEAN
-  //////////////////////////////////////////////////
-  /**
-   * @param array $attributes
-   * @version 1.22.06.13
-   * @since 1.22.06.13
-   */
-  public function __construct($attributes=[])
-  {
-    parent::__construct($attributes);
-    $this->stringClass = 'CopsEvent';
-    $this->CopsEventServices = new CopsEventServices();
-  }
-  /**
-   * @param array $row
-   * @return CopsEvent
-   * @version 1.22.06.13
-   * @since 1.22.06.13
-   */
-  public static function convertElement($row)
-  { return parent::convertRootElement(new CopsEvent(), $row); }
-  /**
-   * @return CopsEventBean
-   * @version 1.22.06.13
-   * @since 1.22.06.13
-   */
-  public function getBean()
-  { return new CopsEventBean($this); }
+    /**
+     * @since 1.23.04.21
+     */
+    public function setDateFin(string $dateFin): void
+    {
+        if (str_contains((string) $dateFin, '-')) {
+            $this->dateFin = $dateFin;
+        } else {
+            [$d, $m, $Y] = explode('/', (string) $dateFin);
+            $this->dateFin = $Y.'-'.$m.'-'.$d;
+        }
+    }
+
+    /**
+     * @since 1.23.04.21
+     */
+    public function setRepeatEndValue(string $repeatEndValue): void
+    {
+        if (str_contains((string) $repeatEndValue, '/')) {
+            [$d, $m, $Y] = explode('/', (string) $repeatEndValue);
+            $repeatEndValue = $Y.'-'.$m.'-'.$d;
+        }
+        $this->repeatEndValue = $repeatEndValue;
+    }
+
+    //////////////////////////////////////////////////
+    // CONSTRUCT - CLASSVARS - CONVERT - BEAN
+    //////////////////////////////////////////////////
+    /**
+     * @since 1.23.04.21
+     */
+    public function __construct(array $attributes=[])
+    {
+        parent::__construct($attributes);
+        $this->stringClass = 'core\domain\CopsEventClass';
+        $this->objCopsEventServices = new CopsEventServices();
+    }
+
+    /**
+     * @since 1.23.04.21
+     */
+    public static function convertElement(array $row): CopsEventClass
+    {
+        return parent::convertRootElement(new CopsEventClass(), $row);
+    }
+
+    /**
+     * @since 1.23.04.21
+     */
+    public function getBean(): CopsEventBean
+    {
+        return new CopsEventBean($this);
+    }
 
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function checkFields()
+    public function checkFields(): bool
     {
         $blnOk = true;
         if ($this->eventLibelle=='' || $this->dateDebut=='' || $this->dateFin=='') {
@@ -111,18 +119,22 @@ class CopsEvent extends LocalDomain
             if ($this->repeatInterval=='' || $this->repeatEnd=='') {
                 $blnOk = false;
             }
-            if (($this->repeatEnd=='endDate' || $this->repeatEnd=='endRepeat') && $this->repeatEndValue=='') {
+            if (
+                ($this->repeatEnd==self::CST_EVENT_RT_ENDDATE || $this->repeatEnd==self::CST_EVENT_RT_ENDREPEAT) &&
+                $this->repeatEndValue==''
+            ) {
                 $blnOk = false;
             }
+        } else {
+            // TODO
         }
         return $blnOk;
     }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function isValidInterval()
+    public function isValidInterval(): bool
     {
         $dF = $this->dateFin;
         $dD = $this->dateDebut;
@@ -130,30 +142,31 @@ class CopsEvent extends LocalDomain
     }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function isAllDayEvent()
-    { return ($this->allDayEvent==1); }
+    public function isAllDayEvent(): bool
+    {
+        return ($this->allDayEvent==1);
+    }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function isRepetitive()
-    { return ($this->repeatStatus==1); }
+    public function isRepetitive(): bool
+    {
+        return ($this->repeatStatus==1);
+    }
     
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function saveEvent()
+    public function saveEvent(): void
     {
-        $this->CopsEventServices->saveEvent($this);
+        $this->objCopsEventServices->saveEvent($this);
         
         if ($this->isRepetitive()) {
             // On créé un nouvel objet event_date
-            $objCopsEventDate = new CopsEventDate();
+            $objCopsEventDate = new CopsEventDateClass();
             // Que l'on assigne à l'event créé à l'instant.
             $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
             if ($this->isAllDayEvent()) {
@@ -173,7 +186,7 @@ class CopsEvent extends LocalDomain
             
             // Selon le critère de fin de répétition, on gère différemment.
             switch ($this->repeatEnd) {
-                case 'endDate' :
+                case self::CST_EVENT_RT_ENDDATE :
                     // On répète jusqu'à dépasser une date
                     while ($dateDebut<$this->repeatEndValue) {
                         // On insère l'event_date
@@ -183,7 +196,7 @@ class CopsEvent extends LocalDomain
                         $this->incrementerDates($dateDebut, $dateFin);
                     }
                 break;
-                case 'endRepeat' :
+                case self::CST_EVENT_RT_ENDREPEAT :
                     // On répète un certain nombre de fois
                     for ($i=0; $i<$this->repeatEndValue; ++$i) {
                         // On insère l'event_date
@@ -213,7 +226,7 @@ class CopsEvent extends LocalDomain
             }
         } else {
             // S'il ne se répète pas, on insère une seule entrée dans event_date.
-            $objCopsEventDate = new CopsEventDate();
+            $objCopsEventDate = new CopsEventDateClass();
             $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
             $objCopsEventDate->setField(self::FIELD_DSTART, $this->dateDebut);
             $objCopsEventDate->setField(self::FIELD_DEND, $this->dateFin);
@@ -233,29 +246,28 @@ class CopsEvent extends LocalDomain
     }
     
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function incrementerDates(&$dateDebut, &$dateFin)
+    public function incrementerDates(string &$dateDebut, string &$dateFin): void
     {
         // On parse les dates
         [$yd, $md, $dd] = explode('-', (string) $dateDebut);
         [$yf, $mf, $df] = explode('-', (string) $dateFin);
         // Selon le type de répétition, on incrémente de l'intervalle la donnée correspondante
         switch ($this->repeatType) {
-            case 'daily' :
+            case self::CST_EVENT_RT_DAILY :
                 $dd += $this->repeatInterval;
                 $df += $this->repeatInterval;
             break;
-            case 'weekly' :
+            case self::CST_EVENT_RT_WEEKLY :
                 $dd += 7*$this->repeatInterval;
                 $df += 7*$this->repeatInterval;
             break;
-            case 'monthly' :
+            case self::CST_EVENT_RT_MONTHLY :
                 $md += $this->repeatInterval;
                 $mf += $this->repeatInterval;
             break;
-            case 'yearly' :
+            case self::CST_EVENT_RT_YEARLY :
                 $yd += $this->repeatInterval;
                 $yf += $this->repeatInterval;
             break;
@@ -263,81 +275,80 @@ class CopsEvent extends LocalDomain
             break;
         }
         // On met à jour les nouvelles dates.
-        $dateDebut = date('Y-m-d', mktime(0, 0, 0, $md, $dd, $yd));
-        $dateFin = date('Y-m-d', mktime(0, 0, 0, $mf, $df, $yf));
+        $dateDebut = date(self::FORMAT_DATE_YMD, mktime(0, 0, 0, $md, $dd, $yd));
+        $dateFin = date(self::FORMAT_DATE_YMD, mktime(0, 0, 0, $mf, $df, $yf));
     }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function getRgbCategorie()
+    public function getRgbCategorie(): string
     {
-        [$r, $g, $b] = sscanf($this->getCategorieCouleur(), "%02x%02x%02x");
-        return $r.', '.$g.', '.$b;
+        return implode(', ', sscanf($this->getCategorieCouleur(), "%02x%02x%02x"));
     }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function getCategorieCouleur()
-    { return $this->getCategorie()->getField('categorieCouleur'); }
+    public function getCategorieCouleur(): string
+    {
+        return $this->getCategorie()->getField(self::FIELD_CATEG_COLOR);
+    }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function getCategorie()
-    { return $this->CopsEventServices->getCategorie($this->categorieId); }
+    public function getCategorie(): CopsEventCategorieClass
+    {
+        return $this->CopsEventServices->getCategorie($this->categorieId);
+    }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function isSeveralDays()
-    { return ($this->dateDebut!=$this->dateFin); }
+    public function isSeveralDays(): bool
+    {
+        return ($this->dateDebut!=$this->dateFin);
+    }
 
     /**
-     * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @since 1.23.04.21
      */
-    public function isFirstDay($tsDisplay)
-    { return (date('Y-m-d', $tsDisplay)==$this->dateDebut); }
+    public function isFirstDay(int $tsDisplay): bool
+    {
+        return (date(self::FORMAT_DATE_YMD, $tsDisplay)==$this->dateDebut);
+    }
     
     /**
-     * @since v1.22.11.25
-     * @version v1.22.11.25
+     * @since 1.23.04.21
      */
-    public function isLastDay($tsDisplay)
-    { return (date('Y-m-d', $tsDisplay)==$this->dateFin); }
+    public function isLastDay(int $tsDisplay): bool
+    {
+        return (date(self::FORMAT_DATE_YMD, $tsDisplay)==$this->dateFin);
+    }
 
     /**
-     * @since v1.22.11.25
-     * @version v1.22.11.25
+     * @since 1.23.04.21
      */
-    public function isFirstWeek($tsDisplay)
+    public function isFirstWeek(int $tsDisplay): bool
     {
         [$y, $m, $d] = explode('-', (string) $this->dateDebut);
         return (date('W', $tsDisplay)==date('W', mktime(0, 0, 0, $m, $d, $y)));
     }
 
     /**
-     * @since v1.22.11.25
-     * @version v1.22.11.25
+     * @since 1.23.04.21
      */
-    public function isLastWeek($tsDisplay)
+    public function isLastWeek(int $tsDisplay): bool
     {
         [$y, $m, $d] = explode('-', (string) $this->dateFin);
         return (date('W', $tsDisplay)==date('W', mktime(0, 0, 0, $m, $d, $y)));
     }
     
-
     /**
-     * @since v1.22.11.24
-     * @version v1.22.11.24
+     * @since 1.23.04.21
      */
-    public function getNbDays()
+    public function getNbDays(): int
     {
         [$y, $m, $d] = explode('-', (string) $this->dateDebut);
         $tsDeb = mktime(0, 0, 0, $m, $d, $y);
@@ -347,10 +358,9 @@ class CopsEvent extends LocalDomain
     }
     
     /**
-     * @since v1.22.11.27
-     * @version v1.22.11.27
+     * @since 1.23.04.21
      */
-    public function getNbDaysTillEnd($tsDisplay)
+    public function getNbDaysTillEnd(int $tsDisplay): int
     {
         [$y, $m, $d] = explode('-', (string) $this->dateFin);
         $tsFin = mktime(0, 0, 0, $m, $d, $y);
@@ -358,10 +368,9 @@ class CopsEvent extends LocalDomain
     }
     
     /**
-     * @since v1.22.11.24
-     * @version v1.22.11.24
+     * @since 1.23.04.21
      */
-    public function getNbDaysSinceFirst($tsDisplay)
+    public function getNbDaysSinceFirst(int $tsDisplay): int
     {
         [$y, $m, $d] = explode('-', (string) $this->dateDebut);
         $tsDeb = mktime(0, 0, 0, $m, $d, $y);
@@ -369,46 +378,69 @@ class CopsEvent extends LocalDomain
     }
 
     /**
-     * @since v1.22.11.25
-     * @version v1.22.11.25
+     * @since 1.23.04.21
      */
-    public function isSeveralWeeks()
+    public function isSeveralWeeks(): bool
     {
-        $tsFin = mktime(0, 0, 0, substr((string) $this->dateFin, 5, 2), substr((string) $this->dateFin, 8), substr((string) $this->dateFin, 0, 4));
-        $tsDeb = mktime(0, 0, 0, substr((string) $this->dateDebut, 5, 2), substr((string) $this->dateDebut, 8), substr((string) $this->dateDebut, 0, 4));
+        $m = substr((string) $this->dateFin, 5, 2);
+        $d= substr((string) $this->dateFin, 8);
+        $y = substr((string) $this->dateFin, 0, 4);
+        $tsFin = mktime(0, 0, 0, $m, $d, $y);
+        $m = substr((string) $this->dateDebut, 5, 2);
+        $d = substr((string) $this->dateDebut, 8);
+        $y = substr((string) $this->dateDebut, 0, 4);
+        $tsDeb = mktime(0, 0, 0, $m, $d, $y);
         return (date('W', $tsDeb)!=date('W', $tsFin));
     }
-    
 
-
-
-
-
-    
-    
-
-
-
-
-
-
-  public function isOverThisWeek($tsDisplay)
-  {
-    $tsFin = mktime(0, 0, 0, substr((string) $this->dateFin, 5, 2), substr((string) $this->dateFin, 8), substr((string) $this->dateFin, 0, 4));
-    return (date('W', $tsDisplay)!=date('W', $tsFin));
-  }
-
-  public function getColSpan($tsDeb=null)
-  {
-    $tsFin = mktime(0, 0, 0, substr((string) $this->dateFin, 5, 2), substr((string) $this->dateFin, 8), substr((string) $this->dateFin, 0, 4));
-    if ($tsDeb==null) {
-      $tsDeb = mktime(0, 0, 0, substr((string) $this->dateDebut, 5, 2), substr((string) $this->dateDebut, 8), substr((string) $this->dateDebut, 0, 4));
+    /**
+     * @since 1.23.04.21
+     */
+    public function isOverThisWeek(int $tsDisplay): bool
+    {
+        $m = substr((string) $this->dateFin, 5, 2);
+        $d = substr((string) $this->dateFin, 8);
+        $y = substr((string) $this->dateFin, 0, 4);
+        $tsFin = mktime(0, 0, 0, $m, $d, $y);
+        return (date('W', $tsDisplay)!=date('W', $tsFin));
     }
-    return round(($tsFin-$tsDeb)/(60*60*24));
-  }
 
-  public function getInsertAttributes()
-  {
-    return [$this->eventLibelle, $this->categorieId, $this->dateDebut, $this->dateFin, $this->allDayEvent, $this->heureDebut, $this->heureFin, $this->repeatStatus, $this->repeatType, $this->repeatInterval, $this->repeatEnd, $this->repeatEndValue];
-  }
+    /**
+     * @since 1.23.04.21
+     */
+    public function getColSpan(int $tsDeb=-1): bool
+    {
+        $m = substr((string) $this->dateFin, 5, 2);
+        $d = substr((string) $this->dateFin, 8);
+        $y = substr((string) $this->dateFin, 0, 4);
+        $tsFin = mktime(0, 0, 0, $m, $d, $y);
+        if ($tsDeb==-1) {
+            $m = substr((string) $this->dateDebut, 5, 2);
+            $d = substr((string) $this->dateDebut, 8);
+            $y = substr((string) $this->dateDebut, 0, 4);
+            $tsDeb = mktime(0, 0, 0, $m, $d, $y);
+        }
+        return round(($tsFin-$tsDeb)/(60*60*24));
+    }
+
+    /**
+     * @since 1.23.04.21
+     */
+    public function getInsertAttributes(): array
+    {
+        return [
+            $this->eventLibelle,
+            $this->categorieId,
+            $this->dateDebut,
+            $this->dateFin,
+            $this->allDayEvent,
+            $this->heureDebut,
+            $this->heureFin,
+            $this->repeatStatus,
+            $this->repeatType,
+            $this->repeatInterval,
+            $this->repeatEnd,
+            $this->repeatEndValue
+        ];
+    }
 }

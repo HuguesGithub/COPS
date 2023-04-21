@@ -67,7 +67,11 @@ class CopsStageCategorieClass extends LocalDomainClass
     public function getStages()
     {
         $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID           => self::SQL_JOKER_SEARCH, self::FIELD_STAGE_CAT_ID => $this->id, self::FIELD_STAGE_LEVEL  => self::SQL_JOKER_SEARCH];
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::FIELD_ID           => self::SQL_JOKER_SEARCH,
+            self::FIELD_STAGE_CAT_ID => $this->id,
+            self::FIELD_STAGE_LEVEL  => self::SQL_JOKER_SEARCH
+        ];
         return $this->objCopsStageServices->getStages($attributes);
     }
 }

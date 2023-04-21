@@ -116,37 +116,6 @@ class WpPageAdminBean extends WpPageBean
     /**
      * @return string
      * @since 1.22.10.18
-     * @version 1.22.10.18
-     */
-    public function analyzeUri()
-    {
-        $uri = $_SERVER['REQUEST_URI'];
-        $pos = strpos((string) $uri, '?');
-        if ($pos!==false) {
-            $arrParams = explode('&', substr((string) $uri, $pos+1, strlen((string) $uri)));
-            if (!empty($arrParams)) {
-                foreach ($arrParams as $param) {
-                    [$key, $value] = explode('=', $param);
-                    $this->urlParams[$key] = $value;
-                }
-            }
-            $uri = substr((string) $uri, 0, $pos-1);
-        }
-        $pos = strpos((string) $uri, '#');
-        if ($pos!==false) {
-            $this->anchor = substr((string) $uri, $pos+1, strlen((string) $uri));
-        }
-        if (isset($_POST)) {
-            foreach ($_POST as $key => $value) {
-                $this->urlParams[$key] = $value;
-            }
-        }
-        return $uri;
-    }
-
-    /**
-     * @return string
-     * @since 1.22.10.18
      * @version 1.22.10.19
      */
     public function getContentPage()

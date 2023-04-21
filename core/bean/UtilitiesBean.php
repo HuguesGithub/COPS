@@ -120,7 +120,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      * @param array $attributes
      * @return array
      */
-    private function getExtraAttributesString(array $attributes): array
+    private function getExtraAttributesString(array $attributes): string
     {
         $extraAttributes = '';
         if (!empty($attributes)) {
@@ -369,4 +369,34 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 
+    /**
+     * @return string
+     * @since 1.22.10.18
+     * @version 1.22.10.18
+     */
+    public function analyzeUri()
+    {
+        $uri = static::fromServer('REQUEST_URI');
+        $pos = strpos((string) $uri, '?');
+        if ($pos!==false) {
+            $arrParams = explode('&', substr((string) $uri, $pos+1, strlen((string) $uri)));
+            if (!empty($arrParams)) {
+                foreach ($arrParams as $param) {
+                    [$key, $value] = explode('=', $param);
+                    $this->urlParams[$key] = $value;
+                }
+            }
+            $uri = substr((string) $uri, 0, $pos-1);
+        }
+        $pos = strpos((string) $uri, '#');
+        if ($pos!==false) {
+            $this->anchor = substr((string) $uri, $pos+1, strlen((string) $uri));
+        }
+        if (isset($_POST)) {
+            foreach ($_POST as $key => $value) {
+                $this->urlParams[$key] = static::fromPost($key);
+            }
+        }
+        return $uri;
+    }
 }

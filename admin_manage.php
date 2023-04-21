@@ -22,7 +22,7 @@
   if (empty($Cops)) {
     $Cops = new Cops();
   }
-  $AdminPageBean = new AdminPageBean();
+  $AdminPageBean = new \core\bean\AdminPageBean();
   echo $AdminPageBean->getContentPage();
 ?>
 <script type='text/javascript' src='<?php echo PLUGINS_MYCOMMON; ?>web/rsc/js/jquery.min.js'></script>

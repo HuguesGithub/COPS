@@ -1,25 +1,23 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe AdminPageBean
  * @author Hugues
- * @version 1.22.09.05
  * @since 1.22.09.05
+ * @version 1.23.04.20
  */
 class AdminPageBean extends UtilitiesBean
 {
-
-  /**
-   * Class Constructor
-   * @version 1.22.09.05
-   * @since 1.22.09.05
-   */
-  public function __construct()
-  {
-    $this->analyzeUri();
-  }
+    /**
+     * Class Constructor
+     * @version 1.22.09.05
+     * @since 1.22.09.05
+     */
+    public function __construct()
+    {
+        $this->analyzeUri();
+    }
 
   /**
    * @return bool
@@ -37,7 +35,7 @@ class AdminPageBean extends UtilitiesBean
   public function getContentPage()
   {
     $returned = null;
-    if (self::isAdmin() || current_user_can('editor')) {
+    if (static::isAdmin() || current_user_can('editor')) {
       try {
         $returned = match ($this->urlParams[self::CST_ONGLET]) {
             'meteo' => AdminPageMeteoBean::getStaticContentPage($this->urlParams),
