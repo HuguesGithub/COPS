@@ -379,7 +379,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
         $uri = static::fromServer('REQUEST_URI');
         $pos = strpos((string) $uri, '?');
         if ($pos!==false) {
-            $arrParams = explode('&', substr((string) $uri, $pos+1, strlen((string) $uri)));
+            $arrParams = explode('&amp;', substr((string) $uri, $pos+1, strlen((string) $uri)));
             if (!empty($arrParams)) {
                 foreach ($arrParams as $param) {
                     [$key, $value] = explode('=', $param);

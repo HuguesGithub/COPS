@@ -66,7 +66,7 @@ class CopsMeteoDaoImpl extends LocalDaoImpl
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields_met), $this->dbTable_met);
         $request .= " WHERE dateMeteo LIKE '%s'";
-        $request .= " ORDER BY heureMeteo ASC;";
+        $request .= " ORDER BY %s %s LIMIT %s";
         return $this->selectListDaoImpl(new CopsMeteoClass(), $request, $attributes);
     }
 
@@ -79,7 +79,7 @@ class CopsMeteoDaoImpl extends LocalDaoImpl
      */
     public function getSoleil(array $prepObject): array
     {
-        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_sol), $this->dbTable_sol, self::FIELD_ID);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_sol), $this->dbTable_sol, self::FIELD_DATE_SOLEIL);
         return $this->selectDaoImpl($request, $prepObject);
     }
 

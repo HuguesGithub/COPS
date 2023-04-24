@@ -1,72 +1,83 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
+use core\domain\CopsIndexReferenceClass;
+use core\domain\MySQLClass;
+
 /**
  * AdminPageIndexBean
  * @author Hugues
- * @version 1.22.09.06
- * @since 1.22.09.06
+ * @since 1.23.04.20
  */
 class AdminPageIndexBean extends AdminPageBean
 {
-  protected $urlTemplateAdminPageIndex       = 'web/pages/admin/page-admin-index.php';
-
-  /**
-   * Class Constructor
-   */
-  public function __construct($urlParams=null)
-  {
-    parent::__construct();
-  }
-
-  /**
-   * @param array $urlParams
-   * @return string
-   * @version 1.22.09.06
-   * @since 1.22.09.06
-   */
-  public static function getStaticContentPage($urlParams)
-  {
-    ///////////////////////////////////////////:
-    // Initialisation des valeurs par défaut
-    $Bean = new AdminPageIndexBean($urlParams);
-    return $Bean->getContentPage();
-  }
-  /**
-   * @param array $urlParams
-   * @return string
-   * @version 1.22.09.06
-   * @since 1.22.09.06
-   */
-  public function getContentPage()
-  {
-    if (isset($_POST) && !empty($_POST)) {
-      $this->controlerEtEnregistrerIndex();
+    /**
+     * @since 1.23.04.20
+     */
+    public static function getStaticContentPage(): string
+    {
+        ///////////////////////////////////////////:
+        // Initialisation des valeurs par défaut
+        $objBean = new AdminPageIndexBean();
+        return $objBean->getContentPage();
     }
 
-    // On va afficher la dernière donnée enregistrée
-    // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
-    $attributes = [
-        //  - 1
-        $this->getSelectNature(),
-        //  - 2
-        $this->getLisReference(),
-        // - 3
-        $this->getListeIndex(),
-        // - 4
-        $this->getLisNatureCheckboxes(),
-        // - 5
-        $this->getLisReferenceCheckboxes(),
-    ];
-    return $this->getRender($this->urlTemplateAdminPageIndex, $attributes);
-  }
+    /**
+     * @since 1.23.04.20
+     */
+    public function getContentPage(): string
+    {
+        $this->controlerEtEnregistrerIndex();
+
+        // On va afficher la dernière donnée enregistrée
+        // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
+        $attributes = [
+            //  - 1
+            '',//$this->getSelectNature(),
+            //  - 2
+            '',//$this->getLisReference(),
+            // - 3
+            '',//$this->getListeIndex(),
+            // - 4
+            '',//$this->getLisNatureCheckboxes(),
+            // - 5
+            '',//$this->getLisReferenceCheckboxes(),
+        ];
+        return $this->getRender(self::WEB_PA_INDEX, $attributes);
+    }
+
+    /**
+     * @since 1.23.04.20
+     */
+    public function controlerEtEnregistrerIndex(): void
+    {
+        // TODO : Envisager une édition si concerné.
+        $objCopsIndexReference = new CopsIndexReferenceClass();
+        $expectedFields = [
+            self::FIELD_NOM_IDX,
+            self::FIELD_NATURE_IDX_ID,
+            self::FIELD_DESCRIPTION_MJ,
+            self::FIELD_DESCRIPTION_PJ,
+        ];
+        while (!empty($expectedFields)) {
+            $field = array_shift($expectedFields);
+            $value = static::fromPost($field);
+
+            $objCopsIndexReference->setField($field, $value);
+        }
+
+        if ($objCopsIndexReference->isFieldsValid()) {
+            $objCopsIndexReference->insertCopsIndexReference();
+        }
+    }
+  
+
 
   public function getLisReference()
   {
     $str_requete = "SELECT nomIdxReference, abrIdxReference FROM ";
     $str_requete .= "wp_7_cops_index_reference ORDER BY idIdxReference ASC;";
-    $rows = MySQL::wpdbSelect($str_requete);
+    $rows = MySQLClass::wpdbSelect($str_requete);
 
     $str_lis  = '';
     foreach ($rows as $row) {
@@ -79,7 +90,7 @@ class AdminPageIndexBean extends AdminPageBean
   public function getSelectNature()
   {
     $str_requete = "SELECT idIdxNature, nomIdxNature FROM wp_7_cops_index_nature ORDER BY nomIdxNature ASC;";
-    $rows = MySQL::wpdbSelect($str_requete);
+    $rows = MySQLClass::wpdbSelect($str_requete);
 
     $str_select  = '<select id="natureId" name="natureId" class="form-select">';
     $str_select .= '<option value="-">Choisir une Nature</option>';
@@ -90,23 +101,12 @@ class AdminPageIndexBean extends AdminPageBean
     return $str_select;
   }
 
-  public function controlerEtEnregistrerIndex()
-  {
-    $CopsIndex = new CopsIndex();
-    $CopsIndex->setField('nomIdx', $_POST['nomIdx']);
-    $CopsIndex->setField('natureId', $_POST['natureId']);
-    $CopsIndex->setField('reference', $_POST['reference']);
-    $CopsIndex->setField('descriptionMJ', $_POST['descriptionMJ']);
-    $CopsIndex->setField('descriptionPJ', $_POST['descriptionPJ']);
-
-    $CopsIndex->insertCopsIndex();
-  }
 
   public function getListeIndex()
   {
     $requete  = "SELECT nomIdx, nomIdxNature, reference, descriptionMJ, descriptionPJ FROM wp_7_cops_index ";
     $requete .= "INNER JOIN wp_7_cops_index_nature ON natureId=IdIdxNature ORDER BY nomIdx ASC;";
-    $rows = MySQL::wpdbSelect($requete);
+    $rows = MySQLClass::wpdbSelect($requete);
 
     $str_content = '';
     foreach ($rows as $row) {

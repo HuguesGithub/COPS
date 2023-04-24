@@ -35,9 +35,13 @@ class CopsMeteoServices extends LocalServices
     ////////////////////////////////////
     // WP_7_COPS_METEO
     ////////////////////////////////////
-    public function getMeteos(string $dateMeteo): array
+    public function getMeteos(array $params): array
     {
-        $prepAttributes = [$dateMeteo];
+        $prepAttributes = [];
+        $prepAttributes[] = $params[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] ?? self::SQL_JOKER_SEARCH;
+        $prepAttributes[] = $params[self::SQL_ORDER_BY] ?? self::FIELD_DATE_METEO;
+        $prepAttributes[] = $params[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+        $prepAttributes[] = $params[self::SQL_LIMIT] ?? 9999;
         return $this->Dao->getMeteos($prepAttributes);
     }
 

@@ -1,42 +1,38 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
+use core\domain\CopsMeteoClass;
+use core\services\CopsMeteoServices;
+use core\domain\MySQLClass;
+
 /**
  * AdminPageMeteoBean
  * @author Hugues
- * @version 1.22.09.05
- * @since 1.22.09.05
+ * @since 1.23.04.20
  */
 class AdminPageMeteoBean extends AdminPageBean
 {
-  protected $urlTemplateAdminPageMeteo       = 'web/pages/admin/page-admin-meteo.php';
-  protected $urlTemplateGrapheMeteo          = 'web/pages/admin/fragments/page-admin-article-graphe-meteo.php';
-  protected $urlTemplateGrapheMeteoColumn    = 'web/pages/admin/fragments/page-admin-column-graphe-meteo.php';
+    private $ajaxUrl = 'https://www.timeanddate.com/scripts/cityajax.php?n=usa/los-angeles&mode=historic&hd=%1$s&month=%2$s&year=%3$s';
 
     /**
-     * @param array $urlParams
-     * @return string
-     * @version 1.22.09.05
-     * @since 1.22.10.17
+     * @since 1.23.04.20
      */
-    public static function getStaticContentPage($urlParams)
+    public static function getStaticContentPage(): string
     {
         ///////////////////////////////////////////:
         // Initialisation des valeurs par défaut
-        $objBean = new AdminPageMeteoBean($urlParams);
+        $objBean = new AdminPageMeteoBean();
         return $objBean->getContentPage();
     }
 
     /**
-     * @param array $urlParams
-     * @return string
-     * @since 1.22.09.05
-     * @version 1.22.10.17
+     * @since 1.23.04.20
      */
-    public function getContentPage()
+    public function getContentPage(): string
     {
-        $objCopsMeteo = new CopsMeteo();
+        $objCopsMeteo = new CopsMeteoClass();
+        $objCopsMeteoServices = new CopsMeteoServices();
+
         $strCompteRendu = '';
 
         // On récupère le paramètre relatif à la date.
@@ -46,8 +42,7 @@ class AdminPageMeteoBean extends AdminPageBean
             $intYear  = substr((string) $strDate, 0, 4);
             $intMonth = substr((string) $strDate, 4, 2)*1;
             // On construit l'url ciblée
-            $url  = 'https://www.timeanddate.com/scripts/cityajax.php?n=usa/los-angeles&mode=historic&hd=';
-            $url .= $strDate.'&month='.$intMonth.'&year='.$intYear;
+            $url  = sprintf($this->ajaxUrl, $strDate, $intMonth, $intYear);
             $strCompteRendu .= '<a href="'.$url.'">Date étudiée</a><br>';
             // On en récupère le contenu
             $str = file_get_contents($url);
@@ -60,22 +55,86 @@ class AdminPageMeteoBean extends AdminPageBean
                 // Que l'on parse pour récupérer les données souhaitées.
                 $strCompteRendu .= $objCopsMeteo->parseData($str, $strDate);
             }
+            if ($strCompteRendu=='') {
+                $strCompteRendu = 'Le script s\'est bien déroulé.';
+            }
+        }
+
+        // Récupération de la dernière entrée de la table
+        $sqlAttributes = [];
+        $sqlAttributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
+        $sqlAttributes[self::SQL_LIMIT] = 1;
+        $objsCopsMeteoLastInsert = $objCopsMeteoServices->getMeteos($sqlAttributes);
+        $objCopsMeteoLastInsert = array_shift($objsCopsMeteoLastInsert);
+
+        // Construction du Header du tableau
+        // Heure
+        // Température
+        // Météo + Icone
+        // Force et sens du vent
+        // Humidité
+        // Baromètre
+        // Visibilité
+        $strHeader  = '<tr><th>&nbsp;</th><th colspan="3">Conditions</th><th colspan="3">Confort</th><th colspan="2">&nbsp;</th></tr>';
+        $strHeader .= '<tr><th>Heure</th><th>&nbsp;</th><th>Temp</th><th>Météo</th><th>Vent</th><th>&nbsp;</th><th>Humidité</th><th>Baromètre</th><th>Visibilité</th></tr>';
+
+        // Récupération des données de la journée
+        $strDate = $objCopsMeteoLastInsert->getField(self::FIELD_DATE_METEO);
+        $sqlAllAttributes = [];
+        $sqlAllAttributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] = $strDate;
+        $sqlAllAttributes[self::SQL_ORDER_BY] = self::FIELD_HEURE_METEO;
+        $objsCopsMeteo = $objCopsMeteoServices->getMeteos($sqlAllAttributes);
+
+        // Gestion des données relatives au soleil
+        $strJour = '2028-'.substr($strDate, 4, 2).'-'.substr($strDate, 6, 2);
+        $objCopsSoleil = $objCopsMeteoServices->getSoleil($strJour);
+
+        $strBody = '';
+        while (!empty($objsCopsMeteo)) {
+            $objCopsMeteo = array_shift($objsCopsMeteo);
+            $strBody .= '<tr>';
+            $strBody .= '<th>'.$objCopsMeteo->getField(self::FIELD_HEURE_METEO).'</th>';
+            $strBody .= '<td><div class="wicon" data-icon="'.$objCopsMeteo->getField(self::FIELD_WEATHER_ID).'"></div></td>';
+            $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_TEMPERATURE).'°C</td>';
+            $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_WEATHER).'</td>';
+            $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_FORCE_VENT).' km/h</td>';
+            $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_SENS_VENT).'</td>';
+            $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_HUMIDITE).'%</td>';
+            $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_BAROMETRE).' mbar</td>';
+            $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_VISIBILITE).' km</td>';
+            $strBody .= '</tr>';
         }
     
         // On va afficher la dernière donnée enregistrée
         // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
         $attributes = [
             // La dernière saisie - 1
-            $objCopsMeteo->getLastInsertFormatted(),
+            $objCopsMeteoLastInsert->getStrDateMeteo(),
             // Le bouton pour lancer la saisie suivante - 2
-            $objCopsMeteo->getUrlForNextInsert(),
+            $objCopsMeteoLastInsert->getNextDateMeteo(),
             // Le compte-rendu du traitement s'il y a eu - 3
-            ($strCompteRendu=='' ? 'Le script s\'est bien déroulé.' : $strCompteRendu),
+            $strCompteRendu,
             // Le graphe Météo du mois
             $this->getGrapheMeteo(),
+            // La date du jour pour rejouer
+            $objCopsMeteoLastInsert->getField(self::FIELD_DATE_METEO),
+            // Le Header du tableau
+            $strHeader,
+            // Le contenu du tableau
+            $strBody,
+            // Les heures de lever et coucher du soleil
+            $objCopsSoleil->getField(self::FIELD_HEURE_LEVER),
+            $objCopsSoleil->getField(self::FIELD_HEURE_COUCHER),
+            $objCopsSoleil->getDureeJournee(),
         ];
-        return $this->getRender($this->urlTemplateAdminPageMeteo, $attributes);
+        return $this->getRender(self::WEB_PA_METEO, $attributes);
     }
+
+
+
+  protected $urlTemplateGrapheMeteo          = 'web/pages/admin/fragments/page-admin-article-graphe-meteo.php';
+  protected $urlTemplateGrapheMeteoColumn    = 'web/pages/admin/fragments/page-admin-column-graphe-meteo.php';
+
   
   public function getGrapheMeteo()
   {
@@ -106,7 +165,7 @@ class AdminPageMeteoBean extends AdminPageBean
         // On récupère les données du mois
         $strSql  = "SELECT MIN(temperature) as minT, MAX(temperature) as maxT FROM wp_7_cops_meteo ";
         $strSql .= "WHERE dateMeteo LIKE '$strDateMeteo%';";
-        $rows = MySQL::wpdbSelect($strSql);
+        $rows = MySQLClass::wpdbSelect($strSql);
         $maxT = $rows[0]->maxT;
         $minT = $rows[0]->minT;
 
@@ -137,7 +196,7 @@ class AdminPageMeteoBean extends AdminPageBean
                 $strSql .= str_pad(1+$i, 2, '0', STR_PAD_LEFT)."' AND heureMeteo BETWEEN '";
                 $strSql .= str_pad($j*6, 2, '0', STR_PAD_LEFT).":00' AND '";
                 $strSql .= str_pad(($j+1)*6, 2, '0', STR_PAD_LEFT).":00' ORDER BY heureMeteo ASC;";
-                $rows = MySQL::wpdbSelect($strSql);
+                $rows = MySQLClass::wpdbSelect($strSql);
               
                 $maxDayT = -100;
                 $minDayT = 100;

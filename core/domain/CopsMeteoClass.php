@@ -3,6 +3,7 @@ namespace core\domain;
 
 use core\bean\UtilitiesBean;
 use core\services\CopsMeteoServices;
+use core\daoimpl\CopsMeteoDaoImpl;
 
 if (!defined('ABSPATH')) {
   die('Forbidden');
@@ -85,7 +86,10 @@ class CopsMeteoClass extends LocalDomainClass
         $objCopsMeteoServices = new CopsMeteoServices();
         //$this->objCopsSoleil = $objCopsMeteoServices->getSoleil($strJour);
         // TODO : supprimer le -8.
-        $objsCopsMeteo = $objCopsMeteoServices->getMeteos(($Y-8).$m.$d);
+        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] = ($Y-8).$m.$d;
+        $attributes[self::SQL_ORDER_BY] = self::FIELD_HEURE_METEO;
+        $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
+        $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
 
         //$this->id = $this->objCopsSoleil->getField(self::FIELD_ID);
         $this->dateMeteo = $Y.$m.$d;
@@ -161,8 +165,8 @@ class CopsMeteoClass extends LocalDomainClass
             $this->controlerForceVent();
             $this->sensVent     = $matches[6][0];
             $this->humidite     = $matches[7][0];
-            $this->barometre    = $matches[8][0];
-            $this->visibilite   = $matches[9][0];
+            $this->barometre    = $matches[9][0];
+            $this->visibilite   = $matches[11][0];
 
             // On peut envisager des contrôles sur les données saisies...
 
@@ -208,6 +212,7 @@ class CopsMeteoClass extends LocalDomainClass
             $strAlert .= $this->weather.'</em>.<br>';
             return $strAlert;
         }
+        return '';
     }
 
     public function checkIfExists(): bool
@@ -241,6 +246,8 @@ class CopsMeteoClass extends LocalDomainClass
         $requete .= "'".$this->barometre."', "; // Le baromètre
         $requete .= "'".$this->visibilite."'";   // La visibilité
         $requete .= ");";
+        $objCopsMeteoDaoImpl = new CopsMeteoDaoImpl();
+        $objCopsMeteoDaoImpl->traceRequest($requete);
 
         MySQLClass::wpdbQuery($requete);
     }
@@ -253,16 +260,25 @@ class CopsMeteoClass extends LocalDomainClass
     }
 
     /**
-     * @return string
-     * @since 1.22.09.05
-     * @version 1.22.10.17
+     * @since 1.23.04.21
      */
-    public function getUrlForNextInsert(): string
+    public function getStrDateMeteo(): string
     {
-        $strLastInsert = $this->getLastInsertFormatted();
-        $m = substr((string) $strLastInsert, 4, 2);
-        $d = substr((string) $strLastInsert, 6)+1;
-        $y = substr((string) $strLastInsert, 0, 4);
+        $m = substr((string) $this->dateMeteo, 4, 2);
+        $d = substr((string) $this->dateMeteo, 6);
+        $y = substr((string) $this->dateMeteo, 0, 4);
+        return $d.'/'.$m.'/'.$y;
+    }
+
+    /**
+     * @since 1.23.04.21
+     */
+    public function getNextDateMeteo(): string
+    {
+        $m = substr((string) $this->dateMeteo, 4, 2);
+        $d = substr((string) $this->dateMeteo, 6)+1;
+        $y = substr((string) $this->dateMeteo, 0, 4);
         return date('Ymd', mktime(0, 0, 0, $m, $d, $y));
     }
+    
 }

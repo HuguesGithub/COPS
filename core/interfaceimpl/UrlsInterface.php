@@ -22,6 +22,9 @@ interface UrlsInterface
     public const WEB_LOG_REQUEST  = 'web/logs/requests.log';
     
     // Files
+    public const WEB_PA_INDEX               = self::WEB_PAGES_ADMIN.'page-admin-index.tpl';
+    public const WEB_PA_METEO               = self::WEB_PAGES_ADMIN.'page-admin-meteo.tpl';
+
     public const WEB_PP_BOARD               = self::WEB_PAGES_PUBLIC.'publique-board.tpl';
     public const WEB_PP_HOME_CONTENT        = self::WEB_PAGES_PUBLIC.'publique-home-content.tpl';
     public const WEB_PP_MAIN_FOOTER         = self::WEB_PAGES_PUBLIC.'publique-main-footer.tpl';

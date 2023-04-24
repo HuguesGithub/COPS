@@ -318,7 +318,9 @@ interface ConstantsInterface
     public const ONGLET_CALENDAR        = 'calendar';
     public const ONGLET_ENQUETE         = 'enquete';
     public const ONGLET_INBOX           = 'inbox';
+    public const ONGLET_INDEX           = 'index';
     public const ONGLET_LIBRARY         = 'library';
+    public const ONGLET_METEO           = 'meteo';
     public const ONGLET_PROFILE         = 'profile';
     public const ONGLET_DESK            = 'desk';
 

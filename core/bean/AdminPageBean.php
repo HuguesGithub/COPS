@@ -4,61 +4,53 @@ namespace core\bean;
 /**
  * Classe AdminPageBean
  * @author Hugues
- * @since 1.22.09.05
- * @version 1.23.04.20
+ * @since 1.23.04.20
  */
 class AdminPageBean extends UtilitiesBean
 {
     /**
      * Class Constructor
-     * @version 1.22.09.05
-     * @since 1.22.09.05
+     * @since 1.23.04.20
      */
     public function __construct()
     {
         $this->analyzeUri();
     }
 
-  /**
-   * @return bool
-   * @version 1.22.09.05
-   * @since 1.22.09.05
-   */
-  public static function isAdmin()
-  { return current_user_can('manage_options'); }
-
-  /**
-   * @return string
-   * @version 1.22.09.05
-   * @since 1.22.09.05
-   */
-  public function getContentPage()
-  {
-    $returned = null;
-    if (static::isAdmin() || current_user_can('editor')) {
-      try {
-        $returned = match ($this->urlParams[self::CST_ONGLET]) {
-            'meteo' => AdminPageMeteoBean::getStaticContentPage($this->urlParams),
-            'index' => AdminPageIndexBean::getStaticContentPage($this->urlParams),
-            'calendrier' => AdminPageCalendrierBean::getStaticContentPage($this->urlParams),
-            default => $this,
-        };
-      } catch (\Exception) {
-        $returned = 'Error APB';
-      }
+    /**
+     * @since 1.23.04.20
+     */
+    public static function isAdmin(): bool
+    {
+        return current_user_can('manage_options');
     }
-    return $returned;
-  }
 
-  /**
-   * Retourne le contenu de l'interface
-   * @return string
-   * @version 1.22.09.05
-   * @since 1.22.09.05
-   */
-  public function getBoard()
-  {
-    return '';
-  }
+    /**
+     * @since 1.23.04.20
+     */
+    public function getContentPage(): string
+    {
+        if (static::isAdmin() || current_user_can('editor')) {
+            try {
+                $returned = match ($this->urlParams[self::CST_ONGLET]) {
+                    self::ONGLET_METEO => AdminPageMeteoBean::getStaticContentPage(),
+                    self::ONGLET_INDEX => AdminPageIndexBean::getStaticContentPage(),
+                    self::ONGLET_CALENDAR => AdminPageCalendrierBean::getStaticContentPage($this->urlParams),
+                    default => 'WIP',
+                };
+            } catch (\Exception $e) {
+                throw($e);
+            }
+        }
+        return $returned;
+    }
+
+    /**
+     * @since 1.23.04.20
+     */
+    public function getBoard(): string
+    {
+        return '';
+    }
 
 }

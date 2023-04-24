@@ -49,4 +49,19 @@ class CopsSoleilClass extends LocalDomainClass
     // METHODES
     //////////////////////////////////////////////////
 
+    public function getDureeJournee(): string
+    {
+        $hs = substr($this->heureLever, 0, 2);
+        $is = substr($this->heureLever, -2);
+        $he = substr($this->heureCoucher, 0, 2);
+        $ie = substr($this->heureCoucher, -2);
+
+        $duree = (60-$is) + $ie + ($he-$hs-1)*60;
+
+        $i = $duree%60;
+        $h = floor($duree/60);
+
+        return $h.':'.$i;
+    }
+
 }

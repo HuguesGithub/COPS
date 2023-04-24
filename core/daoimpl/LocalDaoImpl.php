@@ -194,7 +194,7 @@ class LocalDaoImpl extends GlobalDaoImpl
         return $request;
     }
 
-    private function traceRequest($prepRequest)
+    public function traceRequest($prepRequest)
     {
         // On récupère le nom de base et on le suffixe avec la date du jour
         $baseName = PLUGIN_PATH.self::WEB_LOG_REQUEST;
