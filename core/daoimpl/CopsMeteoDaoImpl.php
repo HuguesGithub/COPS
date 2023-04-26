@@ -3,14 +3,11 @@ namespace core\daoimpl;
 
 use core\domain\CopsMeteoClass;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsMeteoDaoImpl
  * @author Hugues
  * @since 1.23.4.20
- * @version 1.23.4.20
+ * @version 1.23.04.30
  */
 class CopsMeteoDaoImpl extends LocalDaoImpl
 {
@@ -79,7 +76,8 @@ class CopsMeteoDaoImpl extends LocalDaoImpl
      */
     public function getSoleil(array $prepObject): array
     {
-        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_sol), $this->dbTable_sol, self::FIELD_DATE_SOLEIL);
+        $fields = implode(', ', $this->dbFields_sol);
+        $request  = $this->getSelectRequest($fields, $this->dbTable_sol, self::FIELD_DATE_SOLEIL);
         return $this->selectDaoImpl($request, $prepObject);
     }
 

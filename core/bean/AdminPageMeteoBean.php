@@ -9,6 +9,7 @@ use core\domain\MySQLClass;
  * AdminPageMeteoBean
  * @author Hugues
  * @since 1.23.04.20
+ * @version 1.23.04.30
  */
 class AdminPageMeteoBean extends AdminPageBean
 {
@@ -75,8 +76,10 @@ class AdminPageMeteoBean extends AdminPageBean
         // Humidité
         // Baromètre
         // Visibilité
-        $strHeader  = '<tr><th>&nbsp;</th><th colspan="3">Conditions</th><th colspan="3">Confort</th><th colspan="2">&nbsp;</th></tr>';
-        $strHeader .= '<tr><th>Heure</th><th>&nbsp;</th><th>Temp</th><th>Météo</th><th>Vent</th><th>&nbsp;</th><th>Humidité</th><th>Baromètre</th><th>Visibilité</th></tr>';
+        $strHeader  = '<tr><th>&nbsp;</th><th colspan="3">Conditions</th><th colspan="3">Confort</th>';
+        $strHeader .= '<th colspan="2">&nbsp;</th></tr>';
+        $strHeader .= '<tr><th>Heure</th><th>&nbsp;</th><th>Temp</th><th>Météo</th><th>Vent</th>';
+        $strHeader .= '<th>&nbsp;</th><th>Humidité</th><th>Baromètre</th><th>Visibilité</th></tr>';
 
         // Récupération des données de la journée
         $strDate = $objCopsMeteoLastInsert->getField(self::FIELD_DATE_METEO);
@@ -94,7 +97,8 @@ class AdminPageMeteoBean extends AdminPageBean
             $objCopsMeteo = array_shift($objsCopsMeteo);
             $strBody .= '<tr>';
             $strBody .= '<th>'.$objCopsMeteo->getField(self::FIELD_HEURE_METEO).'</th>';
-            $strBody .= '<td><div class="wicon" data-icon="'.$objCopsMeteo->getField(self::FIELD_WEATHER_ID).'"></div></td>';
+            $strBody .= '<td><div class="wicon" data-icon="'.$objCopsMeteo->getField(self::FIELD_WEATHER_ID);
+            $strBody .= '"></div></td>';
             $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_TEMPERATURE).'°C</td>';
             $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_WEATHER).'</td>';
             $strBody .= '<td>'.$objCopsMeteo->getField(self::FIELD_FORCE_VENT).' km/h</td>';

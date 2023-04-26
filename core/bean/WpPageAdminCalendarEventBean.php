@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminCalendarEventBean
  * @author Hugues
  * @since 1.22.11.22
- * @version 1.22.11.26
+ * @version 1.23.04.30
  */
 class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
 {
@@ -34,7 +33,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
 
-        if (isset($_POST) && isset($this->urlParams[self::CST_WRITE_ACTION])) {
+        if (static::fromPost(self::CST_WRITE_ACTION)!='') {
             $this->dealWithWriteAction();
         }
 
@@ -178,8 +177,17 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         ///////////////////////////////////////////////////////
         // Les options pour la Périodicité
         $strOptsPeriodicite = '';
-        $arrPeriodicite = [self::CST_EVENT_RT_DAILY => self::LABEL_DAILY, self::CST_EVENT_RT_WEEKLY => self::LABEL_WEEKLY, self::CST_EVENT_RT_MONTHLY => self::LABEL_MONTHLY, self::CST_EVENT_RT_YEARLY => self::LABEL_YEARLY];
-        $inputAttributes = [self::ATTR_CLASS => 'custom-control-input', self::ATTR_TYPE => 'radio', self::ATTR_NAME => self::FIELD_REPEAT_TYPE];
+        $arrPeriodicite = [
+            self::CST_EVENT_RT_DAILY => self::LABEL_DAILY,
+            self::CST_EVENT_RT_WEEKLY => self::LABEL_WEEKLY,
+            self::CST_EVENT_RT_MONTHLY => self::LABEL_MONTHLY,
+            self::CST_EVENT_RT_YEARLY => self::LABEL_YEARLY
+        ];
+        $inputAttributes = [
+            self::ATTR_CLASS => 'custom-control-input',
+            self::ATTR_TYPE => 'radio',
+            self::ATTR_NAME => self::FIELD_REPEAT_TYPE
+        ];
         $labelAttributes = [self::ATTR_CLASS => 'custom-control-label'];
         foreach ($arrPeriodicite as $key => $value) {
             $inputAttributes[self::FIELD_ID] = 'repeat_'.$key;
@@ -379,15 +387,32 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
     {
         ///////////////////////////////////////////////////////
         // On défini les champs obligatoires
-        $arrFields = [self::FIELD_EVENT_LIBELLE, self::FIELD_CATEG_ID, self::FIELD_DATE_DEBUT, self::FIELD_DATE_FIN, self::FIELD_ALL_DAY_EVENT, self::FIELD_REPEAT_STATUS];
+        $arrFields = [
+            self::FIELD_EVENT_LIBELLE,
+            self::FIELD_CATEG_ID,
+            self::FIELD_DATE_DEBUT,
+            self::FIELD_DATE_FIN,
+            self::FIELD_ALL_DAY_EVENT,
+            self::FIELD_REPEAT_STATUS
+        ];
         // Si ce n'est pas un "All Day Event", il faut définir les heures et minutes de début et de fin
         if (!isset($this->urlParams[self::FIELD_ALL_DAY_EVENT])) {
-            $arrExtras = [self::FIELD_HEURE_DEBUT, self::FIELD_MINUTE_DEBUT, self::FIELD_HEURE_FIN, self::FIELD_MINUTE_FIN];
+            $arrExtras = [
+                self::FIELD_HEURE_DEBUT,
+                self::FIELD_MINUTE_DEBUT,
+                self::FIELD_HEURE_FIN,
+                self::FIELD_MINUTE_FIN
+            ];
             $arrFields = array_merge($arrFields, $arrExtras);
         }
         // S'il y a répétition, on doit saisir les données relatives à la répétition.
         if (isset($this->urlParams[self::FIELD_REPEAT_STATUS])) {
-            $arrExtras = [self::FIELD_REPEAT_TYPE, self::FIELD_REPEAT_INTERVAL, self::FIELD_ENDDATE_VALUE, self::FIELD_REPEAT_END];
+            $arrExtras = [
+                self::FIELD_REPEAT_TYPE,
+                self::FIELD_REPEAT_INTERVAL,
+                self::FIELD_ENDDATE_VALUE,
+                self::FIELD_REPEAT_END
+            ];
             $arrFields = array_merge($arrFields, $arrExtras);
         }
 

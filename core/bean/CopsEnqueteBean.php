@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * CopsEnqueteBean
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.22.10.06
+ * @version 1.23.04.30
  */
 class CopsEnqueteBean extends CopsBean
 {
@@ -16,7 +15,7 @@ class CopsEnqueteBean extends CopsBean
         $this->obj          = ($objStd==null ? new CopsEnquete() : $objStd);
         $this->urlOnglet   .= self::ONGLET_ENQUETE;
         $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
-        $this->strNoRapportDisponible = 'Aucune rapport disponible';
+        $this->strNoRapportDisponible = 'Aucun rapport disponible';
     }
 
     /**
@@ -39,7 +38,10 @@ class CopsEnqueteBean extends CopsBean
             case self::CST_ENQUETE_COLDED :
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_READ;
                 $strActionsPossibles  = $this->buildActionLink(
-                    self::CST_FILE_OPENED, self::CST_ENQUETE_OPENED, self::I_FILE_OPENED, "Réouvrir l'enquête"
+                    self::CST_FILE_OPENED,
+                    self::CST_ENQUETE_OPENED,
+                    self::I_FILE_OPENED,
+                    "Réouvrir l'enquête"
                 );
                 break;
             case self::CST_ENQUETE_OPENED :
@@ -47,10 +49,16 @@ class CopsEnqueteBean extends CopsBean
                 $urlViewEdit = $this->urlSubOnglet . self::CST_ENQUETE_WRITE;
                 $label = "Transférer au District Attorney";
                 $strActionsPossibles  = $this->buildActionLink(
-                    self::CST_FILE_CLOSED, self::CST_ENQUETE_CLOSED, self::I_FILE_CLOSED, $label
+                    self::CST_FILE_CLOSED,
+                    self::CST_ENQUETE_CLOSED,
+                    self::I_FILE_CLOSED,
+                    $label
                 );
                 $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(
-                    self::CST_FILE_COLDED, self::CST_ENQUETE_COLDED, self::I_FILE_COLDED, "Classer l'enquête"
+                    self::CST_FILE_COLDED,
+                    self::CST_ENQUETE_COLDED,
+                    self::I_FILE_COLDED,
+                    "Classer l'enquête"
                 );
                 break;
         }
@@ -124,8 +132,8 @@ class CopsEnqueteBean extends CopsBean
     $strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
     $strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
     $strSQL .= "INNER JOIN wp_7_cops_index AS ci ON cbp.idxId=ci.id ";
-    $strSQL .= "WHERE dateDebut<='".self::getCopsDate('Y-m-d')."' ";
-    $strSQL .= "AND (dateFin>='".self::getCopsDate('Y-m-d')."' OR dateFin IS NULL) ";
+    $strSQL .= "WHERE dateDebut<='".static::getCopsDate('Y-m-d')."' ";
+    $strSQL .= "AND (dateFin>='".static::getCopsDate('Y-m-d')."' OR dateFin IS NULL) ";
     $strSQL .= "ORDER BY nomIdx ASC;";
     $rows = MySQL::wpdbSelect($strSQL);
     $sel = $this->obj->getField(self::FIELD_IDX_DISTRICT_ATT);
@@ -313,7 +321,9 @@ class CopsEnqueteBean extends CopsBean
     public function getCopsAutopsies()
     {
         $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_IDX_ENQUETE => $this->obj->getField(self::FIELD_IDX_ENQUETE)];
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::FIELD_IDX_ENQUETE => $this->obj->getField(self::FIELD_IDX_ENQUETE)
+        ];
         return $this->objCopsAutopsieServices->getAutopsies($attributes);
     }
 

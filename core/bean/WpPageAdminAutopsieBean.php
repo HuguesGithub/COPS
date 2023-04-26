@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminAutopsieBean
  * @author Hugues
  * @since 1.22.10.08
- * @version 1.22.10.19
+ * @version 1.23.04.30
  */
 class WpPageAdminAutopsieBean extends WpPageAdminBean
 {
@@ -17,7 +16,11 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
 
         /////////////////////////////////////////
         // Construction du menu
-        $this->arrSubOnglets = [self::CST_AUTOPSIE_ARCHIVE => [self::FIELD_ICON => 'box-archive', self::FIELD_LABEL => 'Archive'], self::CST_ENQUETE_READ => [self::FIELD_LABEL => 'Lire'], self::CST_ENQUETE_WRITE => [self::FIELD_LABEL => 'Rédiger']];
+        $this->arrSubOnglets = [
+            self::CST_AUTOPSIE_ARCHIVE => [self::FIELD_ICON => 'box-archive', self::FIELD_LABEL => 'Archive'],
+            self::CST_ENQUETE_READ => [self::FIELD_LABEL => 'Lire'],
+            self::CST_ENQUETE_WRITE => [self::FIELD_LABEL => 'Rédiger']
+        ];
         /////////////////////////////////////////
         
         /////////////////////////////////////////

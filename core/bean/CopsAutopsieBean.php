@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * CopsAutopsieBean
  * @author Hugues
  * @since 1.22.10.09
- * @version 1.22.10.17
+ * @version 1.23.04.30
  */
 class CopsAutopsieBean extends CopsBean
 {
@@ -338,7 +337,15 @@ class CopsAutopsieBean extends CopsBean
     public function getCardDossier()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-dossier.php';
-        $attributes = [stripslashes((string) $this->data['numDossier']), stripslashes((string) $this->data['dateHeureExamen']), stripslashes((string) $this->data['praticiensMedicoLegaux']), stripslashes((string) $this->data['nomPrenomVictime']), stripslashes((string) $this->data['ageApparent']), stripslashes((string) $this->data['circDecouverte']), stripslashes((string) $this->data['dateHeureDeces'])];
+        $attributes = [
+            stripslashes((string) $this->data['numDossier']),
+            stripslashes((string) $this->data['dateHeureExamen']),
+            stripslashes((string) $this->data['praticiensMedicoLegaux']),
+            stripslashes((string) $this->data['nomPrenomVictime']),
+            stripslashes((string) $this->data['ageApparent']),
+            stripslashes((string) $this->data['circDecouverte']),
+            stripslashes((string) $this->data['dateHeureDeces'])
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 
@@ -350,7 +357,19 @@ class CopsAutopsieBean extends CopsBean
     public function getCardMedicoLegal()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-medicolegal.php';
-        $attributes = [stripslashes((string) $this->data['poidsCoeur']), stripslashes((string) $this->data['poidsRate']), stripslashes((string) $this->data['poidsEncephale']), stripslashes((string) $this->data['poidsFoie']), stripslashes((string) $this->data['poidsPoumonG']), stripslashes((string) $this->data['poidsReinG']), stripslashes((string) $this->data['poidsPoumonD']), stripslashes((string) $this->data['poidsReinD']), stripslashes((string) $this->data['toxicologie']), stripslashes((string) $this->data['serologie']), stripslashes((string) $this->data['anapath'])];
+        $attributes = [
+            stripslashes((string) $this->data['poidsCoeur']),
+            stripslashes((string) $this->data['poidsRate']),
+            stripslashes((string) $this->data['poidsEncephale']),
+            stripslashes((string) $this->data['poidsFoie']),
+            stripslashes((string) $this->data['poidsPoumonG']),
+            stripslashes((string) $this->data['poidsReinG']),
+            stripslashes((string) $this->data['poidsPoumonD']),
+            stripslashes((string) $this->data['poidsReinD']),
+            stripslashes((string) $this->data['toxicologie']),
+            stripslashes((string) $this->data['serologie']),
+            stripslashes((string) $this->data['anapath'])
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 

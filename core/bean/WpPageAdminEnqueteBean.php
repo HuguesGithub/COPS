@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminEnqueteBean
  * @author Hugues
  * @since 1.22.09.20
- * @version 1.22.10.19
+ * @version 1.23.04.30
  */
 class WpPageAdminEnqueteBean extends WpPageAdminBean
 {
@@ -17,7 +16,13 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
         
         /////////////////////////////////////////
         // Construction du menu de l'inbox
-        $this->arrSubOnglets = [self::CST_FILE_OPENED => [self::FIELD_ICON => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'], self::CST_FILE_CLOSED => [self::FIELD_ICON => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'], self::CST_FILE_COLDED => [self::FIELD_ICON => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'], self::CST_ENQUETE_READ => [self::FIELD_LABEL => 'Lire'], self::CST_ENQUETE_WRITE => [self::FIELD_LABEL => 'Rédiger']];
+        $this->arrSubOnglets = [
+            self::CST_FILE_OPENED => [self::FIELD_ICON => self::I_FILE_OPENED, self::FIELD_LABEL => 'En cours'],
+            self::CST_FILE_CLOSED => [self::FIELD_ICON => self::I_FILE_CLOSED, self::FIELD_LABEL => 'Classées'],
+            self::CST_FILE_COLDED => [self::FIELD_ICON => self::I_FILE_COLDED, self::FIELD_LABEL => 'Cold Case'],
+            self::CST_ENQUETE_READ => [self::FIELD_LABEL => 'Lire'],
+            self::CST_ENQUETE_WRITE => [self::FIELD_LABEL => 'Rédiger']
+        ];
         /////////////////////////////////////////
 
         /////////////////////////////////////////
@@ -67,7 +72,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
                         // Si tout est bon,
                         // on classe une enquête, on la réouvre ou on la transfère au DA
                         $this->CopsEnquete->setField(self::FIELD_STATUT_ENQUETE, $this->urlParams[self::CST_ACTION]);
-                        $this->CopsEnquete->setField(self::FIELD_DLAST, self::getCopsDate('tsnow'));
+                        $this->CopsEnquete->setField(self::FIELD_DLAST, static::getCopsDate('tsnow'));
                         $this->CopsEnqueteServices->updateEnquete($this->CopsEnquete);
             }
         } else {
@@ -93,14 +98,17 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
             $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)!=self::CST_ENQUETE_OPENED) {
                 $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
                 $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
-                $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
+                $strContent = $this->getIcon(self::I_BACKWARD).' '.self::LABEL_RETOUR;
             } elseif ($this->slugSubOnglet==self::CST_ENQUETE_WRITE) {
                 $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
                 $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
-                $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
+                $strContent = $this->getIcon(self::I_BACKWARD).' '.self::LABEL_RETOUR;
             } else {
                 $strRightPanel   = $this->getFolderEnquetesList();
-                $attributes = [self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE), self::ATTR_CLASS => $strBtnClass];
+                $attributes = [
+                    self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE),
+                    self::ATTR_CLASS => $strBtnClass
+                ];
                 $strContent = 'Ouvrir une enquête';
             }
         /////////////////////////////////////////
@@ -124,8 +132,12 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes-list.php';
         $attributes = match ($this->slugSubOnglet) {
-            self::CST_FILE_CLOSED => [self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CLOSED]],
-            self::CST_FILE_COLDED => [self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED]],
+            self::CST_FILE_CLOSED => [
+                self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CLOSED]
+            ],
+            self::CST_FILE_COLDED => [
+                self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED]
+            ],
             default => [self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_OPENED]],
         };
 

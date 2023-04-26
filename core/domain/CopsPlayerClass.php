@@ -1,14 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\domain;
+
 /**
  * Classe CopsPlayerClass
  * @author Hugues
  * @version 1.22.04.28
- * @since 1.22.04.28
+ * @version 1.23.04.30
  */
-class CopsPlayerClass extends LocalDomain
+class CopsPlayerClass extends LocalDomainClass
 {
   //////////////////////////////////////////////////
   // ATTRIBUTES
@@ -148,13 +147,15 @@ class CopsPlayerClass extends LocalDomain
         return $objCopsPlayer;
     }
 
+    // C'est quoi ce nom de méthode vu le contenu ?
     public function getStrPoids($format)
     {
         $strFormatted = '';
-        switch ($format) {
-            case 'd/m/Y' :
-            $strFormatted = substr((string) $this->birth_date, 8, 2).'/'.substr((string) $this->birth_date, 5, 2).'/'.substr((string) $this->birth_date, 0, 4);
-            break;
+        // Anciennement un switch.
+        if ($format=='d/m/Y') {
+            $strFormatted  = substr((string) $this->birth_date, 8, 2);
+            $strFormatted .= '/'.substr((string) $this->birth_date, 5, 2);
+            $strFormatted .= '/'.substr((string) $this->birth_date, 0, 4);
         }
         return $strFormatted;
     }

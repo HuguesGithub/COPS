@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.22.11.21
+ * @version 1.23.04.30
  */
 class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 {
@@ -14,7 +13,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
     {
         parent::__construct();
         $this->slugSubOnglet = self::CST_CAL_DAY;
-        $this->titreSubOnglet = 'Quotidien';
+        $this->titreSubOnglet = self::LABEL_DAILY;
         /////////////////////////////////////////
         // Définition des services
         $this->objCopsEventServices = new CopsEventServices();
@@ -45,7 +44,14 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         
         /////////////////////////////////////////
         // On récupère tous les events
-        $attributes = [self::SQL_WHERE_FILTERS => [self::FIELD_ID => '%', self::FIELD_DSTART => date('Y-m-d', $tsDisplay), self::FIELD_DEND => date('Y-m-d', $tsDisplay)], self::SQL_ORDER_BY => ['dStart', 'dEnd'], self::SQL_ORDER => ['ASC', 'DESC']];
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_ID => '%',
+                self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
+                self::FIELD_DEND => date('Y-m-d', $tsDisplay)
+            ],
+            self::SQL_ORDER_BY => ['dStart', 'dEnd'],
+            self::SQL_ORDER => ['ASC', 'DESC']];
         $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {
@@ -110,7 +116,11 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $aClass = 'fc-col-header-cell-cushion text-white';
         $divContent = $this->getLink($this->arrFullDays[date('w', $tsDisplay)], $url, $aClass);
         $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-scrollgrid-sync-inner']);
-        $attributes = ['role' => 'columnheader', self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass, self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)];
+        $attributes = [
+            'role' => 'columnheader',
+            self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)
+        ];
         return $this->getBalise(self::TAG_TH, $thContent, $attributes);
     }
 
@@ -129,7 +139,11 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $divIn .= $this->getDiv('', [self::ATTR_CLASS=>'fc-daygrid-day-bg']);
         
         $tdContent = $this->getDiv($divIn, [self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner']);
-        $attributes = ['role'        => 'gridcell', self::ATTR_CLASS => 'fc-daygrid-day fc-day ' . $strClass, self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)];
+        $attributes = [
+            'role' => 'gridcell',
+            self::ATTR_CLASS => 'fc-daygrid-day fc-day ' . $strClass,
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)
+        ];
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
     }
     
@@ -159,7 +173,11 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $divContent .= $this->getDiv('', [self::ATTR_CLASS=>'fc-timegrid-now-indicator-container']);
         
         $tdContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-timegrid-col-frame']);
-        $tdAttributes = ['role' => 'gridcell', self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass, self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)];
+        $tdAttributes = [
+            'role' => 'gridcell',
+            self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
+            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)
+        ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
 

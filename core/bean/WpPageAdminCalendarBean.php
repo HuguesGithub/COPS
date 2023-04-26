@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminCalendarBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.22.11.21
+ * @version 1.23.04.30
  */
 class WpPageAdminCalendarBean extends WpPageAdminBean
 {
@@ -26,13 +25,18 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         if (isset($this->urlParams[self::CST_CAL_CURDAY])) {
             $this->curStrDate = $this->urlParams[self::CST_CAL_CURDAY];
         } else {
-            $this->curStrDate = self::getCopsDate('m-d-Y');
+            $this->curStrDate = static::getCopsDate('m-d-Y');
         }
 
         /////////////////////////////////////////
         // Construction du menu
         $extraUrl = self::CST_CAL_CURDAY.'='.$this->curStrDate;
-        $this->arrMenu = [self::CST_CAL_MONTH => [self::FIELD_LABEL => 'Mensuel', self::CST_URL => $extraUrl], self::CST_CAL_WEEK => [self::FIELD_LABEL => 'Hebdomadaire', self::CST_URL => $extraUrl], self::CST_CAL_DAY => [self::FIELD_LABEL  => 'Quotidien', self::CST_URL => $extraUrl], self::CST_CAL_EVENT => [self::FIELD_LABEL  => 'Événements']];
+        $this->arrMenu = [
+            self::CST_CAL_MONTH => [self::FIELD_LABEL => self::LABEL_MONTHLY, self::CST_URL => $extraUrl],
+            self::CST_CAL_WEEK => [self::FIELD_LABEL => self::LABEL_WEEKLY, self::CST_URL => $extraUrl],
+            self::CST_CAL_DAY => [self::FIELD_LABEL  => self::LABEL_DAILY, self::CST_URL => $extraUrl],
+            self::CST_CAL_EVENT => [self::FIELD_LABEL  => self::LABEL_EVENTS]
+        ];
         /////////////////////////////////////////
 
         /////////////////////////////////////////
@@ -49,13 +53,12 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
      */
     public static function getStaticWpPageBean($slugSubContent)
     {
-        $objBean = match ($slugSubContent) {
+        return match ($slugSubContent) {
             self::CST_CAL_EVENT => new WpPageAdminCalendarEventBean(),
             self::CST_CAL_DAY => new WpPageAdminCalendarDayBean(),
             self::CST_CAL_WEEK => new WpPageAdminCalendarWeekBean(),
             default => new WpPageAdminCalendarMonthBean(),
         };
-        return $objBean;
     }
     
     /**
@@ -65,7 +68,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
     public function getFcDayClass($tsDisplay)
     {
         // On récupère le timestamp du jour COPS courant
-        $tsToday = self::getCopsDate('tsStart');
+        $tsToday = static::getCopsDate('tsStart');
 
         ///////////////////////////////////////////////////
         // On construit la classe de la cellule avec le jour de la semaine
@@ -180,15 +183,27 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         $shrinkCushion = $this->getDiv(date('ga', mktime($h, 0, 0)), $cushionAttributes);
         $frameAttributes = [self::ATTR_CLASS=>'fc-timegrid-slot-label-frame fc-scrollgrid-shrink-frame'];
         $shrinkFrame = $this->getDiv($shrinkCushion, $frameAttributes);
-        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink', 'data-time' => $hPadded.':00:00'];
+        $tdAttributes = [
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink',
+            'data-time' => $hPadded.':00:00'
+        ];
         $firstRow = $this->getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
         
-        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane', 'data-time' => $hPadded.':00:00'];
+        $tdAttributes = [
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane',
+            'data-time' => $hPadded.':00:00'
+        ];
         $firstRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         
-        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor', 'data-time' => $hPadded.':30:00'];
+        $tdAttributes = [
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor',
+            'data-time' => $hPadded.':30:00'
+        ];
         $secondRow = $this->getBalise(self::TAG_TD, '', $tdAttributes);
-        $tdAttributes = [self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor', 'data-time' => $hPadded.':30:00'];
+        $tdAttributes = [
+            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor',
+            'data-time' => $hPadded.':30:00'
+        ];
         $secondRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         
         return $this->getBalise(self::TAG_TR, $firstRow).$this->getBalise(self::TAG_TR, $secondRow);

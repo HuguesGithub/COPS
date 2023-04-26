@@ -4,14 +4,11 @@ namespace core\bean;
 use core\domain\CopsIndexClass;
 use core\services\CopsIndexServices;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * CopsIndexReferenceBean
  * @author Hugues
  * @since 1.23.02.18
- * @version 1.23.02.18
+ * @version 1.23.04.30
  */
 class CopsIndexReferenceBean extends CopsBean
 {
@@ -86,7 +83,11 @@ class CopsIndexReferenceBean extends CopsBean
             $aContent = $this->getIcon('square-pen');
             $aAttributes = [self::ATTR_HREF => $url, self::ATTR_CLASS => self::CST_TEXT_WHITE];
             $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
-            $buttonAttributes = [self::ATTR_TYPE => self::TAG_BUTTON, self::ATTR_CLASS => 'btn btn-default btn-sm', self::ATTR_TITLE => self::LABEL_EDIT_ENTRY];
+            $buttonAttributes = [
+                self::ATTR_TYPE => self::TAG_BUTTON,
+                self::ATTR_CLASS => 'btn btn-default btn-sm',
+                self::ATTR_TITLE => self::LABEL_EDIT_ENTRY
+            ];
             $label = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
             $cell = $this->getBalise(self::TAG_TD, $label);
             $arrColumns[] = $cell;
@@ -103,7 +104,8 @@ class CopsIndexReferenceBean extends CopsBean
 
     public function getReferences()
     {
-        $strPattern = '/([A-Z]*)([0-9\.\/]*)/';
+        // \p{Lu} correspond à A-Z
+        $strPattern = '/([\p{Lu}]*)([0-9\.\/]*)/';
         $label = $this->obj->getField('reference');
         if (empty($label)) {
             // Soit, le champ est vide parce qu'il n'y aucune référence.
@@ -130,7 +132,11 @@ class CopsIndexReferenceBean extends CopsBean
                 if (preg_match($strPattern, $strRef, $matches)) {
                     $label .= $strRef.'*'.$matches[1].'/'.$matches[2].'<br>';
                     $objCopsTome = $this->objCopsIndexServices->getIndexTomeByAbr($matches[1]);
-                    $attributes = [self::FIELD_REF_IDX_ID => $this->obj->getField(self::FIELD_ID_IDX_REF), self::FIELD_TOME_IDX_ID => $objCopsTome->getField(self::FIELD_ID_IDX_TOME), self::FIELD_PAGE => $matches[2]];
+                    $attributes = [
+                        self::FIELD_REF_IDX_ID => $this->obj->getField(self::FIELD_ID_IDX_REF),
+                        self::FIELD_TOME_IDX_ID => $objCopsTome->getField(self::FIELD_ID_IDX_TOME),
+                        self::FIELD_PAGE => $matches[2]
+                    ];
                     $objCopsIndex = new CopsIndexClass($attributes);
                     $this->objCopsIndexServices->insertIndex($objCopsIndex);
                     $blnUpdate = true;

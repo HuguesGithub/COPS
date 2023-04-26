@@ -1,14 +1,11 @@
 <?php
 namespace core\bean;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe AdminCopsProfilePageBean
  * @author Hugues
  * @since 1.22.04.28
- * @version 1.22.05.19
+ * @version 1.23.04.30
  */
 class AdminCopsProfilePageBean extends WpPageAdminBean
 {
@@ -18,7 +15,14 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
 
         /////////////////////////////////////////
         // Construction du menu de l'inbox
-        $this->arrSubOnglets = [self::CST_PFL_IDENTITY    => [self::FIELD_LABEL => 'Identité'], self::CST_PFL_ABILITIES   => [self::FIELD_LABEL => 'Caractéristiques'], self::CST_PFL_SKILLS      => [self::FIELD_LABEL => 'Compétences'], self::CST_PFL_EQUIPMENT   => [self::FIELD_LABEL => 'Équipement'], self::CST_PFL_CONTACTS    => [self::FIELD_LABEL => 'Contacts'], self::CST_PFL_BACKGROUND  => [self::FIELD_LABEL => 'Background']];
+        $this->arrSubOnglets = [
+            self::CST_PFL_IDENTITY    => [self::FIELD_LABEL => self::LABEL_IDENTITY],
+            self::CST_PFL_ABILITIES   => [self::FIELD_LABEL => self::LABEL_ABILITIES],
+            self::CST_PFL_SKILLS      => [self::FIELD_LABEL => self::LABEL_SKILLS],
+            self::CST_PFL_EQUIPMENT   => [self::FIELD_LABEL => self::LABEL_EQUIPMENT],
+            self::CST_PFL_CONTACTS    => [self::FIELD_LABEL => self::LABEL_CONTACTS],
+            self::CST_PFL_BACKGROUND  => [self::FIELD_LABEL => self::LABEL_BACKGROUND]
+        ];
         /////////////////////////////////////////
     }
 
@@ -210,7 +214,12 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   public function getSubongletContacts()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-contacts.php';
-    $attributes = ['1', '2', '3', '4', '5', '6', '7', '8', '1', '2', '3', '4', '5', '6', '7', '11', '12', '3', '4', '5', '6', '17'];
+    // TODO : à implémenter
+    $attributes = [
+        '1', '2', '3', '4', '5', '6', '7', '8',
+        '1', '2', '3', '4', '5', '6', '7', '11',
+        '12', '3', '4', '5', '6', '17'
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 
@@ -221,7 +230,12 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   public function getSubongletEquipment()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-equipment.php';
-    $attributes = ['1', '2', '3', '4', '5', '6', '7', '8', '1', '2', '3', '4', '5', '6', '7', '11', '12', '3', '4', '5', '6', '17'];
+    // TODO : à implémenter
+    $attributes = [
+        '1', '2', '3', '4', '5', '6', '7', '8',
+        '1', '2', '3', '4', '5', '6', '7', '11',
+        '12', '3', '4', '5', '6', '17'
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 
@@ -277,7 +291,12 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   public function getSubongletSkills()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-skills.php';
-    $attributes = ['1', '2', '3', '4', '5', '6', '7', '8', '1', '2', '3', '4', '5', '6', '7', '11', '12', '3', '4', '5', '6', '17'];
+    // TODO : à implémenter
+    $attributes = [
+        '1', '2', '3', '4', '5', '6', '7', '8',
+        '1', '2', '3', '4', '5', '6', '7', '11',
+        '12', '3', '4', '5', '6', '17'
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 

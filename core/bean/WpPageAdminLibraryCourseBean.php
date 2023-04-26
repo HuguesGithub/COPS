@@ -1,14 +1,11 @@
 <?php
 namespace core\bean;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe WpPageAdminLibraryCourseBean
  * @author Hugues
  * @since 1.22.11.05
- * @version 1.22.11.05
+ * @version 1.23.04.30
  */
 class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
 {
@@ -18,7 +15,7 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_STAGE];
         
-        $buttonContent = $this->getLink('Stages', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = $this->getLink(self::LABEL_COURSES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }

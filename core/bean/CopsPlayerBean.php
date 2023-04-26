@@ -1,18 +1,17 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * CopsPlayerBean
  * @author Hugues
  * @since 1.22.04.27
- * @version 1.22.04.28
+ * @version 1.23.04.30
  */
 class CopsPlayerBean extends UtilitiesBean
 {
-  public function __construct($Obj=null)
+  public function __construct($obj=null)
   {
-    $this->CopsPlayer = ($Obj==null ? new CopsPlayer() : $Obj);
+    $this->CopsPlayer = ($obj==null ? new CopsPlayer() : $obj);
     $this->CopsLangueServices = new CopsLangueServices();
   }
 
@@ -27,7 +26,11 @@ class CopsPlayerBean extends UtilitiesBean
 
   public function getCopsPlayerCarac($isCreation=false)
   {
-    $selectAttributes = ['class'         => 'form-control ajaxAction', 'data-trigger'  => 'change', 'data-ajax'     => 'saveData,checkLangue'];
+    $selectAttributes = [
+        'class'         => 'form-control ajaxAction',
+        'data-trigger'  => 'change',
+        'data-ajax'     => 'saveData,checkLangue'
+    ];
 
     $urlTemplate  = 'web/pages/public/fragments/public-fragments-section-caracteristiques-panel';
     $urlTemplate .= ($isCreation ? '-edit' : '').'.php';
@@ -53,13 +56,30 @@ class CopsPlayerBean extends UtilitiesBean
         // Points d'ancienneté
         0,
         // Langue 2
-        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-02', 'id'=>'carac-langue-02'])),
+        $this->CopsLangueServices->getSelectHtml(
+            array_merge($selectAttributes, ['name'=>'carac-langue-02', 'id'=>'carac-langue-02'])
+        ),
         // Langue 3
-        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-03', 'id'=>'carac-langue-03', 'style'=>'display:none;'])),
+        $this->CopsLangueServices->getSelectHtml(
+            array_merge(
+                $selectAttributes,
+                ['name'=>'carac-langue-03', 'id'=>'carac-langue-03', 'style'=>'display:none;']
+            )
+        ),
         // Langue 4
-        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-04', 'id'=>'carac-langue-04', 'style'=>'display:none;'])),
+        $this->CopsLangueServices->getSelectHtml(
+            array_merge(
+                $selectAttributes,
+                ['name'=>'carac-langue-04', 'id'=>'carac-langue-04', 'style'=>'display:none;']
+            )
+        ),
         // Langue 5
-        $this->CopsLangueServices->getSelectHtml(array_merge($selectAttributes, ['name'=>'carac-langue-05', 'id'=>'carac-langue-05', 'style'=>'display:none;'])),
+        $this->CopsLangueServices->getSelectHtml(
+            array_merge(
+                $selectAttributes,
+                ['name'=>'carac-langue-05', 'id'=>'carac-langue-05', 'style'=>'display:none;']
+            )
+        ),
         // Points de vie current
         26,
         // Points d'adrénaline current
@@ -88,12 +108,15 @@ class CopsPlayerBean extends UtilitiesBean
         } else {
             $mask = 'masks/mask-000.jpg';
         }
-        $imgAttributes = [self::ATTR_CLASS => 'mask', self::ATTR_SRC => 'https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/'.$mask];
+        $imgAttributes = [
+            self::ATTR_CLASS => 'mask',
+            self::ATTR_SRC => 'https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/img/'.$mask
+        ];
         $tdContent = $this->getBalise(self::TAG_IMG, '', $imgAttributes);
         $color = match ($this->CopsPlayer->getField(self::FIELD_GRADE)) {
             'Capitaine' => 'gold',
             'Lieutenant' => 'silver',
-            'Détective' => '#cd7f32',
+            'Détective' => '#CD7F32',
             default => '',
         };
         $cellAttributes = [self::ATTR_CLASS => 'mailbox-name', self::ATTR_STYLE => 'border-left: 10px solid '.$color];

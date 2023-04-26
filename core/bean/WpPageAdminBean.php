@@ -5,14 +5,11 @@ use core\domain;
 use core\services\WpCategoryServices;
 use core\services\CopsIndexServices;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version 1.22.10.18
+ * @version 1.23.04.30
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -40,14 +37,20 @@ class WpPageAdminBean extends WpPageBean
         $this->analyzeUri();
 //        $this->CopsPlayerServices = new CopsPlayerServices();
 //        $this->CopsMailServices   = new CopsMailServices();
-    
-        if (isset($_POST[self::FIELD_MATRICULE])) {
+        $strMatricule = static::fromPost(self::FIELD_MATRICULE);
+        $password = static::fromPost(self::FIELD_PASSWORD);
+        if ($strMatricule!='') {
             // On cherche a priori à se logguer
-            $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => $_POST[self::FIELD_MATRICULE], self::FIELD_PASSWORD  => ($_POST[self::FIELD_PASSWORD]=='' ? '' : md5((string) $_POST[self::FIELD_PASSWORD]))];
+            $mdp = ($password ? '' : md5((string) $password));
+            $attributes[self::SQL_WHERE_FILTERS] = [
+                self::FIELD_ID => self::SQL_JOKER_SEARCH,
+                self::FIELD_MATRICULE => $strMatricule,
+                self::FIELD_PASSWORD  => $mdp
+            ];
 //            $objsCopsPlayer = $this->CopsPlayerServices->getCopsPlayers($attributes);
 //            if (!empty($objsCopsPlayer)) {
 //                $this->CopsPlayer = array_shift($objsCopsPlayer);
-                $_SESSION[self::FIELD_MATRICULE] = $_POST[self::FIELD_MATRICULE];
+                $_SESSION[self::FIELD_MATRICULE] = $strMatricule;
 //            } else {
 //                $_SESSION[self::FIELD_MATRICULE] = 'err_login';
 //            }
@@ -56,11 +59,19 @@ class WpPageAdminBean extends WpPageBean
             unset($_SESSION[self::FIELD_MATRICULE]);
         } elseif (isset($_SESSION[self::FIELD_MATRICULE])) {
 //            $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
+        } else {
+            // TODO
         }
         
-        $this->arrSidebarContent = [self::ONGLET_DESK => [self::FIELD_ICON  => 'desktop', self::FIELD_LABEL => 'Bureau'], self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => 'Bibliothèque']];
+        $this->arrSidebarContent = [
+            self::ONGLET_DESK => [self::FIELD_ICON  => 'desktop', self::FIELD_LABEL => 'Bureau'],
+            self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => self::LABEL_LIBRARY]
+        ];
     if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
-            $this->arrSidebarContentNonGuest = [self::ONGLET_INBOX => [self::FIELD_ICON  => 'envelope', self::FIELD_LABEL => 'Messagerie'], self::ONGLET_CALENDAR => [self::FIELD_ICON   => 'calendar-days', self::FIELD_LABEL  => 'Calendrier']];
+            $this->arrSidebarContentNonGuest = [
+                self::ONGLET_INBOX => [self::FIELD_ICON  => 'envelope', self::FIELD_LABEL => self::LABEL_MESSAGERIE],
+                self::ONGLET_CALENDAR => [self::FIELD_ICON   => 'calendar-days', self::FIELD_LABEL  => 'Calendrier']
+            ];
             $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
             /*
             $this->arrSidebarContent = array(
@@ -81,9 +92,9 @@ class WpPageAdminBean extends WpPageBean
                     self::FIELD_ICON   => 'user',
                     self::FIELD_LABEL  => 'Personnage',
                     self::CST_CHILDREN => array(
-                        'player-carac'  => 'Caractéristiques',
-                        'player-comps'  => 'Compétences',
-                        'player-story'  => 'Background',
+                        'player-carac'  => self::LABEL_ABILITIES,
+                        'player-comps'  => self::LABEL_SKILLS,
+                        'player-story'  => self::LABEL_BACKGROUND,
                     ),
                 ),
             );
@@ -120,7 +131,7 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getContentPage()
     {
-        if (!self::isCopsLogged()) {
+        if (!static::isCopsLogged()) {
             // Soit on n'est pas loggué et on affiche la mire d'identification.
             // Celle-ci est invisible et passe visible en cas de souris qui bouge ou touche cliquée.
             $urlTemplate = self::WEB_PPFS_CONNEX_PANEL;
@@ -222,7 +233,10 @@ class WpPageAdminBean extends WpPageBean
             // Construction du lien
             $aContent  = $this->getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
-            $aAttributes = [self::ATTR_HREF  => $this->urlOnglet.$strOnglet, self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '')];
+            $aAttributes = [
+                self::ATTR_HREF  => $this->urlOnglet.$strOnglet,
+                self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '')
+            ];
             $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
          
             // S'il a des enfants, on enrichit
@@ -236,7 +250,10 @@ class WpPageAdminBean extends WpPageBean
                         $extraClass = '';
                     }
                     $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
-                    $aAttributes = [self::ATTR_HREF  => $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet, self::ATTR_CLASS => 'nav-link'.$extraClass];
+                    $aAttributes = [
+                        self::ATTR_HREF  => $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet,
+                        self::ATTR_CLASS => 'nav-link'.$extraClass
+                    ];
                     $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
                     $ulContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
                 }
@@ -252,9 +269,9 @@ class WpPageAdminBean extends WpPageBean
          $attributes = [
              $sidebarContent,
              // La date
-             self::getCopsDate('D m-d-Y'),
+             static::getCopsDate('D m-d-Y'),
              // L'heure
-             self::getCopsDate('H:i:s'),
+             static::getCopsDate('H:i:s'),
          ];
          return $this->getRender($urlTemplate, $attributes);
      }

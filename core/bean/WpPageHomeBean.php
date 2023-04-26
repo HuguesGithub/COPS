@@ -3,14 +3,11 @@ namespace core\bean;
 
 use core\domain\CopsMeteoClass;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * Classe WpPageHomeBean
  * @author Hugues
  * @since 1.22.04.28
- * @version 1.22.09.23
+ * @version 1.22.04.30
  */
 class WpPageHomeBean extends WpPageBean
 {
@@ -34,18 +31,7 @@ class WpPageHomeBean extends WpPageBean
             $strLink = $this->getLink($value, '/section/'.$key, '');
             $str .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>'mini-nav-item']);
         }
-        /*
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/opinion">Opinion</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/science">Science</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/health">Health</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/sports">Sports</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/arts">Arts</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/books">Books</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/style">Style</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/food">Food</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/travel">Travel</a></li>
-                    <li data-testid="mini-nav-item" class="css-cwdrld"><a class="css-1wjnrbv" href="/section/magazine">Magazine</a></li>
-        */
+
         /////////////////////////////////////////
         // Récupération de la météo
         $objCopsMeteo = new CopsMeteoClass();

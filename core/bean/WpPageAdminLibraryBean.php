@@ -8,14 +8,11 @@ use core\services\CopsStageServices;
 use core\services\WpCategoryServices;
 use core\services\WpPostServices;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe WpPageAdminLibraryBean
  * @author Hugues
  * @since 1.22.05.30
- * @version 1.22.11.05
+ * @version 1.23.04.30
  */
 class WpPageAdminLibraryBean extends WpPageAdminBean
 {
@@ -49,7 +46,12 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         
         /////////////////////////////////////////
         // Construction du menu
-        $this->arrSubOnglets = [self::CST_LIB_INDEX => [self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX], self::CST_LIB_BDD   => [self::FIELD_ICON => 'database', self::FIELD_LABEL => self::LABEL_DATABASES], self::CST_LIB_SKILL => [self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS], self::CST_LIB_STAGE => [self::FIELD_ICON => 'file-lines', self::FIELD_LABEL => self::LABEL_COURSES], self::CST_LIB_COPS  => [self::FIELD_ICON => 'users', self::FIELD_LABEL => 'COPS']];
+        $this->arrSubOnglets = [
+            self::CST_LIB_INDEX => [self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX],
+            self::CST_LIB_BDD   => [self::FIELD_ICON => self::I_DATABASE, self::FIELD_LABEL => self::LABEL_DATABASES],
+            self::CST_LIB_SKILL => [self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS],
+            self::CST_LIB_STAGE => [self::FIELD_ICON => 'file-lines', self::FIELD_LABEL => self::LABEL_COURSES],
+            self::CST_LIB_COPS  => [self::FIELD_ICON => self::I_USERS, self::FIELD_LABEL => 'COPS']];
         /////////////////////////////////////////
 
         /////////////////////////////////////////
@@ -74,7 +76,12 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
         $urlTemplate = self::WEB_PPFS_ONGLET_MENU_PANEL;
         $strContent = '';
         foreach ($this->arrSubOnglets as $subOnglet => $arrSubOnglet) {
-            $attributes = [self::ONGLET_LIBRARY, $subOnglet, $arrSubOnglet[self::FIELD_LABEL], $arrSubOnglet[self::FIELD_ICON]];
+            $attributes = [
+                self::ONGLET_LIBRARY,
+                $subOnglet,
+                $arrSubOnglet[self::FIELD_LABEL],
+                $arrSubOnglet[self::FIELD_ICON]
+            ];
             $strContent .= $this->getRender($urlTemplate, $attributes);
         }
       

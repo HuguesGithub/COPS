@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminCalendarWeekBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.22.11.21
+ * @version 1.23.04.30
  */
 class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
 {
@@ -14,7 +13,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
     {
         parent::__construct();
         $this->slugSubOnglet = self::CST_CAL_WEEK;
-        $this->titreSubOnglet = 'Hebdomadaire';
+        $this->titreSubOnglet = self::LABEL_WEEKLY;
         /////////////////////////////////////////
         // Définition des services
         $this->objCopsEventServices = new CopsEventServices();
@@ -56,7 +55,8 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         // On construit le header du tableau
         // Si $fM et $lM sont identiques, la semaine complète est dans un même mois.
         if ($fM==$lM) {
-            $calendarHeader = $fd.'-'.$ld.' '.$this->arrFullMonths[$fm*1].' '.$fY; // 3-9 Juin 2030
+            // 3-9 Juin 2030
+            $calendarHeader = $fd.'-'.$ld.' '.$this->arrFullMonths[$fm*1].' '.$fY;
         } elseif ($fY!=$lY) {
             // Si $fY et $lY diffèrent, la semaine est à cheval sur deux années.
             // 26 Dec 2021 – 1 Jan 2022
@@ -137,7 +137,11 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $divContent .= $this->getDiv('', [self::ATTR_CLASS=>'fc-timegrid-now-indicator-container']);
         
         $tdContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-timegrid-col-frame']);
-        $tdAttributes = ['role' => 'gridcell', self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass, 'data-date' => date('Y-m-d', $tsDisplay)];
+        $tdAttributes = [
+            'role' => 'gridcell',
+            self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
+            'data-date' => date('Y-m-d', $tsDisplay)
+        ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
     
@@ -150,7 +154,15 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $strContent = '';
         /////////////////////////////////////////
         // On récupère tous les events du jour
-        $attributes = [self::SQL_WHERE_FILTERS => [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_DSTART => date('Y-m-d', $tsDisplay), self::FIELD_DEND => date('Y-m-d', $tsDisplay)], self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND], self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]];
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_ID => self::SQL_JOKER_SEARCH,
+                self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
+                self::FIELD_DEND => date('Y-m-d', $tsDisplay)
+            ],
+            self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
+            self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]
+        ];
         $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
         $nbEvts = 0;
         // On va trier les event "Allday" de ceux qui ne le sont pas.
@@ -165,6 +177,8 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
                     // qui déborde sur la semaine affichée.
                     // On ne doit le traiter que si on est un lundi.
                     $strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $tsDisplay, $nbEvts);
+                } else {
+                    // TODO
                 }
                 ++$nbEvts;
             }
@@ -173,7 +187,10 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         
         /////////////////////////////////////////
         // On créé le div de fin de cellule
-        $botAttributes = [self::ATTR_CLASS => 'fc-daygrid-day-bottom', self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;'];
+        $botAttributes = [
+            self::ATTR_CLASS => 'fc-daygrid-day-bottom',
+            self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;'
+        ];
         $divBottom = $this->getDiv('', $botAttributes);
         /////////////////////////////////////////
         
@@ -182,7 +199,11 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $divAttributes = [self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner'];
 
         $tdContent = $this->getDiv($divContent, $divAttributes);
-        $tdAttributes = ['role' => 'gridcell', self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass, 'data-date' => date('Y-m-d', $tsDisplay)];
+        $tdAttributes = [
+            'role' => 'gridcell',
+            self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
+            'data-date' => date('Y-m-d', $tsDisplay)
+        ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
     
@@ -214,7 +235,11 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $aAttributes = ['aria-label' => $label];
         $divContent = $this->getLink($aContent, $url, 'fc-col-header-cell-cushion text-white', $aAttributes);
         $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-scrollgrid-sync-inner']);
-        $thAttributes = ['role' => 'columnheader', self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass, 'data-date' => date('Y-m-d', $tsDisplay)];
+        $thAttributes = [
+            'role' => 'columnheader',
+            self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
+            'data-date' => date('Y-m-d', $tsDisplay)
+        ];
         return $this->getBalise(self::TAG_TH, $thContent, $thAttributes);
     }
     

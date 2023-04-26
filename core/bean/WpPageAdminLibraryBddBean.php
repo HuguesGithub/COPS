@@ -3,14 +3,11 @@ namespace core\bean;
 
 use core\domain\WpPostClass;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe WpPageAdminLibraryBddBean
  * @author Hugues
  * @since 1.22.10.29
- * @version 1.22.10.29
+ * @version 1.23.04.30
  */
 class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
 {
@@ -20,7 +17,7 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_BDD];
 
-        $buttonContent = $this->getLink('Bases de données', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = $this->getLink(self::LABEL_DATABASES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
         

@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminCalendarMonthBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.22.11.21
+ * @version 1.23.04.30
  */
 class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 {
@@ -14,7 +13,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
     {
         parent::__construct();
         $this->slugSubOnglet = self::CST_CAL_MONTH;
-        $this->titreSubOnglet = 'Mensuel';
+        $this->titreSubOnglet = self::LABEL_MONTHLY;
         /////////////////////////////////////////
         // Définition des services
         $this->objCopsEventServices = new CopsEventServices();
@@ -111,7 +110,10 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             $aHref = $this->getUrl($urlElements);
             $aClass = 'fc-daygrid-day-number text-white';
             $divContent = $this->getLink(date('W', $tsDisplay), $aHref, $aClass);
-            $divAttributes = [self::ATTR_CLASS => 'badge bg-primary', self::ATTR_STYLE => 'position: absolute; left: 2px; top: 2px'];
+            $divAttributes = [
+                self::ATTR_CLASS => 'badge bg-primary',
+                self::ATTR_STYLE => 'position: absolute; left: 2px; top: 2px'
+            ];
             $strWeekLink = $this->getDiv($divContent, $divAttributes);
         } else {
             $strWeekLink = '';
@@ -129,7 +131,10 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $divAttributes = [self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner'];
         $divContent = $this->getDiv($strContent, $divAttributes);
         
-        $tdAttributes = [self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass, 'data-date' => date('Y-m-d', $tsDisplay)];
+        $tdAttributes = [
+            self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
+            'data-date' => date('Y-m-d', $tsDisplay)
+        ];
         return $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
     }
     
@@ -142,7 +147,15 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $strContent = '';
         /////////////////////////////////////////
         // On récupère tous les events du jour
-        $attributes = [self::SQL_WHERE_FILTERS => [self::FIELD_ID => '%', self::FIELD_DSTART => date('Y-m-d', $tsDisplay), self::FIELD_DEND => date('Y-m-d', $tsDisplay)], self::SQL_ORDER_BY => ['dStart', 'dEnd'], self::SQL_ORDER => ['ASC', 'DESC']];
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_ID => '%',
+                self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
+                self::FIELD_DEND => date('Y-m-d', $tsDisplay)
+            ],
+            self::SQL_ORDER_BY => ['dStart', 'dEnd'],
+            self::SQL_ORDER => ['ASC', 'DESC']
+        ];
         $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
         $nbEvts = 0;
         // On va trier les event "Allday" de ceux qui ne le sont pas.
@@ -158,6 +171,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
                     // qui déborde sur la semaine affichée.
                     // On ne doit le traiter que si on est un lundi.
                     $strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $tsDisplay, $nbEvts);
+                } else {
+                    // TODO
                 }
                 ++$nbEvts;
             }
@@ -166,7 +181,10 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         
         /////////////////////////////////////////
         // On créé le div de fin de cellule
-        $botAttributes = [self::ATTR_CLASS => 'fc-daygrid-day-bottom', self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;'];
+        $botAttributes = [
+            self::ATTR_CLASS => 'fc-daygrid-day-bottom',
+            self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;'
+        ];
         $divBottom = $this->getDiv('', $botAttributes);
         /////////////////////////////////////////
 

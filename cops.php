@@ -62,9 +62,15 @@ function cops_menu()
   if (function_exists('add_menu_page')) {
     $uploadFiles = 'upload_files';
     $pluginName = 'COPS';
-    add_menu_page($pluginName, $pluginName, $uploadFiles, $urlRoot, '', plugins_url('/hj-cops/web/rsc/img/icons/favicon.ico'));
+    $urlFavicon = plugins_url('/hj-cops/web/rsc/img/icons/favicon.ico');
+    add_menu_page($pluginName, $pluginName, $uploadFiles, $urlRoot, '', $urlFavicon);
     if (function_exists('add_submenu_page')) {
-      $arrUrlSubMenu = ['index' => 'Index', 'calendrier' => 'Calendrier', 'meteo' => 'Météo', '-'              => '-----------------'];
+      $arrUrlSubMenu = [
+        'index' => 'Index',
+        'calendar' => 'Calendrier',
+        'meteo' => 'Météo',
+        '-'              => '-----------------'
+    ];
       foreach ($arrUrlSubMenu as $key => $value) {
         $urlSubMenu = $urlRoot.'&amp;onglet='.$key;
         add_submenu_page($urlRoot, $value, $value, $uploadFiles, $urlSubMenu, $key);

@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * CopsEventDateBean
  * @author Hugues
  * @since 1.22.06.13
- * @version 1.22.11.24
+ * @version 1.23.04.30
  */
 class CopsEventDateBean extends UtilitiesBean
 {
@@ -23,7 +22,7 @@ class CopsEventDateBean extends UtilitiesBean
     public function getFcDayClass($tsDisplay)
     {
         // On récupère le jour courant
-        $tsToday = self::getCopsDate('tsStart');
+        $tsToday = static::getCopsDate('tsStart');
 
         $strClass = 'fc-event-';
         // La date passée, présente ou future
@@ -74,7 +73,12 @@ class CopsEventDateBean extends UtilitiesBean
   public function getEventCartoucheDisplay($tsDisplay)
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-article-calendar-cartouche.php';
-    $attributes = [$this->getFcDayClass($tsDisplay), $this->CopsEvent->getRgbCategorie(), $this->CopsEvent->getField('eventLibelle'), $this->CopsEvent->getColspan(date('N', $tsDisplay)==1 ? $tsDisplay : null)];
+    $attributes = [
+        $this->getFcDayClass($tsDisplay),
+        $this->CopsEvent->getRgbCategorie(),
+        $this->CopsEvent->getField('eventLibelle'),
+        $this->CopsEvent->getColspan(date('N', $tsDisplay)==1 ? $tsDisplay : null)
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
 
@@ -82,7 +86,12 @@ class CopsEventDateBean extends UtilitiesBean
   {
     $tsDisplay = null;
     $urlTemplate = 'web/pages/public/fragments/public-fragments-article-calendar-dot.php';
-    $attributes = [$this->getFcDayClass($tsDisplay), $this->CopsEvent->getRgbCategorie(), $this->CopsEventDate->getStrDotTime('ga', 'tstart'), $this->CopsEvent->getField('eventLibelle')];
+    $attributes = [
+        $this->getFcDayClass($tsDisplay),
+        $this->CopsEvent->getRgbCategorie(),
+        $this->CopsEventDate->getStrDotTime('ga', 'tstart'),
+        $this->CopsEvent->getField('eventLibelle')
+    ];
     return $this->getRender($urlTemplate, $attributes);
   }
   

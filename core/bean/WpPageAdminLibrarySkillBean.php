@@ -3,14 +3,11 @@ namespace core\bean;
 
 use core\domain\WpPostClass;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe WpPageAdminLibrarySkillBean
  * @author Hugues
  * @since 1.22.11.03
- * @version 1.22.11.03
+ * @version 1.23.04.30
  */
 class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
 {
@@ -20,7 +17,7 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_SKILL];
         
-        $buttonContent = $this->getLink('Compétences', $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = $this->getLink(self::LABEL_SKILLS, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
     }
@@ -55,7 +52,10 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
             if ($prevAncre!=$postAnchor) {
                 $prevAncre = $postAnchor;
                 $btnContent = $this->getLink($postAnchor, '#anchor-'.$postAnchor, 'nav-link text-white');
-                $btnAttributes = [self::ATTR_CLASS=>'btn-dark btn-xs', self::ATTR_STYLE=>'width: -webkit-fill-available'];
+                $btnAttributes = [
+                    self::ATTR_CLASS=>'btn-dark btn-xs',
+                    self::ATTR_STYLE=>'width: -webkit-fill-available'
+                ];
                 $liContent = $this->getButton($btnContent, $btnAttributes);
                 $strAncres .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
                 $aAttributes = [self::ATTR_CLASS=>'col-12', self::FIELD_ID=>'anchor-'.$postAnchor];

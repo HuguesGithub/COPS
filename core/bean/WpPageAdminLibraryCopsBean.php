@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
+use core\services\CopsStageServices;
+
 /**
  * Classe WpPageAdminLibraryCopsBean
  * @author Hugues
  * @since 1.22.11.05
- * @version 1.22.11.05
+ * @version 1.23.04.30
  */
 class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
 {
@@ -19,20 +20,98 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $this->lineHeight = 14;
 
         // On défini le menu latéral gauche
-        $this->arrMenu = ['ranked' => 'Gradés', 'alpha' => 'A-Alpha', 'beta' => 'A-Beta', 'epsilon' => 'B-Epsilon', 'rotation' => 'Rotation COPS', 'accueil' => 'Rotation Accueil'];
+        $this->arrMenu = [
+            'ranked' => 'Gradés',
+            'alpha' => 'A-Alpha',
+            'beta' => 'A-Beta',
+            'epsilon' => 'B-Epsilon',
+            'rotation' => 'Rotation COPS',
+            'accueil' => 'Rotation Accueil'
+        ];
 
         // Le tableau des auxiliaires civils va tourner en fonction de la semaine.
         // Puisqu'il sont 7, on a 7 configurations possibles.
-        $this->arrAuxiliairesCivils = ['0' => 'ANDRES Guillermo', 'ASHLEY Ruby', 'FIELDS Sonia', 'COOK James', 'JENNINGS Crystal', 'MARRERO Rose', 'TYLER Ramona'];
+        $this->arrAuxiliairesCivils = [
+            '0' => 'ANDRES Guillermo',
+            'ASHLEY Ruby',
+            'FIELDS Sonia',
+            'COOK James',
+            'JENNINGS Crystal',
+            'MARRERO Rose',
+            'TYLER Ramona'
+        ];
         
         // La rotation des Auxiliaires Civils
-        $this->arrRotationsAC = ['Mon' => [[2], [1, 3, 4], [5]], 'Tue' => [[2], [0, 1, 3], [4]], 'Wed' => [[5], [0, 1, 6], [2]], 'Thu' => [[3], [0, 4, 6], [5]], 'Fri' => [[2], [3, 4, 6], [5]], 'W-e' => [[0], [1]]];
+        $this->arrRotationsAC = [
+            'Mon' => [[2], [1, 3, 4], [5]],
+            'Tue' => [[2], [0, 1, 3], [4]],
+            'Wed' => [[5], [0, 1, 6], [2]],
+            'Thu' => [[3], [0, 4, 6], [5]],
+            'Fri' => [[2], [3, 4, 6], [5]],
+            'W-e' => [[0], [1]]
+        ];
         
         // Les officiers de police présents à l'accueil de l'étage du COPS
-        $this->arrOfficiersPolice = ['A' => 'McLURE Humphrey', 'B' => 'HARRY Lise', 'C' => 'BRADLEY Robert', 'D' => 'FULLERTON Brad', 'E' => 'RIVERO Hector', 'F' => 'ROSHAN Lynda'];
+        $this->arrOfficiersPolice = [
+            'A' => 'McLURE Humphrey',
+            'B' => 'HARRY Lise',
+            'C' => 'BRADLEY Robert',
+            'D' => 'FULLERTON Brad',
+            'E' => 'RIVERO Hector',
+            'F' => 'ROSHAN Lynda'
+        ];
         
         // La rotation des Officiers de Police
-        $this->arrRotationsOP = [0 => ['Mon' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']], 'Tue' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']], 'Wed' => ['am'=>['C'], 'noon'=>['B', 'D'], 'pm'=>['A']], 'Thu' => ['am'=>['E'], 'noon'=>['A', 'F'], 'pm'=>['C']], 'Fri' => ['am'=>['D'], 'noon'=>['B', 'E'], 'pm'=>['F']], 'W-e' => ['am'=>['A'], 'pm'=>['B']]], 1 => ['Mon' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']], 'Tue' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']], 'Wed' => ['am'=>['C'], 'noon'=>['A', 'D'], 'pm'=>['B']], 'Thu' => ['am'=>['E'], 'noon'=>['B', 'F'], 'pm'=>['C']], 'Fri' => ['am'=>['D'], 'noon'=>['A', 'E'], 'pm'=>['F']], 'W-e' => ['am'=>['C'], 'pm'=>['D']]], 2 => ['Mon' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']], 'Tue' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']], 'Wed' => ['am'=>['E'], 'noon'=>['B', 'F'], 'pm'=>['A']], 'Thu' => ['am'=>['C'], 'noon'=>['A', 'D'], 'pm'=>['E']], 'Fri' => ['am'=>['F'], 'noon'=>['B', 'C'], 'pm'=>['D']], 'W-e' => ['am'=>['E'], 'pm'=>['F']]], 3 => ['Mon' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']], 'Tue' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']], 'Wed' => ['am'=>['D'], 'noon'=>['B', 'C'], 'pm'=>['A']], 'Thu' => ['am'=>['F'], 'noon'=>['A', 'E'], 'pm'=>['D']], 'Fri' => ['am'=>['C'], 'noon'=>['B', 'F'], 'pm'=>['E']], 'W-e' => ['am'=>['A'], 'pm'=>['B']]], 4 => ['Mon' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']], 'Tue' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']], 'Wed' => ['am'=>['D'], 'noon'=>['A', 'C'], 'pm'=>['B']], 'Thu' => ['am'=>['F'], 'noon'=>['B', 'E'], 'pm'=>['D']], 'Fri' => ['am'=>['C'], 'noon'=>['A', 'F'], 'pm'=>['E']], 'W-e' => ['am'=>['D'], 'pm'=>['C']]], 5 => ['Mon' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']], 'Tue' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']], 'Wed' => ['am'=>['F'], 'noon'=>['B', 'E'], 'pm'=>['A']], 'Thu' => ['am'=>['D'], 'noon'=>['A', 'C'], 'pm'=>['F']], 'Fri' => ['am'=>['E'], 'noon'=>['B', 'D'], 'pm'=>['C']], 'W-e' => ['am'=>['F'], 'pm'=>['E']]]];
+        $this->arrRotationsOP = [
+            0 => [
+                'Mon' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']],
+                'Tue' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']],
+                'Wed' => ['am'=>['C'], 'noon'=>['B', 'D'], 'pm'=>['A']],
+                'Thu' => ['am'=>['E'], 'noon'=>['A', 'F'], 'pm'=>['C']],
+                'Fri' => ['am'=>['D'], 'noon'=>['B', 'E'], 'pm'=>['F']],
+                'W-e' => ['am'=>['A'], 'pm'=>['B']]
+            ],
+            1 => [
+                'Mon' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']],
+                'Tue' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']],
+                'Wed' => ['am'=>['C'], 'noon'=>['A', 'D'], 'pm'=>['B']],
+                'Thu' => ['am'=>['E'], 'noon'=>['B', 'F'], 'pm'=>['C']],
+                'Fri' => ['am'=>['D'], 'noon'=>['A', 'E'], 'pm'=>['F']],
+                'W-e' => ['am'=>['C'], 'pm'=>['D']]
+            ],
+            2 => [
+                'Mon' => ['am'=>['E'], 'noon'=>['A', 'B'], 'pm'=>['F']],
+                'Tue' => ['am'=>['C'], 'noon'=>['A', 'B'], 'pm'=>['D']],
+                'Wed' => ['am'=>['E'], 'noon'=>['B', 'F'], 'pm'=>['A']],
+                'Thu' => ['am'=>['C'], 'noon'=>['A', 'D'], 'pm'=>['E']],
+                'Fri' => ['am'=>['F'], 'noon'=>['B', 'C'], 'pm'=>['D']],
+                'W-e' => ['am'=>['E'], 'pm'=>['F']]
+            ],
+            3 => [
+                'Mon' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']],
+                'Tue' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']],
+                'Wed' => ['am'=>['D'], 'noon'=>['B', 'C'], 'pm'=>['A']],
+                'Thu' => ['am'=>['F'], 'noon'=>['A', 'E'], 'pm'=>['D']],
+                'Fri' => ['am'=>['C'], 'noon'=>['B', 'F'], 'pm'=>['E']],
+                'W-e' => ['am'=>['A'], 'pm'=>['B']]
+            ],
+            4 => [
+                'Mon' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']],
+                'Tue' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']],
+                'Wed' => ['am'=>['D'], 'noon'=>['A', 'C'], 'pm'=>['B']],
+                'Thu' => ['am'=>['F'], 'noon'=>['B', 'E'], 'pm'=>['D']],
+                'Fri' => ['am'=>['C'], 'noon'=>['A', 'F'], 'pm'=>['E']],
+                'W-e' => ['am'=>['D'], 'pm'=>['C']]
+            ],
+            5 => [
+                'Mon' => ['am'=>['F'], 'noon'=>['A', 'B'], 'pm'=>['E']],
+                'Tue' => ['am'=>['D'], 'noon'=>['A', 'B'], 'pm'=>['C']],
+                'Wed' => ['am'=>['F'], 'noon'=>['B', 'E'], 'pm'=>['A']],
+                'Thu' => ['am'=>['D'], 'noon'=>['A', 'C'], 'pm'=>['F']],
+                'Fri' => ['am'=>['E'], 'noon'=>['B', 'D'], 'pm'=>['C']],
+                'W-e' => ['am'=>['F'], 'pm'=>['E']]
+            ]
+        ];
         
         $this->arrPlanning = [];
         
@@ -60,6 +139,8 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             $buttonContent = $this->getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
             $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
             $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        } else {
+            // TODO
         }
     }
     
@@ -109,7 +190,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $headerContent  = $this->getTh('Masque', $thAttributes);
         $thAttributes = [self::ATTR_CLASS => 'mailbox-name'];
         $headerContent .= $this->getTh('Matricule', $thAttributes);
-        $headerContent .= $this->getTh('Nom', $thAttributes);
+        $headerContent .= $this->getTh(self::LABEL_NOM, $thAttributes);
         $headerContent .= $this->getTh('Surnom', $thAttributes);
         if ($blnRanked) {
             // Les gradés uniquement
@@ -181,7 +262,11 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
 
         $listContent = '';
-        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH, self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH];
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::FIELD_ID => self::SQL_JOKER_SEARCH,
+            self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
+            self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH
+        ];
         
         //////////////////////////////////////////////////////////
         // Gestion du Capitaine (potentiellement des Capitaines)
@@ -197,7 +282,8 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         while (!empty($objCopsPlayers)) {
             $objCopsPlayer = array_shift($objCopsPlayers);
             $section = $objCopsPlayer->getField(self::FIELD_SECTION);
-            if (in_array($section, ['', 'A-Alpha', 'A-Beta', 'B-Epsilon'])) { // A terme, à supprimer
+            if (in_array($section, ['', 'A-Alpha', 'A-Beta', 'B-Epsilon'])) {
+                // A terme, à supprimer
                 $listContent .= $objCopsPlayer->getBean()->getLibraryRow($href);
             }
         }
@@ -230,14 +316,18 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
 
         $listContent = '';
-        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID => self::SQL_JOKER_SEARCH, self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH, self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH];
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::FIELD_ID => self::SQL_JOKER_SEARCH,
+            self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
+            self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH
+        ];
         
         //////////////////////////////////////////////////////////
         // Gestion du Lieutenant
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
         $objLieutenants = $this->CopsPlayerServices->getCopsPlayers($attributes);
         // Gestion des Détectives
-        $tsToday = self::getCopsDate('Y-m-d');
+        $tsToday = static::getCopsDate('Y-m-d');
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Détective';
         $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM;
         $objDetectives = $this->CopsPlayerServices->getCopsPlayers($attributes);
@@ -321,7 +411,11 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         }
         
         // Roulement des équipes
-        $arrSections = ['A' => ['Alpha', 'Beta', 'Gamma', self::CST_NBSP], 'B' => ['Epsilon', 'Theta', 'Mu', 'Delta'], 'C' => ['Sigma', 'Tau', self::CST_NBSP, 'Pi']];
+        $arrSections = [
+            'A' => ['Alpha', 'Beta', 'Gamma', self::CST_NBSP],
+            'B' => ['Epsilon', 'Theta', 'Mu', 'Delta'],
+            'C' => ['Sigma', 'Tau', self::CST_NBSP, 'Pi']
+        ];
         for ($i=0; $i<$nbDiffWeeks; ++$i) {
             $strSection = array_pop($arrSections['A']);
             array_unshift($arrSections['A'], $strSection);
@@ -563,7 +657,18 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     public function getIndividual()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-article-cops-individual.php';
-        $attributes = [$this->objCops->getField(self::FIELD_NOM).' '.$this->objCops->getField(self::FIELD_PRENOM), $this->objCops->getField(self::FIELD_SURNOM), $this->objCops->getField(self::FIELD_MATRICULE), $this->objCops->getField(self::FIELD_BIRTH_DATE), $this->objCops->getField(self::FIELD_TAILLE)/100, $this->objCops->getField(self::FIELD_POIDS), '', '', '', ''];
+        $attributes = [
+            $this->objCops->getField(self::FIELD_NOM).' '.$this->objCops->getField(self::FIELD_PRENOM),
+            $this->objCops->getField(self::FIELD_SURNOM),
+            $this->objCops->getField(self::FIELD_MATRICULE),
+            $this->objCops->getField(self::FIELD_BIRTH_DATE),
+            $this->objCops->getField(self::FIELD_TAILLE)/100,
+            $this->objCops->getField(self::FIELD_POIDS),
+            '',
+            '',
+            '',
+            ''
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 }

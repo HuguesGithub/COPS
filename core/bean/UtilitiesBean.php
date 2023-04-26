@@ -5,14 +5,11 @@ use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\LabelsInterface;
 use core\interfaceimpl\UrlsInterface;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * Classe UtilitiesBean
  * @author Hugues
  * @since 1.00.00
- * @version 1.00.00
+ * @version 1.23.04.30
  */
 class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
@@ -351,21 +348,33 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     public static function fromServer(string $field): string
     {
         // Sanitize
-        $strSanitized = htmlentities((string) $_SERVER[$field], ENT_QUOTES, 'UTF-8');
+        if (isset($_SERVER[$key])) {
+            $strSanitized = htmlentities((string) $_SERVER[$field], ENT_QUOTES, 'UTF-8');
+        } else {
+            $strSanitized = '';
+        }
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 
     public static function fromPost(string $key): mixed
     {
         // Sanitize
-        $strSanitized = htmlentities((string) $_POST[$key], ENT_QUOTES, 'UTF-8');
+        if (isset($_POST[$key])) {
+            $strSanitized = htmlentities((string) $_POST[$key], ENT_QUOTES, 'UTF-8');
+        } else {
+            $strSanitized = '';
+        }
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 
     public static function fromGet(string $key): mixed
     {
         // Sanitize
-        $strSanitized = htmlentities((string) $_GET[$key], ENT_QUOTES, 'UTF-8');
+        if (isset($_GET[$key])) {
+            $strSanitized = htmlentities((string) $_GET[$key], ENT_QUOTES, 'UTF-8');
+        } else {
+            $strSanitized = '';
+        }
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 
