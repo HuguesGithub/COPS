@@ -280,5 +280,41 @@ class CopsMeteoClass extends LocalDomainClass
         $y = substr((string) $this->dateMeteo, 0, 4);
         return date('Ymd', mktime(0, 0, 0, $m, $d, $y));
     }
+
+    /**
+     * @since v1.23.04.26
+     * @version v1.23.04.30
+     */
+    public function getHeatIndex(): int
+    {
+        // T : une température en °F
+        $t = $this->temperature;
+        // On doit la convertir de C à F
+        $t = round(9*$t/5 + 32);
+        // rh : un taux d'humidité.
+        $rh = $this->humidite;
+
+        $tFarnheit = -42.379
+            + (2.04901523*$t) + (10.14333127*$rh)
+            - (0.22475541*$t*$rh) - (0.00683783*$t*$t)
+            - (0.05481717*$rh*$rh) + (0.00122874*$t*$t*$rh)
+            + (0.00085282*$t*$rh*$rh) - (0.00000199*$t*$t*$rh*$rh);
+        
+        return round(5*($tFarnheit-32)/9);
+    }
+
+    /**
+     * @since v1.23.04.26
+     * @version v1.23.04.30
+     */
+    public function getWindChillIndex(): int
+    {
+        // T : une température en °C
+        $t = $this->temperature;
+        // v : une vitesse en km/h
+        $v = $this->forceVent;
+
+        return round(13.12 + 0.6215*$t - 11.37*pow($v, 0.16) + 0.3965*$t*pow($v, 0.16));
+    }
     
 }

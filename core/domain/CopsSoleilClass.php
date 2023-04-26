@@ -1,14 +1,13 @@
 <?php
 namespace core\domain;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+use core\bean\CopsSoleilBean;
+
 /**
  * Classe CopsSoleilClass
  * @author Hugues
  * @since 1.23.4.20
- * @version 1.23.4.20
+ * @version v1.23.04.30
  */
 class CopsSoleilClass extends LocalDomainClass
 {
@@ -44,6 +43,13 @@ class CopsSoleilClass extends LocalDomainClass
     {
         return parent::convertRootElement(new CopsSoleilClass(), $row);
     }
+
+    /**
+     * @since v1.23.04.26
+     * @version v1.23.04.30
+     */
+    public function getBean(): CopsSoleilBean
+    { return new CopsSoleilBean($this); }
 
     //////////////////////////////////////////////////
     // METHODES

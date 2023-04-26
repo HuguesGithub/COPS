@@ -3,8 +3,8 @@ namespace core\interfaceimpl;
 
 /**
  * @author Hugues
- * @since 1.22.11.21
- * @version 1.22.11.24
+ * @since v1.22.11.21
+ * @version v1.23.04.30
  */
 interface UrlsInterface
 {
@@ -24,6 +24,7 @@ interface UrlsInterface
     // Files
     public const WEB_PA_INDEX               = self::WEB_PAGES_ADMIN.'page-admin-index.tpl';
     public const WEB_PA_METEO               = self::WEB_PAGES_ADMIN.'page-admin-meteo.tpl';
+    public const WEB_PA_METEO_METEO         = self::WEB_PAGES_ADMIN.'page-admin-meteo-meteo.tpl';
 
     public const WEB_PP_BOARD               = self::WEB_PAGES_PUBLIC.'publique-board.tpl';
     public const WEB_PP_HOME_CONTENT        = self::WEB_PAGES_PUBLIC.'publique-home-content.tpl';

@@ -3,8 +3,8 @@ namespace core\interfaceimpl;
 
 /**
  * @author Hugues
- * @since 1.00.00
- * @version 1.22.09.21
+ * @since v1.00.00
+ * @version v1.23.04.30
  */
 interface ConstantsInterface
 {
@@ -29,6 +29,7 @@ interface ConstantsInterface
     public const ATTR_DATA              = 'data';
     public const ATTR_DATA_AJAX         = 'ajax';
     public const ATTR_DATA_DATE         = 'data-date';
+    public const ATTR_DATA_ICON         = 'data-icon';
     public const ATTR_DATA_TRIGGER      = 'trigger';
 
   /////////////////////////////////////////////////
@@ -81,18 +82,26 @@ interface ConstantsInterface
     // Subonglet Index
     public const CST_CAT_SLUG           = 'catSlug';
     public const CST_CURPAGE            = 'curPage';
+    // Subonglet Météo
+    public const CST_WEATHER            = 'weather';
+    public const CST_SUN                = 'sun';
+    public const CST_MOON               = 'moon';
 
     public const CST_ACTION             = 'action';
     public const CST_CHECKED            = 'checked';
     public const CST_CHILDREN           = 'children';
+    public const CST_COLSPAN            = 'colspan';
+    public const CST_DATE               = 'date';
     public const CST_DISABLED           = 'disabled';
     public const CST_EDIT               = 'edit';
+    public const CST_HOME               = 'home';
     public const CST_LIST               = 'list';
     public const CST_ONGLET             = 'onglet';
     public const CST_SELECTED           = 'selected';
     public const CST_SUBONGLET          = 'subOnglet';
     public const CST_TEXT_WHITE         = 'text-white';
     public const CST_URL                = 'url';
+    public const CST_WICON              = 'wicon';
     public const CST_WRITE              = 'write';
     public const CST_WRITE_ACTION       = 'writeAction';
 
@@ -312,6 +321,12 @@ interface ConstantsInterface
     public const PAGE_ADMIN              = 'admin';
 
     /////////////////////////////////////////////////
+    // NAVigation
+    public const NAV                    = 'nav';
+    public const NAV_ITEM               = 'nav-item';
+    public const NAV_LINK               = 'nav-link';
+
+    /////////////////////////////////////////////////
     // Onglets
     public const ONGLET_ARCHIVE         = 'archive';
     public const ONGLET_AUTOPSIE        = 'autopsie';
@@ -418,6 +433,7 @@ interface ConstantsInterface
   // Divers
   */
     public const CST_AMP          = '&amp;';
+    public const CST_ANCHOR       = '#';
     public const CST_NBSP         = '&nbsp;';
     public const CSV_EOL          = "\r\n";
     public const CSV_SEP          = ';';

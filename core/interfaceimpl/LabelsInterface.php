@@ -3,11 +3,12 @@ namespace core\interfaceimpl;
 
 /**
  * @author Hugues
- * @since 1.22.11.24
- * @version 1.23.04.30
+ * @since v1.22.11.24
+ * @version v1.23.04.30
  */
 interface LabelsInterface
 {
+    public const LABEL_HOME           = 'Accueil';
     public const LABEL_YEARLY         = 'Annuel';
     public const LABEL_NO_RESULT      = 'Aucun résultat';
     public const LABEL_DATABASES      = 'Bases de données';
@@ -29,6 +30,8 @@ interface LabelsInterface
     public const LABEL_WEEKLY         = 'Hebdomadaire';
     public const LABEL_IDENTITY       = 'Identité';
     public const LABEL_INDEX          = 'Index';
+    public const LABEL_MOON           = 'Lune';
+    public const LABEL_WEATHER        = 'Météo';
     public const LABEL_MONTHLY        = 'Mensuel';
     public const LABEL_MESSAGERIE     = 'Messagerie';
     public const LABEL_EDIT_ENTRY     = 'Modifier cette entrée';
@@ -41,6 +44,7 @@ interface LabelsInterface
     public const LABEL_WRITE_MAIL     = 'Rédiger un message';
     public const LABEL_REFERENCE      = 'Référence';
     public const LABEL_RETOUR         = 'Retour';
+    public const LABEL_SUN            = 'Soleil';
     public const LABEL_COURSES        = 'Stages';
     public const LABEL_DELETE         = 'Supprimer';
     

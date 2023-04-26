@@ -51,7 +51,8 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
             self::CST_LIB_BDD   => [self::FIELD_ICON => self::I_DATABASE, self::FIELD_LABEL => self::LABEL_DATABASES],
             self::CST_LIB_SKILL => [self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS],
             self::CST_LIB_STAGE => [self::FIELD_ICON => 'file-lines', self::FIELD_LABEL => self::LABEL_COURSES],
-            self::CST_LIB_COPS  => [self::FIELD_ICON => self::I_USERS, self::FIELD_LABEL => 'COPS']];
+            self::CST_LIB_COPS  => [self::FIELD_ICON => self::I_USERS, self::FIELD_LABEL => 'COPS']
+        ];
         /////////////////////////////////////////
 
         /////////////////////////////////////////
