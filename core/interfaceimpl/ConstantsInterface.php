@@ -273,6 +273,14 @@ interface ConstantsInterface
     public const FIELD_DATE_SOLEIL      = 'dateSoleil';
     public const FIELD_HEURE_LEVER      = 'heureLever';
     public const FIELD_HEURE_COUCHER    = 'heureCoucher';
+    public const FIELD_HEURE_CULMINE    = 'heureCulmine';
+    public const FIELD_DUREE_JOUR       = 'dureeJour';
+    public const FIELD_HEURE_CIVIL_AM   = 'heureCivilAm';
+    public const FIELD_HEURE_CIVIL_PM   = 'heureCivilPm';
+    public const FIELD_HEURE_NAUTIK_AM  = 'heureNautikAm';
+    public const FIELD_HEURE_NAUTIK_PM  = 'heureNautikPm';
+    public const FIELD_HEURE_ASTRO_AM   = 'heureAstroAm';
+    public const FIELD_HEURE_ASTRO_PM   = 'heureAstroPm';
   
     /////////////////////////////////////////////////
     // Formats
@@ -323,8 +331,10 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // NAVigation
     public const NAV                    = 'nav';
+    public const NAV_FILL               = 'nav-fill';
     public const NAV_ITEM               = 'nav-item';
     public const NAV_LINK               = 'nav-link';
+    public const NAV_PILLS              = 'nav-pills';
 
     /////////////////////////////////////////////////
     // Onglets

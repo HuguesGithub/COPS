@@ -52,11 +52,13 @@ class CopsSoleilServices extends LocalServices
         $startDate = $attributes[self::SQL_WHERE_FILTERS]['startDate'] ?? '2030-01-01';
         $endDate = $attributes[self::SQL_WHERE_FILTERS]['endDate'] ?? '2035-12-31';
 
-        $prepAttributes = [];
-        $prepAttributes[self::SQL_WHERE_FILTERS] = [$startDate, $endDate];
-        $prepAttributes[] = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_DATE_SOLEIL;
-        $prepAttributes[] = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
-        $prepAttributes[] = $attributes[self::SQL_LIMIT] ?? 9999;
+        $prepAttributes = [
+            $startDate,
+            $endDate,
+            $attributes[self::SQL_ORDER_BY] ?? self::FIELD_DATE_SOLEIL,
+            $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
         return $this->Dao->getSoleilsIntervalle($prepAttributes);
     }
     ////////////////////////////////////

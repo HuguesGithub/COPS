@@ -31,7 +31,15 @@ class CopsSoleilDaoImpl extends LocalDaoImpl
         $this->dbFields  = [
             self::FIELD_DATE_SOLEIL,
             self::FIELD_HEURE_LEVER,
-            self::FIELD_HEURE_COUCHER
+            self::FIELD_HEURE_COUCHER,
+            self::FIELD_HEURE_CULMINE,
+            self::FIELD_DUREE_JOUR,
+            self::FIELD_HEURE_CIVIL_AM,
+            self::FIELD_HEURE_CIVIL_PM,
+            self::FIELD_HEURE_NAUTIK_AM,
+            self::FIELD_HEURE_NAUTIK_PM,
+            self::FIELD_HEURE_ASTRO_AM,
+            self::FIELD_HEURE_ASTRO_PM,
         ];
         ////////////////////////////////////
         

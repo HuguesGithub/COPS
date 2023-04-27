@@ -17,6 +17,14 @@ class CopsSoleilClass extends LocalDomainClass
     protected $dateSoleil;
     protected $heureLever;
     protected $heureCoucher;
+    protected $heureCulmine;
+    protected $dureeJour;
+    protected $heureCivilAm;
+    protected $heureCivilPm;
+    protected $heureNautikAm;
+    protected $heureNautikPm;
+    protected $heureAstroAm;
+    protected $heureAstroPm;
 
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -39,7 +47,7 @@ class CopsSoleilClass extends LocalDomainClass
      * @since 1.23.4.20
      * @version 1.23.4.20
      */
-    public static function convertElement(array $row): CopsSoleilClass
+    public static function convertElement($row): CopsSoleilClass
     {
         return parent::convertRootElement(new CopsSoleilClass(), $row);
     }

@@ -74,7 +74,10 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
         } else {
             // Si on est sur la page de listing des autopsies
             $strRightPanel   = $this->getFolderAutopsiesList();
-            $attributes = [self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE), self::ATTR_CLASS => $strBtnClass];
+            $attributes = [
+                self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE),
+                self::ATTR_CLASS => $strBtnClass
+            ];
             $strContent = 'Débuter une autopsie';
         }
         /////////////////////////////////////////

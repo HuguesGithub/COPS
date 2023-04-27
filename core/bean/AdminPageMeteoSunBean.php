@@ -53,15 +53,22 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         }
 
         $strHeader = $this->getBalise(self::TAG_TR, $strHeader);
-        $strBody = $this->getBalise(self::TAG_TR, $strBody);
+        $strBody = $this->getBalise(self::TAG_TR, $strBody, [self::ATTR_STYLE=>'height: 288px;']);
 
-        return $this->getRender(self::WEB_PA_METEO_METEO, [$strNavigation, $strHeader, $strBody]);
+        return $this->getRender(self::WEB_PA_METEO_SUN, [$strNavigation, $strHeader, $strBody]);
     }
 
     public function getFirstColumn(): string
     {
-        // TODO : définir la première colonne.
-        return $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $tdContent  = '<span style="position: absolute; top: 72px; left: 0px;">06:00</span>';
+        $tdContent .= '<span style="position: absolute; top: 144px; left: 0px;">12:00</span>';
+        $tdContent .= '<span style="position: absolute; top: 216px; left: 0px;">18:00</span>';
+
+        $attributes = [
+            self::ATTR_STYLE => 'position: relative; height: 100%; width: 100px;',
+        ];
+
+        return $this->getBalise(self::TAG_TH, $tdContent, $attributes);
     }
 
     /**

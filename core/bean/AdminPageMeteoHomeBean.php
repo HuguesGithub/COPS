@@ -17,6 +17,12 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     public function getContentOnglet(): string
     {
+
+        // Récupération des onglets de navigation.
+        $strNavigation = $this->getContentPage();
+
+
+        
         $objCopsMeteo = new CopsMeteoClass();
         $objCopsMeteoServices = new CopsMeteoServices();
 
@@ -57,6 +63,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
         // On va afficher la dernière donnée enregistrée
         // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
         $attributes = [
+            $strNavigation,
             // La dernière saisie - 1
             $objCopsMeteoLastInsert->getStrDateMeteo(),
             // Le bouton pour lancer la saisie suivante - 2
@@ -66,7 +73,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
             // Le compte-rendu du traitement s'il y a eu - 4
             $strCompteRendu,
         ];
-        return $this->getRender(self::WEB_PA_METEO, $attributes);
+        return $this->getRender(self::WEB_PA_METEO_HOME, $attributes);
     }
 
 

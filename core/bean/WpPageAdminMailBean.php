@@ -1,7 +1,6 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe WpPageAdminMailBean
  * @author Hugues
@@ -31,7 +30,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
             /*
             self::CST_FOLDER_DRAFT  => array(self::FIELD_ICON => 'file-lines',    self::FIELD_LABEL => 'Brouillons'),
             self::CST_FOLDER_SENT   => array(self::FIELD_ICON => 'paper-plane',   self::FIELD_LABEL => 'Envoyés'),
-            self::CST_FOLDER_EVENTS => array(self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => self::LABEL_EVENTS),
+            self::CST_FOLDER_EVENTS => [self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => self::LABEL_EVENTS],
             self::CST_FOLDER_ALERT  => array(self::FIELD_ICON => 'bell',         self::FIELD_LABEL => 'Notifications'),
             self::CST_FOLDER_SPAM   => array(self::FIELD_ICON => 'filter',        self::FIELD_LABEL => 'Indésirables'),
             */

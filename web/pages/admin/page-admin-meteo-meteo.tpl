@@ -4,7 +4,7 @@
 <div class="main-body">
   <div class="page-wrapper">
     <!-- Page-header start -->
-    <div class="page-header">
+    <div class="page-header mb-3">
       <div class="row align-items-end">
         <div class="col-lg-8">
           <div class="page-header-title">

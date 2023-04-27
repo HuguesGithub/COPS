@@ -348,7 +348,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     public static function fromServer(string $field): string
     {
         // Sanitize
-        if (isset($_SERVER[$key])) {
+        if (isset($_SERVER[$field])) {
             $strSanitized = htmlentities((string) $_SERVER[$field], ENT_QUOTES, 'UTF-8');
         } else {
             $strSanitized = '';

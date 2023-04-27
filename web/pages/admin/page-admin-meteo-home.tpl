@@ -4,7 +4,7 @@
 <div class="main-body">
   <div class="page-wrapper">
     <!-- Page-header start -->
-    <div class="page-header">
+    <div class="page-header mb-3">
       <div class="row align-items-end">
         <div class="col-lg-8">
           <div class="page-header-title">
@@ -37,12 +37,12 @@
             <div class="card-header">Table Météo</div>
             <!-- Card-body start -->
             <div class="card-body">
-                <h6 class="m-b-30 m-t-20">Dernière mise à jour : %1$s</h6>
+                <h6 class="m-b-30 m-t-20">Dernière mise à jour : %2$s</h6>
                 <div class="btn-group">
-                    <a class="btn" href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&date=%2$s"><button class="btn btn-primary">Suivante</button></a>
-                    <a class="btn" href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&date=%3$s"><button class="btn btn-primary">Actuelle</button></a>
+                    <a class="btn" href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&date=%3$s"><button class="btn btn-primary">Suivante</button></a>
+                    <a class="btn" href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&date=%4$s"><button class="btn btn-primary">Actuelle</button></a>
                 </div>
-                <p>%4$s</p>
+                <p>%5$s</p>
             </div>
         </div>
 
