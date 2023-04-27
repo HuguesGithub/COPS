@@ -22,11 +22,18 @@ class CopsSoleilBean extends UtilitiesBean
      */
     public function getColumn(): string
     {
-        $darkColor = '#000000';
-        $nightColor = '#1B1641';
-        $nauticColor = '#3E3963';
-        $civilColor = '#6B659C';
-        $dayColor = '#EDE34E';
+        // La nuit noire
+        $nightColor = '#000000';
+        // La première astro
+        $amAstroColor = '#463D4C';
+        $amNautikColor = '#72627C';
+        $amCivilColor = '#E9AD88';
+        $earlyDayColor = '#7A9EB6';
+        $dayColor = '#77B5FE';
+        $lateDayColor = '#CC763F';
+        $pmCivilColor = '#E06632';
+        $pmNautikColor = '#75423C';
+        $pmAstroColor = '#331C1A';
         $culmineColor = '#EDBE4E';
         $delim6h = '#FFFFFF';
 
@@ -49,25 +56,25 @@ class CopsSoleilBean extends UtilitiesBean
         $heureStart = $strMinuit;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_ASTRO_AM);
         $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
-        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $darkColor, $posTop, $height);
+        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $nightColor, $posTop, $height);
 
         // Le premier créneau de nuit astronomique
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_NAUTIK_AM);
         $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
-        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $nightColor, $posTop, $height);
+        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $amAstroColor, $posTop, $height);
 
         // Le premier créneau de nuit nautique
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_CIVIL_AM);
         $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
-        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $nauticColor, $posTop, $height);
+        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $amNautikColor, $posTop, $height);
 
         // Le premier créneau de nuit civil
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_LEVER);
         $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
-        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $civilColor, $posTop, $height);
+        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $amCivilColor, $posTop, $height);
 
         // La journée
         $heureStart = $heureFin;
@@ -80,19 +87,19 @@ class CopsSoleilBean extends UtilitiesBean
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_CIVIL_PM);
         $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
-        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $civilColor, $posTop, $height);
+        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $pmCivilColor, $posTop, $height);
 
         // Le deuxième créneau de nuit nautique
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_NAUTIK_PM);
         $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
-        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $nauticColor, $posTop, $height);
+        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $pmNautikColor, $posTop, $height);
 
         // Le deuxième créneau de nuit astronomique
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_ASTRO_PM);
         $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
-        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $nightColor, $posTop, $height);
+        $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $pmAstroColor, $posTop, $height);
 
         // Le deuxième créneau de nuit noire
         $heureStart = $heureFin;
@@ -104,7 +111,7 @@ class CopsSoleilBean extends UtilitiesBean
             ++$height;
         }
         $attributes = [
-            self::ATTR_STYLE => vsprintf($this->strStyle, [$this->strWidth, $posTop, $height, $darkColor]),
+            self::ATTR_STYLE => vsprintf($this->strStyle, [$this->strWidth, $posTop, $height, $nightColor]),
             self::ATTR_TITLE => sprintf($strTitleNuit, $heureStart, $heureFin),
         ];
         $strColContent .= $this->getBalise(self::TAG_SPAN, self::CST_NBSP, $attributes);

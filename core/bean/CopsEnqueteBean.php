@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * CopsEnqueteBean
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class CopsEnqueteBean extends CopsBean
 {
@@ -98,7 +100,7 @@ class CopsEnqueteBean extends CopsBean
      */
     public function displayNiceDateSince($intDate)
     {
-       $tsNow = UtilitiesBean::getCopsDate('tsnow');
+       $tsNow = DateUtils::getCopsDate(self::FORMAT_TS_NOW);
        $tsDiff = $tsNow-$intDate;
        $strReturned = "Il y a ";
        if ($tsDiff<60) {
@@ -132,8 +134,8 @@ class CopsEnqueteBean extends CopsBean
     $strSQL  = "SELECT cbp.id AS cbpId, nomIdx ";
     $strSQL .= "FROM wp_7_cops_bdd_procureur AS cbp ";
     $strSQL .= "INNER JOIN wp_7_cops_index AS ci ON cbp.idxId=ci.id ";
-    $strSQL .= "WHERE dateDebut<='".static::getCopsDate('Y-m-d')."' ";
-    $strSQL .= "AND (dateFin>='".static::getCopsDate('Y-m-d')."' OR dateFin IS NULL) ";
+    $strSQL .= "WHERE dateDebut<='".DateUtils::getCopsDate(self::FORMAT_DATE_YMD)."' ";
+    $strSQL .= "AND (dateFin>='".DateUtils::getCopsDate(self::FORMAT_DATE_YMD)."' OR dateFin IS NULL) ";
     $strSQL .= "ORDER BY nomIdx ASC;";
     $rows = MySQL::wpdbSelect($strSQL);
     $sel = $this->obj->getField(self::FIELD_IDX_DISTRICT_ATT);

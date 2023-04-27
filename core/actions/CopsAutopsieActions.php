@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\actions;
+
+use core\utils\DateUtils;
+
 /**
  * CopsAutopsieActions
  * @author Hugues
  * @since 1.22.10.10
- * @version 1.22.10.14
+ * @version v1.23.04.30
  */
 class CopsAutopsieActions extends LocalActions
 {
@@ -45,7 +46,7 @@ class CopsAutopsieActions extends LocalActions
         ////////////////////////////////////////////
         $objCopsAutopsie->setField(self::FIELD_DATA, serialize($urlParams));
         // On définit le timestamp du jeu
-        $tsNow = UtilitiesBean::getCopsDate('tsnow');
+        $tsNow = DateUtils::getCopsDate(self::FORMAT_TS_NOW);
         $objCopsAutopsie->setField(self::FIELD_DSTART, $tsNow);
         ////////////////////////////////////////////
         

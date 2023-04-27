@@ -4,12 +4,13 @@ namespace core\bean;
 use core\domain;
 use core\services\WpCategoryServices;
 use core\services\CopsIndexServices;
+use core\utils\DateUtils;
 
 /**
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -269,9 +270,9 @@ class WpPageAdminBean extends WpPageBean
          $attributes = [
              $sidebarContent,
              // La date
-             static::getCopsDate('D m-d-Y'),
+             DateUtils::getCopsDate(self::FORMAT_DATE_DMDY),
              // L'heure
-             static::getCopsDate('H:i:s'),
+             DateUtils::getCopsDate(self::FORMAT_DATE_HIS),
          ];
          return $this->getRender($urlTemplate, $attributes);
      }

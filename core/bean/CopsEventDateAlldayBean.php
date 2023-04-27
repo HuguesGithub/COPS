@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
+use core\utils\DateUtils;
+
 /**
  * CopsEventDateAlldayBean
  * @author Hugues
  * @since 1.22.11.25
- * @version 1.22.11.27
+ * @version v1.23.04.30
  */
 class CopsEventDateAlldayBean extends CopsEventDateBean
 {
@@ -29,7 +30,7 @@ class CopsEventDateAlldayBean extends CopsEventDateBean
         $fcDayClass = 'fc-event-';
         ///////////////////////////////////////////////////
         // On récupère le jour courant
-        $tsToday = self::getCopsDate('tsStart');
+        $tsToday = DateUtils::getCopsDate(self::FORMAT_TS_START_DAY);
         
         ///////////////////////////////////////////////////
         // La date passée, présente ou future

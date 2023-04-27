@@ -7,7 +7,7 @@ use core\domain\CopsMeteoClass;
  * CopsMeteoBean
  * @author Hugues
  * @since 1.23.04.36
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class CopsMeteoBean extends UtilitiesBean
 {
@@ -24,12 +24,13 @@ class CopsMeteoBean extends UtilitiesBean
     {
         // Initialisation de la ligne de données
         $adminRow = '';
+        $adminRow .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
 
         // On ajoute les différents champs
         $adminRow .= $this->getBalise(self::TAG_TH, $this->objCopsMeteo->getField(self::FIELD_HEURE_METEO));
         // Construction découpée sinon trop longue.
         $wicon = $this->objCopsMeteo->getField(self::FIELD_WEATHER_ID);
-        $strDiv = $this->getDiv($wicon, [self::ATTR_CLASS=>self::CST_WICON, self::ATTR_DATA_ICON=>$wicon]);
+        $strDiv = $this->getDiv('', [self::ATTR_CLASS=>self::CST_WICON, self::ATTR_DATA_ICON=>$wicon]);
         $adminRow .= $this->getBalise(self::TAG_TD, $strDiv);
 
         $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_TEMPERATURE).'°C');
@@ -44,6 +45,7 @@ class CopsMeteoBean extends UtilitiesBean
         $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_BAROMETRE).' mbar');
         $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_VISIBILITE).' km');
 
+        $adminRow .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
         // On retourne la ligne terminée
         return $this->getBalise(self::TAG_TR, $adminRow);
     }

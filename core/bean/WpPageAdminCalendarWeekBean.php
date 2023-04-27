@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * Classe WpPageAdminCalendarWeekBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
 {
@@ -56,16 +58,17 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         // Si $fM et $lM sont identiques, la semaine complète est dans un même mois.
         if ($fM==$lM) {
             // 3-9 Juin 2030
-            $calendarHeader = $fd.'-'.$ld.' '.$this->arrFullMonths[$fm*1].' '.$fY;
+            $calendarHeader = $fd.'-'.$ld.' '.DateUtils::arrFullMonths[$fm*1].' '.$fY;
         } elseif ($fY!=$lY) {
             // Si $fY et $lY diffèrent, la semaine est à cheval sur deux années.
             // 26 Dec 2021 – 1 Jan 2022
-            $calendarHeader  = $fd.' '.$this->arrFullMonths[$fm*1].' '.$fY;
-            $calendarHeader .= ' - '.$ld.' '.$this->arrFullMonths[$lm*1].' '.$lY;
+            $calendarHeader  = $fd.' '.DateUtils::arrFullMonths[$fm*1].' '.$fY;
+            $calendarHeader .= ' - '.$ld.' '.DateUtils::arrFullMonths[$lm*1].' '.$lY;
         } else {
             // Sinon, seuls les deux mois diffèrent, la semaine est à cheval sur deux mois.
             // Mar 27 – Apr 2, 2022
-            $calendarHeader = $fd.' '.$this->arrFullMonths[$fm*1].' - '.$ld.' '.$this->arrFullMonths[$lm*1].' '.$lY;
+            $calendarHeader  = $fd.' '.DateUtils::arrFullMonths[$fm*1].' - '.$ld;
+            $calendarHeader .= ' '.DateUtils::arrFullMonths[$lm*1].' '.$lY;
         }
         /////////////////////////////////////////
         
@@ -90,8 +93,8 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         }
         /////////////////////////////////////////
         
-        $this->prevCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d-7, $y));
-        $this->nextCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d+7, $y));
+        $this->prevCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d-7, $y));
+        $this->nextCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d+7, $y));
         
         /////////////////////////////////////////
         $urlTemplate = self::PF_SECTION_CAL_WEEK;
@@ -140,7 +143,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $tdAttributes = [
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay)
+            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
@@ -157,8 +160,8 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $attributes = [
             self::SQL_WHERE_FILTERS => [
                 self::FIELD_ID => self::SQL_JOKER_SEARCH,
-                self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
-                self::FIELD_DEND => date('Y-m-d', $tsDisplay)
+                self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
+                self::FIELD_DEND => date(self::FORMAT_DATE_YMD, $tsDisplay)
             ],
             self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
             self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]
@@ -202,7 +205,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $tdAttributes = [
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay)
+            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
@@ -228,17 +231,18 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
     public function getRowHeader($strClass, $tsDisplay)
     {
         $urlBase = '/admin?'.self::CST_ONGLET.'='.self::ONGLET_CALENDAR.self::CST_AMP.self::CST_SUBONGLET.'=';
-        $url = $urlBase.self::CST_CAL_DAY.self::CST_AMP.self::CST_CAL_CURDAY.'='.date('m-d-Y', $tsDisplay);
+        $url  = $urlBase.self::CST_CAL_DAY.self::CST_AMP;
+        $url .= self::CST_CAL_CURDAY.'='.date(self::FORMAT_DATE_MDY, $tsDisplay);
 
-        $label = date('d ', $tsDisplay).$this->arrFullMonths[date('m', $tsDisplay)*1].date(' Y', $tsDisplay);
-        $aContent = $this->arrShortDays[date('w', $tsDisplay)].date(' d/m', $tsDisplay);
+        $label = date('d ', $tsDisplay).DateUtils::arrFullMonths[date('m', $tsDisplay)*1].date(' Y', $tsDisplay);
+        $aContent = DateUtils::arrShortDays[date('w', $tsDisplay)].date(' d/m', $tsDisplay);
         $aAttributes = ['aria-label' => $label];
         $divContent = $this->getLink($aContent, $url, 'fc-col-header-cell-cushion text-white', $aAttributes);
         $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-scrollgrid-sync-inner']);
         $thAttributes = [
             'role' => 'columnheader',
             self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay)
+            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TH, $thContent, $thAttributes);
     }

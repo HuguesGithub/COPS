@@ -2,6 +2,7 @@
 namespace core\domain;
 
 use core\bean\CopsSoleilBean;
+use core\utils\DateUtils;
 
 /**
  * Classe CopsSoleilClass
@@ -63,6 +64,10 @@ class CopsSoleilClass extends LocalDomainClass
     // METHODES
     //////////////////////////////////////////////////
 
+    /**
+     * @since v1.23.04.27
+     * @version v1.23.04.30
+     */
     public function getDureeJournee(): string
     {
         $hs = substr($this->heureLever, 0, 2);
@@ -76,6 +81,16 @@ class CopsSoleilClass extends LocalDomainClass
         $h = floor($duree/60);
 
         return $h.':'.$i;
+    }
+
+    /**
+     * @since v1.23.04.27
+     * @version v1.23.04.30
+     */
+    public function getHeaderDate(): string
+    {
+        [, $m, $d] = explode('-', $this->dateSoleil);
+        return $d.' '.DateUtils::$arrShortMonths[$m*1];
     }
 
 }

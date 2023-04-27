@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\services\CopsMeteoServices;
+use core\utils\DateUtils;
 
 /**
  * AdminPageMeteoMeteoBean
  * @author Hugues
  * @since 1.23.04.26
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 {
@@ -23,18 +24,27 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         // On récupère le paramètre relatif à la date.
         $strDate = static::fromGet(self::CST_DATE);
         if ($strDate=='') {
-            $strDate = static::getCopsDate(self::FORMAT_DATE_YMD);
+            $strDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
         }
+        // TODO : A supprimer. Mis en place pour les besoins du dèv le temps de tester.
+        // Pour le moment, les données sont sur 2022 et 2023.
+        // On applique donc les données de 2022 à 2030. Et 2023 à 2031.
+        // Dde plus le format actuel est YYYYmmdd en base. Il devra être transformé en YYYY-mm-dd
+        $strDate = DateUtils::getDateAjout($strDate, [0, 0, -8], self::FORMAT_DATE_YMD);
+        $strDate = str_replace('-', '', $strDate);
+        // TODO : Fin suppression.
 
         // Récupération des onglets de navigation.
         $strNavigation = $this->getContentPage();
 
         // Construction du contenu du header
         $trContent  = '';
+        $trContent .= $this->getBalise(self::TAG_TH, '&nbsp;', [self::CST_ROWSPAN=>2]);
         $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
         $trContent .= $this->getBalise(self::TAG_TH, 'Conditions', [self::CST_COLSPAN=>3]);
         $trContent .= $this->getBalise(self::TAG_TH, 'Confort', [self::CST_COLSPAN=>3]);
         $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP, [self::CST_COLSPAN=>2]);
+        $trContent .= $this->getBalise(self::TAG_TH, '&nbsp;', [self::CST_ROWSPAN=>2]);
         $strHeader  = $this->getBalise(self::TAG_TR, $trContent);
 
         $trContent  = '';

@@ -5,10 +5,15 @@ namespace core\bean;
  * AdminPageMeteoBean
  * @author Hugues
  * @since 1.23.04.20
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class AdminPageMeteoBean extends AdminPageBean
 {
+    /*
+    Les données relatives aux heures du soleil sont issues du site suivant :
+    dateandtime.info/fr/citysunrisesunset.php?id=5368361
+    */
+
     /**
      * @since 1.23.04.20
      */
@@ -29,7 +34,7 @@ class AdminPageMeteoBean extends AdminPageBean
      */
     public function getContentPage(): string
     {
-        $curSubOnglet = static::fromPost(self::CST_SUBONGLET);
+        $curSubOnglet = static::fromGet(self::CST_SUBONGLET);
 
         /////////////////////////////////////////
         // Construction du menu
@@ -45,6 +50,9 @@ class AdminPageMeteoBean extends AdminPageBean
         foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
             $urlSubOnglet  = 'https://cops.jhugues.fr/wp-admin/admin.php?page=hj-cops%2Fadmin_manage.php';
             $urlSubOnglet .= '&onglet=meteo&subOnglet='.$slugSubOnglet;
+            if (static::fromGet(self::CST_DATE)!='') {
+                $urlSubOnglet .= '&amp;date='.static::fromGet(self::CST_DATE);
+            }
 
             $strLink = $this->getLink(
                 $arrData[self::FIELD_LABEL],

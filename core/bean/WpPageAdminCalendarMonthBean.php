@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * Classe WpPageAdminCalendarMonthBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 {
@@ -70,11 +72,11 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $viewContent = $this->getRender($urlTemplate, $attributes);
         /////////////////////////////////////////
         
-        $this->prevCurday = date('m-d-Y', mktime(0, 0, 0, $m-1, $d, $y));
-        $this->nextCurday = date('m-d-Y', mktime(0, 0, 0, $m+1, $d, $y));
+        $this->prevCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m-1, $d, $y));
+        $this->nextCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m+1, $d, $y));
         
         $tsCopsDate = mktime(0, 0, 0, $m, $d, $y);
-        $calendarHeader = $this->arrFullMonths[date('m', $tsCopsDate)*1].date(' Y', $tsCopsDate);
+        $calendarHeader = DateUtils::arrFullMonths[date('m', $tsCopsDate)*1].date(' Y', $tsCopsDate);
         $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
         
         $urlTemplate = self::PF_SECTION_ONGLET;
@@ -102,7 +104,10 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
     {
         $strClass = $this->getFcDayClass($tsDisplay);
 
-        $urlElements = [self::CST_ONGLET => self::ONGLET_CALENDAR, self::CST_CAL_CURDAY => date('m-d-Y', $tsDisplay)];
+        $urlElements = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_CAL_CURDAY => date(self::FORMAT_DATE_MDY, $tsDisplay)
+        ];
         
         // Construction de la cellule
         if ($blnMonday) {
@@ -133,7 +138,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
-            'data-date' => date('Y-m-d', $tsDisplay)
+            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
     }
@@ -150,8 +155,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $attributes = [
             self::SQL_WHERE_FILTERS => [
                 self::FIELD_ID => '%',
-                self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
-                self::FIELD_DEND => date('Y-m-d', $tsDisplay)
+                self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
+                self::FIELD_DEND => date(self::FORMAT_DATE_YMD, $tsDisplay)
             ],
             self::SQL_ORDER_BY => ['dStart', 'dEnd'],
             self::SQL_ORDER => ['ASC', 'DESC']
@@ -202,14 +207,14 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         /*
         $attributes[self::SQL_WHERE_FILTERS] = array(
             self::FIELD_ID     => self::SQL_JOKER_SEARCH,
-            self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
-            self::FIELD_DEND   => date('Y-m-d', $tsDisplay),
+            self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
+            self::FIELD_DEND   => date(self::FORMAT_DATE_YMD, $tsDisplay),
         );
         $CopsEventDates = $this->CopsEventServices->getCopsEventDates($attributes);
 
         while (!empty($CopsEventDates)) {
             $CopsEventDate = array_shift($CopsEventDates);
-            if ($CopsEventDate->getField('dStart')==date('Y-m-d', $tsDisplay)) {
+            if ($CopsEventDate->getField('dStart')==date(self::FORMAT_DATE_YMD, $tsDisplay)) {
                 $strContent .= $CopsEventDate->getBean()->getEventDateDisplay($tsDisplay);
             }
         }

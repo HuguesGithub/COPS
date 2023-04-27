@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * CopsEventDateBean
  * @author Hugues
  * @since 1.22.06.13
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class CopsEventDateBean extends UtilitiesBean
 {
@@ -22,7 +24,7 @@ class CopsEventDateBean extends UtilitiesBean
     public function getFcDayClass($tsDisplay)
     {
         // On récupère le jour courant
-        $tsToday = static::getCopsDate('tsStart');
+        $tsToday = DateUtils::getCopsDate(self::FORMAT_TS_START_DAY);
 
         $strClass = 'fc-event-';
         // La date passée, présente ou future

@@ -4,12 +4,13 @@ namespace core\bean;
 use core\domain\CopsMeteoClass;
 use core\services\CopsMeteoServices;
 use core\domain\MySQLClass;
+use core\utils\DateUtils;
 
 /**
  * AdminPageMeteoHomeBean
  * @author Hugues
  * @since 1.23.04.26
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 {
@@ -20,8 +21,6 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
         // Récupération des onglets de navigation.
         $strNavigation = $this->getContentPage();
-
-
         
         $objCopsMeteo = new CopsMeteoClass();
         $objCopsMeteoServices = new CopsMeteoServices();
@@ -183,7 +182,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
                     // L'identifiant
                     $i*4+$j,
                     // La date 'jeu 1 sep'
-                    $this->arrShortDays[$n].' '.($i+1).' '.$this->arrShortMonths[$m],
+                    DateUtils::arrShortDays[$n].' '.($i+1).' '.DateUtils::arrShortMonths[$m],
                     // Position Texte pour t° minimale
                     $posMin,
                     // Température minimale

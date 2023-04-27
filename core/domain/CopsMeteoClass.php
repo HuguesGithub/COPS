@@ -4,15 +4,14 @@ namespace core\domain;
 use core\bean\UtilitiesBean;
 use core\services\CopsMeteoServices;
 use core\daoimpl\CopsMeteoDaoImpl;
+use core\utils\DateUtils;
+use core\bean\CopsMeteoBean;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * Classe CopsMeteoClass
  * @author Hugues
  * @version 1.22.09.05
- * @since 1.22.09.05
+ * @since v1.23.04.30
  */
 class CopsMeteoClass extends LocalDomainClass
 {
@@ -68,6 +67,13 @@ class CopsMeteoClass extends LocalDomainClass
         return parent::convertRootElement(new CopsMeteoClass(), $row);
     }
 
+    /**
+     * @since v1.23.04.27
+     * @version v1.23.04.30
+     */
+    public function getBean(): CopsMeteoBean
+    { return new CopsMeteoBean($this); }
+
   //////////////////////////////////////////////////
   // METHODES
   //////////////////////////////////////////////////
@@ -78,7 +84,7 @@ class CopsMeteoClass extends LocalDomainClass
      */
     public function init(): void
     {
-        $strDate = UtilitiesBean::getCopsDate(self::FORMAT_DATE_YMDHIS);
+        $strDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMDHIS);
         [$strJour, $strHeure] = explode(' ', $strDate);
         [$Y, $m, $d] = explode('-', $strJour);
         [$H, $i, ] = explode(':', $strHeure);
@@ -121,12 +127,12 @@ class CopsMeteoClass extends LocalDomainClass
 
     public function getStrHour(): string
     {
-        return UtilitiesBean::getCopsDate(self::FORMAT_DATE_HIS);
+        return DateUtils::getCopsDate(self::FORMAT_DATE_HIS);
     }
 
     public function getStrDate(): string
     {
-        return UtilitiesBean::getCopsDate(self::FORMAT_STRJOUR);
+        return DateUtils::getCopsDate(self::FORMAT_STRJOUR);
     }
 
     public function getAltStr(): string

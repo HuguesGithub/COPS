@@ -6,15 +6,13 @@ namespace core\actions;
 use core\services\CopsEnqueteServices;
 use core\domain\CopsEnqueteClass;
 use core\bean\UtilitiesBean;
+use core\utils\DateUtils;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * CopsEnqueteActions
  * @author Hugues
  * @since 1.22.09.24
- * @version 1.22.09.24
+ * @version v1.23.04.30
  */
 class CopsEnqueteActions extends LocalActions
 {
@@ -40,7 +38,7 @@ class CopsEnqueteActions extends LocalActions
         // On créé le Service
         $objCopsEnqueteServices = new CopsEnqueteServices();
         // On définit le timestamp du jeu
-        $tsNow = UtilitiesBean::getCopsDate(self::FORMAT_TS_NOW);
+        $tsNow = DateUtils::getCopsDate(self::FORMAT_TS_NOW);
         ////////////////////////////////////////////
         // On créé l'objet
         $objCopsEnquete = new CopsEnqueteClass();
@@ -88,7 +86,7 @@ class CopsEnqueteActions extends LocalActions
         // On créé le Service
         $objCopsEnqueteServices = new CopsEnqueteServices();
         // On définit le timestamp du jeu
-        $tsNow = UtilitiesBean::getCopsDate(self::FORMAT_TS_NOW);
+        $tsNow = DateUtils::getCopsDate(self::FORMAT_TS_NOW);
         ////////////////////////////////////////////
         // On récupère l'objet présent en base
         $objCopsEnquete = $objCopsEnqueteServices->getEnquete($urlParams[self::FIELD_ID]);

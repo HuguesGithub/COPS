@@ -604,8 +604,66 @@ border-color: #4b545c;
     color: rgb(18, 18, 18) !important;
   }
 
+  .page-body {
+    margin-right: 15px;
+  }
 
-
+  .comp {
+    display:inline-block;
+    font-family:Lucida Sans Unicode,Lucida Grande,Sans-Serif;
+    font-size:25px;
+    font-weight:600;
+    line-height:15px
+   }
+   .comp.sa0 {
+    transform:rotate(0deg)
+   }
+   .comp.sa2 {
+    transform:rotate(22.5deg)
+   }
+   .comp.sa4 {
+    transform:rotate(45deg)
+   }
+   .comp.sa6 {
+    transform:rotate(67.5deg)
+   }
+   .comp.sa8 {
+    transform:rotate(90deg)
+   }
+   .comp.sa10 {
+    transform:rotate(112.5deg)
+   }
+   .comp.sa12 {
+    transform:rotate(135deg)
+   }
+   .comp.sa14 {
+    transform:rotate(157.5deg)
+   }
+   .comp.sa16 {
+    transform:rotate(180deg)
+   }
+   .comp.sa18 {
+    transform:rotate(202.5deg)
+   }
+   .comp.sa20 {
+    transform:rotate(225deg)
+   }
+   .comp.sa22 {
+    transform:rotate(247.5deg)
+   }
+   .comp.sa24 {
+    transform:rotate(270deg)
+   }
+   .comp.sa26 {
+    transform:rotate(292.5deg)
+   }
+   .comp.sa28 {
+    transform:rotate(315deg)
+   }
+   .comp.sa30 {
+    transform:rotate(337.5deg)
+   }
+   
 
 
 

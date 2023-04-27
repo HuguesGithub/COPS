@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * Classe WpPageAdminCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 {
@@ -47,8 +49,8 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $attributes = [
             self::SQL_WHERE_FILTERS => [
                 self::FIELD_ID => '%',
-                self::FIELD_DSTART => date('Y-m-d', $tsDisplay),
-                self::FIELD_DEND => date('Y-m-d', $tsDisplay)
+                self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
+                self::FIELD_DEND => date(self::FORMAT_DATE_YMD, $tsDisplay)
             ],
             self::SQL_ORDER_BY => ['dStart', 'dEnd'],
             self::SQL_ORDER => ['ASC', 'DESC']];
@@ -71,8 +73,8 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         }
         /////////////////////////////////////////
         
-        $this->prevCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d-1, $y));
-        $this->nextCurday = date('m-d-Y', mktime(0, 0, 0, $m, $d+1, $y));
+        $this->prevCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d-1, $y));
+        $this->nextCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d+1, $y));
         
         $urlTemplate = self::PF_SECTION_CAL_DAY;
         $attributes = [
@@ -86,7 +88,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
             $this->getRowHoraire($strClass, $tsDisplay),
         ];
         $viewContent = $this->getRender($urlTemplate, $attributes);
-        $calendarHeader = $d.' '.$this->arrFullMonths[$m*1].' '.$y;
+        $calendarHeader = $d.' '.DateUtils::arrFullMonths[$m*1].' '.$y;
         $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
         
         $urlTemplate = self::PF_SECTION_ONGLET;
@@ -114,12 +116,12 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
     {
         $url = '#';
         $aClass = 'fc-col-header-cell-cushion text-white';
-        $divContent = $this->getLink($this->arrFullDays[date('w', $tsDisplay)], $url, $aClass);
+        $divContent = $this->getLink(DateUtils::arrFullDays[date('w', $tsDisplay)], $url, $aClass);
         $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-scrollgrid-sync-inner']);
         $attributes = [
             'role' => 'columnheader',
             self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
-            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)
+            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TH, $thContent, $attributes);
     }
@@ -142,7 +144,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $attributes = [
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-daygrid-day fc-day ' . $strClass,
-            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)
+            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
     }
@@ -176,7 +178,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $tdAttributes = [
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
-            self::ATTR_DATA_DATE => date('Y-m-d', $tsDisplay)
+            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }

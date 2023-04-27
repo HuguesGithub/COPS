@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * Classe WpPageAdminMailBean
  * @author Hugues
  * @since 1.22.04.29
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminMailBean extends WpPageAdminBean
 {
@@ -389,7 +391,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
         $objCopsMail = new CopsMail();
         $objCopsMail->setField(self::FIELD_MAIL_SUBJECT, stripslashes((string) static::fromPost('mailSubject')));
         $objCopsMail->setField(self::FIELD_MAIL_CONTENT, stripslashes((string) static::fromPost('mailContent')));
-        $objCopsMail->setField(self::FIELD_MAIL_DATE_ENVOI, static::getCopsDate('Y-m-d h:i:s'));
+        $objCopsMail->setField(self::FIELD_MAIL_DATE_ENVOI, DateUtils::getCopsDate(self::FORMAT_DATE_YMDHIS));
         $this->CopsMailServices->insertMail($objCopsMail);
         // Puis on créé un CopsMailJoint
         $objCopsMailJoint = new CopsMailJoint();

@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * Classe WpPageAdminCalendarBean
  * @author Hugues
  * @since 1.22.11.21
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminCalendarBean extends WpPageAdminBean
 {
@@ -25,7 +27,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         if (isset($this->urlParams[self::CST_CAL_CURDAY])) {
             $this->curStrDate = $this->urlParams[self::CST_CAL_CURDAY];
         } else {
-            $this->curStrDate = static::getCopsDate('m-d-Y');
+            $this->curStrDate = DateUtils::getCopsDate(self::FORMAT_DATE_MDY);
         }
 
         /////////////////////////////////////////
@@ -68,7 +70,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
     public function getFcDayClass($tsDisplay)
     {
         // On récupère le timestamp du jour COPS courant
-        $tsToday = static::getCopsDate('tsStart');
+        $tsToday = DateUtils::getCopsDate(self::FORMAT_TS_START_DAY);
 
         ///////////////////////////////////////////////////
         // On construit la classe de la cellule avec le jour de la semaine

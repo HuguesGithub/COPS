@@ -35,8 +35,17 @@ spl_autoload_register(PLUGIN_PACKAGE.'_autoloader');
 function cops_autoloader($classname)
 {
     $matches = [];
-    $arr = ['Actions' => 'actions', 'Bean' => 'bean', 'Class' => 'domain', 'DaoImpl' => 'daoimpl', 'Interface' => 'interfaceimpl', 'Services' => 'services'];
-    $pattern = "/(Actions|Bean|Class|DaoImpl|Interface|Services)/";
+    $arr = [
+        'Actions' => 'actions',
+        'Bean' => 'bean',
+        'Class' => 'domain',
+        'DaoImpl' => 'daoimpl',
+        'Enum' => 'enum',
+        'Interface' => 'interfaceimpl',
+        'Services' => 'services',
+        'Utils' => 'utils',
+    ];
+    $pattern = "/(Actions|Bean|Class|DaoImpl|Enum|Interface|Services|Utils)/";
     if (preg_match($pattern, (string) $classname, $matches)) {
         if (str_contains((string) $classname, '\\')) {
             $classname = substr((string) $classname, strrpos((string) $classname, '\\')+1);
@@ -101,29 +110,30 @@ function dealWithAjax_callback(): never
 */
 function exception_handler($objException)
 {
-  echo
-    '<div class="card border-danger" style="max-width: 100%;margin-right: 15px;">'.
-    '  <div class="card-header bg-danger text-white"><strong>'.$objException->getMessage().'</strong></div>'.
-    '  <div class="card-body text-danger">'.
-    '    <p>Une erreur est survenue dans le fichier <strong>'.$objException->getFile().
-    '</strong> à la ligne <strong>'.$objException->getLine().'</strong>.</p>'.
-    '    <ul class="list-group">';
+    $strHandler  = '<div class="card border-danger" style="max-width: 100%;margin-right: 15px;">';
+    $strHandler .= '  <div class="card-header bg-danger text-white"><strong>';
+    $strHandler .= $objException->getMessage().'</strong></div>';
+    $strHandler .= '  <div class="card-body text-danger">';
+    $strHandler .= '    <p>Une erreur est survenue dans le fichier <strong>'.$objException->getFile();
+    $strHandler .= '</strong> à la ligne <strong>'.$objException->getLine().'</strong>.</p>';
+    $strHandler .= '    <ul class="list-group">';
 
-  $arrTraces = $objException->getTrace();
+    $arrTraces = $objException->getTrace();
     foreach ($arrTraces as $trace) {
-        echo '<li class="list-group-item">Fichier <strong>'.$trace['file'];
-        echo '</strong> ligne <em>'.$trace['line'].'</em> :<br>';
+        $strHandler .= '<li class="list-group-item">Fichier <strong>'.$trace['file'];
+        $strHandler .= '</strong> ligne <em>'.$trace['line'].'</em> :<br>';
         if (is_array($trace['args'])) {
-            echo $trace['function'].'()</li>';
+            $strHandler .= $trace['function'].'()</li>';
         } else {
-            echo $trace['class'].$trace['type'].$trace['function'].'('.implode(', ', $trace['args']).')</li>';
+            $strHandler .= $trace['class'].$trace['type'].$trace['function'].'('.implode(', ', $trace['args']).')</li>';
         }
     }
 
-  echo
-    '    </ul>'.
-    '  </div>'.
-    '  <div class="card-footer"></div>'.
-    '</div>';
+    $strHandler .= '    </ul>';
+    $strHandler .= '  </div>';
+    $strHandler .= '  <div class="card-footer"></div>';
+    $strHandler .= '</div>';
+
+    echo $strHandler;
 }
 set_exception_handler('exception_handler');

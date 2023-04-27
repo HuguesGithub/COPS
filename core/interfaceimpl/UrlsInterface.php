@@ -26,6 +26,7 @@ interface UrlsInterface
     public const WEB_PA_METEO               = self::WEB_PAGES_ADMIN.'page-admin-meteo.tpl';
     public const WEB_PA_METEO_HOME          = self::WEB_PAGES_ADMIN.'page-admin-meteo-home.tpl';
     public const WEB_PA_METEO_METEO         = self::WEB_PAGES_ADMIN.'page-admin-meteo-meteo.tpl';
+    public const WEB_PA_METEO_MOON          = self::WEB_PAGES_ADMIN.'page-admin-meteo-moon.tpl';
     public const WEB_PA_METEO_SUN           = self::WEB_PAGES_ADMIN.'page-admin-meteo-soleil.tpl';
 
     public const WEB_PP_BOARD               = self::WEB_PAGES_PUBLIC.'publique-board.tpl';

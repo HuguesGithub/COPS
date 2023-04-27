@@ -97,6 +97,7 @@ interface ConstantsInterface
     public const CST_HOME               = 'home';
     public const CST_LIST               = 'list';
     public const CST_ONGLET             = 'onglet';
+    public const CST_ROWSPAN            = 'rowspan';
     public const CST_SELECTED           = 'selected';
     public const CST_SUBONGLET          = 'subOnglet';
     public const CST_TEXT_WHITE         = 'text-white';
@@ -281,6 +282,11 @@ interface ConstantsInterface
     public const FIELD_HEURE_NAUTIK_PM  = 'heureNautikPm';
     public const FIELD_HEURE_ASTRO_AM   = 'heureAstroAm';
     public const FIELD_HEURE_ASTRO_PM   = 'heureAstroPm';
+    // TABLE cops_lune
+    public const FIELD_ID_LUNE          = 'idLune';
+    public const FIELD_DATE_LUNE        = 'dateLune';
+    public const FIELD_HEURE_LUNE       = 'heureLune';
+    public const FIELD_TYPE_LUNE        = 'typeLune';
   
     /////////////////////////////////////////////////
     // Formats
@@ -355,6 +361,10 @@ interface ConstantsInterface
     public const ROLE_PJ                = 10;
     public const ROLE_MJ                = 100;
     public const ROLE_ADMIN             = 999;
+
+    /////////////////////////////////////////////////
+    // STYLE / CLASS
+    public const STYLE_TEXT_CENTER      = 'text-center';
 
     /////////////////////////////////////////////////
     // SQL

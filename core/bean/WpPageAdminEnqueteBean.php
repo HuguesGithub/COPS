@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\DateUtils;
+
 /**
  * Classe WpPageAdminEnqueteBean
  * @author Hugues
  * @since 1.22.09.20
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminEnqueteBean extends WpPageAdminBean
 {
@@ -72,7 +74,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
                         // Si tout est bon,
                         // on classe une enquête, on la réouvre ou on la transfère au DA
                         $this->CopsEnquete->setField(self::FIELD_STATUT_ENQUETE, $this->urlParams[self::CST_ACTION]);
-                        $this->CopsEnquete->setField(self::FIELD_DLAST, static::getCopsDate('tsnow'));
+                        $this->CopsEnquete->setField(self::FIELD_DLAST, DateUtils::getCopsDate(self::FORMAT_TS_NOW));
                         $this->CopsEnqueteServices->updateEnquete($this->CopsEnquete);
             }
         } else {

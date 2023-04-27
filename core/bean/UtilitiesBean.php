@@ -9,20 +9,10 @@ use core\interfaceimpl\UrlsInterface;
  * Classe UtilitiesBean
  * @author Hugues
  * @since 1.00.00
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface
 {
-    public $arrFullMonths = [1=>'Janvier', 'Février', 'Mars',
-        'Avril', 'Mai', 'Juin',
-        'Juillet', 'Août', 'Septembre',
-        'Octobre', 'Novembre', 'Décembre'];
-    public $arrShortMonths = [1=>'Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin',
-        'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
-    public $arrFullDays = [0=>'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-    public $arrShortDays = [0=>'Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
-    public $arrShortEnglishDays = [0=>'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-
     /**
      * @return bool
      */
@@ -63,54 +53,6 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     public static function getWpUserId(): int
     {
         return get_current_user_id();
-    }
-
-    /**
-     * @param string
-     * @return string
-     */
-    public static function getCopsDate(string $format): string
-    {
-        $strCopsDate = get_option(self::CST_CAL_COPSDATE);
-        $h = substr((string) $strCopsDate, 0, 2);
-        $i = substr((string) $strCopsDate, 3, 2);
-        $s = substr((string) $strCopsDate, 6, 2);
-        $his = substr((string) $strCopsDate, 0, 8);
-        $d = substr((string) $strCopsDate, 9, 2);
-        $m = substr((string) $strCopsDate, 12, 2);
-        $y = substr((string) $strCopsDate, 15);
-        $dmy = substr((string) $strCopsDate, 9);
-        $tsCops = mktime($h, $i, $s, $m, $d, $y);
-        $objUtilitiesBean = new UtilitiesBean();
-
-        switch ($format) {
-            case self::FORMAT_STRJOUR :
-                $strJour = $objUtilitiesBean->arrFullDays[date('N', $tsCops)];
-                $attributes = [$strJour, $d, $objUtilitiesBean->arrFullMonths[$m*1], $y];
-                $formatted = implode(' ', $attributes);
-                break;
-            case self::FORMAT_SIDEBAR_DATE :
-                $formatted = $objUtilitiesBean->arrShortDays[date('N', $tsCops)].' '.$dmy.'<br>'.$his;
-                break;
-            case self::FORMAT_TS_NOW :
-                $formatted = mktime($h, $i, $s, $m, $d, $y);
-                break;
-            case self::FORMAT_TS_START_DAY :
-                $formatted = mktime(0, 0, 0, $m, $d, $y);
-                break;
-            case self::FORMAT_DATE_HIS    :
-            case self::FORMAT_DATE_DMDY   :
-            case self::FORMAT_DATE_YMD    :
-            case self::FORMAT_DATE_MDY    :
-            case self::FORMAT_DATE_DMY    :
-            case self::FORMAT_DATE_YMDHIS :
-                $formatted = date($format, mktime($h, $i, $s, $m, $d, $y));
-                break;
-            default :
-                $formatted = $format;
-                break;
-        }
-        return $formatted;
     }
 
     /**

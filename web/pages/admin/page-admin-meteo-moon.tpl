@@ -10,7 +10,7 @@
           <div class="page-header-title">
             <div class="d-inline">
               <h4>Météo</h4>
-              <span>Données relatives à la table Soleil de la semaine du jour ingame.</span>
+              <span>Données relatives à la table Lune de la lunaison du jour ingame ou passé en paramètre.</span>
             </div>
           </div>
         </div>
@@ -21,7 +21,7 @@
                 <a href="/wp-admin/admin.php?page=hj-cops/admin_manage.php"> <i class="feather icon-home"></i> </a>
               </li>
               <li class="breadcrumb-item" style="float: left;"><a href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo">Météo</a> </li>
-              <li class="breadcrumb-item" style="float: left;"><a href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&subOnglet=sun">Soleil</a> </li>
+              <li class="breadcrumb-item" style="float: left;"><a href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&subOnglet=moon">Lune</a> </li>
             </ul>
           </div>
         </div>

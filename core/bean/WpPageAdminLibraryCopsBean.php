@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\services\CopsStageServices;
+use core\utils\DateUtils;
 
 /**
  * Classe WpPageAdminLibraryCopsBean
  * @author Hugues
  * @since 1.22.11.05
- * @version 1.23.04.30
+ * @version v1.23.04.30
  */
 class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
 {
@@ -327,7 +328,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
         $objLieutenants = $this->CopsPlayerServices->getCopsPlayers($attributes);
         // Gestion des Détectives
-        $tsToday = static::getCopsDate('Y-m-d');
+        $tsToday = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
         $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Détective';
         $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM;
         $objDetectives = $this->CopsPlayerServices->getCopsPlayers($attributes);
@@ -371,7 +372,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         // Si la date n'est pas définie, on récupère celle du jour.
         // Sinon, on récupère la date passée en paramètre.
-        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', $this->getCopsDate('d-m-Y')));
+        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', DateUtils::getCopsDate(self::FORMAT_DATE_DMY)));
         $tsNow = mktime(0, 0, 0, $mDate, $dDate, $yDate);
         
         // Si la date en question n'est pas un lundi, on récupère le lundi précédent.
@@ -381,14 +382,14 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         // Header - 4 semaines concernées
         $strHeader = '';
         for ($i=0; $i<4; ++$i) {
-            $strDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust+$i*7, $yDate));
+            $strDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+$dAjust+$i*7, $yDate));
             $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$strDate]);
             $divContent = $this->getLink($strDate, $href, self::CST_TEXT_WHITE);
             $strHeader .= $this->getDiv($divContent, [self::ATTR_CLASS=>'col-3 table-bordered']);
         }
 
         // Bouton précédent
-        $prevDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust-7, $yDate));
+        $prevDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+$dAjust-7, $yDate));
         $aContent = $this->getIcon('caret-left');
         $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$prevDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
@@ -396,7 +397,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $prevBtn .= self::CST_NBSP.$prevDate;
         
         // Bouton suivant
-        $nextDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+$dAjust+7, $yDate));
+        $nextDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+$dAjust+7, $yDate));
         $aContent = $this->getIcon('caret-right');
         $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$nextDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
@@ -452,15 +453,15 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         // Si la date n'est pas définie, on récupère celle du jour.
         // Sinon, on récupère la date passée en paramètre.
-        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', $this->getCopsDate('d-m-Y')));
+        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', DateUtils::getCopsDate(self::FORMAT_DATE_DMY)));
         $tsNow = mktime(0, 0, 0, $mDate, $dDate, $yDate);
         
         // Bandeau de la semaine
-        $strBandeau  = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate, $yDate)).' au ';
-        $strBandeau .= date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+6, $yDate));
+        $strBandeau  = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate, $yDate)).' au ';
+        $strBandeau .= date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+6, $yDate));
 
         // Bouton précédent
-        $prevDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate-7, $yDate));
+        $prevDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate-7, $yDate));
         $aContent = $this->getIcon('caret-left');
         $href = $this->getUrl([self::CST_CAT_SLUG=>'accueil', 'strDate'=>$prevDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
@@ -468,7 +469,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $prevBtn .= self::CST_NBSP.$prevDate;
 
         // Bouton suivant
-        $nextDate = date('d-m-Y', mktime(0, 0, 0, $mDate, $dDate+7, $yDate));
+        $nextDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+7, $yDate));
         $aContent = $this->getIcon('caret-right');
         $href = $this->getUrl([self::CST_CAT_SLUG=>'accueil', 'strDate'=>$nextDate]);
         $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
