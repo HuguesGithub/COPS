@@ -322,5 +322,15 @@ class CopsMeteoClass extends LocalDomainClass
 
         return round(13.12 + 0.6215*$t - 11.37*pow($v, 0.16) + 0.3965*$t*pow($v, 0.16));
     }
-    
+
+    /**
+     * @since v1.23.04.27
+     * @version v1.23.04.30
+     */
+    public function getDateHeure(): string
+    {
+        // TODO : On est obligé de prendre dateMeteo pour le moment car son format n'est pas bon.
+        $strDate = substr($this->dateMeteo, 0, 4).'-'.substr($this->dateMeteo, 4, 2).'-'.substr($this->dateMeteo, -2);
+        return DateUtils::getStrDate('d M y H:i:s', $strDate.' '.$this->heureMeteo);
+    }
 }

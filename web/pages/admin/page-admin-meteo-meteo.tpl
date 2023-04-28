@@ -4,8 +4,8 @@
 <div class="main-body">
   <div class="page-wrapper">
     <!-- Page-header start -->
-    <div class="page-header mb-3">
-      <div class="row align-items-end">
+    <div class="page-header my-3">
+      <div class="row">
         <div class="col-lg-8">
           <div class="page-header-title">
             <div class="d-inline">

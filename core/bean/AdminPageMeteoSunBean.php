@@ -92,4 +92,36 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         return $this->getBalise(self::TAG_TH, $tdContent, $attributes);
     }
 
+    /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getCardContent(string &$titre, string &$strBody): void
+    {
+        $titre = 'Table Soleil';
+
+        // On initialise le service dont on va avoir besoin.
+        $objCopsSoleilServices = new CopsSoleilServices();
+
+        $strLis = '';
+
+        // On récupère la première date
+        $attributes = [];
+        $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
+        $attributes[self::SQL_LIMIT] = 1;
+        $objsCopsSoleil = $objCopsSoleilServices->getSoleils($attributes);
+        $objCopsSoleil = array_shift($objsCopsSoleil);
+        $strLis .= $this->getBalise(self::TAG_LI, 'Première entrée : '.$objCopsSoleil->getDateHeure());
+
+        // On récupère la dernière date
+        $attributes = [];
+        $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
+        $attributes[self::SQL_LIMIT] = 1;
+        $objsCopsSoleil = $objCopsSoleilServices->getSoleils($attributes);
+        $objCopsSoleil = array_shift($objsCopsSoleil);
+        $strLis .= $this->getBalise(self::TAG_LI, 'Dernière entrée : '.$objCopsSoleil->getDateHeure());
+
+        $strBody = $this->getBalise(self::TAG_UL, $strLis);
+    }
+
 }

@@ -78,9 +78,7 @@ class CopsLuneClass extends LocalDomainClass
      */
     public function getDateHeure(): string
     {
-        [, $m, $d] = explode('-', $this->dateLune);
-        [$h, $i] = explode(':', $this->heureLune);
-        return $d.' '.DateUtils::$arrShortMonths[$m*1].' '.$h.'h'.$i;
+        return DateUtils::getStrDate('d M y H:i:s', $this->dateLune.' '.$this->heureLune);
     }
 
 }

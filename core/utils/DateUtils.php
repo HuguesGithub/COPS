@@ -100,6 +100,37 @@ class DateUtils implements ConstantsInterface
         [$d, $m, $y] = static::parseDate($strDate);
         return date($dateFormat, mktime(0, 0, 0, $m+$nbMois, $d+$nbJours, $y+$nbAns));
     }
+
+    /**
+     * v1.23.04.28
+     * v1.23.04.30
+     */
+    public static function getStrDate(string $strFormat, string|int $when): string
+    {
+        // On détermine si $when est string ou int.
+        // Si int, c'est un timestamp.
+        // Si string, c'est une chaine de type YYYY-mm-dd HH:ii:ss ou autre.
+        [$d, $m, $y, $h, $i, $s] = static::parseDate($when);
+        if ($s<10) {
+            $s = str_pad($s, 2, '0', STR_PAD_LEFT);
+        }
+
+        // Une fois déterminé $when, on doit avoir une chaine au format YYYY-mm-dd HH:ii:ss.
+        // On peut alors traiter la donnée pour retourner l'info selon le format souhaité.
+
+        switch ($strFormat) {
+            case 'd M y' :
+                $strFormatted = $d.' '.static::$arrShortMonths[$m*1].' '.$y;
+            break;
+            case 'd M y H:i:s' :
+                $strFormatted = $d.' '.static::$arrShortMonths[$m*1].' '.$y.' '.$h.':'.$i.':'.$s;
+            break;
+            default :
+                $strFormatted = '';
+            break;
+        }
+        return $strFormatted;
+    }
     
     /**
      * Retourne au format donné le premier jour de la semaine de la date passée.
@@ -108,44 +139,35 @@ class DateUtils implements ConstantsInterface
      */
     public static function getDateStartWeek(string $strDate, string $dateFormat): string
     {
-        [$d, $m, $y] = static::parseDate($strDate);
+        [$d, $m, $y, , ,] = static::parseDate($strDate);
         $n = date('N', mktime(0, 0, 0, $m, $d, $y));
         return static::getDateAjout($strDate, [$n-1, 0, 0], $dateFormat);
     }
 
     /**
-     * Retourne un tableau [$d, $m, $y] de la date passée.
+     * Retourne un tableau [$d, $m, $y, $h, $i, $s] de la date passée.
      * @since v1.23.04.26
      * @version v1.23.04.30
      */
     public static function parseDate(string $strDate): array
     {
-        // On part du principe qu'on ne connait pas le format passé.
+        // On attend un des formats ci-dessous
+        // YYYY-MM-DD
+        $patternDate = "/^(\d{4})-(\d{2})-(\d{2})$/";
+        // HH:II:SS - Note : ":SS" peut ne pas être présent
+        $patternHour = "/^(\d{2}):(\d{2}):?(\d{2})?$/";
+        // YYYY-MM-DD HH:II:SS - Note : ":SS" peut ne pas être présent
+        $patternBoth = "/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):?(\d{2})?$/";
 
-        if (strpos($strDate, '-')) {
-            // Y a-t-il un - dans la chaine ?
-            // YYYY-mm-dd
-            // YY-mm-dd
-            [$y, $m, $d] = explode('-', $strDate);
-        } elseif (strpos($strDate, '/')) {
-            // Y a-t-il un / dans la chaine ?
-            // jj/mm/AAAA
-            // jj/mm/AA
-            [$d, $m, $y] = explode('/', $strDate);
-        } elseif (strlen($strDate)==8) {
-            // TODO : prendre les 4 premiers caractères et vérifier que c'est une année valide.
-            // YYYYmmdd
-            // jjmmAAAA
-        } elseif (strlen($strDate)==6) {
-            // TODO : prendre les 2 premiers caractères et vérifier que c'est une année valide.
-            // YYmmdd
-            // jjmmAA
+        if (preg_match($patternDate, $strDate, $matches)) {
+            $arrParsed = [$matches[3], $matches[2], $matches[1], 0, 0, 0];
+        } elseif (preg_match($patternHour, $strDate, $matches)) {
+            $arrParsed = [0, 0, 0, $matches[1], $matches[2], $matches[3] ?? 0];
+        } elseif (preg_match($patternBoth, $strDate, $matches)) {
+            $arrParsed = [$matches[3], $matches[2], $matches[1], $matches[4], $matches[5], $matches[6] ?? 0];
         } else {
-            // Si on ne connait pas le format, on utilise la date ingame
-            $strDate = static::getCopsDate(self::FORMAT_DATE_YMD);
-            [$y, $m, $d] = explode('-', $strDate);
+            $arrParsed = [0, 0, 0, 0, 0, 0];
         }
-
-        return [$d, $m, $y];
+        return $arrParsed;
     }
 }

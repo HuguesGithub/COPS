@@ -50,14 +50,12 @@ class AdminPageMeteoBean extends AdminPageBean
         foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
             $urlSubOnglet  = 'https://cops.jhugues.fr/wp-admin/admin.php?page=hj-cops%2Fadmin_manage.php';
             $urlSubOnglet .= '&onglet=meteo&subOnglet='.$slugSubOnglet;
-            if (static::fromGet(self::CST_DATE)!='') {
-                $urlSubOnglet .= '&amp;date='.static::fromGet(self::CST_DATE);
-            }
 
+            $blnActive = ($curSubOnglet==$slugSubOnglet || $curSubOnglet=='' && $slugSubOnglet==self::CST_HOME);
             $strLink = $this->getLink(
                 $arrData[self::FIELD_LABEL],
                 $urlSubOnglet,
-                self::NAV_LINK.($curSubOnglet==$slugSubOnglet ? ' '.self::CST_ACTIVE : '')
+                self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
             );
             $strLis .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>self::NAV_ITEM]);
         }
@@ -71,5 +69,26 @@ class AdminPageMeteoBean extends AdminPageBean
     public function getContentOnglet(): string
     {
         return 'Default. Specific getContentOnglet() to be defined.';
+    }
+
+    /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getCard(string $strCompteRendu=''): string
+    {
+        $titre='';
+        $strBody='';
+        $this->getCardContent($titre, $strBody);
+
+        if ($strCompteRendu!='') {
+            $attributes = [self::ATTR_CLASS=>'alert alert-primary', self::ATTR_ROLE=>'alert'];
+            $strBody .= $this->getDiv($strCompteRendu, $attributes);
+        }
+
+        $strCardHeader = $this->getDiv($titre, [self::ATTR_CLASS=>'card-header']);
+        $strCardBody = $this->getDiv($strBody, [self::ATTR_CLASS=>'card-body']);
+
+        return $this->getDiv($strCardHeader.$strCardBody, [self::ATTR_CLASS=>'card col mx-1 p-0']);
     }
 }

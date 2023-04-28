@@ -1,9 +1,10 @@
 <?php
 namespace core\bean;
 
+
 use core\domain\CopsMeteoClass;
-use core\services\CopsMeteoServices;
 use core\domain\MySQLClass;
+use core\services\CopsMeteoServices;
 use core\utils\DateUtils;
 
 /**
@@ -18,61 +19,59 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     public function getContentOnglet(): string
     {
+        // Gestion d'éventuels traitements.
+        $strDate = static::fromGet(self::CST_DATE);
+        if ($strDate!='') {
+            $strCompteRendu = $this->dealWithGetActions();
+        } else {
+            $strCompteRendu = '';
+        }
 
         // Récupération des onglets de navigation.
         $strNavigation = $this->getContentPage();
+
+        // Initialisation de la liste des cards qu'on va afficher.
+        // Card Meteo
+        // Card Soleil
+        // Card Lune
+        // Card Saisons
+        // Card Home ?
+        // Quand on veut aller à la ligne, on doit ajouter une div :
+        // <div class="w-100"></div>
+        $strCards = '';
+
+        $strCards .= $this->getCard();
+
+        $objBean = new AdminPageMeteoMeteoBean();
+        $strCards .= $objBean->getCard($strCompteRendu);
+
+        $strCards .= '<div class="w-100"></div>';
+
+        $objBean = new AdminPageMeteoSunBean();
+        $strCards .= $objBean->getCard();
+
+        $objBean = new AdminPageMeteoMoonBean();
+        $strCards .= $objBean->getCard();
+
+        $strCards .= '<div class="w-100"></div>';
         
-        $objCopsMeteo = new CopsMeteoClass();
-        $objCopsMeteoServices = new CopsMeteoServices();
-
-        $strCompteRendu = '';
-
-        // On récupère le paramètre relatif à la date.
-        $strDate = $this->urlParams['date'];
-        // S'il n'est pas nul, on va faire le traitement.
-        if (!empty($strDate)) {
-            $intYear  = substr((string) $strDate, 0, 4);
-            $intMonth = substr((string) $strDate, 4, 2)*1;
-            // On construit l'url ciblée
-            $url  = sprintf($this->ajaxUrl, $strDate, $intMonth, $intYear);
-            $strCompteRendu .= '<a href="'.$url.'">Date étudiée</a><br>';
-            // On en récupère le contenu
-            $str = file_get_contents($url);
-            // On ne veut que le tbody du tableau
-            $strpos = strpos($str, 'tbody');
-            // On transforme la ligne unique en un tableau
-            $arr = explode("/tr><tr", substr($str, $strpos));
-            // On parcourt toutes les lignes du tableau
-            foreach ($arr as $str) {
-                // Que l'on parse pour récupérer les données souhaitées.
-                $strCompteRendu .= $objCopsMeteo->parseData($str, $strDate);
-            }
-            if ($strCompteRendu=='') {
-                $strCompteRendu = 'Le script s\'est bien déroulé.';
-            }
-        }
-
-        // Récupération de la dernière entrée de la table
-        $sqlAttributes = [];
-        $sqlAttributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
-        $sqlAttributes[self::SQL_LIMIT] = 1;
-        $objsCopsMeteoLastInsert = $objCopsMeteoServices->getMeteos($sqlAttributes);
-        $objCopsMeteoLastInsert = array_shift($objsCopsMeteoLastInsert);
-    
         // On va afficher la dernière donnée enregistrée
         // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
         $attributes = [
             $strNavigation,
-            // La dernière saisie - 1
-            $objCopsMeteoLastInsert->getStrDateMeteo(),
-            // Le bouton pour lancer la saisie suivante - 2
-            $objCopsMeteoLastInsert->getNextDateMeteo(),
-            // La date du jour pour rejouer - 3
-            $objCopsMeteoLastInsert->getField(self::FIELD_DATE_METEO),
-            // Le compte-rendu du traitement s'il y a eu - 4
-            $strCompteRendu,
+            $strCards,
         ];
         return $this->getRender(self::WEB_PA_METEO_HOME, $attributes);
+    }
+
+    /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getCardContent(string &$titre, string &$strBody): void
+    {
+        $titre = 'Home';
+        $strBody = 'WIP Home Card';
     }
 
 
@@ -207,7 +206,35 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
         }
         }
 
+    /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function dealWithGetActions(): string
+    {
+        $objCopsMeteo = new CopsMeteoClass();
+        $strDate = static::fromGet(self::CST_DATE);
+        [, $m, $y, , ,] = DateUtils::parseDate($strDate);
+        $strDate = str_replace('-', '', $strDate);
 
+        // On construit l'url ciblée
+        $url  = sprintf($this->ajaxUrl, $strDate, $m, $y);
+        $strCompteRendu = $this->getLink('Date étudiée', $url, '');
+
+        // On en récupère le contenu
+        $str = file_get_contents($url);
+        // On ne veut que le tbody du tableau
+        $strpos = strpos($str, 'tbody');
+        // On transforme la ligne unique en un tableau
+        $arr = explode("/tr><tr", substr($str, $strpos));
+
+        // On parcourt toutes les lignes du tableau
+        foreach ($arr as $str) {
+            // Que l'on parse pour récupérer les données souhaitées.
+            $strCompteRendu .= $objCopsMeteo->parseData($str, $strDate);
+        }
+        return $strCompteRendu;
+    }
 
 
 }

@@ -4,8 +4,8 @@
 <div class="main-body">
   <div class="page-wrapper">
     <!-- Page-header start -->
-    <div class="page-header mb-3">
-      <div class="row align-items-end">
+    <div class="page-header my-3">
+      <div class="row">
         <div class="col-lg-8">
           <div class="page-header-title">
             <div class="d-inline">
@@ -32,36 +32,8 @@
     <!-- Page-body start -->
     <div class="page-body">
         %1$s
-
-        <div class="card" style="max-width: initial; padding: 0;">
-            <div class="card-header">Table Météo</div>
-            <!-- Card-body start -->
-            <div class="card-body">
-                <h6 class="m-b-30 m-t-20">Dernière mise à jour : %2$s</h6>
-                <div class="btn-group">
-                    <a class="btn" href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&date=%3$s"><button class="btn btn-primary">Suivante</button></a>
-                    <a class="btn" href="/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&date=%4$s"><button class="btn btn-primary">Actuelle</button></a>
-                </div>
-                <p>%5$s</p>
-            </div>
-        </div>
-
-        <div class="card" style="max-width: initial; padding: 0;">
-            <div class="card-header">Table Soleil</div>
-            <!-- Card-body start -->
-            <div class="card-body">
-            </div>
-        </div>
-
-        <div class="card" style="max-width: initial; padding: 0;">
-            <div class="card-header">Table Lune</div>
-            <!-- Card-body start -->
-            <div class="card-body">
-            </div>
-        </div>
+        <div class="row">%2$s</div>
     </div>
     <!-- Page-body end -->
   </div>
 </div>
-
-<div class="main-body">%4$s</div>

@@ -27,10 +27,6 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
             $strDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
         }
         // TODO : A supprimer. Mis en place pour les besoins du dèv le temps de tester.
-        // Pour le moment, les données sont sur 2022 et 2023.
-        // On applique donc les données de 2022 à 2030. Et 2023 à 2031.
-        // Dde plus le format actuel est YYYYmmdd en base. Il devra être transformé en YYYY-mm-dd
-        $strDate = DateUtils::getDateAjout($strDate, [0, 0, -8], self::FORMAT_DATE_YMD);
         $strDate = str_replace('-', '', $strDate);
         // TODO : Fin suppression.
 
@@ -82,5 +78,57 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         return $this->getRender(self::WEB_PA_METEO_METEO, [$strNavigation, $strHeader, $strBody]);
     }
 
+    /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getCardContent(string &$titre, string &$strBody): void
+    {
+        $titre = 'Table Météo';
+
+        // On initialise le service dont on va avoir besoin.
+        $objCopsMeteoServices = new CopsMeteoServices();
+
+        $strLis = '';
+
+        // On récupère la première date
+        $attributes = [];
+        $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
+        $attributes[self::SQL_LIMIT] = 1;
+        $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
+        $objCopsMeteo = array_shift($objsCopsMeteo);
+        $strLis .= $this->getBalise(self::TAG_LI, 'Première entrée : '.$objCopsMeteo->getDateHeure());
+        $strDate = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
+        $m = substr((string) $strDate, 4, 2);
+        $d = substr((string) $strDate, 6);
+        $y = substr((string) $strDate, 0, 4);
+        $prevDate = DateUtils::getDateAjout($y.'-'.$m.'-'.$d, [-1, 0, 0], self::FORMAT_DATE_YMD);
+
+        // On récupère la dernière date
+        $attributes = [];
+        $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
+        $attributes[self::SQL_LIMIT] = 1;
+        $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
+        $objCopsMeteo = array_shift($objsCopsMeteo);
+        $strLis .= $this->getBalise(self::TAG_LI, 'Dernière entrée : '.$objCopsMeteo->getDateHeure());
+        $strDate = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
+        $m = substr((string) $strDate, 4, 2);
+        $d = substr((string) $strDate, 6);
+        $y = substr((string) $strDate, 0, 4);
+        $curDate = $y.'-'.$m.'-'.$d;
+        $nextDate = DateUtils::getDateAjout($curDate, [1, 0, 0], self::FORMAT_DATE_YMD);
+
+        $strBody = $this->getBalise(self::TAG_UL, $strLis);
+
+        // On fabrique la liste des boutons pour action.
+        $urlReference = '/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&subOnglet=home&date=';
+
+        $linkClass = 'btn btn-primary';
+        $btnGroup  = $this->getLink('Précédente', $urlReference.$prevDate, $linkClass);
+        $btnGroup .= $this->getLink('Actuelle', $urlReference.$curDate, $linkClass);
+        $btnGroup .= $this->getLink('Suivante', $urlReference.$nextDate, $linkClass);
+
+        $strBody .= $this->getDiv($btnGroup, [self::ATTR_CLASS=>'btn-group btn-group-sm']);
+    }
 
 }

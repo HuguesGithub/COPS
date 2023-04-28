@@ -65,6 +65,18 @@ class CopsSoleilDaoImpl extends LocalDaoImpl
     }
 
     /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getSoleils(array $attributes): array
+    {
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
+        $request .= " WHERE dateSoleil LIKE '%s'";
+        $request .= " ORDER BY %s %s LIMIT %s";
+        return $this->selectListDaoImpl(new CopsSoleilClass(), $request, $attributes);
+    }
+
+    /**
      * @since v1.23.04.26
      * @version v1.23.04.30
      */

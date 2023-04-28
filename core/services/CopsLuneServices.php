@@ -40,8 +40,8 @@ class CopsLuneServices extends LocalServices
     public function getMoons(array $attributes): array
     {
         $startDate = $attributes[self::SQL_WHERE_FILTERS]['startDate'] ?? '2030-01-01';
-        $endDate = $attributes[self::SQL_WHERE_FILTERS]['endDate'] ?? '2035-12-31';
-        $typeLune = $attributes[self::SQL_WHERE_FILTERS]['typeLune'] ?? '%';
+        $endDate = $attributes[self::SQL_WHERE_FILTERS]['endDate'] ?? '2036-12-31';
+        $typeLune = $attributes[self::SQL_WHERE_FILTERS]['typeLune'] ?? self::SQL_JOKER_SEARCH;
 
         $prepAttributes = [
             $startDate,

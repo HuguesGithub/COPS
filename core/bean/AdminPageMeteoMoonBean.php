@@ -3,6 +3,7 @@ namespace core\bean;
 
 use core\utils\DateUtils;
 use core\services\CopsLuneServices;
+use core\domain\CopsLuneClass;
 
 /**
  * AdminPageMeteoMoonBean
@@ -41,6 +42,9 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsLune = $objCopsLuneServices->getMoons($attributes);
         $objCopsLune = array_shift($objsCopsLune);
+        if ($objCopsLune==null) {
+            return 'Error';
+        }
         $prevDate = $objCopsLune->getField(self::FIELD_DATE_LUNE);
 
         // On récupère les 3 dates suivantes
@@ -80,4 +84,37 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         // On retourne le tout.
         return $this->getRender(self::WEB_PA_METEO_MOON, [$strNavigation, $strHeader, $strBody]);
     }
+
+    /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getCardContent(string &$titre, string &$strBody): void
+    {
+        $titre = 'Table Lune';
+
+        // On initialise le service dont on va avoir besoin.
+        $objCopsLuneServices = new CopsLuneServices();
+
+        $strLis = '';
+
+        // On récupère la première date
+        $attributes = [];
+        $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
+        $attributes[self::SQL_LIMIT] = 1;
+        $objsCopsLune = $objCopsLuneServices->getMoons($attributes);
+        $objCopsLune = array_shift($objsCopsLune);
+        $strLis .= $this->getBalise(self::TAG_LI, 'Première entrée : '.$objCopsLune->getDateHeure());
+
+        // On récupère la dernière date
+        $attributes = [];
+        $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
+        $attributes[self::SQL_LIMIT] = 1;
+        $objsCopsLune = $objCopsLuneServices->getMoons($attributes);
+        $objCopsLune = array_shift($objsCopsLune);
+        $strLis .= $this->getBalise(self::TAG_LI, 'Dernière entrée : '.$objCopsLune->getDateHeure());
+
+        $strBody = $this->getBalise(self::TAG_UL, $strLis);
+    }
+
 }

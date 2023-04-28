@@ -93,4 +93,13 @@ class CopsSoleilClass extends LocalDomainClass
         return $d.' '.DateUtils::$arrShortMonths[$m*1];
     }
 
+    /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getDateHeure(): string
+    {
+        return DateUtils::getStrDate('d M y', $this->dateSoleil);
+    }
+
 }

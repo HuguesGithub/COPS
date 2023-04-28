@@ -44,6 +44,21 @@ class CopsSoleilServices extends LocalServices
     }
 
     /**
+     * @since v1.23.04.28
+     * @version v1.23.04.30
+     */
+    public function getSoleils(array $attributes): array
+    {
+        $prepAttributes = [
+            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_SOLEIL] ?? '%',
+            $attributes[self::SQL_ORDER_BY] ?? self::FIELD_DATE_SOLEIL,
+            $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getSoleils($prepAttributes);
+    }
+
+    /**
      * @since v1.23.04.26
      * @version v1.23.04.30
      */
