@@ -60,7 +60,7 @@ class CopsSoleilDaoImpl extends LocalDaoImpl
     public function getSoleil(array $prepObject): array
     {
         $fields = implode(', ', $this->dbFields_sol);
-        $request  = $this->getSelectRequest($fields, $this->dbTable_sol, self::FIELD_DATE_SOLEIL);
+        $request  = $this->getSelectRequest($fields, $this->dbTable, self::FIELD_DATE_SOLEIL);
         return $this->selectDaoImpl($request, $prepObject);
     }
 

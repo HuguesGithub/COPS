@@ -22,7 +22,7 @@ class CopsLuneServices extends LocalServices
      */
     public function __construct()
     {
-        $this->Dao = new CopsLuneDaoImpl();
+        $this->Dao = null;
     }
 
     //////////////////////////////////////////////////
@@ -37,11 +37,14 @@ class CopsLuneServices extends LocalServices
      * @since v1.23.04.27
      * @version v1.23.04.30
      */
-    public function getMoons(array $attributes): array
+    public function getLunes(array $attributes): array
     {
-        $startDate = $attributes[self::SQL_WHERE_FILTERS]['startDate'] ?? '2030-01-01';
-        $endDate = $attributes[self::SQL_WHERE_FILTERS]['endDate'] ?? '2036-12-31';
-        $typeLune = $attributes[self::SQL_WHERE_FILTERS]['typeLune'] ?? self::SQL_JOKER_SEARCH;
+        if ($this->Dao==null) {
+            $this->Dao = new CopsLuneDaoImpl();
+        }
+        $startDate = $attributes[self::SQL_WHERE_FILTERS][self::CST_STARTDATE] ?? self::CST_FIRST_DATE;
+        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::CAST_ENDDATE] ?? self::CST_LAST_DATE;
+        $typeLune = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_TYPE_LUNE] ?? self::SQL_JOKER_SEARCH;
 
         $prepAttributes = [
             $startDate,
@@ -51,7 +54,7 @@ class CopsLuneServices extends LocalServices
             $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->Dao->getMoons($prepAttributes);
+        return $this->Dao->getLunes($prepAttributes);
     }
     ////////////////////////////////////
 

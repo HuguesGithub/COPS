@@ -4,14 +4,11 @@ namespace core\services;
 use core\domain\CopsSoleilClass;
 use core\daoimpl\CopsMeteoDaoImpl;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsMeteoServices
  * @author Hugues
  * @since 1.22.04.29
- * @version 1.22.10.17
+ * @version v1.23.04.30
  */
 class CopsMeteoServices extends LocalServices
 {
@@ -25,7 +22,7 @@ class CopsMeteoServices extends LocalServices
      */
     public function __construct()
     {
-        $this->Dao = new CopsMeteoDaoImpl();
+        $this->Dao = null;
     }
 
     //////////////////////////////////////////////////
@@ -35,8 +32,15 @@ class CopsMeteoServices extends LocalServices
     ////////////////////////////////////
     // WP_7_COPS_METEO
     ////////////////////////////////////
+    /**
+     * @since v1.23.04.29
+     * @version v1.23.04.30
+     */
     public function getMeteos(array $params): array
     {
+        if ($this->Dao==null) {
+            $this->Dao = new CopsMeteoDaoImpl();
+        }
         $prepAttributes = [];
         $prepAttributes[] = $params[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] ?? self::SQL_JOKER_SEARCH;
         $prepAttributes[] = $params[self::SQL_ORDER_BY] ?? self::FIELD_DATE_METEO;
@@ -45,18 +49,30 @@ class CopsMeteoServices extends LocalServices
         return $this->Dao->getMeteos($prepAttributes);
     }
 
-    ////////////////////////////////////
 
-    ////////////////////////////////////
-    // WP_7_COPS_SOLEIL
-    ////////////////////////////////////
-    public function getSoleil(string $strJour): CopsSoleilClass
+    /**
+     * @since v1.23.04.29
+     * @version v1.23.04.30
+     */
+    public function insertMeteo(CopsMeteoClass $objCopsMeteo): void
     {
-        $prepAttributes = [$strJour];
-        $rows = $this->Dao->getSoleil($prepAttributes);
-        return new CopsSoleilClass($rows[0]);
+        if ($this->Dao==null) {
+            $this->Dao = new CopsMeteoDaoImpl();
+        }
+        $prepAttributes = [];
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_HEURE_METEO);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_TEMPERATURE);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_WEATHER);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_WEATHER_ID);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_FORCE_VENT);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_SENS_VENT);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_HUMIDITE);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_BAROMETRE);
+        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_VISIBILITE);
+        $this->Dao->insertMeteo($prepAttributes);
     }
-    ////////////////////////////////////
 
+    ////////////////////////////////////
 
 }

@@ -3,6 +3,7 @@ namespace core\bean;
 
 use core\services\CopsMeteoServices;
 use core\utils\DateUtils;
+use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoMeteoBean
@@ -35,31 +36,31 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
         // Construction du contenu du header
         $trContent  = '';
-        $trContent .= $this->getBalise(self::TAG_TH, '&nbsp;', [self::CST_ROWSPAN=>2]);
+        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP, [self::CST_ROWSPAN=>2]);
         $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
-        $trContent .= $this->getBalise(self::TAG_TH, 'Conditions', [self::CST_COLSPAN=>3]);
-        $trContent .= $this->getBalise(self::TAG_TH, 'Confort', [self::CST_COLSPAN=>3]);
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_CONDITIONS, [self::CST_COLSPAN=>3]);
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_CONFORT, [self::CST_COLSPAN=>3]);
         $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP, [self::CST_COLSPAN=>2]);
-        $trContent .= $this->getBalise(self::TAG_TH, '&nbsp;', [self::CST_ROWSPAN=>2]);
+        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP, [self::CST_ROWSPAN=>2]);
         $strHeader  = $this->getBalise(self::TAG_TR, $trContent);
 
         $trContent  = '';
         // Heure
-        $trContent .= $this->getBalise(self::TAG_TH, 'Heure');
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_HEURE);
         $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
         // Température
         // Météo + Icone
         // Force et sens du vent
-        $trContent .= $this->getBalise(self::TAG_TH, 'Temp');
-        $trContent .= $this->getBalise(self::TAG_TH, 'Météo');
-        $trContent .= $this->getBalise(self::TAG_TH, 'Vent');
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_TEMP);
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_WEATHER);
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_WIND);
         $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
         // Humidité
         // Baromètre
         // Visibilité
-        $trContent .= $this->getBalise(self::TAG_TH, 'Humidité');
-        $trContent .= $this->getBalise(self::TAG_TH, 'Baromètre');
-        $trContent .= $this->getBalise(self::TAG_TH, 'Visibilité');
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_HUMIDITY);
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_BAROMETER);
+        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_VISIBILITY);
         $strHeader .= $this->getBalise(self::TAG_TR, $trContent);
 
         // Récupération des données de la journée
@@ -84,7 +85,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
      */
     public function getCardContent(string &$titre, string &$strBody): void
     {
-        $titre = 'Table Météo';
+        $titre = self::LABEL_TABLE_WEATHER;
 
         // On initialise le service dont on va avoir besoin.
         $objCopsMeteoServices = new CopsMeteoServices();
@@ -97,7 +98,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
         $objCopsMeteo = array_shift($objsCopsMeteo);
-        $strLis .= $this->getBalise(self::TAG_LI, 'Première entrée : '.$objCopsMeteo->getDateHeure());
+        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsMeteo->getDateHeure()));
         $strDate = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
         $m = substr((string) $strDate, 4, 2);
         $d = substr((string) $strDate, 6);
@@ -110,7 +111,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
         $objCopsMeteo = array_shift($objsCopsMeteo);
-        $strLis .= $this->getBalise(self::TAG_LI, 'Dernière entrée : '.$objCopsMeteo->getDateHeure());
+        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsMeteo->getDateHeure()));
         $strDate = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
         $m = substr((string) $strDate, 4, 2);
         $d = substr((string) $strDate, 6);
@@ -121,14 +122,19 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $strBody = $this->getBalise(self::TAG_UL, $strLis);
 
         // On fabrique la liste des boutons pour action.
-        $urlReference = '/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&subOnglet=home&date=';
+        $linkClass = self::BTS_BTN_PRIMARY;
+        $urlAttributes = [
+            self::CST_ONGLET    => self::ONGLET_METEO,
+            self::CST_SUBONGLET => self::CST_HOME,
+            self::CST_DATE      => $prevDate,
+        ];
+        $btnGroup  = $this->getLink(self::LABEL_PRECEDENTE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
+        $urlAttributes[self::CST_DATE] = $curDate;
+        $btnGroup .= $this->getLink(self::LABEL_ACTUELLE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
+        $urlAttributes[self::CST_DATE] = $nextDate;
+        $btnGroup .= $this->getLink(self::LABEL_SUIVANTE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
 
-        $linkClass = 'btn btn-primary';
-        $btnGroup  = $this->getLink('Précédente', $urlReference.$prevDate, $linkClass);
-        $btnGroup .= $this->getLink('Actuelle', $urlReference.$curDate, $linkClass);
-        $btnGroup .= $this->getLink('Suivante', $urlReference.$nextDate, $linkClass);
-
-        $strBody .= $this->getDiv($btnGroup, [self::ATTR_CLASS=>'btn-group btn-group-sm']);
+        $strBody .= $this->getDiv($btnGroup, [self::ATTR_CLASS=>self::BTS_BTN_GROUP_SM]);
     }
 
 }

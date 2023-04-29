@@ -32,6 +32,11 @@ interface ConstantsInterface
     public const ATTR_DATA_ICON         = 'data-icon';
     public const ATTR_DATA_TRIGGER      = 'trigger';
 
+    /////////////////////////////////////////////////
+    // Bootstrap
+    public const BTS_BTN_PRIMARY        = 'btn btn-primary';
+    public const BTS_BTN_GROUP_SM       = 'btn-group btn-group-sm';
+
   /////////////////////////////////////////////////
   // Constantes
     public const CST_ACTIVE             = 'active';
@@ -94,11 +99,15 @@ interface ConstantsInterface
     public const CST_DATE               = 'date';
     public const CST_DISABLED           = 'disabled';
     public const CST_EDIT               = 'edit';
+    public const CST_ENDDATE            = 'endDate';
+    public const CST_FIRST_DATE         = '2030-01-01';
     public const CST_HOME               = 'home';
+    public const CST_LAST_DATE          = '2036-12-31';
     public const CST_LIST               = 'list';
     public const CST_ONGLET             = 'onglet';
     public const CST_ROWSPAN            = 'rowspan';
     public const CST_SELECTED           = 'selected';
+    public const CST_STARTDATE          = 'startDate';
     public const CST_SUBONGLET          = 'subOnglet';
     public const CST_TEXT_WHITE         = 'text-white';
     public const CST_URL                = 'url';
@@ -299,6 +308,7 @@ interface ConstantsInterface
     public const FORMAT_DATE_YMD         = 'Y-m-d';
     public const FORMAT_DATE_MDY         = 'm-d-Y';
     public const FORMAT_DATE_DMY         = 'd-m-Y';
+    public const FORMAT_DATE_DMYHIS      = 'd M y H:i:s';
     public const FORMAT_DATE_YMDHIS      = 'Y-m-d h:i:s';
 
     /////////////////////////////////////////////////

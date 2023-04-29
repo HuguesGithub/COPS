@@ -3,6 +3,7 @@ namespace core\bean;
 
 use core\services\CopsSoleilServices;
 use core\utils\DateUtils;
+use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoSunBean
@@ -40,16 +41,23 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         $objCopsSoleilServices = new CopsSoleilServices();
 
         $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS] = ['startDate'=>$strDateStartWeek, 'endDate'=>$strDateEndWeek];
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::CST_STARTDATE => $strDateStartWeek,
+            self::CST_ENDDATE   => $strDateEndWeek
+        ];
         $objsCopsSoleil = $objCopsSoleilServices->getSoleilsIntervalle($attributes);
 
-        $urlRoot = '/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&subOnglet=sun&date=';
         // Construction du Header et du Body
         $strHeader  = $this->getBalise(self::TAG_TH, self::CST_NBSP);
         // On doit ajouter une 2è colonne pour passer à la semaine précédente
         $label = $this->getButton($this->getIcon(self::I_ANGLE_LEFT, 'feather icon-chevron-left'));
         $strPrevDate = DateUtils::getDateAjout($strDateStartWeek, [-7, 0, 0], self::FORMAT_DATE_YMD);
-        $link = $this->getLink($label, $urlRoot.$strPrevDate, '');
+        $urlAttributes = [
+            self::CST_ONGLET    => self::ONGLET_METEO,
+            self::CST_SUBONGLET => self::CST_SUN,
+            self::CST_DATE      => $strPrevDate,
+        ];
+        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
         $strHeader .= $this->getBalise(self::TAG_TH, $link);
         $strBody = $this->getFirstColumn();
         // On doit ajouter une 2è colonne vide
@@ -64,7 +72,8 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         // On doit ajouter une dernière colonne pour passer à la semaine suivante
         $label = $this->getButton($this->getIcon(self::I_ANGLE_RIGHT, 'feather icon-chevron-right'));
         $strNextDate = DateUtils::getDateAjout($strDateStartWeek, [7, 0, 0], self::FORMAT_DATE_YMD);
-        $link = $this->getLink($label, $urlRoot.$strNextDate, '');
+        $urlAttributes[self::CST_DATE] = $strNextDate;
+        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
         $strHeader .= $this->getBalise(self::TAG_TH, $link);
         // On doit ajouter une dernière colonne vide
         $strBody .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
@@ -81,6 +90,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
      */
     public function getFirstColumn(): string
     {
+        // TODO : Améliorer l'affichage de la première colonne.
         $tdContent  = '<span style="position: absolute; top: 72px; left: 0px;">06:00</span>';
         $tdContent .= '<span style="position: absolute; top: 144px; left: 0px;">12:00</span>';
         $tdContent .= '<span style="position: absolute; top: 216px; left: 0px;">18:00</span>';
@@ -98,7 +108,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
      */
     public function getCardContent(string &$titre, string &$strBody): void
     {
-        $titre = 'Table Soleil';
+        $titre = self::LABEL_TABLE_SOLEIL;
 
         // On initialise le service dont on va avoir besoin.
         $objCopsSoleilServices = new CopsSoleilServices();
@@ -111,7 +121,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsSoleil = $objCopsSoleilServices->getSoleils($attributes);
         $objCopsSoleil = array_shift($objsCopsSoleil);
-        $strLis .= $this->getBalise(self::TAG_LI, 'Première entrée : '.$objCopsSoleil->getDateHeure());
+        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsSoleil->getDateHeure()));
 
         // On récupère la dernière date
         $attributes = [];
@@ -119,7 +129,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsSoleil = $objCopsSoleilServices->getSoleils($attributes);
         $objCopsSoleil = array_shift($objsCopsSoleil);
-        $strLis .= $this->getBalise(self::TAG_LI, 'Dernière entrée : '.$objCopsSoleil->getDateHeure());
+        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsSoleil->getDateHeure()));
 
         $strBody = $this->getBalise(self::TAG_UL, $strLis);
     }

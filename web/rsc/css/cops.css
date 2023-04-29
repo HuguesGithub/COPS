@@ -196,11 +196,9 @@ border-color: #4b545c;
     width: auto;
 }
 #weather {
-    -ms-scroll-chaining: chained;
     height: 360px;
     margin-top: 30px;
     position: relative;
-    -ms-touch-action: none;
     white-space: nowrap;
 }
 #weather .gridline {
@@ -526,11 +524,6 @@ border-color: #4b545c;
     color: #121212;
   }
 
-  .css-103zufb {
-    
-  }
-  .css-i1s3vq {
-  }
   .css-dey754 {
     display: flex;
     -moz-box-align: center;
@@ -539,8 +532,6 @@ border-color: #4b545c;
     justify-content: space-between;
     font-family: nyt-franklin, helvetica, arial, sans-serif;
     font-size: 0.625rem;
-  }
-  .css-1lire5m {
   }
   .css-6vr0ez {
     margin-left: 2px;
@@ -575,19 +566,13 @@ border-color: #4b545c;
     z-index: 100001;
     background: #fff;
   }
-  .css-umysuv {
-  }
   ol, ul {
     list-style: none;
-  }
-  .css-192g0mx {
   }
   .css-umysuv::after {
     content: '';
     border-bottom: 1px double #000;
     display: block;
-  }
-  .css-cwdrld {
   }
   a {
     text-decoration: none;

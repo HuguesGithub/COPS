@@ -55,7 +55,7 @@ class CopsMeteoBean extends UtilitiesBean
 val T = temperature.state as Number
 val RH = humidity.state as Number
 
-val HI = -42.379 + 2.04901523*T + 10.14333127*RH - .22475541*T*RH - .00683783*T*T - .05481717*RH*RH 
+val HI = -42.379 + 2.04901523*T + 10.14333127*RH - .22475541*T*RH - .00683783*T*T - .05481717*RH*RH
 + .00122874*T*T*RH + .00085282*T*RH*RH - .00000199*T*T*RH*RH
 
 if (RH< 13 && T>= 80 && T<=110) {
@@ -67,13 +67,13 @@ if (RH< 13 && T>= 80 && T<=110) {
    var adjust = ((RH-85)/10) * ((87-T)/5)
    HI += adjust
 } else if (T<80){
-   // HI = 0.5 * {T + 61.0 + [(T-68.0)*1.2] + (RH*0.094)} 
+   // HI = 0.5 * {T + 61.0 + [(T-68.0)*1.2] + (RH*0.094)}
    HI = 0.5 * (T + 61.0 + ((T-68.0)*1.2) + (RH*0.094))
 }
 
 // remember it is in F in Germany you would prefer to use C
 // C to F =  T(°F) = T(°C) × 9/5 + 32
 // F to C =  T(°C) = (T(°F) - 32) × 5/9
-     * 
+     *
      */
 }

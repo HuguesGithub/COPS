@@ -183,7 +183,8 @@ class CopsMeteoClass extends LocalDomainClass
                 $strCompteRendu .= "Cette donnée (".$this->dateMeteo.", ".$this->heureMeteo.") existe déjà.<br>";
             } else {
                 // Sinon, on doit l'insérer
-                $this->insertCopsMeteo();
+                $objCopsMeteoServices = new CopsMeteoServices();
+                $objCopsMeteoServices->insertMeteo($this);
             }
         } else {
             $strCompteRendu .= "<strong>/!\</strong> Erreur d'analyse dans la chaîne suivante :<br>$str<br><br>";
@@ -228,34 +229,6 @@ class CopsMeteoClass extends LocalDomainClass
         $requete .= "heureMeteo = '".$this->heureMeteo."';";
         $rows = MySQLClass::wpdbSelect($requete);
         return !empty($rows);
-    }
-
-    /**
-     * @return string
-     * @since 1.22.09.05
-     * @version 1.22.10.17
-     */
-    public function insertCopsMeteo(): void
-    {
-        $requete  = "INSERT INTO wp_7_cops_meteo ";
-        $requete .= "(dateMeteo, heureMeteo, temperature, weather, weatherId, forceVent, ";
-        $requete .= "sensVent, humidite, barometre, visibilite) ";
-        $requete .= "VALUES (";
-        $requete .= "'".$this->dateMeteo."', ";      // La date
-        $requete .= "'".$this->heureMeteo."', "; // L'heure
-        $requete .= "'".$this->temperature."', "; // La température
-        $requete .= "'".$this->weather."', "; // La météo : certains ne sont peut-être pas définis dans l'enum...
-        $requete .= "'".$this->weatherId."', "; // L'id météo
-        $requete .= "'".$this->forceVent."', "; // La force du vent
-        $requete .= "'".$this->sensVent."', "; // La direction du vent : prefixé par "sa".
-        $requete .= "'".$this->humidite."', "; // L'humidité
-        $requete .= "'".$this->barometre."', "; // Le baromètre
-        $requete .= "'".$this->visibilite."'";   // La visibilité
-        $requete .= ");";
-        $objCopsMeteoDaoImpl = new CopsMeteoDaoImpl();
-        $objCopsMeteoDaoImpl->traceRequest($requete);
-
-        MySQLClass::wpdbQuery($requete);
     }
 
     public function getLastInsertFormatted(): string

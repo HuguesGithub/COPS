@@ -50,7 +50,7 @@ class CopsLuneDaoImpl extends LocalDaoImpl
      * @since v1.23.04.27
      * @version v1.23.04.30
      */
-    public function getMoons(array $attributes): array
+    public function getLunes(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
         $request .= " WHERE dateLune BETWEEN '%s' AND '%s'";

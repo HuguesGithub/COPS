@@ -1,6 +1,8 @@
 <?php
 namespace core\bean;
 
+use core\utils\UrlUtils;
+
 /**
  * AdminPageMeteoBean
  * @author Hugues
@@ -46,15 +48,15 @@ class AdminPageMeteoBean extends AdminPageBean
         ];
         /////////////////////////////////////////
 
+        $urlAttributes = [self::CST_ONGLET=>self::CST_METEO];
         $strLis = '';
         foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
-            $urlSubOnglet  = 'https://cops.jhugues.fr/wp-admin/admin.php?page=hj-cops%2Fadmin_manage.php';
-            $urlSubOnglet .= '&onglet=meteo&subOnglet='.$slugSubOnglet;
+            $urlAttributes[self::CST_SUBONGLET] = $slugSubOnglet;
 
             $blnActive = ($curSubOnglet==$slugSubOnglet || $curSubOnglet=='' && $slugSubOnglet==self::CST_HOME);
             $strLink = $this->getLink(
                 $arrData[self::FIELD_LABEL],
-                $urlSubOnglet,
+                UrlUtils::getAdminUrl($urlAttributes),
                 self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
             );
             $strLis .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>self::NAV_ITEM]);

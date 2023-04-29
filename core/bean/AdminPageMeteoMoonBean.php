@@ -1,9 +1,9 @@
 <?php
 namespace core\bean;
 
-use core\utils\DateUtils;
 use core\services\CopsLuneServices;
-use core\domain\CopsLuneClass;
+use core\utils\DateUtils;
+use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoMoonBean
@@ -36,11 +36,11 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
         // On récupère en base la newmoon précédente
         $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS]['endDate'] = $strDate;
-        $attributes[self::SQL_WHERE_FILTERS]['typeLune'] = 'newmoon';
+        $attributes[self::SQL_WHERE_FILTERS][self::CST_ENDDATE] = $strDate;
+        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_TYPE_LUNE] = 'newmoon';
         $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
         $attributes[self::SQL_LIMIT] = 1;
-        $objsCopsLune = $objCopsLuneServices->getMoons($attributes);
+        $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
         $objCopsLune = array_shift($objsCopsLune);
         if ($objCopsLune==null) {
             return 'Error';
@@ -49,15 +49,19 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
         // On récupère les 3 dates suivantes
         $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS]['startDate'] = $prevDate;
+        $attributes[self::SQL_WHERE_FILTERS][self::CST_STARTDATE] = $prevDate;
         $attributes[self::SQL_LIMIT] = 5;
-        $objsCopsLune = $objCopsLuneServices->getMoons($attributes);
+        $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
 
-        $urlRoot = '/wp-admin/admin.php?page=hj-cops/admin_manage.php&onglet=meteo&subOnglet=moon&date=';
         // Construction du Header et du Body
         $label = $this->getButton($this->getIcon(self::I_ANGLE_LEFT, 'feather icon-chevron-left'));
         $strPrevDate = DateUtils::getDateAjout($prevDate, [-1, 0, 0], self::FORMAT_DATE_YMD);
-        $link = $this->getLink($label, $urlRoot.$strPrevDate, '');
+        $urlAttributes = [
+            self::CST_ONGLET    => self::ONGLET_METEO,
+            self::CST_SUBONGLET => self::CST_MOON,
+            self::CST_DATE      => $strPrevDate,
+        ];
+        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
         $strHeader = $this->getBalise(self::TAG_TH, $link, [self::ATTR_CLASS=>self::STYLE_TEXT_CENTER]);
         $strBody = $this->getBalise(self::TAG_TH, self::CST_NBSP);
 
@@ -73,7 +77,8 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         $label = $this->getButton($this->getIcon(self::I_ANGLE_RIGHT, 'feather icon-chevron-right'));
         $nextDate = $objCopsLuneLast->getField(self::FIELD_DATE_LUNE);
         $strNextDate = DateUtils::getDateAjout($nextDate, [2, 0, 0], self::FORMAT_DATE_YMD);
-        $link = $this->getLink($label, $urlRoot.$strNextDate, '');
+        $urlAttributes[self::CST_DATE] = $strNextDate;
+        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
         $strHeader .= $this->getBalise(self::TAG_TH, $link, [self::ATTR_CLASS=>self::STYLE_TEXT_CENTER]);
         // On doit ajouter une dernière colonne vide
         $strBody .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
@@ -91,7 +96,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
      */
     public function getCardContent(string &$titre, string &$strBody): void
     {
-        $titre = 'Table Lune';
+        $titre = self::LABEL_TABLE_LUNE;
 
         // On initialise le service dont on va avoir besoin.
         $objCopsLuneServices = new CopsLuneServices();
@@ -102,17 +107,17 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         $attributes = [];
         $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
         $attributes[self::SQL_LIMIT] = 1;
-        $objsCopsLune = $objCopsLuneServices->getMoons($attributes);
+        $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
         $objCopsLune = array_shift($objsCopsLune);
-        $strLis .= $this->getBalise(self::TAG_LI, 'Première entrée : '.$objCopsLune->getDateHeure());
+        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsLune->getDateHeure()));
 
         // On récupère la dernière date
         $attributes = [];
         $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
         $attributes[self::SQL_LIMIT] = 1;
-        $objsCopsLune = $objCopsLuneServices->getMoons($attributes);
+        $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
         $objCopsLune = array_shift($objsCopsLune);
-        $strLis .= $this->getBalise(self::TAG_LI, 'Dernière entrée : '.$objCopsLune->getDateHeure());
+        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsLune->getDateHeure()));
 
         $strBody = $this->getBalise(self::TAG_UL, $strLis);
     }
