@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.05.19
  * @version 1.22.05.19
  */
-class LocalActions extends GlobalActions implements ConstantsInterface, LabelsInterface
+class LocalActions extends GlobalActions implements ConstantsInterface, LabelsInterface, FieldsInterface
 {
   /**
    * Class Constructor

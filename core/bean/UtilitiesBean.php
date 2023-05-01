@@ -2,6 +2,7 @@
 namespace core\bean;
 
 use core\interfaceimpl\ConstantsInterface;
+use core\interfaceimpl\FieldsInterface;
 use core\interfaceimpl\LabelsInterface;
 use core\interfaceimpl\UrlsInterface;
 
@@ -11,7 +12,7 @@ use core\interfaceimpl\UrlsInterface;
  * @since 1.00.00
  * @version v1.23.04.30
  */
-class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface
+class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface, FieldsInterface
 {
     /**
      * @return bool

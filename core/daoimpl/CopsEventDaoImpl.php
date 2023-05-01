@@ -5,34 +5,30 @@ use core\domain\MysqlClass;
 use core\domain\CopsEventDateClass;
 use core\domaine\CopsEventCategorieClass;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * Classe CopsEventDaoImpl
  * @author Hugues
  * @since 1.22.06.13
- * @version 1.22.06.13
+ * @version v1.23.05.07
  */
 class CopsEventDaoImpl extends LocalDaoImpl
 {
-  /**
-   * Class constructor
-   * @since 1.22.06.13
-   * @version 1.22.06.13
-   */
-  public function __construct()
-  {
-    ////////////////////////////////////
-    // Définition des variables spécifiques
-    //$this->ObjClass = new CopsEvent();
-    $this->dbTable  = "wp_7_cops_event";
-    $this->dbTable_cec  = "wp_7_cops_event_categorie";
-    $this->dbTable_ced  = "wp_7_cops_event_date";
-    ////////////////////////////////////
+    /**
+     * Class constructor
+     * @since 1.22.06.13
+     * @version v1.23.05.07
+     */
+    public function __construct()
+    {
+        ////////////////////////////////////
+        // Définition des variables spécifiques
+        $this->dbTable  = "wp_7_cops_event";
+        $this->dbTable_cec  = "wp_7_cops_event_categorie";
+        $this->dbTable_ced  = "wp_7_cops_event_date";
+        ////////////////////////////////////
 
-    parent::__construct();
-  }
+        parent::__construct();
+    }
 
     public function getCopsEventDates($attributes)
     {

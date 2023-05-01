@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace core\domain;
 
 use core\interfaceimpl\ConstantsInterface;
+use core\interfaceimpl\FieldsInterface;
 use core\interfaceimpl\LabelsInterface;
 use core\interfaceimpl\UrlsInterface;
 
@@ -16,7 +17,7 @@ if (!defined('ABSPATH')) {
  * @since 1.22.04.27
  * @version 1.22.04.27
  */
-class GlobalDomainClass implements ConstantsInterface, LabelsInterface, UrlsInterface
+class GlobalDomainClass implements ConstantsInterface, LabelsInterface, UrlsInterface, FieldsInterface
 {
   protected $stringClass;
 
