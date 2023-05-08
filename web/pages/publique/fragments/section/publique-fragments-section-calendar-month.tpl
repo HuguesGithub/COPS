@@ -1,3 +1,4 @@
+<!-- @version v1.23.05.07 -->
 <section class="fc-daygrid fc-dayGridMonth-view fc-view">
   <table class="fc-scrollgrid table-bordered fc-scrollgrid-liquid" aria-describedby="Evénements du mois">
     <thead>

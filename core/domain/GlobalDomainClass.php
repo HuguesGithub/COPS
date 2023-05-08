@@ -8,14 +8,11 @@ use core\interfaceimpl\FieldsInterface;
 use core\interfaceimpl\LabelsInterface;
 use core\interfaceimpl\UrlsInterface;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * Classe GlobalDomain
  * @author Hugues.
  * @since 1.22.04.27
- * @version 1.22.04.27
+ * @version v1.23.05.07
  */
 class GlobalDomainClass implements ConstantsInterface, LabelsInterface, UrlsInterface, FieldsInterface
 {
@@ -54,9 +51,9 @@ class GlobalDomainClass implements ConstantsInterface, LabelsInterface, UrlsInte
 
   /**
    * @since 1.22.04.27
-   * @version 1.22.04.27
+   * @version v1.23.05.07
    */
-    public static function convertRootElement(LocalDomainClass $objLocalDomain, array $row): LocalDomainClass
+    public static function convertRootElement(LocalDomainClass $objLocalDomain, $row): LocalDomainClass
     {
         $vars = $objLocalDomain->getClassVars();
         if (!empty($vars)) {

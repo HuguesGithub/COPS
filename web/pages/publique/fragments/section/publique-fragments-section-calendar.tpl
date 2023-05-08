@@ -1,3 +1,4 @@
+<!-- @version v1.23.05.07 -->
 <section class="card card-primary">
   <div class="card-body p-0">
     <div id="calendar" class="fc fc-media-screen fc-direction-ltr fc-theme-bootstrap">

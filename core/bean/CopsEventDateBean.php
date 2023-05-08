@@ -1,20 +1,21 @@
 <?php
 namespace core\bean;
 
+use core\domain\CopsEventDateClass;
 use core\utils\DateUtils;
 
 /**
  * CopsEventDateBean
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.04.30
+ * @version v1.23.05.07
  */
 class CopsEventDateBean extends UtilitiesBean
 {
     public function __construct($obj=null)
     {
-        $this->objCopsEventDate = ($obj==null ? new CopsEventDate() : $obj);
-        $this->objCopsEvent     = $this->objCopsEventDate->getCopsEvent();
+        //$this->objCopsEventDate = ($obj==null ? new CopsEventDateClass() : $obj);
+        //$this->objCopsEvent     = $this->objCopsEventDate->getCopsEvent();
     }
 
     /**

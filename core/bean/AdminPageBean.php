@@ -5,6 +5,7 @@ namespace core\bean;
  * Classe AdminPageBean
  * @author Hugues
  * @since 1.23.04.20
+ * @version v1.23.05.07
  */
 class AdminPageBean extends UtilitiesBean
 {
@@ -27,6 +28,7 @@ class AdminPageBean extends UtilitiesBean
 
     /**
      * @since 1.23.04.20
+     * @version v1.23.05.07
      */
     public function getContentPage(): string
     {
@@ -35,8 +37,8 @@ class AdminPageBean extends UtilitiesBean
                 $returned = match ($this->urlParams[self::CST_ONGLET]) {
                     self::ONGLET_METEO => AdminPageMeteoBean::getStaticContentPage(),
                     self::ONGLET_INDEX => AdminPageIndexBean::getStaticContentPage(),
-                    self::ONGLET_CALENDAR => AdminPageCalendrierBean::getStaticContentPage($this->urlParams),
-                    default => 'WIP',
+                    self::ONGLET_CALENDAR => AdminPageCalendarBean::getStaticContentPage(),
+                    default => 'Error. Unexpected Onglet Term.',
                 };
             } catch (\Exception $e) {
                 throw($e);

@@ -1,3 +1,4 @@
+<!-- @version v1.23.05.07 -->
 <section class="fc-timegrid fc-timeGridWeek-view fc-view">
   <table role="grid" class="fc-scrollgrid table-bordered fc-scrollgrid-liquid" aria-describedby="Evénements de la semaine">
     <tbody role="rowgroup">

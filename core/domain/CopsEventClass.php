@@ -1,35 +1,32 @@
 <?php
 namespace core\domain;
 
+use core\services\CopsEventServices;
+
 /**
  * Classe CopsEventClass
  * @author Hugues
- * @version 1.22.06.13
  * @since 1.22.06.13
+ * @version v1.23.05.07
  */
 class CopsEventClass extends LocalDomainClass
 {
-  //////////////////////////////////////////////////
-  // ATTRIBUTES
-  //////////////////////////////////////////////////
-  /**
-   * Id technique de la donnée
-   * @var int $id
-   */
-  protected $id;
-
-  protected $eventLibelle;
-  protected $categorieId;
-  protected $dateDebut;
-  protected $dateFin;
-  protected $allDayEvent;
-  protected $heureDebut;
-  protected $heureFin;
-  protected $repeatStatus;
-  protected $repeatType;
-  protected $repeatInterval;
-  protected $repeatEnd;
-  protected $repeatEndValue;
+    //////////////////////////////////////////////////
+    // ATTRIBUTES
+    //////////////////////////////////////////////////
+    protected $id;
+    protected $eventLibelle;
+    protected $categorieId;
+    protected $dateDebut;
+    protected $dateFin;
+    protected $allDayEvent;
+    protected $heureDebut;
+    protected $heureFin;
+    protected $repeatStatus;
+    protected $repeatType;
+    protected $repeatInterval;
+    protected $repeatEnd;
+    protected $repeatEndValue;
 
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -82,13 +79,13 @@ class CopsEventClass extends LocalDomainClass
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsEventClass';
-        $this->objCopsEventServices = new CopsEventServices();
     }
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.05.07
      */
-    public static function convertElement(array $row): CopsEventClass
+    public static function convertElement($row): CopsEventClass
     {
         return parent::convertRootElement(new CopsEventClass(), $row);
     }
@@ -97,9 +94,7 @@ class CopsEventClass extends LocalDomainClass
      * @since 1.23.04.21
      */
     public function getBean(): CopsEventBean
-    {
-        return new CopsEventBean($this);
-    }
+    { return new CopsEventBean($this); }
 
     //////////////////////////////////////////////////
     // METHODES
@@ -300,6 +295,7 @@ class CopsEventClass extends LocalDomainClass
      */
     public function getCategorie(): CopsEventCategorieClass
     {
+        $this->CopsEventServices = new CopsEventServices();
         return $this->CopsEventServices->getCategorie($this->categorieId);
     }
 
@@ -313,10 +309,11 @@ class CopsEventClass extends LocalDomainClass
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.05.07
      */
-    public function isFirstDay(int $tsDisplay): bool
+    public function isFirstDay(string $curDate): bool
     {
-        return (date(self::FORMAT_DATE_YMD, $tsDisplay)==$this->dateDebut);
+        return ($curDate==$this->dateDebut);
     }
     
     /**

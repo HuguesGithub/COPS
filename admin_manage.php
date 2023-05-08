@@ -16,7 +16,7 @@
   integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" media="all" href="<?php echo PLUGINS_MYCOMMON; ?>web/rsc/css/jquery-ui.min.css"/>
 <link rel="stylesheet" type="text/css" media="all" href="<?php echo PLUGINS_COPS; ?>web/rsc/css/cops.css"/>
-<link rel="stylesheet" type="text/css" media="all" href="<?php echo PLUGINS_COPS; ?>web/rsc/open-iconic-bootstrap.css"/>
+<link rel="stylesheet" type="text/css" media="all" href="<?php echo PLUGINS_COPS; ?>web/rsc/css/open-iconic-bootstrap.css"/>
 <?php
   global $Cops;
   if (empty($Cops)) {
@@ -25,6 +25,6 @@
   $AdminPageBean = new \core\bean\AdminPageBean();
   echo $AdminPageBean->getContentPage();
 ?>
-<script type='text/javascript' src='<?php echo PLUGINS_MYCOMMON; ?>web/rsc/js/jquery.min.js'></script>
+<script type='text/javascript' src='<?php echo PLUGINS_COPS; ?>web/rsc/js/jquery.min.js'></script>
 <script type='text/javascript' src='<?php echo PLUGINS_MYCOMMON; ?>web/rsc/js/jquery-ui.min.js'></script>
 <script type='text/javascript' src='<?php echo PLUGINS_COPS; ?>web/rsc/js/cops.js'></script>

@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * DateUtils
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.04.30
+ * @version v1.23.05.07
  */
 class DateUtils implements ConstantsInterface
 {
@@ -29,8 +29,16 @@ class DateUtils implements ConstantsInterface
     public static $arrShortEnglishDays = [0=>'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     /**
-     * @param string
-     * @return string
+     * @since v1.23.05.05
+     * @version v1.23.05.07
+     */
+    public static function isMonday(string $strDate): bool
+    {
+        [$d, $m, $y] = static::parseDate($strDate);
+        return (date('N', mktime(0, 0, 0, $m, $d, $y))==1);
+    }
+
+    /**
      */
     public static function getCopsDate(string $format): string
     {
@@ -103,27 +111,57 @@ class DateUtils implements ConstantsInterface
 
     /**
      * v1.23.04.28
-     * v1.23.04.30
+     * v1.23.05.07
      */
     public static function getStrDate(string $strFormat, string|int $when): string
     {
         // On détermine si $when est string ou int.
-        // Si int, c'est un timestamp.
-        // Si string, c'est une chaine de type YYYY-mm-dd HH:ii:ss ou autre.
-        [$d, $m, $y, $h, $i, $s] = static::parseDate($when);
-        if ($s<10) {
-            $s = str_pad($s, 2, '0', STR_PAD_LEFT);
+        if (is_int($when)) {
+            // Si int, c'est un timestamp.
+            [$d, $m, $y, $h, $i, $s] = explode(' ', date('d m Y h i s', $when));
+        } else {
+            // Si string, c'est une chaine de type YYYY-mm-dd HH:ii:ss ou autre.
+            [$d, $m, $y, $h, $i, $s] = static::parseDate($when);
+            if ($s<10) {
+                $s = str_pad($s, 2, '0', STR_PAD_LEFT);
+            }
         }
 
-        // Une fois déterminé $when, on doit avoir une chaine au format YYYY-mm-dd HH:ii:ss.
-        // On peut alors traiter la donnée pour retourner l'info selon le format souhaité.
-
         switch ($strFormat) {
+            case 'sduk' :
+                // sduk pour Short Day English
+                $w = date('w', mktime(0, 0, 0, $m, $d, $y));
+                $strFormatted = static::$arrShortEnglishDays[$w*1];
+            break;
+            case 'fd d fm' :
+                // fd pour Full Day
+                // fm pour Full Month
+                $w = date('w', mktime(0, 0, 0, $m, $d, $y));
+                $strFormatted = static::$arrFullDays[$w*1].' '.$d.' '.static::$arrFullMonths[$m*1];
+            break;
             case 'd M y' :
                 $strFormatted = $d.' '.static::$arrShortMonths[$m*1].' '.$y;
             break;
             case 'd M y H:i:s' :
                 $strFormatted = $d.' '.static::$arrShortMonths[$m*1].' '.$y.' '.$h.':'.$i.':'.$s;
+            break;
+            case 'month y' :
+                $strFormatted = static::$arrFullMonths[$m*1].' '.$y;
+            break;
+            case 'd month' :
+                $strFormatted = $d.' '.static::$arrFullMonths[$m*1];
+            break;
+            case self::FORMAT_DATE_DMONTHY :
+                $strFormatted = $d.' '.static::$arrFullMonths[$m*1].' '.$y;
+            break;
+            case 'w d/m' :
+                $w = date('w', mktime(0, 0, 0, $m, $d, $y));
+                $strFormatted = static::$arrShortDays[$w*1].' '.$d.'/'.$m;
+            break;
+            case 'W' :
+            case self::FORMAT_DATE_YMD :
+                $tsDisplay = mktime($h, $i, $s, $m, $d, $y);
+                $strFormatted = date($strFormat, $tsDisplay);
             break;
             default :
                 $strFormatted = '';
@@ -142,6 +180,21 @@ class DateUtils implements ConstantsInterface
         [$d, $m, $y, , ,] = static::parseDate($strDate);
         $n = date('N', mktime(0, 0, 0, $m, $d, $y));
         return static::getDateAjout($strDate, [$n-1, 0, 0], $dateFormat);
+    }
+    
+    /**
+     * Retourne au format donné le premier jour du mois de la date passée.
+     * @since v1.23.05.03
+     * @version v1.23.05.07
+     */
+    public static function getDateStartWeekMonth(string $strDate, string $dateFormat): string
+    {
+        [, $m, $y, , ,] = static::parseDate($strDate);
+        [$fN, $fd, $fm, $fY] = explode(' ', date('N d m Y', mktime(0, 0, 0, $m, 1, $y)));
+        if ($fN!=1) {
+            [$fd, $fm, $fY] = explode(' ', date('d m Y', mktime(0, 0, 0, $m, 2-$fN, $y)));
+        }
+        return date($dateFormat, mktime(0, 0, 0, $fm, $fd, $fY));
     }
 
     /**

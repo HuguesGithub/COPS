@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\services;
+
+use core\daoimpl\CopsEventDaoImpl;
+
 /**
  * Classe CopsEventServices
  * @author Hugues
  * @since 1.22.06.13
- * @version 1.22.06.13
+ * @version v1.23.05.07
  */
 class CopsEventServices extends LocalServices
 {
@@ -76,6 +77,7 @@ class CopsEventServices extends LocalServices
    */
   public function getCopsEventDates($attributes=[])
   {
+    return [];
     $this->initFilters($attributes);
     return $this->Dao->getCopsEventDates($attributes);
   }
@@ -127,5 +129,47 @@ class CopsEventServices extends LocalServices
       }
       return $this->Dao->getCopsEventCategories($attributes);
   }
-  
+
+    /**
+     * @since v1.23.05.05
+     * @version v1.23.05.07
+     */
+    public function getEventDates(array $attributes): array
+    {
+        if ($this->Dao==null) {
+            $this->Dao = new CopsEventDaoImpl();
+        }
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DSTART] ?? self::CST_FIRST_DATE;
+        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DEND] ?? self::CST_LAST_DATE;
+
+        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
+        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+
+        // Traitement spécifique pour gérer le tri multi-colonnes
+        if (!isset($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = self::FIELD_DSTART;
+        } elseif (is_array($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = '';
+            while (!empty($attributes[self::SQL_ORDER_BY])) {
+                $orderBy .= array_shift($attributes[self::SQL_ORDER_BY]).' ';
+                $orderBy .= array_shift($attributes[self::SQL_ORDER]).', ';
+            }
+            $orderBy = substr($orderBy, 0, -2);
+            $order = '';
+        } else {
+            $orderBy = $attributes[self::SQL_ORDER_BY];
+        }
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $id,
+            $startDate,
+            $endDate,
+            $orderBy,
+            $order,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getEventDates($prepAttributes);
+    }
 }

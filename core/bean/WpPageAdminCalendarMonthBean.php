@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\services\CopsEventServices;
 
 /**
  * Classe WpPageAdminCalendarMonthBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.04.30
+ * @version v1.23.05.07
  */
 class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 {

@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.04.30
+ * @version v1.23.05.07
  */
 interface ConstantsInterface
 {
@@ -95,6 +95,7 @@ interface ConstantsInterface
     public const CST_ACTION             = 'action';
     public const CST_ADD                = 'add';
     public const CST_CHECKED            = 'checked';
+    public const CST_CHANGE_DATE        = 'changeDate';
     public const CST_CHILDREN           = 'children';
     public const CST_COLSPAN            = 'colspan';
     public const CST_DATE               = 'date';
@@ -117,9 +118,8 @@ interface ConstantsInterface
     public const CST_WICON              = 'wicon';
     public const CST_WRITE              = 'write';
     public const CST_WRITE_ACTION       = 'writeAction';
-    public const CST_CHANGE_DATE        = 'changeDate';
 
-    // Constantes de certains champs.    
+    // Constantes de certains champs.
     public const CST_EVENT_RT_NEVER        = 'never';
     public const CST_EVENT_RT_ENDDATE      = 'endDate';
     public const CST_EVENT_RT_ENDREPEAT    = 'endRepeat';
@@ -128,6 +128,31 @@ interface ConstantsInterface
     public const CST_EVENT_RT_MONTHLY      = 'monthly';
     public const CST_EVENT_RT_YEARLY       = 'yearly';
   
+    /////////////////////////////////////////////////
+    // FC
+    public const CST_FC_COL_HEADER_CELL    = 'fc-col-header-cell';
+    public const CST_FC_COL_HEADER_CELL_CSH= self::CST_FC_COL_HEADER_CELL.'-cushion';
+    public const CST_FC_DAY                = 'fc-day';
+    public const CST_FC_DAY_PAST           = self::CST_FC_DAY.'-past';
+    public const CST_FC_DAY_TODAY          = self::CST_FC_DAY.'-today';
+    public const CST_FC_DAY_FUTURE         = self::CST_FC_DAY.'-future';
+    public const CST_FC_DAY_OTHER          = self::CST_FC_DAY.'-other';
+    public const CST_FC_DAYGRID_DAY        = 'fc-daygrid-day';
+    public const CST_FC_DAYGRID_DAY_BG     = self::CST_FC_DAYGRID_DAY.'-bg';
+    public const CST_FC_DAYGRID_DAY_BTM    = self::CST_FC_DAYGRID_DAY.'-bottom';
+    public const CST_FC_DAYGRID_DAY_EVENTS = self::CST_FC_DAYGRID_DAY.'-events';
+    public const CST_FC_DAYGRID_DAY_FRAME  = self::CST_FC_DAYGRID_DAY.'-frame';
+    public const CST_FC_DAYGRID_DAY_NB     = self::CST_FC_DAYGRID_DAY.'-number';
+    public const CST_FC_DAYGRID_DAY_TOP    = self::CST_FC_DAYGRID_DAY.'-top';
+    public const CST_FC_SCROLLGRID_SYNC_IN = 'fc-scrollgrid-sync-inner';
+    public const CST_FC_TIMEGRID_COL       = 'fc-timegrid-col';
+    public const CST_FC_TIMEGRID_COL_BG    = self::CST_FC_TIMEGRID_COL.'-bg';
+    public const CST_FC_TIMEGRID_COL_EVENTS= self::CST_FC_TIMEGRID_COL.'-events';
+    public const CST_FC_TIMEGRID_COL_FRAME = self::CST_FC_TIMEGRID_COL.'-frame';
+    public const CST_FC_TIMEGRID_NOW_IC    = 'fc-timegrid-now-indicator-container';
+    public const CST_GRIDCELL              = 'gridcell';
+    public const CST_COLUMNHEADER          = 'columnheader';
+
     /////////////////////////////////////////////////
     // Formats
     public const FORMAT_STRJOUR          = 'strJour';
@@ -139,6 +164,7 @@ interface ConstantsInterface
     public const FORMAT_DATE_YMD         = 'Y-m-d';
     public const FORMAT_DATE_MDY         = 'm-d-Y';
     public const FORMAT_DATE_DMY         = 'd-m-Y';
+    public const FORMAT_DATE_DMONTHY     = 'd month Y';
     public const FORMAT_DATE_DMYHIS      = 'd M y H:i:s';
     public const FORMAT_DATE_YMDHIS      = 'Y-m-d h:i:s';
 

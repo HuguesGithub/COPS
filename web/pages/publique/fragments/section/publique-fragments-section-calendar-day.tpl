@@ -1,3 +1,4 @@
+<!-- @version v1.23.05.07 -->
 <section class="fc-timegrid fc-timeGridDay-view fc-view">
   <table role="grid" class="fc-scrollgrid table-bordered fc-scrollgrid-liquid" aria-describedby="Calendrier du jour">
     <tbody role="rowgroup">

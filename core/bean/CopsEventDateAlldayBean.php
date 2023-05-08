@@ -7,41 +7,37 @@ use core\utils\DateUtils;
  * CopsEventDateAlldayBean
  * @author Hugues
  * @since 1.22.11.25
- * @version v1.23.04.30
+ * @version v1.23.05.07
  */
-class CopsEventDateAlldayBean extends CopsEventDateBean
+class CopsEventDateAlldayBean extends UtilitiesBean
 {
-    public function __construct($obj=null)
+    public function __construct($obj)
     {
-        parent::__construct($obj);
+        $this->objEventDate = $obj;
     }
 
     /**
-     * @param string $tag vaut day, week ou month, selon le type de vue.
-     * @param int $tsDisplay la date du jour affiché.
-     * @since 1.22.11.25
-     * @version 1.22.11.27
+     * @since v1.23.05.05
+     * @version v1.23.05.07
      */
-    public function getCartouche($tag, $tsDisplay, $nbEvents=0)
+    public function getCartouche(string $tag, string $displayDate, int $nbEvents=0): string
     {
+        ///////////////////////////////////////////////////
+        // On récupère le jour courant
+        $this->curDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
+        ///////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////
+        //
+        
+
+  //      $fcDayClass = $this->getFcDayClass($tag, $displayDate);
+
+        /*
         $divClass = '';
         $divStyle = 'margin-top: 0px; ';
         $divAttributes = '';
-        $fcDayClass = 'fc-event-';
-        ///////////////////////////////////////////////////
-        // On récupère le jour courant
-        $tsToday = DateUtils::getCopsDate(self::FORMAT_TS_START_DAY);
         
-        ///////////////////////////////////////////////////
-        // La date passée, présente ou future
-        // si le jour est dans le passé : fc-day-past, dans le futur : fc-day-future, aujourd'hui : fc-day-today
-        if ($tsDisplay==$tsToday) {
-            $fcDayClass .= 'today ';
-        } elseif ($tsDisplay<$tsToday) {
-            $fcDayClass .= 'past ';
-        } else {
-            $fcDayClass .= 'future ';
-        }
         
         switch ($tag) {
             case self::CST_CAL_MONTH :
@@ -73,6 +69,8 @@ class CopsEventDateAlldayBean extends CopsEventDateBean
             $divAttributes,
         ];
         return $this->getRender($urlTemplate, $attributes);
+        */
+        return 'wip';
     }
     
     /**
@@ -107,38 +105,73 @@ class CopsEventDateAlldayBean extends CopsEventDateBean
     }
 
     /**
-     * @since 1.22.11.25
-     * @version 1.22.11.25
+     * @since v1.23.05.05
+     * @version v1.23.05..7
      */
-    public function getDayClass(&$fcDayClass, $tsDisplay)
+    public function getDayClass(string $displayDate): string
     {
+        $strExtra = '';
+
         ///////////////////////////////////////////////////
         // Si c'est le début de l'event
-        if ($this->objCopsEvent->isFirstDay($tsDisplay)) {
-            $fcDayClass .= 'fc-event-start ';
+        if ($this->objCopsEvent->isFirstDay($displayDate)) {
+            $strExtra .= 'fc-event-start ';
         }
         ///////////////////////////////////////////////////
         // Si c'est la fin de l'event
-        if ($this->objCopsEvent->isLastDay($tsDisplay)) {
-            $fcDayClass .= 'fc-event-end ';
+        if ($this->objCopsEvent->isLastDay($displayDate)) {
+            $strExtra .= 'fc-event-end ';
         }
+
+        return $strExtra;
     }
 
     /**
-     * @since 1.22.11.25
-     * @version 1.22.11.25
+     * @since v1.23.05.05
+     * @version v1.23.05.07
      */
-    public function getWeekClass(&$fcDayClass, $tsDisplay)
+    public function getWeekClass(string $displayDate): string
     {
+        $strExtra = '';
         ///////////////////////////////////////////////////
         // Si c'est le début de l'event
-        if ($this->objCopsEvent->isFirstWeek($tsDisplay)) {
-            $fcDayClass .= 'fc-event-start ';
+        if ($this->objCopsEvent->isFirstWeek($displayDate)) {
+            $strExtra .= 'fc-event-start ';
         }
         ///////////////////////////////////////////////////
         // Si c'est la fin de l'event
-        if ($this->objCopsEvent->isLastWeek($tsDisplay)) {
-            $fcDayClass .= 'fc-event-end ';
+        if ($this->objCopsEvent->isLastWeek($displayDate)) {
+            $strExtra .= 'fc-event-end ';
         }
+        return $strExtra;
     }
+
+    /**
+     * @since v1.23.05.05
+     * @version v1.23.05.07
+     */
+   public function getFcDayClass(string $tag, string $displayDate): string
+    {
+        $fcDayClass = 'fc-event-';
+
+        ///////////////////////////////////////////////////
+        // La date passée, présente ou future
+        // si le jour est dans le passé : fc-day-past, dans le futur : fc-day-future, aujourd'hui : fc-day-today
+        if ($displayDate==$this->curDate) {
+            $fcDayClass .= 'today ';
+        } elseif ($displayDate<$this->curDate) {
+            $fcDayClass .= 'past ';
+        } else {
+            $fcDayClass .= 'future ';
+        }
+
+        if ($tag==self::CST_CAL_DAY) {
+//            $fcDayClass .= $this->getDayClass($displayDate);
+        } else {
+//            $fcDayClass .= $this->getWeekClass($displayDate);
+        }
+
+        return $fcDayClass;
+    }
+
 }

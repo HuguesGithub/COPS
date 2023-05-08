@@ -1,14 +1,18 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\domain;
+
+use core\bean\CopsEventDateAlldayBean;
+use core\bean\CopsEventDateLongBean;
+use core\bean\CopsEventDateDotBean;
+use core\services\CopsEventServices;
+
 /**
  * Classe CopsEventDate
  * @author Hugues
- * @version 1.22.06.13
  * @since 1.22.11.25
+ * @version v1.23.05.07
  */
-class CopsEventDate extends LocalDomain
+class CopsEventDateClass extends LocalDomainClass
 {
     //////////////////////////////////////////////////
     // ATTRIBUTES
@@ -33,26 +37,23 @@ class CopsEventDate extends LocalDomain
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
     /**
-     * @param array $attributes
      * @version 1.22.06.13
      * @since 1.22.06.13
      */
     public function __construct($attributes=[])
     {
         parent::__construct($attributes);
-        $this->stringClass = 'CopsEventDate';
+        $this->stringClass = 'core\domain\CopsEventDateClass';
         $this->CopsEventServices = new CopsEventServices();
         // On initialise l'event source
         $this->objCopsEvent = $this->getCopsEvent();
     }
     /**
-     * @param array $row
-     * @return CopsEventDate
      * @version 1.22.06.13
      * @since 1.22.06.13
      */
-    public static function convertElement($row)
-    { return parent::convertRootElement(new CopsEventDate(), $row); }
+    public static function convertElement($row): CopsEventDateClass
+    { return parent::convertRootElement(new CopsEventDateClass(), $row); }
     
     /**
      * @version 1.22.06.13
@@ -64,9 +65,9 @@ class CopsEventDate extends LocalDomain
         if ($objCopsEvent->isAllDayEvent()) {
             $objBean = new CopsEventDateAlldayBean($this);
         } elseif ($objCopsEvent->isSeveralDays()) {
-            $objBean = new CopsEventDateLongBean($this);
+            //$objBean = new CopsEventDateLongBean($this);
         } else {
-            $objBean = new CopsEventDateDotBean($this);
+            //$objBean = new CopsEventDateDotBean($this);
         }
         return $objBean;
     }

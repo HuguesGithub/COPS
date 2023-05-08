@@ -10,8 +10,8 @@ use core\bean\CopsMeteoBean;
 /**
  * Classe CopsMeteoClass
  * @author Hugues
- * @version 1.22.09.05
  * @since v1.23.04.30
+ * @version v1.23.05.07
  */
 class CopsMeteoClass extends LocalDomainClass
 {
@@ -57,8 +57,6 @@ class CopsMeteoClass extends LocalDomainClass
     }
 
   /**
-   * @param array $row
-   * @return CopsMeteo
    * @version 1.22.09.05
    * @since 1.22.09.05
    */

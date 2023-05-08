@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.24
- * @version v1.23.04.30
+ * @version v1.23.05.07
  */
 interface LabelsInterface
 {
@@ -16,6 +16,7 @@ interface LabelsInterface
     public const LABEL_BACKGROUND     = 'Background';
     public const LABEL_BAROMETER      = 'Baromètre';
     public const LABEL_LIBRARY        = 'Bibliothèque';
+    public const LABEL_CALENDAR       = 'Calendrier';
     public const LABEL_CATEGORIES     = 'Catégories';
     public const LABEL_ABILITIES      = 'Caractéristiques';
     public const LABEL_CODE           = 'Code';

@@ -1,3 +1,5 @@
+<!-- @version v1.23.05.07 -->
+<link rel="stylesheet" href="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/css/all.min.css" type="text/css" media="all" />
 <link rel="stylesheet" href="https://cops.jhugues.fr/wp-content/plugins/hj-cops/web/rsc/feather.css" type="text/css" media="all">
 
 <div class="main-body">
