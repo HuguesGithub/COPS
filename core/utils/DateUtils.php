@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * DateUtils
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class DateUtils implements ConstantsInterface
 {
@@ -30,12 +30,12 @@ class DateUtils implements ConstantsInterface
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @version v1.23.05.14
      */
     public static function isMonday(string $strDate): bool
     {
         [$d, $m, $y] = static::parseDate($strDate);
-        return (date('N', mktime(0, 0, 0, $m, $d, $y))==1);
+        return date('N', mktime(0, 0, 0, $m, $d, $y))==1;
     }
 
     /**
@@ -110,8 +110,8 @@ class DateUtils implements ConstantsInterface
     }
 
     /**
-     * v1.23.04.28
-     * v1.23.05.07
+     * @since v1.23.04.28
+     * @version v1.23.05.14
      */
     public static function getStrDate(string $strFormat, string|int $when): string
     {
@@ -158,6 +158,7 @@ class DateUtils implements ConstantsInterface
                 $w = date('w', mktime(0, 0, 0, $m, $d, $y));
                 $strFormatted = static::$arrShortDays[$w*1].' '.$d.'/'.$m;
             break;
+            case 'N' :
             case 'W' :
             case self::FORMAT_DATE_YMD :
                 $tsDisplay = mktime($h, $i, $s, $m, $d, $y);
@@ -173,13 +174,13 @@ class DateUtils implements ConstantsInterface
     /**
      * Retourne au format donné le premier jour de la semaine de la date passée.
      * @since v1.23.04.26
-     * @version v1.23.04.30
+     * @version v1.23.05.14
      */
     public static function getDateStartWeek(string $strDate, string $dateFormat): string
     {
         [$d, $m, $y, , ,] = static::parseDate($strDate);
         $n = date('N', mktime(0, 0, 0, $m, $d, $y));
-        return static::getDateAjout($strDate, [$n-1, 0, 0], $dateFormat);
+        return static::getDateAjout($strDate, [1-$n, 0, 0], $dateFormat);
     }
     
     /**
@@ -222,5 +223,29 @@ class DateUtils implements ConstantsInterface
             $arrParsed = [0, 0, 0, 0, 0, 0];
         }
         return $arrParsed;
+    }
+
+    /**
+     * @since v1.23.05.10
+     * @version v1.23.05.14
+     */
+    public static function getNbDaysBetween(string $firstDate, string $secondDate): int
+    {
+        // On retourne la différence de jour entre la date la plus élevée et la moins élevée.
+        if ($firstDate>$secondDate) {
+            $startDate = $secondDate;
+            $endDate = $firstDate;
+        } else {
+            $startDate = $firstDate;
+            $endDate = $secondDate;
+        }
+        // On calcule les timestamp des deux dates.
+        [$sy, $sm, $sd] = explode('-', $startDate);
+        [$ey, $em, $ed] = explode('-', $endDate);
+
+        $tsStart = mktime(0, 0, 0, $sm, $sd, $sy);
+        $tsEnd = mktime(0, 0, 0, $em, $ed, $ey);
+
+        return round(($tsEnd-$tsStart)/(60*60*24));
     }
 }

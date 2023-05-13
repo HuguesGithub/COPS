@@ -10,7 +10,7 @@ use core\domain\MySQLClass;
  * Classe AdminPageCalendarWeekBean
  * @author Hugues
  * @since v1.23.05.04
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 {
@@ -126,7 +126,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.07
+     * @version v1.23.05.14
      */
     public function getRowHoraire(string $firstWeekDay): string
     {
@@ -136,7 +136,8 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             $curDay = DateUtils::getDateAjout($firstWeekDay, [$i, 0, 0], self::FORMAT_DATE_YMD);
 
             $divContent  = $this->getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_BG]);
-            $divContent .= $this->getDiv($this->getWeekCell($curDay), [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_EVENTS]);
+            $locAttributes = [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_EVENTS];
+            $divContent .= $this->getDiv($this->getWeekCell($curDay), $locAttributes);
             $divContent .= $this->getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_EVENTS]);
             $divContent .= $this->getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_NOW_IC]);
 
@@ -154,7 +155,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.07
+     * @version v1.23.05.14
      */
     public function getRowAllDay(string $firstWeekDay): string
     {
@@ -182,14 +183,13 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
                 $objEventDate = array_shift($objsEventDate);
                 if ($objEventDate->getCopsEvent()->isAllDayEvent()) {
                     if ($objEventDate->getCopsEvent()->isFirstDay($curDay)) {
-                        $tdContent .= 'first-day-';
-                        $strContent .= '';//$objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
+                        $tdContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
                     } elseif (DateUtils::isMonday($curDay)) {
                         // On a un événement qui est couvert par la période mais dont le premier jour
                         // n'est pas sur la période. C'est un événement de la semaine précédente
                         // qui déborde sur la semaine affichée.
                         // On ne doit le traiter que si on est un lundi.
-                        $tdContent .= 'monday';// $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
+                        $tdContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
                     } else {
                         // TODO : en fait, rien à faire, c'est juste Sonar qui veut un else...
                     }
@@ -269,33 +269,17 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @version v1.23.05.14
      */
-    public function getWeekCell(string $curDay)
+    public function getWeekCell(string $curDay): string
     {
         $strContent = '';
         if (isset($this->objsEventDates[$curDay])) {
-            foreach($this->objsEventDates[$curDay] as $objEventDate) {
-                $strContent .= 'TODO WeekCell <br>';
+            foreach ($this->objsEventDates[$curDay] as $objEventDate) {
+                $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay);
             }
         }
         return $strContent;
-      /*
-<div class="fc-timegrid-event-harness fc-timegrid-event-harness-inset" style="inset: 0px 0% -1199px; z-index: 1;">
-  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past"
-   style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
-    <div class="fc-event-main">
-      <div class="fc-event-main-frame">
-        <div class="fc-event-time">12:00</div>
-        <div class="fc-event-title-container">
-          <div class="fc-event-title fc-sticky">Long Event</div>
-        </div>
-      </div>
-    </div>
-    <div class="fc-event-resizer fc-event-resizer-end"></div>
-  </a>
-</div>
-       */
     }
 
 }

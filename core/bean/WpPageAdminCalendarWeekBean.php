@@ -7,7 +7,7 @@ use core\utils\DateUtils;
  * Classe WpPageAdminCalendarWeekBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.04.30
+ * @version v1.23.05.14
  */
 class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
 {
@@ -150,7 +150,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
     
     /**
      * @since v1.22.11.21
-     * @version v1.22.11.21
+     * @version v1.23.05.14
      */
     public function getRowAllDay($strClass, $tsDisplay)
     {
@@ -166,7 +166,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
             self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
             self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]
         ];
-        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+        $objsCopsEventDate = $this->objCopsEventServices->getEventDates($attributes);
         $nbEvts = 0;
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {

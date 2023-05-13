@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 interface FieldsInterface
 {
@@ -90,9 +90,9 @@ interface FieldsInterface
     public const FIELD_REPEAT_END_VALUE   = 'repeatEndValue';
 
     // TODO : Confirmer utilisation et définition dans table.
-    public const FIELD_MINUTE_DEBUT         = 'minuteDebut';
-    public const FIELD_MINUTE_FIN           = 'minuteFin';
-    public const FIELD_ENDDATE_VALUE         = 'endDateValue';
+    public const FIELD_MINUTE_DEBUT       = 'minuteDebut';
+    public const FIELD_MINUTE_FIN         = 'minuteFin';
+    public const FIELD_ENDDATE_VALUE      = 'endDateValue';
 
     // TABLE cops_event_categorie
     public const FIELD_CATEG_LIBELLE      = 'categorieLibelle';

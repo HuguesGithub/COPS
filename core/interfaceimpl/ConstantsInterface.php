@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 interface ConstantsInterface
 {
@@ -144,6 +144,10 @@ interface ConstantsInterface
     public const CST_FC_DAYGRID_DAY_FRAME  = self::CST_FC_DAYGRID_DAY.'-frame';
     public const CST_FC_DAYGRID_DAY_NB     = self::CST_FC_DAYGRID_DAY.'-number';
     public const CST_FC_DAYGRID_DAY_TOP    = self::CST_FC_DAYGRID_DAY.'-top';
+    public const CST_FC_DG_EVENT_HAR_ABS   = 'fc-daygrid-event-harness-abs';
+    public const CST_FC_EVENT_END          = 'fc-event-end';
+    public const CST_FC_EVENT_START        = 'fc-event-start';
+    public const CST_FC_EVENT_TODAY        = 'fc-event-today';
     public const CST_FC_SCROLLGRID_SYNC_IN = 'fc-scrollgrid-sync-inner';
     public const CST_FC_TIMEGRID_COL       = 'fc-timegrid-col';
     public const CST_FC_TIMEGRID_COL_BG    = self::CST_FC_TIMEGRID_COL.'-bg';

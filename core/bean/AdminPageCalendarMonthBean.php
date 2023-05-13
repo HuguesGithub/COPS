@@ -10,7 +10,7 @@ use core\domain\MySQLClass;
  * Classe AdminPageCalendarMonthBean
  * @author Hugues
  * @since v1.23.05.03
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class AdminPageCalendarMonthBean extends AdminPageCalendarBean
 {
@@ -96,7 +96,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.07
+     * @version v1.23.05.14
      */
     public function getMonthCell(string $displayDate, bool $blnMonday): string
     {
@@ -108,6 +108,9 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         ];
         
         // Construction de la cellule
+
+        //////////////////////////////////////////////////////////////////////////////////
+        // Si on est un lundi, on doit ajouter le numéro et le lien de la semaine
         if ($blnMonday) {
             $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
             $aHref = UrlUtils::getAdminUrl($urlElements);
@@ -121,16 +124,26 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         } else {
             $strWeekLink = '';
         }
+        //////////////////////////////////////////////////////////////////////////////////
         
+        //////////////////////////////////////////////////////////////////////////////////
+        // Le jour et le lien vers celui-ci
         $urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
         $url = UrlUtils::getAdminUrl($urlElements);
         $strLink = $this->getLink(substr($displayDate, 8, 2), $url, self::CST_FC_DAYGRID_DAY_NB);
         $strContent  = $this->getDiv($strWeekLink.$strLink, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_TOP]);
+        //////////////////////////////////////////////////////////////////////////////////
 
+        //////////////////////////////////////////////////////////////////////////////////
+        // Gestion des événements
+        // D'abord les événements qui prenennt toute la journée
+        // Ou les "long events" sur plusieurs jours
         $attr = [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_EVENTS];
         $strContent .= $this->getDiv($this->getAllDayEvents($displayDate), $attr);
-
-        $strContent .= $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG]);
+        // Puis ceux de la journée
+        $locAttributes = [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG];
+        $strContent .= $this->getDiv($this->getDayEvents($displayDate), $locAttributes);
+        //////////////////////////////////////////////////////////////////////////////////
         
         $divAttributes = [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN];
         $divContent = $this->getDiv($strContent, $divAttributes);
@@ -144,10 +157,11 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.07
+     * @version v1.23.05.14
      */
     public function getAllDayEvents(string $displayDate): string
     {
+        $this->objsDayEvent = [];
         $strContent = '';
         /////////////////////////////////////////
         // On récupère tous les events du jour
@@ -167,21 +181,32 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
             $objEventDate = array_shift($objsEventDate);
             if ($objEventDate->getCopsEvent()->isAllDayEvent()) {
                 if ($objEventDate->getCopsEvent()->isFirstDay($displayDate)) {
-                    $tag = self::CST_CAL_MONTH;
-                    $strContent .= 'firstDay';
-                    //$strContent .= $objCopsEventDate->getBean()->getCartouche($tag, $displayDate, $nbEvts);
+                    $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
                 } elseif (DateUtils::isMonday($displayDate)) {
                     // On a un événement qui est couvert par la période mais dont le premier jour
                     // n'est pas sur la période. C'est un événement de la semaine précédente
                     // qui déborde sur la semaine affichée.
                     // On ne doit le traiter que si on est un lundi.
-                    //$strContent .= $objCopsEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $displayDate, $nbEvts);
-                    $strContent .= 'monday';
+                    $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
                 } else {
                     // TODO
-                    $strContent .= 'flag';
                 }
                 ++$nbEvts;
+            } elseif ($objEventDate->getCopsEvent()->isSeveralDays()) {
+                if ($objEventDate->isFirstDay($displayDate)) {
+                    $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
+                } elseif (DateUtils::isMonday($displayDate)) {
+                    $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
+                } else {
+                    // TODO
+                }
+                ++$nbEvts;
+            } else {
+                $dateDebut = $objEventDate->getField(self::FIELD_DSTART);
+                if (!isset($this->objsDayEvent[$dateDebut])) {
+                    $this->objsDayEvent[$dateDebut] = [];
+                }
+                $this->objsDayEvent[$dateDebut][] = $objEventDate;
             }
         }
         /////////////////////////////////////////
@@ -199,28 +224,19 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
     }
 
     /**
-     * @since v1.22.11.21
-     * @version v1.22.11.21
-     *
-    public function getEvents($tsDisplay)
+     * @since v1.23.05.11
+     * @version v1.23.05.14
+     */
+    public function getDayEvents(string $displayDate): string
     {
-        return '';
-        // TODO
-        /*
-        $attributes[self::SQL_WHERE_FILTERS] = array(
-            self::FIELD_ID     => self::SQL_JOKER_SEARCH,
-            self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
-            self::FIELD_DEND   => date(self::FORMAT_DATE_YMD, $tsDisplay),
-        );
-        $CopsEventDates = $this->CopsEventServices->getCopsEventDates($attributes);
+        $objsEventDate = $this->objsDayEvent[$displayDate];
 
-        while (!empty($CopsEventDates)) {
-            $CopsEventDate = array_shift($CopsEventDates);
-            if ($CopsEventDate->getField('dStart')==date(self::FORMAT_DATE_YMD, $tsDisplay)) {
-                $strContent .= $CopsEventDate->getBean()->getEventDateDisplay($tsDisplay);
-            }
+        $tdContent = '';
+        while (!empty($objsEventDate)) {
+            $objEventDate = array_shift($objsEventDate);
+            $tdContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate);
         }
-        *
+        return $tdContent;
     }
-    */
+
 }

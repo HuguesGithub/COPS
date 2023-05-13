@@ -7,7 +7,7 @@ use core\utils\DateUtils;
  * Classe WpPageAdminCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.04.30
+ * @version v1.23.05.14
  */
 class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 {
@@ -31,7 +31,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
     
     /**
      * @since 1.22.11.21
-     * @version 1.22.11.21
+     * @version v1.23.05.14
      */
     public function getOngletContent()
     {
@@ -48,13 +48,13 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         // On récupère tous les events
         $attributes = [
             self::SQL_WHERE_FILTERS => [
-                self::FIELD_ID => '%',
-                self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
-                self::FIELD_DEND => date(self::FORMAT_DATE_YMD, $tsDisplay)
+                self::FIELD_ID => self::SQL_JOKER_SEARCH,
+                self::FIELD_DSTART => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
+                self::FIELD_DEND => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
             ],
-            self::SQL_ORDER_BY => ['dStart', 'dEnd'],
-            self::SQL_ORDER => ['ASC', 'DESC']];
-        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+            self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
+            self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]];
+        $objsCopsEventDate = $this->objCopsEventServices->getEventDates($attributes);
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {
             $objCopsEventDate = array_shift($objsCopsEventDate);
@@ -110,17 +110,17 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 
     /**
      * @since 1.22.11.21
-     * @version 1.22.11.21
+     * @version v1.23.05.14
      */
     public function getRowHeaders($strClass, $tsDisplay)
     {
         $url = '#';
-        $aClass = 'fc-col-header-cell-cushion text-white';
+        $aClass = self::CST_FC_COL_HEADER_CELL_CSH.' '.self::CST_TEXT_WHITE;
         $divContent = $this->getLink(DateUtils::arrFullDays[date('w', $tsDisplay)], $url, $aClass);
-        $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-scrollgrid-sync-inner']);
+        $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>self::CST_FC_SCROLLGRID_SYNC_IN]);
         $attributes = [
-            'role' => 'columnheader',
-            self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
+            self::ATTR_ROLE => self::CST_COLUMNHEADER,
+            self::ATTR_CLASS => self::CST_FC_COL_HEADER_CELL.' '.self::CST_FC_DAY.' '.$strClass,
             self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TH, $thContent, $attributes);
@@ -128,22 +128,25 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 
     /**
      * @since 1.22.11.21
-     * @version 1.22.11.21
+     * @version v1.23.05.14
      */
     public function getRowAllDay($strClass, $tsDisplay)
     {
-        $botAttributes = [self::ATTR_CLASS => 'fc-daygrid-day-bottom', self::ATTR_STYLE => 'margin-top: 0px;'];
+        $botAttributes = [
+            self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BTM,
+            self::ATTR_STYLE => 'margin-top: 0px;'
+        ];
         $divBottom = $this->getDiv('', $botAttributes);
         
         $allDayEvents = $this->getAllDayEvents($tsDisplay);
         
-        $divIn  = $this->getDiv($allDayEvents.$divBottom, [self::ATTR_CLASS=>'fc-daygrid-day-events']);
-        $divIn .= $this->getDiv('', [self::ATTR_CLASS=>'fc-daygrid-day-bg']);
+        $divIn  = $this->getDiv($allDayEvents.$divBottom, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_EVENTS]);
+        $divIn .= $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG]);
         
-        $tdContent = $this->getDiv($divIn, [self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner']);
+        $tdContent = $this->getDiv($divIn, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN]);
         $attributes = [
-            'role' => 'gridcell',
-            self::ATTR_CLASS => 'fc-daygrid-day fc-day ' . $strClass,
+            self::ATTR_ROLE => self::CST_GRIDCELL,
+            self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' ' . $strClass,
             self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);

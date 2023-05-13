@@ -4,11 +4,9 @@ namespace core\domain;
 use core\bean\WpPostBddBean;
 use core\bean\WpPostSkillBean;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * WpPost
+ * @since v1.23.05.14
  */
 class WpPostClass extends LocalDomainClass
 {
@@ -139,8 +137,12 @@ class WpPostClass extends LocalDomainClass
     public function getAttachedMedia($type)
     { return get_attached_media($type, $this->ID); }
 
+    /**
+     * @since v1.23.05.14
+     * @version v1.23.05.14
+     */
     public function getUrlOrUri()
-    { return (static::isAdmin() ? $this->getGuid() : $this->getUrl()); }
+    { return static::isAdmin() ? $this->getGuid() : $this->getUrl(); }
 
     public function getUrl()
     { return $this->getPostMeta('article_url'); }

@@ -8,7 +8,7 @@ use core\services\CopsEventServices;
  * Classe WpPageAdminCalendarMonthBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 {
@@ -146,7 +146,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
     
     /**
      * @since v1.22.11.22
-     * @version v1.22.11.22
+     * @version v1.23.05.14
      */
     public function getAllDayEvents($tsDisplay)
     {
@@ -162,7 +162,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             self::SQL_ORDER_BY => ['dStart', 'dEnd'],
             self::SQL_ORDER => ['ASC', 'DESC']
         ];
-        $objsCopsEventDate = $this->objCopsEventServices->getCopsEventDates($attributes);
+        $objsCopsEventDate = $this->objCopsEventServices->getEventDates($attributes);
         $nbEvts = 0;
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {
@@ -197,28 +197,4 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         return $strContent.$divBottom;
     }
 
-    /**
-     * @since v1.22.11.21
-     * @version v1.22.11.21
-     */
-    public function getEvents($tsDisplay)
-    {
-        return '';
-        // TODO
-        /*
-        $attributes[self::SQL_WHERE_FILTERS] = array(
-            self::FIELD_ID     => self::SQL_JOKER_SEARCH,
-            self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
-            self::FIELD_DEND   => date(self::FORMAT_DATE_YMD, $tsDisplay),
-        );
-        $CopsEventDates = $this->CopsEventServices->getCopsEventDates($attributes);
-
-        while (!empty($CopsEventDates)) {
-            $CopsEventDate = array_shift($CopsEventDates);
-            if ($CopsEventDate->getField('dStart')==date(self::FORMAT_DATE_YMD, $tsDisplay)) {
-                $strContent .= $CopsEventDate->getBean()->getEventDateDisplay($tsDisplay);
-            }
-        }
-        */
-    }
 }

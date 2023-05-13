@@ -7,14 +7,11 @@ use core\domain\CopsIndexNatureClass;
 use core\domain\CopsIndexReferenceClass;
 use core\domain\CopsIndexTomeClass;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsIndexServices
  * @author Hugues
  * @since 1.22.10.21
- * @version 1.23.2.15
+ * @version v1.23.05.14
  */
 class CopsIndexServices extends LocalServices
 {
@@ -71,13 +68,13 @@ class CopsIndexServices extends LocalServices
      * @param integer
      * @return CopsIndexClass
      * @since 1.22.10.21
-     * @version 1.23.02.15
+     * @version v1.23.05.14
      */
     public function getIndex($indexId=-1)
     {
         $attributes = [$indexId];
         $row = $this->Dao->getIndex($attributes);
-        return (empty($row) ? new CopsIndexClass() : new CopsIndexClass($row[0]));
+        return empty($row) ? new CopsIndexClass() : new CopsIndexClass($row[0]);
     }
 
     /**
@@ -111,13 +108,13 @@ class CopsIndexServices extends LocalServices
      * @param array $idxRefId
      * @return CopsIndexReferenceClass
      * @since 1.23.02.20
-     * @version 1.23.02.20
+     * @version v1.23.05.14
      */
     public function getIndexReference($idxRefId)
     {
         $attributes = [$idxRefId];
         $row = $this->Dao->getIndexReference($attributes);
-        return (empty($row) ? new CopsIndexReferenceClass() : new CopsIndexReferenceClass($row[0]));
+        return empty($row) ? new CopsIndexReferenceClass() : new CopsIndexReferenceClass($row[0]);
     }
 
     /**
@@ -157,13 +154,13 @@ class CopsIndexServices extends LocalServices
      * @param int $natureId
      * @return CopsIndexNature
      * @since 1.23.02.19
-     * @version 1.23.02.19
+     * @version v1.23.05.14
      */
     public function getCopsIndexNature($natureId)
     {
         $attributes = [$natureId];
         $row = $this->Dao->getIndexNature($attributes);
-        return (empty($row) ? new CopsIndexNatureClass() : new CopsIndexNatureClass($row[0]));
+        return empty($row) ? new CopsIndexNatureClass() : new CopsIndexNatureClass($row[0]);
     }
 
     /**
@@ -171,7 +168,7 @@ class CopsIndexServices extends LocalServices
      * @param string $name
      * @return CopsIndexNatureClass
      * @since 1.23.02.15
-     * @version 1.23.02.15
+     * @version v1.23.05.14
      */
     public function getCopsIndexNatureByName($name)
     {
@@ -180,7 +177,7 @@ class CopsIndexServices extends LocalServices
             $attributes[self::SQL_WHERE_FILTERS] = [$name];
         }
         $items = $this->Dao->getIndexNatures($attributes);
-        return (empty($items) ? new CopsIndexNatureClass : new CopsIndexNatureClass($items[0]));
+        return empty($items) ? new CopsIndexNatureClass : new CopsIndexNatureClass($items[0]);
     }
 
     /**
@@ -205,13 +202,13 @@ class CopsIndexServices extends LocalServices
      * @param int $tomeId
      * @return CopsIndexTome
      * @since 1.23.02.20
-     * @version 1.23.02.20
+     * @version v1.23.05.14
      */
     public function getCopsIndexTome($tomeId)
     {
         $attributes = [$tomeId];
         $row = $this->Dao->getIndexTome($attributes);
-        return (empty($row) ? new CopsIndexTomeClass() : new CopsIndexTomeClass($row[0]));
+        return empty($row) ? new CopsIndexTomeClass() : new CopsIndexTomeClass($row[0]);
     }
 
     /**
@@ -219,12 +216,12 @@ class CopsIndexServices extends LocalServices
      * @param string $abr
      * @return CopsIndexNatureClass
      * @since 1.23.02.20
-     * @version 1.23.02.20
+     * @version v1.23.05.14
      */
     public function getIndexTomeByAbr($abr)
     {
         $attributes = [$abr];
         $items = $this->Dao->getIndexTomes($attributes);
-        return (empty($items) ? new CopsIndexTomeClass : new CopsIndexTomeClass($items[0]));
+        return empty($items) ? new CopsIndexTomeClass : new CopsIndexTomeClass($items[0]);
     }
 }

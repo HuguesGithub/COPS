@@ -186,7 +186,7 @@ function stretchColspanEvents() {
 	$('.fc-daygrid-event-harness[data-colspan!="0"]').each(function(){
 		let tdWidth = $(this).width();
 		let nbDays = $(this).data('colspan');
-		$(this).css('right', -1*nbDays*(tdWidth+2));
+		$(this).css('right', -1*nbDays*(tdWidth+1));
     });
 }
 

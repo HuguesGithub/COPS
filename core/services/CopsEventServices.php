@@ -7,7 +7,7 @@ use core\daoimpl\CopsEventDaoImpl;
  * Classe CopsEventServices
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class CopsEventServices extends LocalServices
 {
@@ -66,26 +66,13 @@ class CopsEventServices extends LocalServices
   }
 
   /**
-   * @param array $attributes
-   *    [mixed]   : champs de l'objet
-   *    [orderby] : tri sur une colonne
-   *    [order]   : sens du tri
-   *    [limit]   : nombre d'éléments max
-   * @return array CopsEventDate
-   * @since 1.22.06.13
-   * @version 1.22.06.13
+   * @since v1.23.05.11
+   * @version v1.23.05.14
    */
-  public function getCopsEventDates($attributes=[])
-  {
-    return [];
-    $this->initFilters($attributes);
-    return $this->Dao->getCopsEventDates($attributes);
-  }
-
   public function getCopsEvents($attributes=[])
   {
     if (!isset($attributes[self::SQL_ORDER_BY])) {
-      $attributes[self::SQL_ORDER_BY] = 'dateDebut';
+      $attributes[self::SQL_ORDER_BY] = self::FIELD_DATE_DEBUT;
     }
     if (!isset($attributes[self::SQL_ORDER])) {
       $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;

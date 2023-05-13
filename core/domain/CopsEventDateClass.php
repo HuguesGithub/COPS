@@ -10,19 +10,14 @@ use core\services\CopsEventServices;
  * Classe CopsEventDate
  * @author Hugues
  * @since 1.22.11.25
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class CopsEventDateClass extends LocalDomainClass
 {
     //////////////////////////////////////////////////
     // ATTRIBUTES
     //////////////////////////////////////////////////
-    /**
-     * Id technique de la donnée
-     * @var int $id
-     */
     protected $id;
-
     protected $eventId;
     protected $dStart;
     protected $dEnd;
@@ -37,14 +32,13 @@ class CopsEventDateClass extends LocalDomainClass
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
     /**
-     * @version 1.22.06.13
      * @since 1.22.06.13
+     * @version v1.23.05.14
      */
     public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsEventDateClass';
-        $this->CopsEventServices = new CopsEventServices();
         // On initialise l'event source
         $this->objCopsEvent = $this->getCopsEvent();
     }
@@ -57,7 +51,7 @@ class CopsEventDateClass extends LocalDomainClass
     
     /**
      * @version 1.22.06.13
-     * @since 1.22.11.25
+     * @since v1.23.05.14
      */
     public function getBean()
     {
@@ -65,63 +59,60 @@ class CopsEventDateClass extends LocalDomainClass
         if ($objCopsEvent->isAllDayEvent()) {
             $objBean = new CopsEventDateAlldayBean($this);
         } elseif ($objCopsEvent->isSeveralDays()) {
-            //$objBean = new CopsEventDateLongBean($this);
+            $objBean = new CopsEventDateLongBean($this);
         } else {
-            //$objBean = new CopsEventDateDotBean($this);
+            $objBean = new CopsEventDateDotBean($this);
         }
         return $objBean;
     }
 
     /**
-     * @version 1.22.06.13
      * @since 1.22.11.25
+     * @version v1.23.05.14
      */
-    public function getCopsEvent()
-    { return $this->CopsEventServices->getCopsEvent($this->eventId); }
-
-  //////////////////////////////////////////////////
-  // METHODES
-  //////////////////////////////////////////////////
-
-  public function getStrDotTime($format, $slug)
-  {
-    switch ($slug) {
-      case 'tstart' :
-        $value = $this->tStart;
-      break;
-      case 'tend'   :
-        $value = $this->tEnd;
-      break;
-      default       :
-        return 'err-s';
-      break;
+    public function getCopsEvent(): CopsEventClass
+    {
+        $this->objCopsEventServices = new CopsEventServices();
+        return $this->objCopsEventServices->getCopsEvent($this->eventId);
     }
 
-    $mins  = $value%60;
-    $value = ($value-$mins)/60;
-    $hrs   = $value%24;
+    //////////////////////////////////////////////////
+    // METHODES
+    //////////////////////////////////////////////////
 
-    switch ($format) {
-      case 'ga' :
-        if ($hrs>12) {
-          $hrs-=12;
-          $last = 'p';
-        } else {
-          $last = 'a';
+    /**
+     * @since v1.23.05.11
+     * @version v1.23.05.14
+     */
+    public function getAmPmTime(string $field, bool $blnAmPm=true): string
+    {
+        $intTime = $field==self::FIELD_TSTART ? $this->tStart : $this->tEnd;
+        $m = $intTime%60;
+        $h = floor($intTime/60);
+
+        if (!$blnAmPm) {
+            $objCopsEvent = $this->getCopsEvent();
+            $strTime  = $objCopsEvent->getField(self::FIELD_HEURE_DEBUT).' - ';
+            $strTime .= $objCopsEvent->getField(self::FIELD_HEURE_FIN);
+            return $strTime;
         }
-        $str = $hrs.$last;
-      break;
-      default :
-        $str = 'err-f';
-      break;
+
+        if ($h>12) {
+            $hmod = $h-12;
+            $ampm = 'p';
+        } else {
+            $hmod = $h;
+            $ampm = 'a';
+        }
+        return $hmod.($m!=0 ? ':'.str_pad($m, 2, '0', STR_PAD_LEFT) : '').$ampm;
     }
 
-    return $str;
-  }
-
-  public function saveEventDate()
-  { $this->CopsEventServices->saveEventDate($this); }
-
-  public function getInsertAttributes()
-  { return [$this->eventId, $this->dStart, $this->dEnd, $this->tStart, $this->tEnd]; }
+    /**
+     * @since v1.23.05.11
+     * @version v1.23.05.14
+     */
+    public function isFirstDay(string $curDate): bool
+    {
+        return $curDate==$this->dStart;
+    }
 }

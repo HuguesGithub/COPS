@@ -2,12 +2,13 @@
 namespace core\domain;
 
 use core\services\CopsEventServices;
+use core\utils\DateUtils;
 
 /**
  * Classe CopsEventClass
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class CopsEventClass extends LocalDomainClass
 {
@@ -138,18 +139,20 @@ class CopsEventClass extends LocalDomainClass
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.05.14
      */
     public function isAllDayEvent(): bool
     {
-        return ($this->allDayEvent==1);
+        return $this->allDayEvent==1;
     }
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.05.14
      */
     public function isRepetitive(): bool
     {
-        return ($this->repeatStatus==1);
+        return $this->repeatStatus==1;
     }
     
     /**
@@ -300,46 +303,59 @@ class CopsEventClass extends LocalDomainClass
     }
 
     /**
-     * @since 1.23.04.21
+     * @since v1.23.05.11
+     * @version v1.23.05.14
      */
-    public function isSeveralDays(): bool
+    public function isToday(string $displayDate): bool
     {
-        return ($this->dateDebut!=$this->dateFin);
+        return $this->dateDebut!=$displayDate;
     }
 
     /**
      * @since 1.23.04.21
-     * @version v1.23.05.07
+     * @version v1.23.05.14
+     */
+    public function isSeveralDays(): bool
+    {
+        return $this->dateDebut!=$this->dateFin;
+    }
+
+    /**
+     * @since 1.23.04.21
+     * @version v1.23.05.14
      */
     public function isFirstDay(string $curDate): bool
     {
-        return ($curDate==$this->dateDebut);
+        return $curDate==$this->dateDebut;
     }
     
     /**
      * @since 1.23.04.21
+     * @version v1.23.05.14
      */
-    public function isLastDay(int $tsDisplay): bool
+    public function isLastDay(string $curDate): bool
     {
-        return (date(self::FORMAT_DATE_YMD, $tsDisplay)==$this->dateFin);
+        return $curDate==$this->dateFin;
     }
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.05.14
      */
-    public function isFirstWeek(int $tsDisplay): bool
+    public function isFirstWeek(string $curDate): bool
     {
         [$y, $m, $d] = explode('-', (string) $this->dateDebut);
-        return (date('W', $tsDisplay)==date('W', mktime(0, 0, 0, $m, $d, $y)));
+        return DateUtils::getStrDate('W', $curDate)==date('W', mktime(0, 0, 0, $m, $d, $y));
     }
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.05.14
      */
-    public function isLastWeek(int $tsDisplay): bool
+    public function isLastWeek(string $curDate): bool
     {
         [$y, $m, $d] = explode('-', (string) $this->dateFin);
-        return (date('W', $tsDisplay)==date('W', mktime(0, 0, 0, $m, $d, $y)));
+        return DateUtils::getStrDate('W', $curDate)==date('W', mktime(0, 0, 0, $m, $d, $y));
     }
     
     /**
@@ -352,16 +368,6 @@ class CopsEventClass extends LocalDomainClass
         [$y, $m, $d] = explode('-', (string) $this->dateFin);
         $tsFin = mktime(0, 0, 0, $m, $d, $y);
         return 1+($tsFin-$tsDeb)/(60*60*24);
-    }
-    
-    /**
-     * @since 1.23.04.21
-     */
-    public function getNbDaysTillEnd(int $tsDisplay): int
-    {
-        [$y, $m, $d] = explode('-', (string) $this->dateFin);
-        $tsFin = mktime(0, 0, 0, $m, $d, $y);
-        return 1+($tsFin-$tsDisplay)/(60*60*24);
     }
     
     /**

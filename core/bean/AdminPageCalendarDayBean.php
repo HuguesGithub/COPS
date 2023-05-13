@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class AdminPageCalendarDayBean extends AdminPageCalendarBean
 {
@@ -181,12 +181,13 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.06
-     * @version v1.23.05.07
+     * @version v1.23.05.14
      */
     public function getRowHoraire(string $displayDate): string
     {
         $divContent  = $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_BG]);
-        $divContent .= $this->getDiv($this->getDayCell(), [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_EVENTS]);
+        $locAttributes = [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_EVENTS];
+        $divContent .= $this->getDiv($this->getDayCell($displayDate), $locAttributes);
         $divContent .= $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_EVENTS]);
         $divContent .= $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_NOW_IC]);
         
@@ -200,27 +201,17 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
     }
 
     /**
-     * @since v1.22.11.21
-     * @version v1.22.11.21
+     * @since v1.23.05.13
+     * @version v1.23.05.14
      */
-    public function getDayCell()
+    public function getDayCell(string $curDay): string
     {
-        return '';
-      /*
-<div class="fc-timegrid-event-harness fc-timegrid-event-harness-inset" style="inset: 0px 0% -1199px; z-index: 1;">
-  <a class="fc-timegrid-event fc-v-event fc-event fc-event-draggable fc-event-resizable fc-event-end fc-event-past"
-   style="border-color: rgb(243, 156, 18); background-color: rgb(243, 156, 18);">
-    <div class="fc-event-main">
-      <div class="fc-event-main-frame">
-        <div class="fc-event-time">12:00</div>
-        <div class="fc-event-title-container">
-          <div class="fc-event-title fc-sticky">Long Event</div>
-        </div>
-      </div>
-    </div>
-    <div class="fc-event-resizer fc-event-resizer-end"></div>
-  </a>
-</div>
-       */
+        $strContent = '';
+        if (isset($this->objsTodayEventDate)) {
+            foreach ($this->objsTodayEventDate as $objEventDate) {
+                $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay);
+            }
+        }
+        return $strContent;
     }
 }

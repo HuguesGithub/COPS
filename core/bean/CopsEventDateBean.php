@@ -8,13 +8,13 @@ use core\utils\DateUtils;
  * CopsEventDateBean
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.07
+ * @version v1.23.05.14
  */
 class CopsEventDateBean extends UtilitiesBean
 {
-    public function __construct($obj=null)
+    public function __construct($obj)
     {
-        //$this->objCopsEventDate = ($obj==null ? new CopsEventDateClass() : $obj);
+        $this->objEventDate = $obj;
         //$this->objCopsEvent     = $this->objCopsEventDate->getCopsEvent();
     }
 
@@ -52,51 +52,5 @@ class CopsEventDateBean extends UtilitiesBean
 
         return $strClass;
     }
-
-
-  /**
-   * @since 1.22.06.13
-   * @version 1.22.06.13
-   */
-  public function getEventDateDisplay($tsDisplay)
-  {
-    if ($this->CopsEvent->isAllDayEvent()) {
-      if ($this->CopsEvent->isSeveralDays()) {
-        if ($this->CopsEvent->isFirstDay($tsDisplay) || date('N', $tsDisplay)==1) {
-          return $this->getEventCartoucheDisplay($tsDisplay);
-        }
-      } else {
-        return $this->getEventCartoucheDisplay($tsDisplay);
-      }
-    } else {
-      return $this->getEventDotDisplay();
-    }
-  }
-
-  public function getEventCartoucheDisplay($tsDisplay)
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-article-calendar-cartouche.php';
-    $attributes = [
-        $this->getFcDayClass($tsDisplay),
-        $this->CopsEvent->getRgbCategorie(),
-        $this->CopsEvent->getField('eventLibelle'),
-        $this->CopsEvent->getColspan(date('N', $tsDisplay)==1 ? $tsDisplay : null)
-    ];
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  public function getEventDotDisplay()
-  {
-    $tsDisplay = null;
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-article-calendar-dot.php';
-    $attributes = [
-        $this->getFcDayClass($tsDisplay),
-        $this->CopsEvent->getRgbCategorie(),
-        $this->CopsEventDate->getStrDotTime('ga', 'tstart'),
-        $this->CopsEvent->getField('eventLibelle')
-    ];
-    return $this->getRender($urlTemplate, $attributes);
-  }
-  
 
 }
