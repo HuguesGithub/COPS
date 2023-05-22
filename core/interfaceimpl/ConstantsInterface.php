@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 interface ConstantsInterface
 {
@@ -108,6 +108,8 @@ interface ConstantsInterface
     public const CST_LIST               = 'list';
     public const CST_ONGLET             = 'onglet';
     public const CST_QUANTITY           = 'quantite';
+    public const CST_READONLY           = 'readonly';
+    public const CST_REQUIRED           = 'required';
     public const CST_ROWSPAN            = 'rowspan';
     public const CST_SELECTED           = 'selected';
     public const CST_STARTDATE          = 'startDate';
@@ -127,6 +129,7 @@ interface ConstantsInterface
     public const CST_EVENT_RT_WEEKLY       = 'weekly';
     public const CST_EVENT_RT_MONTHLY      = 'monthly';
     public const CST_EVENT_RT_YEARLY       = 'yearly';
+    public const CST_EVENT_RT_CUSTOM       = 'custom';
   
     /////////////////////////////////////////////////
     // FC

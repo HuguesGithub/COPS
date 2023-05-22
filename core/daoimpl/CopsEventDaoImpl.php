@@ -11,7 +11,7 @@ use core\services\CopsEventServices;
  * Classe CopsEventDaoImpl
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class CopsEventDaoImpl extends LocalDaoImpl
 {
@@ -31,6 +31,21 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
         ////////////////////////////////////
         // Définition des champs spécifiques
+        $this->dbFields  = [
+            self::FIELD_ID,
+            self::FIELD_EVENT_LIBELLE,
+            self::FIELD_CATEG_ID,
+            self::FIELD_DATE_DEBUT,
+            self::FIELD_DATE_FIN,
+            self::FIELD_ALL_DAY_EVENT,
+            self::FIELD_HEURE_DEBUT,
+            self::FIELD_HEURE_FIN,
+            self::FIELD_REPEAT_STATUS,
+            self::FIELD_REPEAT_TYPE,
+            self::FIELD_REPEAT_INTERVAL,
+            self::FIELD_REPEAT_END,
+            self::FIELD_REPEAT_END_VALUE,
+        ];
         $this->dbFields_ced  = [
             self::FIELD_ID,
             self::FIELD_EVENT_ID,
@@ -38,6 +53,11 @@ class CopsEventDaoImpl extends LocalDaoImpl
             self::FIELD_DEND,
             self::FIELD_TSTART,
             self::FIELD_TEND,
+        ];
+        $this->dbFields_cec  = [
+            self::FIELD_ID,
+            self::FIELD_CATEG_LIBELLE,
+            self::FIELD_CATEG_COLOR,
         ];
         ////////////////////////////////////
 
@@ -129,38 +149,11 @@ class CopsEventDaoImpl extends LocalDaoImpl
         //////////////////////////////
     }
 
-    /**
-     * @param array $attributes
-     * @return CopsEventCategorie[]
-     */
-    public function getCopsEventCategories($attributes)
-    {
-        $request  = "SELECT id, categorieLibelle, categorieCouleur FROM ".$this->dbTable_cec." ";
-        $request .= "WHERE 1=1 ";
-        $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
-
-        $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
-        //////////////////////////////
-        // Exécution de la requête
-        $rows = MySQLClass::wpdbSelect($prepRequest);
-        //////////////////////////////
-
-        //////////////////////////////
-        // Construction du résultat
-        $objItems = [];
-        if (!empty($rows)) {
-            foreach ($rows as $row) {
-                $objItems[] = CopsEventCategorieClass::convertElement($row);
-            }
-        }
-        return $objItems;
-        //////////////////////////////
-    }
 
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.14
+     * @version v1.23.05.21
      */
     public function getEventDates(array $attributes): array
     {
@@ -169,4 +162,90 @@ class CopsEventDaoImpl extends LocalDaoImpl
         $request .= " ORDER BY %s %s LIMIT %s";
         return $this->selectListDaoImpl(new CopsEventDateClass(), $request, $attributes);
     }
+
+    /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function deleteEventDate(array $attributes): void
+    {
+        $request  = "DELETE FROM ".$this->dbTable_ced;
+        $request .= " WHERE id LIKE '%s' AND eventId LIKE '%s';";
+
+        $prepRequest = vsprintf($request, $attributes);
+
+        //////////////////////////////
+        // Exécution de la requête
+        $this->traceRequest($prepRequest);
+        MySQLClass::wpdbQuery($prepRequest);
+        //////////////////////////////
+    }
+
+    /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function insertEventDate(array $attributes): void
+    {
+        $fields = $this->dbFields_ced;
+        array_shift($fields);
+
+        $request  = "INSERT INTO ".$this->dbTable_ced." (";
+        $request .= implode(', ', $fields);
+        $request .= ") VALUES ('%s', '%s', '%s', '%s', '%s');";
+
+        $prepRequest = vsprintf($request, $attributes);
+        
+        //////////////////////////////
+        // Exécution de la requête
+        $this->traceRequest($prepRequest);
+        MySQLClass::wpdbQuery($prepRequest);
+        //////////////////////////////
+    }
+
+    /**
+     * @since v1.23.05.15
+     * @version v1.23.05.21
+     */
+    public function getEvents(array $attributes): array
+    {
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
+        $request .= " WHERE id LIKE '%s' AND dateDebut <= '%s' AND dateFin >= '%s'";
+        $request .= " ORDER BY %s %s LIMIT %s";
+        return $this->selectListDaoImpl(new CopsEventClass(), $request, $attributes);
+    }
+    /**
+     * @since v1.23.05.15
+     * @version v1.23.05.21
+     */
+    public function getEventCategories(array $attributes): array
+    {
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_cec), $this->dbTable_cec);
+        $request .= " WHERE id LIKE '%s'";
+        $request .= " ORDER BY %s %s LIMIT %s";
+        return $this->selectListDaoImpl(new CopsEventCategorieClass(), $request, $attributes);
+    }
+
+    /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function updateEvent($objEvent)
+    {
+        $request = "UPDATE ".$this->dbTable." SET ";
+        foreach ($this->dbFields as $field) {
+            if ($field==self::FIELD_ID) {
+                continue;
+            }
+            $request .= $field." = '".str_replace("'", "''", stripslashes($objEvent->getField($field)))."', ";
+        }
+        $request = substr($request, 0, -2)." WHERE id = ".$objEvent->getField(self::FIELD_ID);
+
+        //////////////////////////////
+        // Exécution de la requête
+        $this->traceRequest($request);
+        MySQLClass::wpdbQuery($request);
+        //////////////////////////////
+    }
+
 }

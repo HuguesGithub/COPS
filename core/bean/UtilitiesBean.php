@@ -10,7 +10,7 @@ use core\interfaceimpl\UrlsInterface;
  * Classe UtilitiesBean
  * @author Hugues
  * @since 1.00.00
- * @version v1.23.04.30
+ * @version v1.23.05.21
  */
 class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface, FieldsInterface
 {
@@ -299,7 +299,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
 
-    public static function fromPost(string $key): mixed
+    public static function fromPost(string $key, bool $isUrl=true): mixed
     {
         // Sanitize
         if (isset($_POST[$key])) {
@@ -307,7 +307,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
         } else {
             $strSanitized = '';
         }
-        return filter_var($strSanitized, FILTER_SANITIZE_URL);
+        return $isUrl ? filter_var($strSanitized, FILTER_SANITIZE_URL) : $strSanitized;
     }
 
     public static function fromGet(string $key): mixed

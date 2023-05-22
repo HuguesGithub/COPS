@@ -1,35 +1,39 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
+use core\utils\UrlUtils;
+
 /**
  * CopsEventBean
  * @author Hugues
- * @since 1.22.06.16
- * @version 1.22.06.16
+ * @since v1.23.05.15
+ * @version v1.23.05.21
  */
 class CopsEventBean extends CopsBean
 {
     public function __construct($objStd=null)
     {
         parent::__construct();
-        $this->obj          = ($objStd==null ? new CopsEvent() : $objStd);
-        $this->urlOnglet   .= self::ONGLET_CALENDAR;
-        $this->urlSubOnglet = $this->urlOnglet . '&amp;' . self::CST_SUBONGLET . '=';
+        $this->obj          = $objStd;
     }
 
     /**
-     * @since 1.22.06.16
-     * @version 1.22.09.23
+     * @since v1.23.05.15
+     * @version v1.23.05.21
      */
     public function getTableRow()
     {
-        $urlEdit  = $this->urlSubOnglet.self::CST_CAL_EVENT.'&amp;id='.$this->obj->getField(self::FIELD_ID);
-        $urlEdit .= self::CST_AMP.self::CST_ACTION.'='.self::CST_WRITE;
-        $urlTemplate = self::PF_TR_EVENT;
+        $urlElements = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => self::CST_CAL_EVENT,
+            self::FIELD_ID => $this->obj->getField(self::FIELD_ID),
+            self::CST_ACTION => self::CST_WRITE,
+        ];
+
+        $urlTemplate = self::WEB_PAFT_EVENT_ROW;
         $attributes = [
             // L'url vers le détail de l'event
-            $urlEdit,
+            UrlUtils::getAdminUrl($urlElements),
             // Le libellé de l'event
             $this->obj->getField(self::FIELD_EVENT_LIBELLE),
             // La catégorie de l'event

@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 interface UrlsInterface
 {
@@ -32,7 +32,10 @@ interface UrlsInterface
     public const WEB_PA_METEO_SUN           = self::WEB_PAGES_ADMIN.'page-admin-meteo-soleil.tpl';
     public const WEB_PA_CALENDAR            = self::WEB_PAGES_ADMIN.'page-admin-calendar.tpl';
     public const WEB_PA_CALENDAR_HOME       = self::WEB_PAGES_ADMIN.'page-admin-calendar-home.tpl';
+    public const WEB_PA_CALENDAR_EVENT_LIST = self::WEB_PAGES_ADMIN.'page-admin-calendar-events-list.tpl';
+    public const WEB_PA_CALENDAR_EVENT_EDIT = self::WEB_PAGES_ADMIN.'page-admin-calendar-event-edit.tpl';
     public const WEB_PAFS_CALENDAR          = self::WEB_PA_FRAGMENTS.'page-admin-fragments-section-calendar.tpl';
+    public const WEB_PAFT_EVENT_ROW         = self::WEB_PA_FRAGMENTS.'page-admin-fragments-tr-event-row.tpl';
 
     public const WEB_PP_BOARD               = self::WEB_PAGES_PUBLIC.'publique-board.tpl';
     public const WEB_PP_HOME_CONTENT        = self::WEB_PAGES_PUBLIC.'publique-home-content.tpl';

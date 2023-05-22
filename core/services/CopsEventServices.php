@@ -2,12 +2,15 @@
 namespace core\services;
 
 use core\daoimpl\CopsEventDaoImpl;
+use core\domain\CopsEventClass;
+use core\domain\CopsEventDateClass;
+use core\utils\DateUtils;
 
 /**
  * Classe CopsEventServices
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class CopsEventServices extends LocalServices
 {
@@ -101,21 +104,6 @@ class CopsEventServices extends LocalServices
   public function getCategorie($id)
   { return $this->Dao->getCopsEventCategorie($id); }
 
-  /**
-   * @return CopsEventCategorie[]
-   * @since v1.22.11.26
-   * @version v1.22.11.26
-   */
-  public function getCopsEventCategories($attributes=[])
-  {
-      if (!isset($attributes[self::SQL_ORDER_BY])) {
-          $attributes[self::SQL_ORDER_BY] = self::FIELD_CATEG_LIBELLE;
-      }
-      if (!isset($attributes[self::SQL_ORDER])) {
-          $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
-      }
-      return $this->Dao->getCopsEventCategories($attributes);
-  }
 
     /**
      * @since v1.23.05.05
@@ -158,5 +146,237 @@ class CopsEventServices extends LocalServices
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
         return $this->Dao->getEventDates($prepAttributes);
+    }
+
+    /**
+     * @since v1.23.05.15
+     * @version v1.23.05.21
+     */
+    public function getEvents(array $attributes): array
+    {
+        if ($this->Dao==null) {
+            $this->Dao = new CopsEventDaoImpl();
+        }
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_DEBUT] ?? self::CST_LAST_DATE;
+        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_FIN] ?? self::CST_FIRST_DATE;
+
+        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
+        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+
+        // Traitement spécifique pour gérer le tri multi-colonnes
+        if (!isset($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = self::FIELD_DATE_DEBUT;
+        } elseif (is_array($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = '';
+            while (!empty($attributes[self::SQL_ORDER_BY])) {
+                $orderBy .= array_shift($attributes[self::SQL_ORDER_BY]).' ';
+                $orderBy .= array_shift($attributes[self::SQL_ORDER]).', ';
+            }
+            $orderBy = substr($orderBy, 0, -2);
+            $order = '';
+        } else {
+            $orderBy = $attributes[self::SQL_ORDER_BY];
+        }
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $id,
+            $startDate,
+            $endDate,
+            $orderBy,
+            $order,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getEvents($prepAttributes);
+    }
+
+    /**
+     * @since v1.23.05.15
+     * @version v1.23.05.21
+     */
+    public function getEvent(int $id): CopsEventClass
+    {
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_ID => $id,
+            ]
+        ];
+        $objsEvent = $this->getEvents($attributes);
+        return !empty($objsEvent) ? array_shift($objsEvent) : new CopsEventClass();
+    }
+
+    /**
+     * @since v1.23.05.15
+     * @version v1.23.05.21
+    */
+    public function getEventCategories($attributes=[]): array
+    {
+        if ($this->Dao==null) {
+            $this->Dao = new CopsEventDaoImpl();
+        }
+
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+
+        $orderBy = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_CATEG_LIBELLE;
+        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+
+        $prepAttributes = [
+            $id,
+            $orderBy,
+            $order,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getEventCategories($prepAttributes);
+    }
+
+    /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function updateEvent($objEvent)
+    {
+        // Une mise à jour.
+        $this->Dao->updateEvent($objEvent);
+
+        // On doit vérifier s'il y avait des eventDate associés.
+        // Le cas échéant, on doit les supprimer.
+        $attributes = [self::FIELD_EVENT_ID => $objEvent->getField(self::FIELD_ID)];
+        $this->deleteEventDate($attributes);
+
+        // Une fois event mis à jour, on doit créer les eventDate associés.
+        $this->addEventDates($objEvent);
+    }
+
+    /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function deleteEventDate($attributes)
+    {
+        $attributes = [
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_EVENT_ID] ?? self::SQL_JOKER_SEARCH,
+        ];
+        $this->Dao->deleteEventDate($attributes);
+    }
+
+    /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function insertEventDate($objEventDate)
+    {
+        $attributes = [
+            $objEventDate->getField(self::FIELD_EVENT_ID),
+            $objEventDate->getField(self::FIELD_DSTART),
+            $objEventDate->getField(self::FIELD_DEND),
+            $objEventDate->getField(self::FIELD_TSTART),
+            $objEventDate->getField(self::FIELD_TEND),
+        ];
+        $this->Dao->insertEventDate($attributes);
+    }
+
+    /**
+     * @since v1.23.05.16
+     * @version v1.23.05.21
+     */
+    public function addEventDates($objEvent): void
+    {
+        $objEventServices = new CopsEventServices();
+        $objEventDate = new CopsEventDateClass();
+
+        // On intialise les données du premier eventDate à insérer.
+        $objEventDate->setField(self::FIELD_EVENT_ID, $objEvent->getField(self::FIELD_ID));
+        // Les dates
+        $dStart = $objEvent->getField(self::FIELD_DATE_DEBUT);
+        $objEventDate->setField(self::FIELD_DSTART, $dStart);
+        $dEnd   = $objEvent->getField(self::FIELD_DATE_FIN);
+        $objEventDate->setField(self::FIELD_DEND, $dEnd);
+        // Les heures
+        if ($objEvent->isAllDayEvent()) {
+            $tStart = 0;
+            $tEnd   = 1440;
+        } else {
+            [$h, $i, ] = explode(':', (string) $objEvent->getField(self::FIELD_HEURE_DEBUT));
+            $tStart = $i+60*(int)$h;
+            [$h, $i, ] = explode(':', (string) $objEvent->getField(self::FIELD_HEURE_FIN));
+            $tEnd   = $i+60*(int)$h;
+        }
+        $objEventDate->setField(self::FIELD_TSTART, $tStart);
+        $objEventDate->setField(self::FIELD_TEND, $tEnd);
+
+        // On récupère les valeurs d'incrément et de répétition.
+        // Ca ne sert pas pour le default, mais ça mutualise pour les autres.
+        $arrIncr = $this->getArrIncrement($objEvent);
+        $repeatEndValue = $objEvent->getField(self::FIELD_REPEAT_END_VALUE);
+
+        // Selon le type de répétition, si répétition il y a
+        switch ($objEvent->getField(self::FIELD_REPEAT_END)) {
+            case self::CST_EVENT_RT_ENDREPEAT :
+                // On répète un certain nombre de fois
+                for ($i=0; $i<$repeatEndValue; ++$i) {
+                    // On insère l'event_date
+                    $objEventServices->insertEventDate($objEventDate);
+                    // On incrémente les date de début et de fin
+                    $dStart = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
+                    $dEnd = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
+                    // On met àjour l'objet
+                    $objEventDate->setField(self::FIELD_DSTART, $dStart);
+                    $objEventDate->setField(self::FIELD_DEND, $dEnd);
+                }
+            break;
+            case self::CST_EVENT_RT_NEVER :
+                // On répète ad vitaam. Bon, techniquement, jusqu'à la dernière date.
+                $repeatEndValue = self::CST_LAST_DATE;
+            // no break
+            case self::CST_EVENT_RT_ENDDATE :
+                // On répète jusqu'à dépasser une date
+                while ($dStart<$repeatEndValue) {
+                    // On insère l'event_date
+                    $objEventServices->insertEventDate($objEventDate);
+                    // On incrémente les date de début et de fin
+                    $dStart = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
+                    $dEnd = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
+                    // On met àjour l'objet
+                    $objEventDate->setField(self::FIELD_DSTART, $dStart);
+                    $objEventDate->setField(self::FIELD_DEND, $dEnd);
+                }
+            break;
+            default :
+                // Pas de répétition
+                $objEventServices->insertEventDate($objEventDate);
+            break;
+        }
+            
+    }
+
+    /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function getArrIncrement(CopsEventClass $objEvent): array
+    {
+        $repeatInterval = $objEvent->getField(self::FIELD_REPEAT_INTERVAL);
+        switch ($objEvent->getField(self::FIELD_REPEAT_TYPE)) {
+            case self::CST_EVENT_RT_DAILY :
+                $arr = [$repeatInterval, 0, 0];
+            break;
+            case self::CST_EVENT_RT_WEEKLY :
+                $arr = [7*$repeatInterval, 0, 0];
+            break;
+            case self::CST_EVENT_RT_MONTHLY :
+                $arr = [0, $repeatInterval, 0];
+            break;
+            case self::CST_EVENT_RT_YEARLY :
+                $arr = [0, 0, $repeatInterval];
+            break;
+            default :
+                // Custom
+                // TODO
+                $arr = [0, 0, 0];
+            break;
+        }
+        return $arr;
     }
 }

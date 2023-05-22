@@ -10,7 +10,7 @@ use core\domain\MySQLClass;
  * Classe AdminPageCalendarWeekBean
  * @author Hugues
  * @since v1.23.05.04
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 {
@@ -155,7 +155,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.14
+     * @version v1.23.05.21
      */
     public function getRowAllDay(string $firstWeekDay): string
     {
@@ -182,16 +182,8 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             while (!empty($objsEventDate)) {
                 $objEventDate = array_shift($objsEventDate);
                 if ($objEventDate->getCopsEvent()->isAllDayEvent()) {
-                    if ($objEventDate->getCopsEvent()->isFirstDay($curDay)) {
+                    if ($objEventDate->getCopsEvent()->isFirstDay($curDay) || DateUtils::isMonday($curDay)) {
                         $tdContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
-                    } elseif (DateUtils::isMonday($curDay)) {
-                        // On a un événement qui est couvert par la période mais dont le premier jour
-                        // n'est pas sur la période. C'est un événement de la semaine précédente
-                        // qui déborde sur la semaine affichée.
-                        // On ne doit le traiter que si on est un lundi.
-                        $tdContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
-                    } else {
-                        // TODO : en fait, rien à faire, c'est juste Sonar qui veut un else...
                     }
                     ++$nbEvts;
                 } else {

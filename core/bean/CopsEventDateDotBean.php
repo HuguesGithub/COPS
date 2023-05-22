@@ -7,13 +7,13 @@ use core\utils\DateUtils;
  * CopsEventDateDotBean
  * @author Hugues
  * @since v1.23.05.11
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class CopsEventDateDotBean extends CopsEventDateBean
 {
     /**
      * @since v1.23.05.11
-     * @version v1.23.05.14
+     * @version v1.23.05.21
      */
     public function getCartouche(string $tag, string $displayDate): string
     {
@@ -29,10 +29,22 @@ class CopsEventDateDotBean extends CopsEventDateBean
 
         $ratio = 1190/1440;
         $strInset  = 'inset: ';
-        $intTop = round(2+$ratio*$this->objEventDate->getField(self::FIELD_TSTART));
-        $height = $this->objEventDate->getField(self::FIELD_TEND)-$this->objEventDate->getField(self::FIELD_TSTART);
-        $intHeight = round(-4+$ratio*($height));
-        $intBottom = -1*$intTop-$intHeight;
+
+        if (!$this->objEvent->isSeveralDays()) {
+            $intTop = round(2+$ratio*$this->objEventDate->getField(self::FIELD_TSTART));
+            $height = $this->objEventDate->getField(self::FIELD_TEND)-$this->objEventDate->getField(self::FIELD_TSTART);
+            $intHeight = round(-4+$ratio*($height));
+            $intBottom = -1*$intTop-$intHeight;
+        } elseif ($this->objEventDate->getField(self::FIELD_DSTART)==$displayDate) {
+            $intTop = round(2+$ratio*$this->objEventDate->getField(self::FIELD_TSTART));
+            $intBottom = -1*1190;
+        } else {
+            $intTop = 0;
+            $height = $this->objEventDate->getField(self::FIELD_TEND);
+            $intHeight = round(-4+$ratio*($height));
+            $intBottom = -1*$intHeight;
+        }
+
         $strInset .= $intTop.'px ';
         $strInset .= '0% ';
         $strInset .= $intBottom.'px ';

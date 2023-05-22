@@ -8,14 +8,13 @@ use core\utils\DateUtils;
  * CopsEventDateBean
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class CopsEventDateBean extends UtilitiesBean
 {
     public function __construct($obj)
     {
         $this->objEventDate = $obj;
-        //$this->objCopsEvent     = $this->objCopsEventDate->getCopsEvent();
     }
 
     /**

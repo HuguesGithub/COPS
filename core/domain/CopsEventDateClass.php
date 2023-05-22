@@ -10,7 +10,7 @@ use core\services\CopsEventServices;
  * Classe CopsEventDate
  * @author Hugues
  * @since 1.22.11.25
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class CopsEventDateClass extends LocalDomainClass
 {
@@ -51,15 +51,13 @@ class CopsEventDateClass extends LocalDomainClass
     
     /**
      * @version 1.22.06.13
-     * @since v1.23.05.14
+     * @since v1.23.05.21
      */
     public function getBean()
     {
         $objCopsEvent = $this->getCopsEvent();
         if ($objCopsEvent->isAllDayEvent()) {
             $objBean = new CopsEventDateAlldayBean($this);
-        } elseif ($objCopsEvent->isSeveralDays()) {
-            $objBean = new CopsEventDateLongBean($this);
         } else {
             $objBean = new CopsEventDateDotBean($this);
         }

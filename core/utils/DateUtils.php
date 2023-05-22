@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * DateUtils
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class DateUtils implements ConstantsInterface
 {
@@ -96,7 +96,7 @@ class DateUtils implements ConstantsInterface
      * Retourne au format donné le date obtenue en ajoutant $nbJours à la date passée.
      * $tmpArray attend les informations comme ça : [$nbJours, $nbMois, $nbAns]
      * @since v1.23.04.26
-     * @version v1.23.04.30
+     * @version v1.23.05.21
      */
     public static function getDateAjout(
         string $strDate,
@@ -106,7 +106,7 @@ class DateUtils implements ConstantsInterface
     {
         [$nbJours, $nbMois, $nbAns] = $tmpArray;
         [$d, $m, $y] = static::parseDate($strDate);
-        return date($dateFormat, mktime(0, 0, 0, $m+$nbMois, $d+$nbJours, $y+$nbAns));
+        return date($dateFormat, mktime(0, 0, 0, (int)$m+(int)$nbMois, (int)$d+(int)$nbJours, (int)$y+(int)$nbAns));
     }
 
     /**

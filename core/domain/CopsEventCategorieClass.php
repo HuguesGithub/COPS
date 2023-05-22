@@ -1,13 +1,13 @@
 <?php
 namespace core\domain;
 
-use core\services\CopsEventServices;
+use core\bean\CopsEventCategorieBean;
 
 /**
  * Classe CopsEventCategorieClass
  * @author Hugues
  * @since v1.23.05.03
- * @version v1.23.05.07
+ * @version v1.23.05.21
  */
 class CopsEventCategorieClass extends LocalDomainClass
 {
@@ -34,18 +34,24 @@ class CopsEventCategorieClass extends LocalDomainClass
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsEventCategorieClass';
-        $this->CopsEventServices = new CopsEventServices();
     }
 
-  /**
-   * @version 1.22.06.25
-   * @since 1.22.06.25
-   */
-  public static function convertElement($row): CopsEventCategorieClass
-  { return parent::convertRootElement(new CopsEventCategorieClass(), $row); }
+    /**
+     * @since 1.22.06.25
+     * @version 1.22.06.25
+     */
+    public static function convertElement($row): CopsEventCategorieClass
+    { return parent::convertRootElement(new CopsEventCategorieClass(), $row); }
 
-  //////////////////////////////////////////////////
-  // METHODES
-  //////////////////////////////////////////////////
+    /**
+     * @since v1.23.05.15
+     * @version v1.23.05.21
+     */
+    public function getBean(): CopsEventCategorieBean
+    { return new CopsEventCategorieBean($this); }
+
+    //////////////////////////////////////////////////
+    // METHODES
+    //////////////////////////////////////////////////
 
 }

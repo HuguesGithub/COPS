@@ -10,7 +10,7 @@ use core\domain\MySQLClass;
  * Classe AdminPageCalendarMonthBean
  * @author Hugues
  * @since v1.23.05.03
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class AdminPageCalendarMonthBean extends AdminPageCalendarBean
 {
@@ -157,7 +157,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.14
+     * @version v1.23.05.21
      */
     public function getAllDayEvents(string $displayDate): string
     {
@@ -187,15 +187,6 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
                     // n'est pas sur la période. C'est un événement de la semaine précédente
                     // qui déborde sur la semaine affichée.
                     // On ne doit le traiter que si on est un lundi.
-                    $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
-                } else {
-                    // TODO
-                }
-                ++$nbEvts;
-            } elseif ($objEventDate->getCopsEvent()->isSeveralDays()) {
-                if ($objEventDate->isFirstDay($displayDate)) {
-                    $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
-                } elseif (DateUtils::isMonday($displayDate)) {
                     $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
                 } else {
                     // TODO

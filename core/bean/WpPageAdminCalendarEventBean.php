@@ -95,40 +95,6 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
      */
     public function getOngletContent()
     {
-        /////////////////////////////////////////
-        $strButtonCreation = '';
-        $classe = 'btn btn-primary mb-3 btn-block';
-        if ($this->action==self::CST_WRITE) {
-            /////////////////////////////////////////
-            // Le bouton d'annulation.
-            $href = $this->getRefreshUrl([self::CST_ACTION=>'']);
-            $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
-            /////////////////////////////////////////
-            $mainContent = $this->getEditContent();
-        } else {
-            // Le bouton de création.
-            $href = $this->getRefreshUrl([self::CST_ACTION=>self::CST_WRITE]);
-            $label = self::LABEL_CREER_ENTREE;
-            /////////////////////////////////////////
-            $mainContent = $this->getListContent();
-        }
-        $strButtonCreation .= $this->getLink($label, $href, $classe);
-        /////////////////////////////////////////
-        
-        $urlTemplate = self::PF_SECTION_ONGLET;
-        $attributes = [
-            // L'id de la page
-            'section-cal-event',
-            // Le bouton éventuel de création / retour...
-            $strButtonCreation,
-            // Le nom du bloc du menu de gauche
-            $this->titreOnglet,
-            // La liste des éléments du menu de gauche
-            $this->getMenuContent(),
-            // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
-            $mainContent,
-        ];
-        return $this->getRender($urlTemplate, $attributes);
     }
     
     /**

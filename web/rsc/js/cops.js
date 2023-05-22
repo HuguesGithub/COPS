@@ -495,3 +495,37 @@ function csvExport(obj) {
   });
   
 }
+
+
+$('input[name="repeatEnd"]').on('click', function(){
+    if ($('#repeatEndDate').is(':checked')) {
+        $('#endDateValue').prop('readonly', false);
+        $('#endRepetitionValue').prop('readonly', true);
+    } else if ($('#repeatEndValue').is(':checked')) {
+        $('#endDateValue').prop('readonly', true);
+        $('#endRepetitionValue').prop('readonly', false);
+    } else {
+        $('#endDateValue').prop('readonly', true);
+        $('#endRepetitionValue').prop('readonly', true);
+    }
+});
+
+$('#repeatStatus').on('click', function(){
+    if ($(this).is(':checked')) {
+        $('#mec_meta_box_period_form').show();
+        $('#mec_meta_box_recursive_form').show();
+    } else {
+        $('#mec_meta_box_period_form').hide();
+        $('#mec_meta_box_recursive_form').hide();
+    }
+});
+
+$('#allDayEvent').on('click', function(){
+    if ($(this).is(':checked')) {
+        $('#heureDebut').prop('readonly', true);
+        $('#heureFin').prop('readonly', true);
+    } else {
+        $('#heureDebut').prop('readonly', false);
+        $('#heureFin').prop('readonly', false);
+    }
+});

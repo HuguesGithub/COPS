@@ -1,6 +1,7 @@
 <?php
 namespace core\domain;
 
+use core\bean\CopsEventBean;
 use core\services\CopsEventServices;
 use core\utils\DateUtils;
 
@@ -8,7 +9,7 @@ use core\utils\DateUtils;
  * Classe CopsEventClass
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.14
+ * @version v1.23.05.21
  */
 class CopsEventClass extends LocalDomainClass
 {
@@ -106,7 +107,6 @@ class CopsEventClass extends LocalDomainClass
      */
     public function checkFields(): bool
     {
-        $blnOk = true;
         if ($this->eventLibelle=='' || $this->dateDebut=='' || $this->dateFin=='') {
             $blnOk = false;
         } elseif (!$this->isValidInterval()) {
@@ -122,7 +122,7 @@ class CopsEventClass extends LocalDomainClass
                 $blnOk = false;
             }
         } else {
-            // TODO
+            $blnOk = true;
         }
         return $blnOk;
     }
