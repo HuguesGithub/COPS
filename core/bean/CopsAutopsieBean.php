@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * CopsAutopsieBean
  * @author Hugues
  * @since 1.22.10.09
- * @version 1.23.04.30
+ * @version 1.23.05.28
  */
 class CopsAutopsieBean extends CopsBean
 {
@@ -19,16 +21,14 @@ class CopsAutopsieBean extends CopsBean
     }
 
     /**
-     * @return string
      * @since 1.22.10.17
-     * @version 1.22.10.17
+     * @version v1.23.05.28
      */
-    public function getCopsAutopsieLi()
+    public function getCopsAutopsieLi(): string
     {
         $data = unserialize($this->obj->getField(self::FIELD_DATA));
         $url = $this->urlSubOnglet.'read&amp;id='.$this->obj->getField(self::FIELD_ID);
-        $attributesLi = [self::ATTR_HREF=>$url, self::ATTR_CLASS=>'text-white'];
-        $labelLi = $this->getBalise(self::TAG_A, $data['numDossier'], $attributesLi);
+        $labelLi = HtmlUtils::getLink($data['numDossier'], $url, self::CST_TEXT_WHITE);
         return $this->getBalise(self::TAG_LI, $labelLi);
     }
 
@@ -194,7 +194,7 @@ class CopsAutopsieBean extends CopsBean
     /**
      * @return string
      * @since 1.22.10.14
-     * @version 1.22.10.14
+     * @version v1.23.05.28
      */
     public function getCardSignalement()
     {
@@ -205,11 +205,7 @@ class CopsAutopsieBean extends CopsBean
         $strCorpulence = '';
         $arrCorpulence = ['1' => 'Maigre', '2' => 'Mince', '3' => 'Moyenne', '4' => 'Forte', '5' => 'Athlétique'];
         foreach ($arrCorpulence as $value => $label) {
-            $attributes = [self::ATTR_VALUE => $value];
-            if ($value==$this->data['corpulence']) {
-                $attributes['selected'] = self::CST_SELECTED;
-            }
-            $strCorpulence .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
+            $strCorpulence .= HtmlUtils::getOption($label, $value, $value==$this->data['corpulence']);
         }
         /////////////////////////////////////////////
 
@@ -218,21 +214,13 @@ class CopsAutopsieBean extends CopsBean
         $strLongueurCheveux = '';
         $arrLongueurCheveux = ['1' => 'Longs', '2' => 'Courts', '3' => 'Calvitie', '4' => 'Chauve'];
         foreach ($arrLongueurCheveux as $value => $label) {
-            $attributes = [self::ATTR_VALUE => $value];
-            if ($value==$this->data['cheveux_longueur']) {
-                $attributes['selected'] = self::CST_SELECTED;
-            }
-            $strLongueurCheveux .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
+            $strLongueurCheveux .= HtmlUtils::getOption($label, $value, $value==$this->data['cheveux_longueur']);
         }
         /////////////////////////////////////////////
         $strCoiffureCheveux = '';
         $arrCoiffureCheveux = ['1' => 'Raides', '2' => 'Ondulés', '3' => 'Frisés'];
         foreach ($arrCoiffureCheveux as $value => $label) {
-            $attributes = [self::ATTR_VALUE => $value];
-            if ($value==$this->data['cheveux_coiffure']) {
-                $attributes['selected'] = self::CST_SELECTED;
-            }
-            $strCoiffureCheveux .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
+            $strCoiffureCheveux .= HtmlUtils::getOption($label, $value, $value==$this->data['cheveux_coiffure']);
         }
         /////////////////////////////////////////////
 
@@ -374,11 +362,10 @@ class CopsAutopsieBean extends CopsBean
     }
 
     /**
-     * @return string
      * @since 1.22.10.14
-     * @version 1.22.10.14
+     * @version v1.23.05.28
      */
-    public function getCardEnquete()
+    public function getCardEnquete(): string
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-card-autopsie-enquete.php';
 
@@ -388,12 +375,10 @@ class CopsAutopsieBean extends CopsBean
         $strContent = '';
         while (!empty($objsCopsEnquete)) {
             $objCopsEnquete = array_shift($objsCopsEnquete);
-            $attributes = [self::ATTR_VALUE => $objCopsEnquete->getField(self::FIELD_ID)];
-            if ($objCopsEnquete->getField(self::FIELD_ID)==$this->obj->getField(self::FIELD_IDX_ENQUETE)) {
-                $attributes['selected'] = 'selected';
-            }
             $label = $objCopsEnquete->getField(self::FIELD_NOM_ENQUETE);
-            $strContent .= $this->getBalise(self::TAG_OPTION, $label, $attributes);
+            $value = $objCopsEnquete->getField(self::FIELD_ID);
+            $blnSelected = $objCopsEnquete->getField(self::FIELD_ID)==$this->obj->getField(self::FIELD_IDX_ENQUETE);
+            $strContent .= HtmlUtils::getOption($label, $value, $blnSelected);
         }
 
         $attributes = [$strContent];

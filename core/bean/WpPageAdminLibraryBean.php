@@ -7,12 +7,13 @@ use core\services\CopsIndexServices;
 use core\services\CopsStageServices;
 use core\services\WpCategoryServices;
 use core\services\WpPostServices;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminLibraryBean
  * @author Hugues
  * @since 1.22.05.30
- * @version 1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminLibraryBean extends WpPageAdminBean
 {
@@ -62,17 +63,17 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
             $buttonContent = $this->getBalise(self::TAG_SPAN, $this->titreOnglet, $spanAttributes);
             $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         } else {
-            $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
+            $buttonContent = HtmlUtils::getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
             $buttonAttributes = [self::ATTR_CLASS=>($this->btnDark)];
         }
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
     }
 
     /**
      * @since 1.22.05.30
-     * @version 1.22.11.05
+     * @version v1.23.05.28
      */
-    public function getOngletContent()
+    public function getOngletContent(): string
     {
         $urlTemplate = self::WEB_PPFS_ONGLET_MENU_PANEL;
         $strContent = '';
@@ -86,7 +87,7 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
             $strContent .= $this->getRender($urlTemplate, $attributes);
         }
       
-        return $this->getDiv($strContent, [self::ATTR_CLASS=>'row']);
+        return HtmlUtils::getDiv($strContent, [self::ATTR_CLASS=>'row']);
     }
     
    /**

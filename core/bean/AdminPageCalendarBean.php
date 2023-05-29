@@ -2,13 +2,14 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageCalendrierBean
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.05.07
+ * @version v1.23.05.28
  */
 class AdminPageCalendarBean extends AdminPageBean
 {
@@ -31,14 +32,14 @@ class AdminPageCalendarBean extends AdminPageBean
 
     /**
      * @since v1.23.05.01
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getContentPage(): string
     {
         // On récupère l'éventuel subonglet.
         $curSubOnglet = $this->initVar(self::CST_SUBONGLET);
         // On récupère la date du jour.
-        $curStrDate = $this->initVar(self::CST_CAL_CURDAY, DateUtils::getCopsDate(self::FORMAT_DATE_YMD));
+        $this->curStrDate = $this->initVar(self::CST_CAL_CURDAY, DateUtils::getCopsDate(self::FORMAT_DATE_YMD));
 
         /////////////////////////////////////////
         // Construction du menu
@@ -53,13 +54,13 @@ class AdminPageCalendarBean extends AdminPageBean
 
         /////////////////////////////////////////
         // Construction des onglets
-        $urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR, self::CST_CAL_CURDAY=>$curStrDate];
+        $urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR, self::CST_CAL_CURDAY=>$this->curStrDate];
         $strLis = '';
         foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
             $urlAttributes[self::CST_SUBONGLET] = $slugSubOnglet;
 
             $blnActive = ($curSubOnglet==$slugSubOnglet || $curSubOnglet=='' && $slugSubOnglet==self::CST_HOME);
-            $strLink = $this->getLink(
+            $strLink = HtmlUtils::getLink(
                 $arrData[self::FIELD_LABEL],
                 UrlUtils::getAdminUrl($urlAttributes),
                 self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
@@ -71,11 +72,11 @@ class AdminPageCalendarBean extends AdminPageBean
         
         /////////////////////////////////////////
         // Construction du Breadcrumbs
-        $this->styleBreadCrumbs = 'breadcrumb-item float-left';
-        $strLink = $this->getLink('<i class="feather icon-home"></i>', UrlUtils::getAdminUrl(), '');
+        $this->styleBreadCrumbs = 'breadcrumb-item '.self::CSS_FLOAT_LEFT;
+        $strLink = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_HOUSE), UrlUtils::getAdminUrl(), '');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
         $urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR];
-        $strLink = $this->getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($urlAttributes), '');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
         /////////////////////////////////////////
 
@@ -131,7 +132,7 @@ class AdminPageCalendarBean extends AdminPageBean
 
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getFcDayClass(string $strDate): string
     {
@@ -159,38 +160,49 @@ class AdminPageCalendarBean extends AdminPageBean
         return $strClass;
     }
 
-
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
-    public function getColumnHoraire($h)
+    public function getColumnHoraire(int $h): string
     {
         $hPadded = str_pad((string) $h, 2, '0', STR_PAD_LEFT);
-        $cushionAttributes = [self::ATTR_CLASS=>'fc-timegrid-slot-label-cushion fc-scrollgrid-shrink-cushion'];
-        $shrinkCushion = $this->getDiv(date('ga', mktime($h, 0, 0)), $cushionAttributes);
-        $frameAttributes = [self::ATTR_CLASS=>'fc-timegrid-slot-label-frame fc-scrollgrid-shrink-frame'];
-        $shrinkFrame = $this->getDiv($shrinkCushion, $frameAttributes);
+        $cushionAttributes = [
+            self::ATTR_CLASS=>self::CST_FC_TIMEGRID_SLOT_LABEL_CUSHION.' '.self::CST_FC_SCROLLGRID_SHRINK_CUSHION
+        ];
+        $shrinkCushion = HtmlUtils::getDiv(DateUtils::getStrDate('ga', mktime($h, 0, 0)), $cushionAttributes);
+        $frameAttributes = [
+            self::ATTR_CLASS=>self::CST_FC_TIMEGRID_SLOT_LABEL_FRAME.' '.self::CST_FC_SCROLLGRID_SHRINK_FRAME
+        ];
+        $shrinkFrame = HtmlUtils::getDiv($shrinkCushion, $frameAttributes);
         $tdAttributes = [
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink',
-            'data-time' => $hPadded.':00:00'
+            self::ATTR_CLASS => self::CST_FC_TIMEGRID_SLOT_LABEL.' '.self::CST_FC_SCROLLGRID_SHRINK,
+            self::ATTR_DATA => [
+                self::ATTR_TIME => $hPadded.':00:00'
+            ],
         ];
         $firstRow = $this->getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
         
         $tdAttributes = [
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane',
-            'data-time' => $hPadded.':00:00'
+            self::ATTR_CLASS => self::CST_FC_TIMEGRID_SLOT_LANE,
+            self::ATTR_DATA => [
+                self::ATTR_TIME => $hPadded.':00:00'
+            ],
         ];
         $firstRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         
         $tdAttributes = [
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00'
+            self::ATTR_CLASS => self::CST_FC_TIMEGRID_SLOT_LABEL.' '.self::CST_FC_TIMEGRID_SLOT_MINOR,
+            self::ATTR_DATA => [
+                self::ATTR_TIME => $hPadded.':30:00'
+            ],
         ];
         $secondRow = $this->getBalise(self::TAG_TD, '', $tdAttributes);
         $tdAttributes = [
-            self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00'
+            self::ATTR_CLASS => self::CST_FC_TIMEGRID_SLOT_LANE.' '.self::CST_FC_TIMEGRID_SLOT_MINOR,
+            self::ATTR_DATA => [
+                self::ATTR_TIME => $hPadded.':30:00'
+            ],
         ];
         $secondRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         

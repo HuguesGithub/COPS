@@ -3,13 +3,14 @@ namespace core\bean;
 
 use core\services\CopsSoleilServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoSunBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class AdminPageMeteoSunBean extends AdminPageMeteoBean
 {
@@ -17,6 +18,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
      * Affichage des données de la table wp_7_cops_soleil pour une semaine donnée.
      * Par défaut, la semaine affichée est la semaine comprenant la journée ingame.
      * @since v1.23.04.26
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -48,35 +50,35 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         $objsCopsSoleil = $objCopsSoleilServices->getSoleilsIntervalle($attributes);
 
         // Construction du Header et du Body
-        $strHeader  = $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $strHeader  = HtmlUtils::getTh(self::CST_NBSP);
         // On doit ajouter une 2è colonne pour passer à la semaine précédente
-        $label = $this->getButton($this->getIcon(self::I_ANGLE_LEFT, 'feather icon-chevron-left'));
+        $label = HtmlUtils::getButton(HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'feather icon-chevron-left'));
         $strPrevDate = DateUtils::getDateAjout($strDateStartWeek, [-7, 0, 0], self::FORMAT_DATE_YMD);
         $urlAttributes = [
             self::CST_ONGLET    => self::ONGLET_METEO,
             self::CST_SUBONGLET => self::CST_SUN,
             self::CST_DATE      => $strPrevDate,
         ];
-        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
-        $strHeader .= $this->getBalise(self::TAG_TH, $link);
+        $link = HtmlUtils::getLink($label, UrlUtils::getAdminUrl($urlAttributes));
+        $strHeader .= HtmlUtils::getTh($link);
         $strBody = $this->getFirstColumn();
         // On doit ajouter une 2è colonne vide
-        $strBody .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $strBody .= HtmlUtils::getTh(self::CST_NBSP);
 
         while (!empty($objsCopsSoleil)) {
             $objCopsSoleil = array_shift($objsCopsSoleil);
-            $strHeader .= $this->getBalise(self::TAG_TH, $objCopsSoleil->getHeaderDate());
+            $strHeader .= HtmlUtils::getTh($objCopsSoleil->getHeaderDate());
             $strBody .= $objCopsSoleil->getBean()->getColumn();
         }
 
         // On doit ajouter une dernière colonne pour passer à la semaine suivante
-        $label = $this->getButton($this->getIcon(self::I_ANGLE_RIGHT, 'feather icon-chevron-right'));
+        $label = HtmlUtils::getButton(HtmlUtils::getIcon(self::I_ANGLE_RIGHT, 'feather icon-chevron-right'));
         $strNextDate = DateUtils::getDateAjout($strDateStartWeek, [7, 0, 0], self::FORMAT_DATE_YMD);
         $urlAttributes[self::CST_DATE] = $strNextDate;
-        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
-        $strHeader .= $this->getBalise(self::TAG_TH, $link);
+        $link = HtmlUtils::getLink($label, UrlUtils::getAdminUrl($urlAttributes));
+        $strHeader .= HtmlUtils::getTh($link);
         // On doit ajouter une dernière colonne vide
-        $strBody .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $strBody .= HtmlUtils::getTh(self::CST_NBSP);
 
         $strHeader = $this->getBalise(self::TAG_TR, $strHeader);
         $strBody = $this->getBalise(self::TAG_TR, $strBody, [self::ATTR_STYLE=>'height: 288px;']);
@@ -86,7 +88,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.27
-     * @version v1.23.04.30
+     * @version v1.23.05.28
      */
     public function getFirstColumn(): string
     {
@@ -99,7 +101,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
             self::ATTR_STYLE => 'position: relative; height: 100%; width: 100px;',
         ];
 
-        return $this->getBalise(self::TAG_TH, $tdContent, $attributes);
+        return HtmlUtils::getTh($tdContent, $attributes);
     }
 
     /**

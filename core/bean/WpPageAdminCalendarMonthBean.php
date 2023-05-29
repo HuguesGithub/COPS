@@ -1,14 +1,15 @@
 <?php
 namespace core\bean;
 
-use core\utils\DateUtils;
 use core\services\CopsEventServices;
+use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminCalendarMonthBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.14
+ * @version v1.23.05.28
  */
 class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 {
@@ -26,7 +27,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         $buttonContent = $this->getBalise(self::TAG_SPAN, $this->titreSubOnglet, $spanAttributes);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
 
@@ -73,8 +74,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $viewContent = $this->getRender($urlTemplate, $attributes);
         /////////////////////////////////////////
         
-        $this->prevCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m-1, $d, $y));
-        $this->nextCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m+1, $d, $y));
+        $this->prevCurday = DateUtils::getStrDate(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m-1, $d, $y));
+        $this->nextCurday = DateUtils::getStrDate(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m+1, $d, $y));
         
         $tsCopsDate = mktime(0, 0, 0, $m, $d, $y);
         $calendarHeader = DateUtils::arrFullMonths[date('m', $tsCopsDate)*1].date(' Y', $tsCopsDate);
@@ -107,7 +108,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 
         $urlElements = [
             self::CST_ONGLET => self::ONGLET_CALENDAR,
-            self::CST_CAL_CURDAY => date(self::FORMAT_DATE_MDY, $tsDisplay)
+            self::CST_CAL_CURDAY => DateUtils::getStrDate(self::FORMAT_DATE_MDY, $tsDisplay)
         ];
         
         // Construction de la cellule
@@ -115,40 +116,40 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
             $aHref = $this->getUrl($urlElements);
             $aClass = 'fc-daygrid-day-number text-white';
-            $divContent = $this->getLink(date('W', $tsDisplay), $aHref, $aClass);
+            $divContent = HtmlUtils::getLink(date('W', $tsDisplay), $aHref, $aClass);
             $divAttributes = [
                 self::ATTR_CLASS => 'badge bg-primary',
                 self::ATTR_STYLE => 'position: absolute; left: 2px; top: 2px'
             ];
-            $strWeekLink = $this->getDiv($divContent, $divAttributes);
+            $strWeekLink = HtmlUtils::getDiv($divContent, $divAttributes);
         } else {
             $strWeekLink = '';
         }
         
         $urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
         $url = $this->getUrl($urlElements);
-        $strLink = $this->getLink(date('d', $tsDisplay), $url, 'fc-daygrid-day-number text-white');
+        $strLink = HtmlUtils::getLink(date('d', $tsDisplay), $url, 'fc-daygrid-day-number text-white');
         
-        $strContent  = $this->getDiv($strWeekLink.$strLink, [self::ATTR_CLASS=>'fc-daygrid-day-top']);
+        $strContent  = HtmlUtils::getDiv($strWeekLink.$strLink, [self::ATTR_CLASS=>'fc-daygrid-day-top']);
         $attr = [self::ATTR_CLASS=>'fc-daygrid-day-events'];
-        $strContent .= $this->getDiv($this->getAllDayEvents($tsDisplay), $attr);
-        $strContent .= $this->getDiv('', [self::ATTR_CLASS=>'fc-daygrid-day-bg']);
+        $strContent .= HtmlUtils::getDiv($this->getAllDayEvents($tsDisplay), $attr);
+        $strContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>'fc-daygrid-day-bg']);
         
         $divAttributes = [self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner'];
-        $divContent = $this->getDiv($strContent, $divAttributes);
+        $divContent = HtmlUtils::getDiv($strContent, $divAttributes);
         
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
-            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            'data-date' => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
     }
     
     /**
      * @since v1.22.11.22
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
-    public function getAllDayEvents($tsDisplay)
+    public function getAllDayEvents(int $tsDisplay): string
     {
         $strContent = '';
         /////////////////////////////////////////
@@ -156,8 +157,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         $attributes = [
             self::SQL_WHERE_FILTERS => [
                 self::FIELD_ID => '%',
-                self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
-                self::FIELD_DEND => date(self::FORMAT_DATE_YMD, $tsDisplay)
+                self::FIELD_DSTART => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
+                self::FIELD_DEND => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
             ],
             self::SQL_ORDER_BY => ['dStart', 'dEnd'],
             self::SQL_ORDER => ['ASC', 'DESC']
@@ -167,8 +168,8 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {
             $objCopsEventDate = array_shift($objsCopsEventDate);
-            if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
-                if ($objCopsEventDate->getCopsEvent()->isFirstDay($tsDisplay)) {
+            if ($objCopsEventDate->getEvent()->isAllDayEvent()) {
+                if ($objCopsEventDate->getEvent()->isFirstDay($tsDisplay)) {
                     $tag = self::CST_CAL_MONTH;
                     $strContent .= $objCopsEventDate->getBean()->getCartouche($tag, $tsDisplay, $nbEvts);
                 } elseif (date('N', $tsDisplay)==1) {
@@ -191,7 +192,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
             self::ATTR_CLASS => 'fc-daygrid-day-bottom',
             self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;'
         ];
-        $divBottom = $this->getDiv('', $botAttributes);
+        $divBottom = HtmlUtils::getDiv('', $botAttributes);
         /////////////////////////////////////////
 
         return $strContent.$divBottom;

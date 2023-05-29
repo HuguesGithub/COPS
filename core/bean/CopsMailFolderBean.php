@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe CopsMailFolderBean
  * @author Hugues
  * @since 1.22.05.02
- * @version 1.22.05.02
+ * @version v1.23.05.28
  */
 class CopsMailFolderBean extends UtilitiesBean
 {
@@ -22,14 +21,14 @@ class CopsMailFolderBean extends UtilitiesBean
 
   /**
    * @since 1.22.05.02
-   * @version 1.22.05.02
+   * @version v1.23.05.28
    */
   public function getMenuFolder($activeSlug='')
   {
     $slug = $this->CopsMailFolder->getField(self::FIELD_SLUG);
     $nbMailsNonLus = $this->CopsMailFolder->getNombreMailsNonLus([self::FIELD_SLUG=>$slug]);
     if ($nbMailsNonLus!=0) {
-        $badgeAttr = [self::ATTR_CLASS=>'badge bg-primary float-right'];
+        $badgeAttr = [self::ATTR_CLASS=>'badge bg-primary '.self::CSS_FLOAT_RIGHT];
       $strBadge = $this->getBalise(self::TAG_SPAN, $nbMailsNonLus, $badgeAttr);
     } else {
       $strBadge = '';

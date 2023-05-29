@@ -1,13 +1,14 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoBean
  * @author Hugues
  * @since 1.23.04.20
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class AdminPageMeteoBean extends AdminPageBean
 {
@@ -33,6 +34,7 @@ class AdminPageMeteoBean extends AdminPageBean
 
     /**
      * @since 1.23.04.20
+     * @version v1.23.05.28
      */
     public function getContentPage(): string
     {
@@ -54,7 +56,7 @@ class AdminPageMeteoBean extends AdminPageBean
             $urlAttributes[self::CST_SUBONGLET] = $slugSubOnglet;
 
             $blnActive = ($curSubOnglet==$slugSubOnglet || $curSubOnglet=='' && $slugSubOnglet==self::CST_HOME);
-            $strLink = $this->getLink(
+            $strLink = HtmlUtils::getLink(
                 $arrData[self::FIELD_LABEL],
                 UrlUtils::getAdminUrl($urlAttributes),
                 self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
@@ -75,7 +77,7 @@ class AdminPageMeteoBean extends AdminPageBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.04.30
+     * @version v1.23.05.28
      */
     public function getCard(string $strCompteRendu=''): string
     {
@@ -85,12 +87,12 @@ class AdminPageMeteoBean extends AdminPageBean
 
         if ($strCompteRendu!='') {
             $attributes = [self::ATTR_CLASS=>'alert alert-primary', self::ATTR_ROLE=>'alert'];
-            $strBody .= $this->getDiv($strCompteRendu, $attributes);
+            $strBody .= HtmlUtils::getDiv($strCompteRendu, $attributes);
         }
 
-        $strCardHeader = $this->getDiv($titre, [self::ATTR_CLASS=>'card-header']);
-        $strCardBody = $this->getDiv($strBody, [self::ATTR_CLASS=>'card-body']);
+        $strCardHeader = HtmlUtils::getDiv($titre, [self::ATTR_CLASS=>'card-header']);
+        $strCardBody = HtmlUtils::getDiv($strBody, [self::ATTR_CLASS=>'card-body']);
 
-        return $this->getDiv($strCardHeader.$strCardBody, [self::ATTR_CLASS=>'card col mx-1 p-0']);
+        return HtmlUtils::getDiv($strCardHeader.$strCardBody, [self::ATTR_CLASS=>'card col mx-1 p-0']);
     }
 }

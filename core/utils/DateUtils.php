@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * DateUtils
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class DateUtils implements ConstantsInterface
 {
@@ -111,7 +111,7 @@ class DateUtils implements ConstantsInterface
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
     public static function getStrDate(string $strFormat, string|int $when): string
     {
@@ -158,8 +158,11 @@ class DateUtils implements ConstantsInterface
                 $w = date('w', mktime(0, 0, 0, $m, $d, $y));
                 $strFormatted = static::$arrShortDays[$w*1].' '.$d.'/'.$m;
             break;
-            case 'N' :
-            case 'W' :
+            case 'N'   :
+            case 'W'   :
+            case 'ga'  :
+            case 'Ymd' :
+            case 'd m y h i s' :
             case self::FORMAT_DATE_YMD :
                 $tsDisplay = mktime($h, $i, $s, $m, $d, $y);
                 $strFormatted = date($strFormat, $tsDisplay);

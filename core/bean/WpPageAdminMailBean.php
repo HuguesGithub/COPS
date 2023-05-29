@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminMailBean
  * @author Hugues
  * @since 1.22.04.29
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminMailBean extends WpPageAdminBean
 {
@@ -43,9 +44,9 @@ class WpPageAdminMailBean extends WpPageAdminBean
 
         /////////////////////////////////////////
         // Construction du Breadcrumbs
-        $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDark)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
         
         $id = $this->initVar(self::FIELD_ID);
@@ -288,11 +289,10 @@ class WpPageAdminMailBean extends WpPageAdminBean
     */
     
     /**
-     * @return string
      * @since v1.22.11.11
-     * @version v1.22.11.11
+     * @version v1.23.05.28
      */
-    public function getMenuContent()
+    public function getMenuContent(): string
     {
         /////////////////////////////////////////
         // On va définir la liste des éléments du menu de gauche.
@@ -301,9 +301,9 @@ class WpPageAdminMailBean extends WpPageAdminBean
             if (!isset($arrMenu[self::FIELD_ICON])) {
                 continue;
             }
-            $aContent = $this->getIcon($arrMenu[self::FIELD_ICON]).self::CST_NBSP.$arrMenu[self::FIELD_LABEL];
+            $aContent = HtmlUtils::getIcon($arrMenu[self::FIELD_ICON]).self::CST_NBSP.$arrMenu[self::FIELD_LABEL];
             $href = $this->getUrl([self::CST_SUBONGLET => $key]);
-            $liContent = $this->getLink($aContent, $href, 'nav-link text-white');
+            $liContent = HtmlUtils::getLink($aContent, $href, 'nav-link text-white');
             
             // Si le slug affiché vaut celui du menu ou qu'on est sur la vue par défaut est le menu est inbox
             $blnActive = ($this->slugSubOnglet==$key || $this->slugSubOnglet=='' && $key==self::CST_MAIL_INBOX);
@@ -324,30 +324,30 @@ class WpPageAdminMailBean extends WpPageAdminBean
     
     /**
      * @since v1.22.11.11
-     * @version v1.22.11.11
+     * @version v1.23.05.28
      */
-    public function getOngletContent()
+    public function getOngletContent(): string
     {
         ///////////////////////////////////////////////////////////////////
         // Bouton de retour
         $urlElements = [self::CST_SUBONGLET => $this->objCopsMailJoint->getMailFolder()->getField(self::FIELD_SLUG)];
         $href = $this->getOngletUrl($urlElements);
         $label = self::LABEL_RETOUR;
-        $btnContent  = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP;
-        $btnContent .= $this->getLink($label, $href, self::CST_TEXT_WHITE);
+        $btnContent  = HtmlUtils::getIcon(self::I_ANGLES_LEFT).self::CST_NBSP;
+        $btnContent .= HtmlUtils::getLink($label, $href, self::CST_TEXT_WHITE);
         $btnAttributes = [
             self::ATTR_TITLE => $label,
-            self::ATTR_CLASS => 'btn btn-default btn-primary col-4 mb-3'];
-        $strButtonRetour = $this->getBalise(self::TAG_BUTTON, $btnContent, $btnAttributes);
+            self::ATTR_CLASS => 'btn-primary col-4 mb-3'];
+        $strButtonRetour = HtmlUtils::getButton($btnContent, $btnAttributes);
         // Bouton de création d'un message
         $urlElements = [self::CST_SUBONGLET=>self::CST_WRITE];
         $href = $this->getOngletUrl($urlElements);
-        $btnContent = $this->getLink(self::LABEL_WRITE_MAIL, $href, self::CST_TEXT_WHITE);
+        $btnContent = HtmlUtils::getLink(self::LABEL_WRITE_MAIL, $href, self::CST_TEXT_WHITE);
         $btnAttributes = [
             self::ATTR_TITLE => self::LABEL_WRITE_MAIL,
-            self::ATTR_CLASS => 'btn btn-default btn-primary col-8 mb-3'
+            self::ATTR_CLASS => 'btn-primary col-8 mb-3'
         ];
-        $strButtonRetour .= $this->getBalise(self::TAG_BUTTON, $btnContent, $btnAttributes);
+        $strButtonRetour .= HtmlUtils::getButton($btnContent, $btnAttributes);
 
         if ($this->slugSubOnglet==self::CST_MAIL_READ) {
             $mainContent = $this->getReadMessageBlock();
@@ -406,9 +406,9 @@ class WpPageAdminMailBean extends WpPageAdminBean
 
     /**
      * @since 1.22.05.04
-     * @version 1.22.11.12
+     * @version v1.23.05.28
      */
-    public function getWriteMessageBlock()
+    public function getWriteMessageBlock(): string
     {
         /////////////////////////////////////////////////////////////////
         // Vient-on de poster un nouveau message ?
@@ -419,7 +419,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
         $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         $buttonContent = $this->getBalise(self::TAG_SPAN, 'Rédiger', $spanAttributes);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////////////////////////////
         
         $objCopsMail = $this->objCopsMailJoint->getMail();
@@ -452,9 +452,9 @@ class WpPageAdminMailBean extends WpPageAdminBean
      /**
       * @return string
       * @since v1.22.11.12
-      * @version v1.22.11.12
+      * @version v1.23.05.28
       */
-     public function getExpediteurOptions()
+     public function getExpediteurOptions(): string
      {
          $strExpediteurOptions = '';
          $id = $this->CopsPlayer->getField(self::FIELD_ID);
@@ -466,16 +466,15 @@ class WpPageAdminMailBean extends WpPageAdminBean
              $strExpediteurOptions .= '<option value="2">COPS 101</option>';
          }
          $label = $objMailUser->getField('user');
-         $optAttributes = [self::ATTR_VALUE=>$objMailUser->getField(self::FIELD_ID)];
-         $strExpediteurOptions .= $this->getBalise(self::TAG_OPTION, $label, $optAttributes);
+         $strExpediteurOptions .= HtmlUtils::getOption($label, $objMailUser->getField(self::FIELD_ID));
          return $strExpediteurOptions;
      }
      
     /**
      * @since 1.22.05.06
-     * @version 1.22.11.11
+     * @version v1.23.05.28
      */
-    public function getReadMessageBlock()
+    public function getReadMessageBlock(): string
     {
         //////////////////////////////////////////////////
         // On marque le message comme lu
@@ -487,7 +486,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
         $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         $buttonContent = $this->getBalise(self::TAG_SPAN, 'Lecture', $spanAttributes);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
 
         //////////////////////////////////////////////////
         // Construction de la chaine de réception
@@ -511,17 +510,15 @@ class WpPageAdminMailBean extends WpPageAdminBean
         $urlRemove = $this->getOngletUrl($urlElements);
         
         // Les boutons centraux en haut :
-        $buttonContent = $this->getLink($this->getIcon('trash-alt'), $urlRemove, self::CST_TEXT_WHITE);
-        $strButton = $this->getButton($buttonContent, [self::ATTR_TITLE=>self::LABEL_DELETE]);
-        $strButtonCentral = $this->getDiv($strButton, [self::ATTR_CLASS=>'btn-group']);
+        $buttonContent = HtmlUtils::getLink(HtmlUtils::getIcon('trash-alt'), $urlRemove, self::CST_TEXT_WHITE);
+        $strButton = HtmlUtils::getButton($buttonContent, [self::ATTR_TITLE=>self::LABEL_DELETE]);
+        $strButtonCentral = HtmlUtils::getDiv($strButton, [self::ATTR_CLASS=>'btn-group']);
         
         // Les boutons en bas à gauche
         $buttonAttributes = [
-            self::ATTR_TYPE => self::TAG_BUTTON,
-            self::ATTR_CLASS => 'btn btn-default',
             self::ATTR_TITLE => self::LABEL_DELETE
         ];
-        $strButtonLeft = $this->getBalise(self::TAG_BUTTON, $buttonContent.' '.self::LABEL_DELETE, $buttonAttributes);
+        $strButtonLeft = HtmlUtils::getButton($buttonContent.' '.self::LABEL_DELETE, $buttonAttributes);
         
         /**
          * TODO
@@ -561,8 +558,8 @@ class WpPageAdminMailBean extends WpPageAdminBean
         }
         $url = $this->getOngletUrl($arrUrlElements);
         $aContent = '<i class="fa-solid fa-chevron-left"></i>';
-        $buttonContent = $this->getLink($aContent, $url, 'btn btn-tool', ['title'=>'Précédent']);
-        $cardTools = $this->getButton($buttonContent, [self::ATTR_CLASS=>'btn-dark']);
+        $buttonContent = HtmlUtils::getLink($aContent, $url, 'btn btn-tool', ['title'=>'Précédent']);
+        $cardTools = HtmlUtils::getButton($buttonContent, [self::ATTR_CLASS=>'btn-dark']);
         
         // Mail suivant ou folder du mail si aucun mail suivant
         $objPrevMailJoint = $this->CopsMailServices->getPrevNextMailJoint($this->objCopsMailJoint, false);
@@ -576,8 +573,8 @@ class WpPageAdminMailBean extends WpPageAdminBean
         }
         $url = $this->getOngletUrl($arrUrlElements);
         $aContent = '<i class="fa-solid fa-chevron-right"></i>';
-        $buttonContent = $this->getLink($aContent, $url, 'btn btn-tool', ['title'=>'Suivant']);
-        $cardTools .= $this->getButton($buttonContent, [self::ATTR_CLASS=>'btn-dark']);
+        $buttonContent = HtmlUtils::getLink($aContent, $url, 'btn btn-tool', ['title'=>'Suivant']);
+        $cardTools .= HtmlUtils::getButton($buttonContent, [self::ATTR_CLASS=>'btn-dark']);
         //////////////////////////////////////////////////
         
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-inbox-read.php';
@@ -640,15 +637,15 @@ class WpPageAdminMailBean extends WpPageAdminBean
     
     /**
      * @since 1.22.11.17
-     * @version 1.22.11.17
+     * @version v1.23.05.28
      */
-    public function getOngletContentMutual($labelDossier, $idPage)
+    public function getOngletContentMutual(string $labelDossier, int $idPage): string
     {
         ///////////////////////////////////////////////////////////////////
         // Bouton de création d'un nouveau message
         $urlElements = [self::CST_SUBONGLET=>self::CST_WRITE];
         $href = $this->getOngletUrl($urlElements);
-        $strButtonRetour = $this->getLink(self::LABEL_WRITE_MAIL, $href, 'btn btn-primary btn-block mb-3');
+        $strButtonRetour = HtmlUtils::getLink(self::LABEL_WRITE_MAIL, $href, 'btn btn-primary btn-block mb-3');
         
         ///////////////////////////////////////////////////////////////////
         // Récupération des mails du dossier affiché pour l'utilisateur courant

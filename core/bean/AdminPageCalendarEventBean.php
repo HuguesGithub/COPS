@@ -4,19 +4,20 @@ namespace core\bean;
 use core\bean\UtilitiesBean;
 use core\domain\CopsEventClass;
 use core\services\CopsEventServices;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * Classe AdminPageCalendarEventBean
  * @author Hugues
  * @since v1.23.05.15
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class AdminPageCalendarEventBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.15
-     * @version v1.23.05.21
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -28,10 +29,14 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         /////////////////////////////////////////
 
         /////////////////////////////////////////
-        // Si on a une action de formulaire qui est soumise
-        // TODO : envisage un fromGet pour une suppression ?
-        if (static::fromPost(self::CST_WRITE_ACTION)!='') {
+        // Si writeAction est défini, par formulaire pour Write, par url pour Delete
+        $writeAction = static::initVar(self::CST_WRITE_ACTION);
+        if ($writeAction==self::CST_WRITE) {
             $this->dealWithWriteAction();
+        } elseif ($writeAction==self::CST_DELETE) {
+            $this->dealWithDeleteAction();
+        } else {
+            // TODO : vraiment relou cette obligation de else
         }
         /////////////////////////////////////////
 
@@ -43,17 +48,14 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             self::CST_ONGLET => self::ONGLET_CALENDAR,
             self::CST_SUBONGLET => self::CST_CAL_EVENT
         ];
-        $strLink = $this->getLink(self::LABEL_EVENTS, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_EVENTS, UrlUtils::getAdminUrl($urlAttributes));
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
-
-        // Récupération du contenu principal
-        $strCards = $this->getCard();
 
         // Construction et renvoi du template
         $attributes = [
             $this->strBreadcrumbs,
             $strNavigation,
-            $strCards,
+            $this->getCard(),
         ];
         return $this->getRender(self::WEB_PA_CALENDAR, $attributes);
     }
@@ -66,14 +68,58 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
     {
         if ($this->action==self::CST_WRITE) {
             return $this->getEditContent();
+        } elseif ($this->action==self::CST_DELETE) {
+            return $this->getDeleteContent();
         } else {
             return $this->getListContent();
         }
     }
 
     /**
+     * @since v1.23.05.25
+     * @version v1.23.05.28
+     */
+    public function getDeleteContent(): string
+    {
+        $objCopsEventServices = new CopsEventServices();
+        $objCopsEvent = $objCopsEventServices->getEvent($this->id);
+
+        $msgAttributes = [$objCopsEvent->getField(self::FIELD_EVENT_LIBELLE), $this->id];
+        $strMessage  = vsprintf(self::DYN_DELETE_EVENT, $msgAttributes);
+        $urlAttributes = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => self::CST_CAL_EVENT,
+            self::CST_CURPAGE => $this->curPage,
+        ];
+        $urlAnnulation = UrlUtils::getAdminUrl($urlAttributes);
+        $urlAttributes = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => self::CST_CAL_EVENT,
+            self::CST_WRITE_ACTION => self::CST_DELETE,
+            self::FIELD_ID => $this->id,
+        ];
+        $urlSuppression = UrlUtils::getAdminUrl($urlAttributes);
+
+        //////////////////////////////////////////////////////////
+        $urlTemplate = self::WEB_PA_CALENDAR_DELETE;
+        $attributes = [
+            ////////////////////////////////////////////////////
+            // Titre
+            self::LABEL_DELETE_EVENT,
+            // Libellé
+            $strMessage,
+            ////////////////////////////////////////////////////
+            // Url d'annulation de la suppression - 2
+            $urlAnnulation,
+            // Url de cofirmation de suppression de l'événement
+            $urlSuppression,
+        ];
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
      * @since v1.23.05.15
-     * @version v1.23.05.21
+     * @version v1.23.05.28
      */
     public function getEditContent(): string
     {
@@ -82,20 +128,13 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
         $strOptions = '';
         $objsCopsEventCategorie = $objCopsEventServices->getEventCategories();
-        $objBean = new UtilitiesBean();
 
         $categId = $objCopsEvent->getField(self::FIELD_CATEG_ID);
         while (!empty($objsCopsEventCategorie)) {
             $objEventCategorie = array_shift($objsCopsEventCategorie);
             $strLibelle = $objEventCategorie->getField(self::FIELD_CATEG_LIBELLE);
             $strId = $objEventCategorie->getField(self::FIELD_ID);
-            $optAttributes = [
-                self::ATTR_VALUE => $strId,
-            ];
-            if ($strId==$categId) {
-                $optAttributes[self::CST_SELECTED] = self::CST_SELECTED;
-            }
-            $strOptions .= $objBean->getBalise(self::TAG_OPTION, $strLibelle, $optAttributes);
+            $strOptions .= HtmlUtils::getOption($strLibelle, $strId, $strId==$categId);
         }
 
         /////////////////////////////////////////////////////////////////////////
@@ -142,6 +181,20 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         } else {
             // TODO
         }
+
+        $urlAttributes = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => self::CST_CAL_EVENT,
+            self::CST_CURPAGE => $this->curPage,
+        ];
+        $urlAnnulation = UrlUtils::getAdminUrl($urlAttributes);
+        $urlAttributes = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => self::CST_CAL_EVENT,
+            self::CST_ACTION => self::CST_DELETE,
+            self::FIELD_ID => $this->id,
+        ];
+        $urlSuppression = UrlUtils::getAdminUrl($urlAttributes);
 
         //////////////////////////////////////////////////////////
         $urlTemplate = self::WEB_PA_CALENDAR_EVENT_EDIT;
@@ -199,6 +252,10 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             // EndRepeat checked ?
             $strEndRepeat,
             ////////////////////////////////////////////////////
+            // Url d'annulation de l'édition - 25
+            $urlAnnulation,
+            // Url de suppression de l'événement
+            $urlSuppression,
         ];
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -236,6 +293,16 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
     }
 
     /**
+     * @since v1.23.05.25
+     * @version v1.23.05.28
+     */
+    public function dealWithDeleteAction(): void
+    {
+        $objEventServices = new CopsEventServices();
+        $objEventServices->deleteEvent([self::FIELD_ID=>$this->id]);
+    }
+
+    /**
      * @since v1.23.05.15
      * @version v1.23.05.21
      */
@@ -267,7 +334,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             $repeatEnd = static::fromPost(self::FIELD_REPEAT_END);
             $objEvent->setField(self::FIELD_REPEAT_END, $repeatEnd);
             if ($repeatEnd==self::CST_EVENT_RT_ENDDATE) {
-                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost('endDateValue'));
+                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost(self::FIELD_ENDDATE_VALUE));
             } elseif ($repeatEnd==self::CST_EVENT_RT_ENDREPEAT) {
                 $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost('endRepetitionValue'));
             } else {
@@ -283,7 +350,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         if ($objEvent->checkFields()) {
             $id = static::fromPost(self::FIELD_ID, 0);
             if ($id==0) {
-                $objCopsEventServices->insert($objEvent);
+                $objCopsEventServices->insertEvent($objEvent);
             } else {
                 $objEvent->setField(self::FIELD_ID, $id);
                 $objCopsEventServices->updateEvent($objEvent);
@@ -293,173 +360,4 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         }
     }
 
-     /*
-    public function __construct()
-    {
-
-        /////////////////////////////////////////
-        // Enrichissement du Breadcrumbs
-        $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
-        $buttonContent = $this->getBalise(self::TAG_SPAN, $this->titreSubOnglet, $spanAttributes);
-        $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
-        /////////////////////////////////////////
-
-        if (static::fromPost(self::CST_WRITE_ACTION)!='') {
-            $this->dealWithWriteAction();
-        }
-
-        /*
-
-    if (isset($_POST) && !empty($_POST)) {
-      $CopsEvent = new CopsEvent();
-
-      if (trim($_POST['eventLibelle'])!='') {
-
-
-        if ($CopsEvent->isValidInterval()) {
-          if (isset($_POST['repeatStatus'])) {
-            $CopsEvent->setField('repeatStatus', 1);
-            // repeatType
-            $CopsEvent->setField('repeatType', $_POST['repeatType']);
-            // repeatInterval
-            $CopsEvent->setField('repeatInterval', $_POST['repeatInterval']);
-            // repeatEnd
-            $CopsEvent->setField('repeatEnd', $_POST['repeatEnd']);
-            // repeatEndValue
-            if ($_POST['repeatEnd']=='endDate') {
-              $CopsEvent->setRepeatEndValue($_POST['endDateValue']);
-            } elseif ($_POST['repeatEnd']=='endRepeat') {
-              $CopsEvent->setField('repeatEndValue', $_POST['endRepetitionValue']);
-            }
-          } else {
-            $CopsEvent->setField('repeatStatus', 0);
-            $CopsEvent->setField('repeatType', '');
-            $CopsEvent->setField('repeatInterval', '');
-            $CopsEvent->setField('repeatEnd', '');
-            $CopsEvent->setField('repeatEndValue', '');
-          }
-          $CopsEvent->saveEvent();
-        } else {
-          echo "Intervalle non valide";
-        }
-      }
-    }
-    * /
-  }
-    */
-
-    /**
-     * @since 1.22.11.25
-     * @version 1.22.11.26
-     *
-    public function getOngletContent()
-    {
-        /////////////////////////////////////////
-        $strButtonCreation = '';
-        $classe = 'btn btn-primary mb-3 btn-block';
-        if ($this->action==self::CST_WRITE) {
-            /////////////////////////////////////////
-            // Le bouton d'annulation.
-            $href = $this->getRefreshUrl([self::CST_ACTION=>'']);
-            $label = $this->getIcon(self::I_ANGLES_LEFT).self::CST_NBSP.self::LABEL_RETOUR;
-            /////////////////////////////////////////
-            $mainContent = $this->getEditContent();
-        } else {
-            // Le bouton de création.
-            $href = $this->getRefreshUrl([self::CST_ACTION=>self::CST_WRITE]);
-            $label = self::LABEL_CREER_ENTREE;
-            /////////////////////////////////////////
-            $mainContent = $this->getListContent();
-        }
-        $strButtonCreation .= $this->getLink($label, $href, $classe);
-        /////////////////////////////////////////
-        
-        $urlTemplate = self::PF_SECTION_ONGLET;
-        $attributes = [
-            // L'id de la page
-            'section-cal-event',
-            // Le bouton éventuel de création / retour...
-            $strButtonCreation,
-            // Le nom du bloc du menu de gauche
-            $this->titreOnglet,
-            // La liste des éléments du menu de gauche
-            $this->getMenuContent(),
-            // Le contenu de la liste relative à l'élément sélectionné dans le menu de gauche
-            $mainContent,
-        ];
-        return $this->getRender($urlTemplate, $attributes);
-    }
-        
-    /**
-     * @since v1.22.11.26
-     * @version v1.22.11.26
-     * @return string
-     *
-    public function getListContent()
-    {
-        $strPagination = null;
-        
-        /////////////////////////////////////////////
-        // Toolbar & Pagination
-        // Bouton pour recharger la liste
-        $label = $this->getLink($this->getIcon(self::I_ARROWS_ROTATE), $this->getRefreshUrl(), self::CST_TEXT_WHITE);
-        $btnAttributes = [self::ATTR_TITLE => self::LABEL_REFRESH_LIST];
-        $strToolBar = $this->getButton($label, $btnAttributes);
-        // Ajout de la pagination
-        $strToolBar .= $this->getDiv($strPagination, [self::ATTR_CLASS=>'float-right']);
-        /////////////////////////////////////////
-        
-        $listAttributes = [$titre, $strToolBar, $header, $listContent];
-        return $this->getRender($urlTemplateList, $listAttributes);
-    }
-    
-    /**
-     * @param array $objs
-     * @return string
-     * @since 1.22.10.27
-     * @version 1.22.10.27
-     *
-    public function buildPagination(&$objs)
-    {
-        $nbItems = count($objs);
-        $nbItemsPerPage = 10;
-        $nbPages = ceil($nbItems/$nbItemsPerPage);
-        $strPagination = '';
-        if ($nbPages>1) {
-            // Le bouton page précédente
-            $label = $this->getIcon('caret-left');
-            if ($this->curPage!=1) {
-                $btnClass = '';
-                $href = $this->getRefreshUrl([self::CST_CURPAGE=>$this->curPage-1]);
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
-            }
-            $btnAttributes = [self::ATTR_CLASS=>$btnClass];
-            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
-            
-            // La chaine des éléments affichés
-            $firstItem = ($this->curPage-1)*$nbItemsPerPage;
-            $lastItem = min(($this->curPage)*$nbItemsPerPage, $nbItems);
-            $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, [$firstItem+1, $lastItem, $nbItems]);
-            
-            // Le bouton page suivante
-            $label = $this->getIcon('caret-right');
-            if ($this->curPage!=$nbPages) {
-                $btnClass = '';
-                $href = $this->getRefreshUrl([self::CST_CURPAGE=>$this->curPage+1]);
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
-            } else {
-                $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
-                $btnContent = $label;
-            }
-            $btnAttributes = [self::ATTR_CLASS=>$btnClass];
-            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
-            $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
-        }
-        return $strPagination;
-    }
-    */
 }

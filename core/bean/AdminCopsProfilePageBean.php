@@ -92,7 +92,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
       $attributes = [self::ONGLET_PROFILE, $subOnglet, $arrData[self::FIELD_LABEL]];
       $strContent .= $this->getRender($urlTemplate, $attributes);
     }
-    return $this->getBalise(self::TAG_DIV, $strContent, [self::ATTR_CLASS=>'row']);
+    return HtmlUtils::getDiv($strContent, [self::ATTR_CLASS=>'row']);
   }
 
   /**

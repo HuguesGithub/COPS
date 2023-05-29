@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\domain\WpPostClass;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminLibraryBddBean
  * @author Hugues
  * @since 1.22.10.29
- * @version 1.23.04.30
+ * @version 1.23.05.28
  */
 class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
 {
@@ -17,9 +18,9 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_BDD];
 
-        $buttonContent = $this->getLink(self::LABEL_DATABASES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink(self::LABEL_DATABASES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         
         if ($this->catSlug!='') {
             $attributes = ['name' => $this->catSlug];
@@ -29,9 +30,9 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
             [$name] = explode(':', (string) $postTitle);
             
             $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
-            $buttonContent = $this->getLink(trim($name), $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+            $buttonContent = HtmlUtils::getLink(trim($name), $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
             $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-            $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+            $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         }
     }
     

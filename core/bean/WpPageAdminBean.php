@@ -1,16 +1,16 @@
 <?php
 namespace core\bean;
 
-use core\domain;
 use core\services\WpCategoryServices;
 use core\services\CopsIndexServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -23,7 +23,7 @@ class WpPageAdminBean extends WpPageBean
     /**
      * Class Constructor
      * @since 1.22.10.18
-     * @version 1.22.10.18
+     * @version v1.23.05.28
      */
     public function __construct()
     {
@@ -65,7 +65,10 @@ class WpPageAdminBean extends WpPageBean
         }
         
         $this->arrSidebarContent = [
-            self::ONGLET_DESK => [self::FIELD_ICON  => 'desktop', self::FIELD_LABEL => 'Bureau'],
+            self::ONGLET_DESK => [
+                self::FIELD_ICON  => self::I_DESKTOP,
+                self::FIELD_LABEL => 'Bureau'
+            ],
             self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => self::LABEL_LIBRARY]
         ];
     if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
@@ -106,14 +109,14 @@ class WpPageAdminBean extends WpPageBean
         $this->btnDisabled = 'btn-dark disabled';
         
         // Le lien vers la Home
-        $aContent = $this->getIcon('desktop');
-        $buttonContent = $this->getLink($aContent, '/'.self::PAGE_ADMIN, self::CST_TEXT_WHITE);
+        $aContent = HtmlUtils::getIcon(self::I_DESKTOP);
+        $buttonContent = HtmlUtils::getLink($aContent, '/'.self::PAGE_ADMIN, self::CST_TEXT_WHITE);
         if ($this->slugOnglet=='desk' || $this->slugOnglet=='') {
             $buttonAttributes = [self::ATTR_CLASS=>$this->btnDisabled];
         } else {
             $buttonAttributes = [self::ATTR_CLASS=>$this->btnDark];
         }
-        $this->breadCrumbsContent = $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent = HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
         $this->strTitle = '';
     }
@@ -213,9 +216,9 @@ class WpPageAdminBean extends WpPageBean
     
     /**
      * @since 1.22.10.18
-     * @version 1.22.10.18
+     * @version v1.23.05.28
      */
-     protected function getSideBar()
+     protected function getSideBar(): string
      {
          $urlTemplate = self::WEB_PPF_SIDEBAR;
          
@@ -229,16 +232,13 @@ class WpPageAdminBean extends WpPageBean
          
             // Construction du label
             $pContent  = $arrOnglet[self::FIELD_LABEL];
-            $pContent .= ($hasChildren ? $this->getIcon(self::I_ANGLE_LEFT, 'right') : '');
+            $pContent .= ($hasChildren ? HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'right') : '');
          
             // Construction du lien
-            $aContent  = $this->getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
+            $aContent  = HtmlUtils::getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
-            $aAttributes = [
-                self::ATTR_HREF  => $this->urlOnglet.$strOnglet,
-                self::ATTR_CLASS => 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '')
-            ];
-            $superLiContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+            $strClasse = 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '');
+            $superLiContent = HtmlUtils::getLink($aContent, $this->urlOnglet.$strOnglet, $strClasse);
          
             // S'il a des enfants, on enrichit
             if ($hasChildren) {
@@ -250,12 +250,9 @@ class WpPageAdminBean extends WpPageBean
                     } else {
                         $extraClass = '';
                     }
-                    $aContent  = $this->getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
-                    $aAttributes = [
-                        self::ATTR_HREF  => $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet,
-                        self::ATTR_CLASS => 'nav-link'.$extraClass
-                    ];
-                    $liContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+                    $aContent  = HtmlUtils::getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
+                    $url = $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet;
+                    $liContent = HtmlUtils::getLink($aContent, $url, 'nav-link'.$extraClass);
                     $ulContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
                 }
                 $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
@@ -316,16 +313,16 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since 1.22.10.18
-     * @version 1.22.10.18
+     * @version v1.23.05.28
      */
-    public function getContentHeader()
+    public function getContentHeader(): string
     {
         $urlTemplate = self::WEB_PPFS_CONTENT_HEADER;
         $attributes = [
             // Le Titre
             $this->strTitle,
             // Le BreadCrumb
-            $this->getDiv($this->breadCrumbsContent, [self::ATTR_CLASS=>'btn-group float-sm-right']),
+            HtmlUtils::getDiv($this->breadCrumbsContent, [self::ATTR_CLASS=>'btn-group float-sm-right']),
         ];
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -458,18 +455,18 @@ class WpPageAdminBean extends WpPageBean
         if ($nbPages>1) {
             $this->blnHasPagination = true;
             // Le bouton page précédente
-            $label = $this->getIcon(self::I_CARET_LEFT);
+            $label = HtmlUtils::getIcon(self::I_CARET_LEFT);
             if ($this->curPage!=1) {
                 $btnClass = '';
                 $arrUrl[self::CST_CURPAGE] = $this->curPage-1;
                 $href = $this->getUrl($arrUrl);
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+                $btnContent = HtmlUtils::getLink($label, $href, self::CST_TEXT_WHITE);
             } else {
                 $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
                 $btnContent = $label;
             }
             $btnAttributes = [self::ATTR_CLASS=>$btnClass];
-            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
+            $strPagination .= HtmlUtils::getButton($btnContent, $btnAttributes).self::CST_NBSP;
             
             // La chaine des éléments affichés
             $firstItem = ($this->curPage-1)*$nbItemsPerPage;
@@ -477,18 +474,18 @@ class WpPageAdminBean extends WpPageBean
             $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, [$firstItem+1, $lastItem, $nbItems]);
             
             // Le bouton page suivante
-            $label = $this->getIcon(self::I_CARET_RIGHT);
+            $label = HtmlUtils::getIcon(self::I_CARET_RIGHT);
             if ($this->curPage!=$nbPages) {
                 $btnClass = '';
                 $arrUrl[self::CST_CURPAGE] = $this->curPage+1;
                 $href = $this->getUrl($arrUrl);
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+                $btnContent = HtmlUtils::getLink($label, $href, self::CST_TEXT_WHITE);
             } else {
                 $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
                 $btnContent = $label;
             }
             $btnAttributes = [self::ATTR_CLASS=>$btnClass];
-            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
+            $strPagination .= self::CST_NBSP.HtmlUtils::getButton($btnContent, $btnAttributes);
             $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
         }
         return $strPagination;

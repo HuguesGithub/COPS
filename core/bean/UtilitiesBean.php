@@ -10,7 +10,7 @@ use core\interfaceimpl\UrlsInterface;
  * Classe UtilitiesBean
  * @author Hugues
  * @since 1.00.00
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface, FieldsInterface
 {
@@ -31,21 +31,21 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
     }
 
     /**
-     * @return bool
+     * @version v1.23.05.28
      */
     public static function isCopsLogged(): bool
     {
       // On va checker dans les variables de SESSION si les infos relatives à Cops y sont stockées.
-      return (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='err_login');
+      return isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='err_login';
     }
 
     /**
-     * @return bool
+     * @version v1.23.05.28
      */
     public static function isCopsEditor(): bool
     {
       // On va checker dans les variables de SESSION si les infos relatives à Cops y sont stockées.
-      return (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest');
+      return isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest';
     }
 
     /**
@@ -103,145 +103,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
             throw new \Exception($msgError);
         }
     }
-
-    /**
-     * @param string $label
-     * @param array $attributes
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     */
-    public function getButton(string $label, array $attributes=[]): string
-    {
-        $buttonAttributes = [self::ATTR_TYPE => self::TAG_BUTTON, self::ATTR_CLASS => 'btn btn-default btn-sm'];
-        if (!empty($attributes)) {
-            foreach ($attributes as $key => $value) {
-                if (!isset($buttonAttributes[$key])) {
-                    $buttonAttributes[$key]  = $value;
-                } elseif ($key==self::ATTR_CLASS) {
-                    $buttonAttributes[$key] .= ' '.$value;
-                } else {
-                    // TODO
-                }
-            }
-        }
-        return $this->getBalise(self::TAG_BUTTON, $label, $buttonAttributes);
-    }
     
-    /**
-     * @param string $label
-     * @param string $value
-     * @param boolean $blnChecked
-     * @return string
-     * @since v1.22.11.26
-     * @version v1.22.11.26
-     */
-    public function getOption(string $label, string $value, bool $blnChecked=false): string
-    {
-        $attributes = [self::ATTR_VALUE => $value];
-        if ($blnChecked) {
-            $attributes[self::CST_CHECKED] = self::CST_CHECKED;
-        }
-        return $this->getBalise(self::TAG_OPTION, $label, $attributes);
-    }
-    
-    /**
-     * @param string $label
-     * @param array $attributes
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     */
-    public function getTh(string $label, array $attributes=[]): string
-    {
-        $buttonAttributes = ['scope' => 'col'];
-        if (!empty($attributes)) {
-            foreach ($attributes as $key => $value) {
-                $buttonAttributes[$key]  = $value;
-            }
-        }
-        return $this->getBalise(self::TAG_TH, $label, $buttonAttributes);
-    }
-    
-    /**
-     * @param string $label
-     * @param string $href
-     * @param string $classe
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     */
-    public function getLink(string $label, string $href, string $classe, array $extraAttributes=[]): string
-    {
-        $attributes = [self::ATTR_HREF => $href, self::ATTR_CLASS => $classe];
-        if (!empty($extraAttributes)) {
-            foreach ($extraAttributes as $key => $value) {
-                $attributes[$key]  = $value;
-            }
-        }
-        return $this->getBalise(self::TAG_A, $label, $attributes);
-    }
-    
-    /**
-     * @param string $label
-     * @param array $attributes
-     * @return string
-     * @since 1.22.10.28
-     * @version 1.22.10.28
-     */
-    public function getDiv(string $label, array $attributes=[]): string
-    {
-        $divAttributes = [];
-        if (!empty($attributes)) {
-            foreach ($attributes as $key => $value) {
-                $divAttributes[$key]  = $value;
-            }
-        }
-        return $this->getBalise(self::TAG_DIV, $label, $divAttributes);
-    }
-    
-    /**
-     * @param string
-     * @return string
-     * @version 1.22.10.06
-     */
-    public function getIcon(string $tag, string $prefix='', string $label=''): string
-    {
-        $allowedTags = [
-            self::I_ANGLE_LEFT,
-            self::I_ANGLES_LEFT,
-            self::I_ARROWS_ROTATE,
-            self::I_BACKWARD,
-            self::I_CARET_LEFT,
-            self::I_CARET_RIGHT,
-            self::I_CIRCLE,
-            self::I_DATABASE,
-            self::I_DESKTOP,
-            self::I_DOWNLOAD,
-            self::I_FILE_CATEGORY,
-            self::I_FILE_OPENED,
-            self::I_FILE_CLOSED,
-            self::I_FILE_COLDED,
-            self::I_FILE_CIRCLE_CHECK,
-            self::I_FILE_CIRCLE_PLUS,
-            self::I_FILE_CIRCLE_XMARK,
-            'book',
-            'box-archive',
-            'calendar-days',
-            'envelope',
-            'inbox',
-            'square-pen',
-            'square-plus',
-            'trash-alt',
-        ];
-        if ($prefix!='') {
-            $prefix .= ' ';
-        }
-        $prefix .= 'fa-solid fa-'.(in_array($tag, $allowedTags) ? $tag : 'biohazard');
-
-        return $this->getBalise(self::TAG_I, $label, [self::ATTR_CLASS=>$prefix]);
-    }
-
     /**
      * @param string $id
      * @param string $default

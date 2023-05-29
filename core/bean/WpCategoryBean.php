@@ -1,10 +1,12 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * WpCategoryBean
  * @since 1.22.10.20
- * @version 1.22.10.20
+ * @version v1.23.05.28
  */
 class WpCategoryBean extends UtilitiesBean
 {
@@ -24,17 +26,16 @@ class WpCategoryBean extends UtilitiesBean
     
     /**
      * @since 1.22.10.20
-     * @version 1.22.10.21
+     * @version v1.23.05.28
      */
-    public function getCategoryNavItem($url, $icon, $blnSelected=false)
+    public function getCategoryNavItem(string $url, string $icon, bool $blnSelected=false): string
     {
-        $strIcon = $this->getIcon($icon);
+        $strIcon = HtmlUtils::getIcon($icon);
         $label   = $this->wpCategory->getField('name');
         $aContent = $strIcon.self::CST_NBSP.$label;
         
         $url    .= '&amp;'.self::CST_CAT_SLUG.'='.$this->wpCategory->getField('slug');
-        $aAttributes = [self::ATTR_CLASS => 'nav-link text-white', self::ATTR_HREF  => $url];
-        $lien    = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+        $lien    = HtmlUtils::getLink($aContent, $url, 'nav-link text-white');
         
         $liAttributes = [self::ATTR_CLASS => 'nav-item'.($blnSelected ? ' '.self::CST_ACTIVE : '')];
         return $this->getBalise(self::TAG_LI, $lien, $liAttributes);

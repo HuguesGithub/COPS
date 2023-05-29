@@ -7,7 +7,7 @@ use core\utils\DateUtils;
  * CopsEventDateLongBean
  * @author Hugues
  * @since v1.23.05.11
- * @version v1.23.05.14
+ * @version v1.23.05.28
  */
 class CopsEventDateLongBean extends CopsEventDateBean
 {
@@ -18,7 +18,7 @@ class CopsEventDateLongBean extends CopsEventDateBean
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
     public function getCartouche(string $tag, string $displayDate, int $nbEvents=0): string
     {
@@ -27,7 +27,7 @@ class CopsEventDateLongBean extends CopsEventDateBean
         $this->curDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
         ///////////////////////////////////////////////////
 
-        $this->objEvent = $this->objEventDate->getCopsEvent();
+        $this->objEvent = $this->objEventDate->getEvent();
         ///////////////////////////////////////////////////
         //
         $divAttributes = 'title="'.$this->objEvent->getField(self::FIELD_EVENT_LIBELLE).'"';

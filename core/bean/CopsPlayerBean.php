@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * CopsPlayerBean
  * @author Hugues
  * @since 1.22.04.27
- * @version 1.23.04.30
+ * @version v1.23.05.28
  */
 class CopsPlayerBean extends UtilitiesBean
 {
@@ -91,11 +93,10 @@ class CopsPlayerBean extends UtilitiesBean
   }
 
     /**
-     * @return string
      * @since v1.22.11.06
-     * @version v1.22.11.06
+     * @version v1.23.05.28
      */
-  public function getLibraryRow($href, $blnDisplaySection=true)
+    public function getLibraryRow(string $href, bool $blnDisplaySection=true): string
     {
         $arrColumns = [];
         // Checkbox ?
@@ -131,7 +132,7 @@ class CopsPlayerBean extends UtilitiesBean
         // Le nom
         $label = $this->CopsPlayer->getField(self::FIELD_NOM).' '.$this->CopsPlayer->getField(self::FIELD_PRENOM);
         $href .= self::CST_AMP.self::FIELD_ID.'='.$this->CopsPlayer->getField(self::FIELD_ID);
-        $tdContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+        $tdContent = HtmlUtils::getLink($label, $href, self::CST_TEXT_WHITE);
         $cell = $this->getBalise(self::TAG_TD, $tdContent, [self::ATTR_CLASS=>'mailbox-date']);
         $arrColumns[] = $cell;
         

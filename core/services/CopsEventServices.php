@@ -3,6 +3,7 @@ namespace core\services;
 
 use core\daoimpl\CopsEventDaoImpl;
 use core\domain\CopsEventClass;
+use core\domain\CopsEventCategorieClass;
 use core\domain\CopsEventDateClass;
 use core\utils\DateUtils;
 
@@ -10,142 +11,44 @@ use core\utils\DateUtils;
  * Classe CopsEventServices
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class CopsEventServices extends LocalServices
 {
-  //////////////////////////////////////////////////
-  // CONSTRUCT
-  //////////////////////////////////////////////////
-  /**
-   * Class constructor
-   * @version 1.22.06.13
-   * @since 1.22.06.13
-   */
-  public function __construct()
-  {
-    $this->Dao = new CopsEventDaoImpl();
-  }
-
-  //////////////////////////////////////////////////
-  // METHODS
-  //////////////////////////////////////////////////
-  /**
-   * @param array $attributes [E|S]
-   * @since 1.22.06.13
-   * @version 1.22.06.13
-   */
-  public function initFilters(&$attributes)
-  {
-    if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = [
-          // Id
-          self::SQL_JOKER_SEARCH,
-          // dStart
-          '2030-01-01',
-          // dEnd
-          '2049-12-31',
-      ];
-    } else {
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = self::SQL_JOKER_SEARCH;
-      }
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_DSTART])) {
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DSTART] = '2030-01-01';
-      }
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_DEND])) {
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DEND] = '2049-12-31';
-      }
+    //////////////////////////////////////////////////
+    // CONSTRUCT
+    //////////////////////////////////////////////////
+    /**
+     * Class constructor
+     * @version 1.22.06.13
+     * @since 1.22.06.13
+     */
+    public function __construct()
+    {
+        $this->Dao = new CopsEventDaoImpl();
     }
-    if (!isset($attributes[self::SQL_ORDER_BY])) {
-      $attributes[self::SQL_ORDER_BY] = self::FIELD_DSTART;
-    }
-    if (!isset($attributes[self::SQL_ORDER])) {
-      $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
-    }
-    if (!isset($attributes[self::SQL_LIMIT])) {
-      $attributes[self::SQL_LIMIT] = -1;
-    }
-  }
 
-  /**
-   * @since v1.23.05.11
-   * @version v1.23.05.14
-   */
-  public function getCopsEvents($attributes=[])
-  {
-    if (!isset($attributes[self::SQL_ORDER_BY])) {
-      $attributes[self::SQL_ORDER_BY] = self::FIELD_DATE_DEBUT;
-    }
-    if (!isset($attributes[self::SQL_ORDER])) {
-      $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
-    }
-    if (!isset($attributes[self::SQL_LIMIT])) {
-      $attributes[self::SQL_LIMIT] = -1;
-    }
-    return $this->Dao->getCopsEvents($attributes);
-  }
+    //////////////////////////////////////////////////
+    // METHODS
+    //////////////////////////////////////////////////
 
-  public function getCopsEvent($id)
-  { return $this->Dao->getCopsEvent($id); }
-
-  public function saveEvent(&$Obj)
-  {
-    $id = $this->Dao->saveEvent($Obj->getInsertAttributes());
-    $Obj->setField('id', $id);
-  }
-
-  public function saveEventDate(&$Obj)
-  {
-    $id = $this->Dao->saveEventDate($Obj->getInsertAttributes());
-    $Obj->setField('id', $id);
-  }
-
-  public function getCategorie($id)
-  { return $this->Dao->getCopsEventCategorie($id); }
-
+    ////////////////////////////////////
+    // wp_7_cops_event
+    ////////////////////////////////////
 
     /**
-     * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @since v1.23.05.15
+     * @version v1.23.05.28
      */
-    public function getEventDates(array $attributes): array
+    public function getEvent(int $id): CopsEventClass
     {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEventDaoImpl();
-        }
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-        $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DSTART] ?? self::CST_FIRST_DATE;
-        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DEND] ?? self::CST_LAST_DATE;
-
-        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
-        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
-
-        // Traitement spécifique pour gérer le tri multi-colonnes
-        if (!isset($attributes[self::SQL_ORDER_BY])) {
-            $orderBy = self::FIELD_DSTART;
-        } elseif (is_array($attributes[self::SQL_ORDER_BY])) {
-            $orderBy = '';
-            while (!empty($attributes[self::SQL_ORDER_BY])) {
-                $orderBy .= array_shift($attributes[self::SQL_ORDER_BY]).' ';
-                $orderBy .= array_shift($attributes[self::SQL_ORDER]).', ';
-            }
-            $orderBy = substr($orderBy, 0, -2);
-            $order = '';
-        } else {
-            $orderBy = $attributes[self::SQL_ORDER_BY];
-        }
-        ///////////////////////////////////////////////////////////
-
-        $prepAttributes = [
-            $id,
-            $startDate,
-            $endDate,
-            $orderBy,
-            $order,
-            $attributes[self::SQL_LIMIT] ?? 9999,
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_ID => $id,
+            ]
         ];
-        return $this->Dao->getEventDates($prepAttributes);
+        $objsEvent = $this->getEvents($attributes);
+        return !empty($objsEvent) ? array_shift($objsEvent) : new CopsEventClass();
     }
 
     /**
@@ -154,9 +57,6 @@ class CopsEventServices extends LocalServices
      */
     public function getEvents(array $attributes): array
     {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEventDaoImpl();
-        }
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
         $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_DEBUT] ?? self::CST_LAST_DATE;
         $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_FIN] ?? self::CST_FIRST_DATE;
@@ -192,49 +92,21 @@ class CopsEventServices extends LocalServices
     }
 
     /**
-     * @since v1.23.05.15
-     * @version v1.23.05.21
+     * @since v1.23.05.26
+     * @version v1.23.05.28
      */
-    public function getEvent(int $id): CopsEventClass
+    public function insertEvent(CopsEventClass &$objEvent): void
     {
-        $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ID => $id,
-            ]
-        ];
-        $objsEvent = $this->getEvents($attributes);
-        return !empty($objsEvent) ? array_shift($objsEvent) : new CopsEventClass();
-    }
-
-    /**
-     * @since v1.23.05.15
-     * @version v1.23.05.21
-    */
-    public function getEventCategories($attributes=[]): array
-    {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEventDaoImpl();
-        }
-
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-
-        $orderBy = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_CATEG_LIBELLE;
-        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
-
-        $prepAttributes = [
-            $id,
-            $orderBy,
-            $order,
-            $attributes[self::SQL_LIMIT] ?? 9999,
-        ];
-        return $this->Dao->getEventCategories($prepAttributes);
+        $this->Dao->insertEvent($objEvent);
+        
+        $this->addEventDates($objEvent);
     }
 
     /**
      * @since v1.23.05.21
      * @version v1.23.05.21
      */
-    public function updateEvent($objEvent)
+    public function updateEvent(CopsEventClass $objEvent): void
     {
         // Une mise à jour.
         $this->Dao->updateEvent($objEvent);
@@ -249,23 +121,66 @@ class CopsEventServices extends LocalServices
     }
 
     /**
-     * @since v1.23.05.21
-     * @version v1.23.05.21
+     * @since v1.23.05.25
+     * @version v1.23.05.28
      */
-    public function deleteEventDate($attributes)
+    public function deleteEvent(array $attributes): void
     {
         $attributes = [
             $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
-            $attributes[self::FIELD_EVENT_ID] ?? self::SQL_JOKER_SEARCH,
         ];
-        $this->Dao->deleteEventDate($attributes);
+        $this->Dao->deleteEvent($attributes);
+    }
+
+    ////////////////////////////////////
+    // wp_7_cops_event_date
+    ////////////////////////////////////
+
+    /**
+     * @since v1.23.05.05
+     * @version v1.23.05.07
+     */
+    public function getEventDates(array $attributes): array
+    {
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DSTART] ?? self::CST_FIRST_DATE;
+        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DEND] ?? self::CST_LAST_DATE;
+
+        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
+        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+
+        // Traitement spécifique pour gérer le tri multi-colonnes
+        if (!isset($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = self::FIELD_DSTART;
+        } elseif (is_array($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = '';
+            while (!empty($attributes[self::SQL_ORDER_BY])) {
+                $orderBy .= array_shift($attributes[self::SQL_ORDER_BY]).' ';
+                $orderBy .= array_shift($attributes[self::SQL_ORDER]).', ';
+            }
+            $orderBy = substr($orderBy, 0, -2);
+            $order = '';
+        } else {
+            $orderBy = $attributes[self::SQL_ORDER_BY];
+        }
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $id,
+            $startDate,
+            $endDate,
+            $orderBy,
+            $order,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getEventDates($prepAttributes);
     }
 
     /**
      * @since v1.23.05.21
      * @version v1.23.05.21
      */
-    public function insertEventDate($objEventDate)
+    public function insertEventDate(CopsEventDateClass $objEventDate): void
     {
         $attributes = [
             $objEventDate->getField(self::FIELD_EVENT_ID),
@@ -278,10 +193,23 @@ class CopsEventServices extends LocalServices
     }
 
     /**
+     * @since v1.23.05.21
+     * @version v1.23.05.21
+     */
+    public function deleteEventDate(array $attributes): void
+    {
+        $attributes = [
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_EVENT_ID] ?? self::SQL_JOKER_SEARCH,
+        ];
+        $this->Dao->deleteEventDate($attributes);
+    }
+
+    /**
      * @since v1.23.05.16
      * @version v1.23.05.21
      */
-    public function addEventDates($objEvent): void
+    public function addEventDates(CopsEventClass $objEvent): void
     {
         $objEventServices = new CopsEventServices();
         $objEventDate = new CopsEventDateClass();
@@ -379,4 +307,44 @@ class CopsEventServices extends LocalServices
         }
         return $arr;
     }
+
+    ////////////////////////////////////
+    // wp_7_cops_event_categorie
+    ////////////////////////////////////
+
+    /**
+     * @since v1.23.05.25
+     * @version v1.23.05.28
+     */
+    public function getCategorie(int $id): CopsEventCategorieClass
+    {
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_ID => $id,
+            ]
+        ];
+        $objsEventCategories = $this->getEventCategories($attributes);
+        return !empty($objsEventCategories) ? array_shift($objsEventCategories) : new CopsEventCategorieClass();
+    }
+
+    /**
+     * @since v1.23.05.15
+     * @version v1.23.05.21
+    */
+    public function getEventCategories(array $attributes=[]): array
+    {
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+
+        $orderBy = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_CATEG_LIBELLE;
+        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+
+        $prepAttributes = [
+            $id,
+            $orderBy,
+            $order,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getEventCategories($prepAttributes);
+    }
+
 }

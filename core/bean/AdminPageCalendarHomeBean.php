@@ -2,19 +2,20 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageCalendarHomeBean
  * @author Hugues
  * @since v1.23.05.02
- * @version v1.23.05.07
+ * @version v1.23.05.28
  */
 class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.02
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -27,7 +28,7 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
         $urlAttributes = [
             self::CST_ONGLET => self::ONGLET_CALENDAR,
         ];
-        $strLink = $this->getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($urlAttributes), '');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         $strCards = $this->getCard();
@@ -43,13 +44,13 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.02
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getCard(): string
     {
         // On récupère la date ingame courante pour l'afficher.
         $tsNow = DateUtils::getCopsDate(self::FORMAT_TS_NOW);
-        [$d, $m, $y, $h, $ii, $s] = explode(' ', date('d m y h i s', $tsNow));
+        [$d, $m, $y, $h, $ii, $s] = explode(' ', DateUtils::getStrDate('d m y h i s', $tsNow));
         // On construit la liste déroulante des jours.
         $dLis = '';
         for ($i=1; $i<=31; ++$i) {
@@ -104,15 +105,11 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.02
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function addOption($value, $blnSelected, $label)
     {
-        $attributes = [self::ATTR_VALUE=>$value];
-        if ($blnSelected) {
-            $attributes[self::CST_SELECTED] = self::CST_SELECTED;
-        }
-        return $this->getBalise(self::TAG_OPTION, $label, $attributes);
+        return HtmlUtils::getOption($label, $value, $blnSelected);
     }
 
     /**

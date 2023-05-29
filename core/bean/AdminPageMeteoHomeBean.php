@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * AdminPageMeteoHomeBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 {
@@ -74,7 +76,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.04.30
+     * @version v1.23.05.28
      */
     public function dealWithGetActions(): string
     {
@@ -85,7 +87,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
         // On construit l'url ciblée
         $url  = sprintf($this->ajaxUrl, $strDate, $m, $y);
-        $strCompteRendu = $this->getLink('Date étudiée', $url, '');
+        $strCompteRendu = HtmlUtils::getLink('Date étudiée', $url, '');
 
         // On en récupère le contenu
         $str = file_get_contents($url);

@@ -7,7 +7,7 @@ use core\utils\DateUtils;
  * CopsEventDateAlldayBean
  * @author Hugues
  * @since 1.22.11.25
- * @version v1.23.05.14
+ * @version v1.23.05.28
  */
 class CopsEventDateAlldayBean extends UtilitiesBean
 {
@@ -18,7 +18,7 @@ class CopsEventDateAlldayBean extends UtilitiesBean
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
     public function getCartouche(string $tag, string $displayDate, int $nbEvents=0): string
     {
@@ -27,7 +27,7 @@ class CopsEventDateAlldayBean extends UtilitiesBean
         $this->curDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
         ///////////////////////////////////////////////////
 
-        $this->objEvent = $this->objEventDate->getCopsEvent();
+        $this->objEvent = $this->objEventDate->getEvent();
         ///////////////////////////////////////////////////
         //
         $divAttributes = '';

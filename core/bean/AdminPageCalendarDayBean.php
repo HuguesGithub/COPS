@@ -3,19 +3,20 @@ namespace core\bean;
 
 use core\services\CopsEventServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * Classe AdminPageCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.14
+ * @version v1.23.05.28
  */
 class AdminPageCalendarDayBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -31,7 +32,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
             self::CST_SUBONGLET => self::CST_CAL_DAY,
             self::CST_CAL_CURDAY => $this->curStrDate
         ];
-        $strLink = $this->getLink(self::LABEL_DAILY, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_DAILY, UrlUtils::getAdminUrl($urlAttributes), '');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Récupération du contenu principal
@@ -48,7 +49,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getCard(): string
     {
@@ -75,7 +76,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsEventDate)) {
             $objEventDate = array_shift($objsEventDate);
-            if ($objEventDate->getCopsEvent()->isAllDayEvent()) {
+            if ($objEventDate->getEvent()->isAllDayEvent()) {
                 $this->objsAlldayEventDate[] = $objEventDate;
             } else {
                 $this->objsTodayEventDate[] = $objEventDate;
@@ -114,28 +115,26 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
         $calendarHeader = DateUtils::getStrDate(self::FORMAT_DATE_DMONTHY, $displayDate);
         $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
 
-        return $this->getDiv($mainContent, [self::ATTR_CLASS=>'col']);
+        return HtmlUtils::getDiv($mainContent, [self::ATTR_CLASS=>'col']);
     }
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getRowHeader(string $displayDate): string
     {
-        $strClass='';
-
         $url = '#';
-        $aClass = 'fc-col-header-cell-cushion';
+        $aClass = self::CST_FC_COL_HEADER_CELL_CSH;
         $label = DateUtils::getStrDate('fd d fm', $displayDate);
-        $divContent = $this->getLink($label, $url, $aClass);
-        $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-scrollgrid-sync-inner']);
+        $divContent = HtmlUtils::getLink($label, $url, $aClass);
+        $thContent = HtmlUtils::getDiv($divContent, [self::ATTR_CLASS=>self::CST_FC_SCROLLGRID_SYNC_IN]);
         $attributes = [
-            self::ATTR_ROLE => 'columnheader',
-            self::ATTR_CLASS => 'fc-col-header-cell '.self::CST_FC_DAY.' '.$strClass,
-            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_ROLE => self::CST_COLUMNHEADER,
+            self::ATTR_CLASS => self::CST_FC_COL_HEADER_CELL.' '.self::CST_FC_DAY,
+            self::ATTR_DATA_DATE => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $displayDate)
         ];
-        return $this->getBalise(self::TAG_TH, $thContent, $attributes);
+        return HtmlUtils::getTh($thContent, $attributes);
     }
 
     /**
@@ -147,18 +146,20 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
         $allDayEvents = $this->getAllDayEvents($displayDate);
 
         $botAttributes = [
-            self::ATTR_CLASS => 'fc-daygrid-day-bottom',
+            self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BTM,
             self::ATTR_STYLE => 'margin-top: 0px;'
         ];
-        $divBottom = $this->getDiv('', $botAttributes);
+        $divBottom = HtmlUtils::getDiv('', $botAttributes);
 
-        $divIn  = $this->getDiv($allDayEvents.$divBottom, [self::ATTR_CLASS=>'fc-daygrid-day-events']);
-        $divIn .= $this->getDiv('', [self::ATTR_CLASS=>'fc-daygrid-day-bg']);
+        $divIn  = HtmlUtils::getDiv($allDayEvents.$divBottom, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_EVENTS]);
+        $divIn .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG]);
 
-        $tdContent = $this->getDiv($divIn, [self::ATTR_CLASS=>'fc-daygrid-day-frame fc-scrollgrid-sync-inner']);
+        $tdAttributes = [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN];
+        $tdContent = HtmlUtils::getDiv($divIn, $tdAttributes);
+
         $attributes = [
-            self::ATTR_ROLE => 'gridcell',
-            self::ATTR_CLASS => 'fc-daygrid-day fc-day ' . $this->getFcDayClass($displayDate),
+            self::ATTR_ROLE => self::CST_GRIDCELL,
+            self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' ' . $this->getFcDayClass($displayDate),
             self::ATTR_DATA_DATE => $displayDate
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
@@ -185,17 +186,17 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
      */
     public function getRowHoraire(string $displayDate): string
     {
-        $divContent  = $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_BG]);
+        $divContent  = HtmlUtils::getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_BG]);
         $locAttributes = [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_EVENTS];
-        $divContent .= $this->getDiv($this->getDayCell($displayDate), $locAttributes);
-        $divContent .= $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_EVENTS]);
-        $divContent .= $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_NOW_IC]);
+        $divContent .= HtmlUtils::getDiv($this->getDayCell($displayDate), $locAttributes);
+        $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_EVENTS]);
+        $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_NOW_IC]);
         
-        $tdContent = $this->getDiv($divContent, [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_FRAME]);
+        $tdContent = HtmlUtils::getDiv($divContent, [self::ATTR_CLASS=>self::CST_FC_TIMEGRID_COL_FRAME]);
         $tdAttributes = [
             self::ATTR_ROLE => self::CST_GRIDCELL,
             self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL.' '.self::CST_FC_DAY.' '.$this->getFcDayClass($displayDate),
-            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $displayDate)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }

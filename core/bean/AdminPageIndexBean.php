@@ -111,10 +111,10 @@ class AdminPageIndexBean extends AdminPageBean
     $str_content = '';
     foreach ($rows as $row) {
       $str_content .= '<tr>';
-      $str_content .= '<td>'.$row->nomIdx.'</td>';
-      $str_content .= '<td>'.$row->nomIdxNature.'</td>';
-      $str_content .= '<td>'.$row->reference.'</td>';
-      $str_content .= '<td>MJ : '.$row->descriptionMJ.'<hr>PJ : '.$row->descriptionPJ.'</td>';
+      $str_content .= $this->getBalise(self::TAG_TD, $row->nomIdx);
+      $str_content .= $this->getBalise(self::TAG_TD, $row->nomIdxNature);
+      $str_content .= $this->getBalise(self::TAG_TD, $row->reference);
+      $str_content .= $this->getBalise(self::TAG_TD, 'MJ : '.$row->descriptionMJ.'<hr>PJ : '.$row->descriptionPJ);
       $str_content .= '</tr>';
     }
     return $str_content;

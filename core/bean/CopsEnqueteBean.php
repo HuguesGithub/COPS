@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * CopsEnqueteBean
  * @author Hugues
  * @since 1.22.09.16
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class CopsEnqueteBean extends CopsBean
 {
@@ -83,12 +84,16 @@ class CopsEnqueteBean extends CopsBean
         return $this->getRender($urlTemplate, $attributes);
     }
 
+    /**
+     * @since v1.23.05.24
+     * @version v1.23.05.28
+     */
     private function buildActionLink($subOnglet, $action, $icon, $title)
     {
         $id       = $this->obj->getField(self::FIELD_ID);
         $url      = $this->urlSubOnglet . $subOnglet;
         $url     .= '&amp;action='.$action.'&amp;id='.$id;
-        $aContent = $this->getIcon($icon);
+        $aContent = HtmlUtils::getIcon($icon);
         return '<a href="'.$url.'" class="text-white" title="'.$title.'">'.$aContent.'</a>';
     }
 
@@ -116,11 +121,10 @@ class CopsEnqueteBean extends CopsBean
     }
 
     /**
-     * @return string
      * @since 1.22.09.20
-     * @version 1.22.10.04
+     * @version v1.23.05.28
      */
-    public function getWriteEnqueteBlock()
+    public function getWriteEnqueteBlock(): string
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquete-write.php';
         /////////////////////////////////////////
@@ -141,11 +145,7 @@ class CopsEnqueteBean extends CopsBean
     $sel = $this->obj->getField(self::FIELD_IDX_DISTRICT_ATT);
     while (!empty($rows)) {
       $row = array_shift($rows);
-      $args = [self::ATTR_VALUE=>$row->cbpId];
-      if ($sel==$row->cbpId) {
-          $args[self::CST_SELECTED] = self::CST_SELECTED;
-      }
-      $strSelectDistrictAttorneys .= $this->getBalise(self::TAG_OPTION, $row->nomIdx, $args);
+      $strSelectDistrictAttorneys .= HtmlUtils::getOption($row->nomIdx, $row->cbpId, $sel==$row->cbpId);
     }
 
     $strRapportSID = $this->strNoRapportDisponible;

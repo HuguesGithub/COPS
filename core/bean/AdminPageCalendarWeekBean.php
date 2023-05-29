@@ -1,22 +1,23 @@
 <?php
 namespace core\bean;
 
+use core\domain\MySQLClass;
 use core\services\CopsEventServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
-use core\domain\MySQLClass;
 
 /**
  * Classe AdminPageCalendarWeekBean
  * @author Hugues
  * @since v1.23.05.04
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -32,7 +33,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             self::CST_SUBONGLET => self::CST_CAL_WEEK,
             self::CST_CAL_CURDAY => $this->curStrDate
         ];
-        $strLink = $this->getLink(self::LABEL_WEEKLY, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_WEEKLY, UrlUtils::getAdminUrl($urlAttributes));
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Récupération du contenu principal
@@ -121,7 +122,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
         $viewContent = $this->getRender($urlTemplate, $attributes);
         $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
 
-        return $this->getDiv($mainContent, [self::ATTR_CLASS=>'col']);
+        return HtmlUtils::getDiv($mainContent, [self::ATTR_CLASS=>'col']);
     }
 
     /**
@@ -135,13 +136,13 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
         for ($i=0; $i<7; ++$i) {
             $curDay = DateUtils::getDateAjout($firstWeekDay, [$i, 0, 0], self::FORMAT_DATE_YMD);
 
-            $divContent  = $this->getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_BG]);
+            $divContent  = HtmlUtils::getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_BG]);
             $locAttributes = [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_EVENTS];
-            $divContent .= $this->getDiv($this->getWeekCell($curDay), $locAttributes);
-            $divContent .= $this->getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_EVENTS]);
-            $divContent .= $this->getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_NOW_IC]);
+            $divContent .= HtmlUtils::getDiv($this->getWeekCell($curDay), $locAttributes);
+            $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_EVENTS]);
+            $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS => self::CST_FC_TIMEGRID_NOW_IC]);
 
-            $tdContent = $this->getDiv($divContent, [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_FRAME]);
+            $tdContent = HtmlUtils::getDiv($divContent, [self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL_FRAME]);
             $tdAttributes = [
                 self::ATTR_ROLE => self::CST_GRIDCELL,
                 self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL.' '.self::CST_FC_DAY.' '.$this->getFcDayClass($curDay),
@@ -155,7 +156,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.21
+     * @version v1.23.05.28
      */
     public function getRowAllDay(string $firstWeekDay): string
     {
@@ -181,8 +182,8 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             // On va trier les event "Allday" de ceux qui ne le sont pas.
             while (!empty($objsEventDate)) {
                 $objEventDate = array_shift($objsEventDate);
-                if ($objEventDate->getCopsEvent()->isAllDayEvent()) {
-                    if ($objEventDate->getCopsEvent()->isFirstDay($curDay) || DateUtils::isMonday($curDay)) {
+                if ($objEventDate->getEvent()->isAllDayEvent()) {
+                    if ($objEventDate->getEvent()->isFirstDay($curDay) || DateUtils::isMonday($curDay)) {
                         $tdContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
                     }
                     ++$nbEvts;
@@ -198,14 +199,14 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
                 self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BTM,
                 self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;'
             ];
-            $divBottom = $this->getDiv('', $botAttributes);
+            $divBottom = HtmlUtils::getDiv('', $botAttributes);
             /////////////////////////////////////////
 
             // Construction du contenu de la cellule
-            $divContent  = $this->getDiv($tdContent.$divBottom, [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_EVENTS]);
-            $divContent .= $this->getDiv('', [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BG]);
+            $divContent  = HtmlUtils::getDiv($tdContent.$divBottom, [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_EVENTS]);
+            $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BG]);
             $divAttributes = [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN];
-            $tdContent = $this->getDiv($divContent, $divAttributes);
+            $tdContent = HtmlUtils::getDiv($divContent, $divAttributes);
 
             // Construction de la cellule
             $tdAttributes = [
@@ -221,7 +222,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getRowHeader(string $firstWeekDay): string
     {
@@ -242,9 +243,9 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             $url = UrlUtils::getAdminUrl($urlAttributes);
             // On construit le lien
             $aContent = DateUtils::getStrDate('w d/m', $curDay);
-            $divContent = $this->getLink($aContent, $url, $aStyle, ['aria-label' => $curDay]);
+            $divContent = HtmlUtils::getLink($aContent, $url, $aStyle, ['aria-label' => $curDay]);
             // On construit la div contenant le lien
-            $thContent = $this->getDiv($divContent, [self::ATTR_CLASS => self::CST_FC_SCROLLGRID_SYNC_IN]);
+            $thContent = HtmlUtils::getDiv($divContent, [self::ATTR_CLASS => self::CST_FC_SCROLLGRID_SYNC_IN]);
             // On défini les attributs de la cellule
             $strClass = $this->getFcDayClass($curDay);
             $thAttributes = [
@@ -253,7 +254,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
                 self::ATTR_DATA_DATE => $curDay,
             ];
             // On concatène la cellule.
-            $strRowHeaders .= $this->getBalise(self::TAG_TH, $thContent, $thAttributes);
+            $strRowHeaders .= HtmlUtils::getTh($thContent, $thAttributes);
         }
 
         return $strRowHeaders;

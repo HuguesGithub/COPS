@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * Classe WpPageAdminCalendarEventBean
  * @author Hugues
  * @since 1.22.11.22
- * @version 1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
 {
@@ -23,14 +25,14 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
         $this->action = $this->initVar(self::CST_ACTION);
         $id = $this->initVar(self::FIELD_ID);
-        $this->objCopsEvent = $this->objCopsEventServices->getCopsEvent($id);
+        $this->objCopsEvent = $this->objCopsEventServices->getEvent($id);
 
         /////////////////////////////////////////
         // Enrichissement du Breadcrumbs
         $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         $buttonContent = $this->getBalise(self::TAG_SPAN, $this->titreSubOnglet, $spanAttributes);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
 
         if (static::fromPost(self::CST_WRITE_ACTION)!='') {
@@ -99,10 +101,9 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
     
     /**
      * @since v1.22.11.26
-     * @version v1.22.11.26
-     * @return string
+     * @version v1.23.05.28
      */
-    public function getEditContent()
+    public function getEditContent(): string
     {
         ///////////////////////////////////////////////////////
         // Les options pour la Catégorie
@@ -113,7 +114,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             $label = $objCopsEventCategorie->getField(self::FIELD_CATEG_LIBELLE);
             $value = $objCopsEventCategorie->getField(self::FIELD_ID);
             $blnChecked = ($this->objCopsEvent->getField(self::FIELD_CATEG_ID==$value));
-            $strOptsCategorie .= $this->getOption($label, $value, $blnChecked);
+            $strOptsCategorie .= HtmlUtils::getOption($label, $value, $blnChecked);
         }
 
         ///////////////////////////////////////////////////////
@@ -123,9 +124,9 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         for ($i=0; $i<=23; ++$i) {
             $label = str_pad($i, 2, '0', STR_PAD_LEFT);
             $hDebut = $this->objCopsEvent->getField(self::FIELD_HEURE_DEBUT);
-            $strOptsHeuresDebut .= $this->getOption($label, $i, $i==$hDebut);
+            $strOptsHeuresDebut .= HtmlUtils::getOption($label, $i, $i==$hDebut);
             $hFin = $this->objCopsEvent->getField(self::FIELD_HEURE_FIN);
-            $strOptsHeuresFin .= $this->getOption($label, $i, $i==$hFin);
+            $strOptsHeuresFin .= HtmlUtils::getOption($label, $i, $i==$hFin);
         }
 
         ///////////////////////////////////////////////////////
@@ -135,9 +136,9 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         for ($i=0; $i<=55; $i+=5) {
             $label = str_pad($i, 2, '0', STR_PAD_LEFT);
             $mDebut = $this->objCopsEvent->getField(self::FIELD_MINUTE_DEBUT);
-            $strOptsMinutesDebut .= $this->getOption($label, $i, $i==$mDebut);
+            $strOptsMinutesDebut .= HtmlUtils::getOption($label, $i, $i==$mDebut);
             $mFin = $this->objCopsEvent->getField(self::FIELD_MINUTE_FIN);
-            $strOptsMinutesFin .= $this->getOption($label, $i, $i==$mFin);
+            $strOptsMinutesFin .= HtmlUtils::getOption($label, $i, $i==$mFin);
         }
 
         ///////////////////////////////////////////////////////
@@ -167,7 +168,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             $strLabel = $this->getBalise(self::TAG_LABEL, $value, $labelAttributes);
 
             $divAttributes = [self::ATTR_CLASS => 'custom-control custom-radio'];
-            $strOptsPeriodicite .= $this->getDiv($strInput.$strLabel, $divAttributes);
+            $strOptsPeriodicite .= HtmlUtils::getDiv($strInput.$strLabel, $divAttributes);
         }
 
         ///////////////////////////////////////////////////////
@@ -230,10 +231,9 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
     
     /**
      * @since v1.22.11.26
-     * @version v1.22.11.26
-     * @return string
+     * @version v1.23.05.28
      */
-    public function getListContent()
+    public function getListContent(): string
     {
         $strPagination = null;
         $urlTemplateList = self::PF_SECTION_ONGLET_LIST;
@@ -241,19 +241,19 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         
         // On va construire le Header du tableau
         $thAttributes = [self::ATTR_CLASS => 'mailbox-name'];
-        $headerContent  = $this->getTh('Titre', $thAttributes);
+        $headerContent  = HtmlUtils::getTh('Titre', $thAttributes);
         $thAttributes[self::ATTR_STYLE] = 'width:150px;';
-        $headerContent .= $this->getTh('Catégorie', $thAttributes);
-        $headerContent .= $this->getTh('Date de début', $thAttributes);
-        $headerContent .= $this->getTh('Date de fin', $thAttributes);
+        $headerContent .= HtmlUtils::getTh('Catégorie', $thAttributes);
+        $headerContent .= HtmlUtils::getTh('Date de début', $thAttributes);
+        $headerContent .= HtmlUtils::getTh('Date de fin', $thAttributes);
         $thAttributes = [self::ATTR_STYLE=>'width:60px;'];
-        $headerContent .= $this->getTh('Périodicité', $thAttributes);
+        $headerContent .= HtmlUtils::getTh('Périodicité', $thAttributes);
         $header = $this->getBalise(self::TAG_TR, $headerContent);
         /////////////////////////////////////////
         
         /////////////////////////////////////////
         // On va chercher les éléments à afficher
-        $objsCopsEvent = $this->objCopsEventServices->getCopsEvents();
+        $objsCopsEvent = $this->objCopsEventServices->getEvents();
         $listContent = '';
         if (empty($objsCopsEvent)) {
             $listContent = '<tr><td class="text-center" colspan="5">'.self::LABEL_NO_RESULT.'</td></tr>';
@@ -271,11 +271,12 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////////
         // Toolbar & Pagination
         // Bouton pour recharger la liste
-        $label = $this->getLink($this->getIcon(self::I_ARROWS_ROTATE), $this->getRefreshUrl(), self::CST_TEXT_WHITE);
+        $aContent = HtmlUtils::getIcon(self::I_ARROWS_ROTATE);
+        $label = HtmlUtils::getLink($aContent, $this->getRefreshUrl(), self::CST_TEXT_WHITE);
         $btnAttributes = [self::ATTR_TITLE => self::LABEL_REFRESH_LIST];
-        $strToolBar = $this->getButton($label, $btnAttributes);
+        $strToolBar = HtmlUtils::getButton($label, $btnAttributes);
         // Ajout de la pagination
-        $strToolBar .= $this->getDiv($strPagination, [self::ATTR_CLASS=>'float-right']);
+        $strToolBar .= HtmlUtils::getDiv($strPagination, [self::ATTR_CLASS=>self::CSS_FLOAT_RIGHT]);
         /////////////////////////////////////////
         
         $listAttributes = [$titre, $strToolBar, $header, $listContent];
@@ -298,12 +299,10 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
     }
     
     /**
-     * @param array $objs
-     * @return string
      * @since 1.22.10.27
-     * @version 1.22.10.27
+     * @version 1v1.23.05.28
      */
-    public function buildPagination(&$objs)
+    public function buildPagination(array &$objs): string
     {
         $nbItems = count($objs);
         $nbItemsPerPage = 10;
@@ -311,17 +310,17 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         $strPagination = '';
         if ($nbPages>1) {
             // Le bouton page précédente
-            $label = $this->getIcon('caret-left');
+            $label = HtmlUtils::getIcon(self::I_CARET_LEFT);
             if ($this->curPage!=1) {
                 $btnClass = '';
                 $href = $this->getRefreshUrl([self::CST_CURPAGE=>$this->curPage-1]);
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+                $btnContent = HtmlUtils::getLink($label, $href, self::CST_TEXT_WHITE);
             } else {
                 $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
                 $btnContent = $label;
             }
             $btnAttributes = [self::ATTR_CLASS=>$btnClass];
-            $strPagination .= $this->getButton($btnContent, $btnAttributes).self::CST_NBSP;
+            $strPagination .= HtmlUtils::getButton($btnContent, $btnAttributes).self::CST_NBSP;
             
             // La chaine des éléments affichés
             $firstItem = ($this->curPage-1)*$nbItemsPerPage;
@@ -329,17 +328,17 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
             $strPagination .= vsprintf(self::DYN_DISPLAYED_PAGINATION, [$firstItem+1, $lastItem, $nbItems]);
             
             // Le bouton page suivante
-            $label = $this->getIcon('caret-right');
+            $label = HtmlUtils::getIcon(self::I_CARET_RIGHT);
             if ($this->curPage!=$nbPages) {
                 $btnClass = '';
                 $href = $this->getRefreshUrl([self::CST_CURPAGE=>$this->curPage+1]);
-                $btnContent = $this->getLink($label, $href, self::CST_TEXT_WHITE);
+                $btnContent = HtmlUtils::getLink($label, $href, self::CST_TEXT_WHITE);
             } else {
                 $btnClass = self::CST_DISABLED.' '.self::CST_TEXT_WHITE;
                 $btnContent = $label;
             }
             $btnAttributes = [self::ATTR_CLASS=>$btnClass];
-            $strPagination .= self::CST_NBSP.$this->getButton($btnContent, $btnAttributes);
+            $strPagination .= self::CST_NBSP.HtmlUtils::getButton($btnContent, $btnAttributes);
             $objs = array_slice($objs, $firstItem, $nbItemsPerPage);
         }
         return $strPagination;

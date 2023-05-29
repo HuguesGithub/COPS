@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * Classe WpPageAdminAutopsieBean
  * @author Hugues
  * @since 1.22.10.08
- * @version 1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminAutopsieBean extends WpPageAdminBean
 {
@@ -57,9 +59,9 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
 
     /**
      * @since 1.22.10.08
-     * @version 1.22.10.08
+     * @version v1.23.05.28
      */
-    public function getOngletContent()
+    public function getOngletContent(): string
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-autopsies.php';
 
@@ -69,15 +71,12 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
         if ($this->slugSubOnglet==self::CST_ENQUETE_WRITE) {
             // Si on est en mode écriture
             $strRightPanel   = $this->objCopsAutopsie->getBean()->getWriteAutopsieBlock();
-            $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
-            $strContent = $this->getIcon(self::I_BACKWARD).' Retour';
+            $url = $this->getOngletUrl();
+            $strContent = HtmlUtils::getIcon(self::I_BACKWARD).' Retour';
         } else {
             // Si on est sur la page de listing des autopsies
             $strRightPanel   = $this->getFolderAutopsiesList();
-            $attributes = [
-                self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE),
-                self::ATTR_CLASS => $strBtnClass
-            ];
+            $url = $this->getSubOngletUrl(self::CST_FOLDER_WRITE);
             $strContent = 'Débuter une autopsie';
         }
         /////////////////////////////////////////
@@ -88,7 +87,7 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
             // Contenu du panneau principal
             $strRightPanel,
             // Eventuel bouton de retour si on est en train de lire ou rédiger un message
-            $this->getBalise(self::TAG_A, $strContent, $attributes),
+            HtmlUtils::getLink($strContent, $url, $strBtnClass),
         ];
         return $this->getRender($urlTemplate, $attributes);
     }

@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.24
- * @version v1.23.05.07
+ * @version v1.23.05.28
  */
 interface LabelsInterface
 {
@@ -56,6 +56,7 @@ interface LabelsInterface
     public const LABEL_COURSES        = 'Stages';
     public const LABEL_SUIVANTE       = 'Suivante';
     public const LABEL_DELETE         = 'Supprimer';
+    public const LABEL_DELETE_EVENT   = 'Supprimer un événement';
     public const LABEL_TABLE_LUNE     = 'Table Lune';
     public const LABEL_TABLE_WEATHER  = 'Table Météo';
     public const LABEL_TABLE_SOLEIL   = 'Table Soleil';
@@ -66,4 +67,5 @@ interface LabelsInterface
     public const DYN_DISPLAYED_PAGINATION = '%1$s - %2$s sur %3$s';
     public const DYN_FIRST_ENTRY      = 'Première entrée : %1$s.';
     public const DYN_LAST_ENTRY       = 'Dernière entrée : %1$s.';
+    public const DYN_DELETE_EVENT     = 'Confirmez-vous la suppression de l\'événement <strong>%1$s</strong>, identifiant <strong>%2$s</strong> ?';
 }

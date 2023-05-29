@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace core\actions;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+use core\utils\DateUtils;
+
 /**
  * CopsIndexActions
  * @since 1.22.10.22
- * @version 1.22.10.22
+ * @version v1.23.05.28
  */
 class CopsIndexActions extends LocalActions
 {
@@ -41,7 +40,7 @@ class CopsIndexActions extends LocalActions
 
     /**
      * @since 1.22.10.22
-     * @version 1.22.10.22
+     * @version v1.23.05.28
      */
     public function csvExport($params)
     {
@@ -96,9 +95,9 @@ class CopsIndexActions extends LocalActions
         // Définir le nom du CSV
         if (isset($params[self::FIELD_NATURE_ID]) && $params[self::FIELD_NATURE_ID]!='') {
             $nomNature = $objCopsIndex->getNature()->getField(self::FIELD_NOM_IDX_NATURE);
-            $strFileName = 'export_index_'.$nomNature.'_'.date('Ymd').'.csv';
+            $strFileName = 'export_index_'.$nomNature.'_'.DateUtils::getStrDate('Ymd', time()).'.csv';
         } else {
-            $strFileName = 'export_index_'.date('Ymd').'.csv';
+            $strFileName = 'export_index_'.DateUtils::getStrDate('Ymd', time()).'.csv';
         }
         // On stocke le contenu du fichier
         $fp = fopen($strDirectory.$strFileName, 'w');

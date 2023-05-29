@@ -7,13 +7,13 @@ use core\utils\DateUtils;
  * CopsEventDateDotBean
  * @author Hugues
  * @since v1.23.05.11
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class CopsEventDateDotBean extends CopsEventDateBean
 {
     /**
      * @since v1.23.05.11
-     * @version v1.23.05.21
+     * @version v1.23.05.28
      */
     public function getCartouche(string $tag, string $displayDate): string
     {
@@ -22,7 +22,7 @@ class CopsEventDateDotBean extends CopsEventDateBean
         $this->curDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
         ///////////////////////////////////////////////////
 
-        $this->objEvent = $this->objEventDate->getCopsEvent();
+        $this->objEvent = $this->objEventDate->getEvent();
         ///////////////////////////////////////////////////
         //
         $fcDayClass = '';

@@ -2,21 +2,22 @@
 namespace core\bean;
 
 use core\domain\CopsMeteoClass;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageHomeBean
  * @author Hugues
  * @since 1.22.04.28
- * @version 1.22.04.30
+ * @version v1.23.05.28
  */
 class WpPageHomeBean extends WpPageBean
 {
 
     /**
      * @since 1.22.04.28
-     * @version 1.22.09.23
+     * @version v1.23.05.28
      */
-    public function getContentPage()
+    public function getContentPage(): string
     {
         $urlTemplate = self::WEB_PP_HOME_CONTENT;
         $str = '';
@@ -28,7 +29,7 @@ class WpPageHomeBean extends WpPageBean
             'business'=>'Business',
         ];
         foreach ($miniNav as $key => $value) {
-            $strLink = $this->getLink($value, '/section/'.$key, '');
+            $strLink = HtmlUtils::getLink($value, '/section/'.$key, '');
             $str .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>'mini-nav-item']);
         }
 

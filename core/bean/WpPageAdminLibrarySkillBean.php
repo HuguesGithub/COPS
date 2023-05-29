@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\domain\WpPostClass;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminLibrarySkillBean
  * @author Hugues
  * @since 1.22.11.03
- * @version 1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
 {
@@ -17,9 +18,9 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_SKILL];
         
-        $buttonContent = $this->getLink(self::LABEL_SKILLS, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink(self::LABEL_SKILLS, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
     }
     
     /**
@@ -51,15 +52,15 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
             $postAnchor = substr($postTitle, 0, 1);
             if ($prevAncre!=$postAnchor) {
                 $prevAncre = $postAnchor;
-                $btnContent = $this->getLink($postAnchor, '#anchor-'.$postAnchor, 'nav-link text-white');
+                $btnContent = HtmlUtils::getLink($postAnchor, '#anchor-'.$postAnchor, 'nav-link text-white');
                 $btnAttributes = [
                     self::ATTR_CLASS=>'btn-dark btn-xs',
                     self::ATTR_STYLE=>'width: -webkit-fill-available'
                 ];
-                $liContent = $this->getButton($btnContent, $btnAttributes);
+                $liContent = HtmlUtils::getButton($btnContent, $btnAttributes);
                 $strAncres .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
-                $aAttributes = [self::ATTR_CLASS=>'col-12', self::FIELD_ID=>'anchor-'.$postAnchor];
-                $strContent .= $this->getBalise(self::TAG_A, '', $aAttributes);
+                $aAttributes = [self::FIELD_ID=>'anchor-'.$postAnchor];
+                $strContent .= HtmlUtils::getLink('', '#', 'col-12', $aAttributes);
             }
             // On récupère le contenu de l'article pour afficher la compétence
             $strContent .= WpPostClass::getBean($objWpPost, self::WP_CAT_ID_SKILL)->getContentDisplay();

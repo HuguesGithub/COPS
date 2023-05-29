@@ -1,12 +1,11 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
 /**
  * Classe AdminCopsCalendarEventPageBean
  * @author Hugues
  * @since 1.22.06.15
- * @version 1.22.06.15
+   * @version v1.23.05.28
  */
 class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
 {
@@ -68,7 +67,7 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
 
   /**
    * @since 1.22.06.09
-   * @version 1.22.09.21
+   * @version v1.23.05.28
    */
     public function getOngletContent()
     {
@@ -88,10 +87,10 @@ class AdminCopsCalendarEventPageBean extends AdminCopsCalendarPageBean
         ///////////////////////////////////////////////////////
         // Contenu de la page
         $strContent = '';
-        $objsCopsEvent = $this->CopsEventServices->getCopsEvents();
+        $objsCopsEvent = $this->CopsEventServices->getEvents();
         while (!empty($objsCopsEvent)) {
-            $CopsEvent = array_shift($objsCopsEvent);
-          $strContent .= $CopsEvent->getBean()->getTableRow();
+            $objCopsEvent = array_shift($objsCopsEvent);
+          $strContent .= $objCopsEvent->getBean()->getTableRow();
         }
         ///////////////////////////////////////////////////////
     

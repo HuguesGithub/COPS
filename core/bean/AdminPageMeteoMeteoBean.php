@@ -3,13 +3,14 @@ namespace core\bean;
 
 use core\services\CopsMeteoServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoMeteoBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 {
@@ -17,6 +18,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
      * Affichage des données de la table wp_7_cops_meteo pour une journée donnée.
      * Par défaut, la journée affichée est la journée ingame.
      * @since v1.23.04.26
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -36,31 +38,31 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
         // Construction du contenu du header
         $trContent  = '';
-        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP, [self::CST_ROWSPAN=>2]);
-        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_CONDITIONS, [self::CST_COLSPAN=>3]);
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_CONFORT, [self::CST_COLSPAN=>3]);
-        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP, [self::CST_COLSPAN=>2]);
-        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP, [self::CST_ROWSPAN=>2]);
+        $trContent .= HtmlUtils::getTh(self::CST_NBSP, [self::CST_ROWSPAN=>2]);
+        $trContent .= HtmlUtils::getTh(self::CST_NBSP);
+        $trContent .= HtmlUtils::getTh(self::LABEL_CONDITIONS, [self::CST_COLSPAN=>3]);
+        $trContent .= HtmlUtils::getTh(self::LABEL_CONFORT, [self::CST_COLSPAN=>3]);
+        $trContent .= HtmlUtils::getTh(self::CST_NBSP, [self::CST_COLSPAN=>2]);
+        $trContent .= HtmlUtils::getTh(self::CST_NBSP, [self::CST_ROWSPAN=>2]);
         $strHeader  = $this->getBalise(self::TAG_TR, $trContent);
 
         $trContent  = '';
         // Heure
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_HEURE);
-        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $trContent .= HtmlUtils::getTh(self::LABEL_HEURE);
+        $trContent .= HtmlUtils::getTh(self::CST_NBSP);
         // Température
         // Météo + Icone
         // Force et sens du vent
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_TEMP);
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_WEATHER);
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_WIND);
-        $trContent .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $trContent .= HtmlUtils::getTh(self::LABEL_TEMP);
+        $trContent .= HtmlUtils::getTh(self::LABEL_WEATHER);
+        $trContent .= HtmlUtils::getTh(self::LABEL_WIND);
+        $trContent .= HtmlUtils::getTh(self::CST_NBSP);
         // Humidité
         // Baromètre
         // Visibilité
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_HUMIDITY);
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_BAROMETER);
-        $trContent .= $this->getBalise(self::TAG_TH, self::LABEL_VISIBILITY);
+        $trContent .= HtmlUtils::getTh(self::LABEL_HUMIDITY);
+        $trContent .= HtmlUtils::getTh(self::LABEL_BAROMETER);
+        $trContent .= HtmlUtils::getTh(self::LABEL_VISIBILITY);
         $strHeader .= $this->getBalise(self::TAG_TR, $trContent);
 
         // Récupération des données de la journée
@@ -81,7 +83,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.04.30
+     * @version v1.23.05.28
      */
     public function getCardContent(string &$titre, string &$strBody): void
     {
@@ -128,13 +130,13 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
             self::CST_SUBONGLET => self::CST_HOME,
             self::CST_DATE      => $prevDate,
         ];
-        $btnGroup  = $this->getLink(self::LABEL_PRECEDENTE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
+        $btnGroup  = HtmlUtils::getLink(self::LABEL_PRECEDENTE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
         $urlAttributes[self::CST_DATE] = $curDate;
-        $btnGroup .= $this->getLink(self::LABEL_ACTUELLE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
+        $btnGroup .= HtmlUtils::getLink(self::LABEL_ACTUELLE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
         $urlAttributes[self::CST_DATE] = $nextDate;
-        $btnGroup .= $this->getLink(self::LABEL_SUIVANTE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
+        $btnGroup .= HtmlUtils::getLink(self::LABEL_SUIVANTE, UrlUtils::getAdminUrl($urlAttributes), $linkClass);
 
-        $strBody .= $this->getDiv($btnGroup, [self::ATTR_CLASS=>self::BTS_BTN_GROUP_SM]);
+        $strBody .= HtmlUtils::getDiv($btnGroup, [self::ATTR_CLASS=>self::BTS_BTN_GROUP_SM]);
     }
 
 }

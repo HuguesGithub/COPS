@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 interface ConstantsInterface
 {
@@ -32,10 +32,17 @@ interface ConstantsInterface
     public const ATTR_DATA_ICON         = 'data-icon';
     public const ATTR_DATA_TRIGGER      = 'trigger';
 
+    public const ATTR_TIME              = 'time';
+
     /////////////////////////////////////////////////
     // Bootstrap
     public const BTS_BTN_PRIMARY        = 'btn btn-primary';
     public const BTS_BTN_GROUP_SM       = 'btn-group btn-group-sm';
+
+    /////////////////////////////////////////////////
+    // CSS
+    public const CSS_FLOAT_LEFT         = 'float-left';
+    public const CSS_FLOAT_RIGHT        = 'float-right';
 
   /////////////////////////////////////////////////
   // Constantes
@@ -99,6 +106,7 @@ interface ConstantsInterface
     public const CST_CHILDREN           = 'children';
     public const CST_COLSPAN            = 'colspan';
     public const CST_DATE               = 'date';
+    public const CST_DELETE             = 'delete';
     public const CST_DISABLED           = 'disabled';
     public const CST_EDIT               = 'edit';
     public const CST_ENDDATE            = 'endDate';
@@ -135,11 +143,13 @@ interface ConstantsInterface
     // FC
     public const CST_FC_COL_HEADER_CELL    = 'fc-col-header-cell';
     public const CST_FC_COL_HEADER_CELL_CSH= self::CST_FC_COL_HEADER_CELL.'-cushion';
+
     public const CST_FC_DAY                = 'fc-day';
     public const CST_FC_DAY_PAST           = self::CST_FC_DAY.'-past';
     public const CST_FC_DAY_TODAY          = self::CST_FC_DAY.'-today';
     public const CST_FC_DAY_FUTURE         = self::CST_FC_DAY.'-future';
     public const CST_FC_DAY_OTHER          = self::CST_FC_DAY.'-other';
+
     public const CST_FC_DAYGRID_DAY        = 'fc-daygrid-day';
     public const CST_FC_DAYGRID_DAY_BG     = self::CST_FC_DAYGRID_DAY.'-bg';
     public const CST_FC_DAYGRID_DAY_BTM    = self::CST_FC_DAYGRID_DAY.'-bottom';
@@ -148,15 +158,28 @@ interface ConstantsInterface
     public const CST_FC_DAYGRID_DAY_NB     = self::CST_FC_DAYGRID_DAY.'-number';
     public const CST_FC_DAYGRID_DAY_TOP    = self::CST_FC_DAYGRID_DAY.'-top';
     public const CST_FC_DG_EVENT_HAR_ABS   = 'fc-daygrid-event-harness-abs';
+
     public const CST_FC_EVENT_END          = 'fc-event-end';
     public const CST_FC_EVENT_START        = 'fc-event-start';
     public const CST_FC_EVENT_TODAY        = 'fc-event-today';
+
     public const CST_FC_SCROLLGRID_SYNC_IN = 'fc-scrollgrid-sync-inner';
+    public const CST_FC_SCROLLGRID_SHRINK  = 'fc-scrollgrid-shrink';
+    public const CST_FC_SCROLLGRID_SHRINK_CUSHION  = self::CST_FC_SCROLLGRID_SHRINK.'-cushion';
+    public const CST_FC_SCROLLGRID_SHRINK_FRAME    = self::CST_FC_SCROLLGRID_SHRINK.'-frame';
+
     public const CST_FC_TIMEGRID_COL       = 'fc-timegrid-col';
     public const CST_FC_TIMEGRID_COL_BG    = self::CST_FC_TIMEGRID_COL.'-bg';
     public const CST_FC_TIMEGRID_COL_EVENTS= self::CST_FC_TIMEGRID_COL.'-events';
     public const CST_FC_TIMEGRID_COL_FRAME = self::CST_FC_TIMEGRID_COL.'-frame';
     public const CST_FC_TIMEGRID_NOW_IC    = 'fc-timegrid-now-indicator-container';
+    public const CST_FC_TIMEGRID_SLOT      = 'fc-timegrid-slot';
+    public const CST_FC_TIMEGRID_SLOT_LABEL= self::CST_FC_TIMEGRID_SLOT.' fc-timegrid-slot-label';
+    public const CST_FC_TIMEGRID_SLOT_LABEL_CUSHION = self::CST_FC_TIMEGRID_SLOT_LABEL.'-cushion';
+    public const CST_FC_TIMEGRID_SLOT_LABEL_FRAME   = self::CST_FC_TIMEGRID_SLOT_LABEL.'-frame ';
+    public const CST_FC_TIMEGRID_SLOT_LANE = self::CST_FC_TIMEGRID_SLOT.' fc-timegrid-slot-lane';
+    public const CST_FC_TIMEGRID_SLOT_MINOR= self::CST_FC_TIMEGRID_SLOT.'-minor';
+
     public const CST_GRIDCELL              = 'gridcell';
     public const CST_COLUMNHEADER          = 'columnheader';
 
@@ -199,6 +222,7 @@ interface ConstantsInterface
     public const I_FILE_COLDED           = 'folder';
     public const I_FILTER_CIRCLE_XMARK  = 'filter-circle-xmark';
     public const I_GEAR                 = 'gear';
+    public const I_HOUSE                = 'house';
     public const I_REFRESH              = 'arrows-rotate';
     public const I_SQUARE_CHECK         = 'square-check';
     public const I_SQUARE_XMARK         = 'square-xmark';
@@ -252,21 +276,16 @@ interface ConstantsInterface
 
     /////////////////////////////////////////////////
     // Tags
-    public const TAG_A                  = 'a';
     public const TAG_BUTTON             = 'button';
-    public const TAG_DIV                = 'div';
-    public const TAG_I                  = 'i';
     public const TAG_IMG                = 'img';
     public const TAG_INPUT              = 'input';
     public const TAG_LABEL              = 'label';
     public const TAG_LI                 = 'li';
-    public const TAG_OPTION             = 'option';
     public const TAG_P                  = 'p';
     public const TAG_SELECT             = 'select';
     public const TAG_SPAN               = 'span';
     public const TAG_STRONG             = 'strong';
     public const TAG_TD                 = 'td';
-    public const TAG_TH                 = 'th';
     public const TAG_TR                 = 'tr';
     public const TAG_UL                 = 'ul';
 

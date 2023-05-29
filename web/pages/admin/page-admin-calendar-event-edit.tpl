@@ -55,7 +55,7 @@
 
                 <div class="col-12"></div>
 
-                <div id="mec_meta_box_period_form" class="mt-3 col-3"%11$s>
+                <div id="mec_meta_box_period_form" class="mt-3 col-2"%11$s>
                     <div class="input-group mb-3">
                         <div class="input-group-text pr-4 col-2">
                             <input class="form-check-input mt-0" type="radio" value="daily" id="repeatTypeDaily" name="repeatType" aria-label="Quotidien"%12$s>
@@ -80,20 +80,14 @@
                         </div>
                         <input type="text" for="repeatTypeYearly" class="form-control col-10" aria-label="Annuel" value="Annuel" readonly>
                     </div>            
-                    <div class="input-group mb-3">
-                        <div class="input-group-text pr-4 col-2">
-                            <input class="form-check-input mt-0" type="radio" value="custom" id="repeatTypeCustom" name="repeatType" aria-label="Personnalisé"%16$s>
-                        </div>
-                        <input type="text" for="repeatTypeCustom" class="form-control col-10" aria-label="Personnalisé" value="Personnalisé" readonly>
-                    </div>            
                 </div>
 
-                <div id="mec_meta_box_recursive_form" class="row mt-3 col-9"%11$s>
+                <div id="mec_meta_box_recursive_form" class="row mt-3 col-6"%11$s>
 
                     <div class="col-12">
                         <div class="input-group mb-3">
-                            <span class="input-group-text col-3" for="repeatInterval">Intervalle de répétition</span>
-                            <input type="text" name="repeatInterval" id="repeatInterval" class="form-control col-9" aria-label="Intervalle de répétition" aria-describedby="Intervalle de répétition" value="%17$s"/>
+                            <span class="input-group-text col-5" for="repeatInterval">Intervalle de répétition</span>
+                            <input type="text" name="repeatInterval" id="repeatInterval" class="form-control col-7" aria-label="Intervalle de répétition" aria-describedby="Intervalle de répétition" value="%17$s"/>
                         </div>
                     </div>
 
@@ -127,13 +121,63 @@
                     </div>
 
                 </div>
-            </div>
+
+                <div id="mec_meta_box_custom_form" class="row mt-3 col-4"%11$s>
+                    <div class="input-group mb-3 col-12">
+                        <div class="input-group-text pr-4 col-2">
+                            <input class="form-check-input mt-0" type="checkbox" value="custom" id="customEvent" name="customEvent" aria-label="Personnalisé">
+                        </div>
+                        <input type="text" for="customEvent" class="form-control col-10" aria-label="Personnalisé" value="Personnalisé" readonly="">
+                    </div>            
+
+                    <div class="input-group mb-3 col-12">
+                        <span class="input-group-text col-4" for="categorieId">Tous les</span>
+                        <select name="customDay" id="customDay" class="custom-select col-8">
+                            <option value="1">1er</option>
+                            <option value="2">2è</option>
+                            <option value="3">3è</option>
+                            <option value="4">4è</option>
+                            <option value="-1">Dernier</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-3 col-12">
+                        <select name="customDayWeek" id="customDayWeek" class="custom-select col-8 offset-4">
+                            <option value="1">Lundi</option>
+                            <option value="2">Mardi</option>
+                            <option value="3">Mercredi</option>
+                            <option value="4">Jeudi</option>
+                            <option value="5">Vendredi</option>
+                            <option value="6">Samedi</option>
+                            <option value="7">Dimanche</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-3 col-12">
+                        <span class="input-group-text col-4">de</span>
+                        <select name="customMonth" id="customMonth" class="custom-select col-8">
+                            <option value="9">Janvier</option>
+                            <option value="8">Février</option>
+                            <option value="1">Mars</option>
+                            <option value="17">Avril</option>
+                            <option value="11">Mai</option>
+                            <option value="10">Juin</option>
+                            <option value="13">Juillet</option>
+                            <option value="6">Août</option>
+                            <option value="2" selected="selected">Septembre</option>
+                            <option value="12">Octobre</option>
+                            <option value="14">Novembre</option>
+                            <option value="21">Décembre</option>
+                        </select>
+                    </div>
+
+                </div>
 
             <div class="card-footer col-12">
-                <input type="hidden" name="writeAction" value="1">
+                <input type="hidden" name="writeAction" value="write">
                 <div class="btn-group">
-                    <button class="btn btn-sm btn-danger">Supprimer</button>
-                    <button class="btn btn-sm btn-outline">Annuler</button>
+                    <button class="btn btn-sm btn-danger p-0"><a href="%26$s" style="margin: .25rem .5rem;text-decoration: none; color: white;">Supprimer</a></button>
+                    <button class="btn btn-sm btn-outline p-0"><a href="%25$s" style="margin: .25rem .5rem;text-decoration: none; color: black;">Annuler</a></button>
                     <button class="btn btn-sm btn-primary">Envoyer</button>
                 </div>
             </div>

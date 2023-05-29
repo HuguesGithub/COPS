@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\domain\WpPostClass;
+use core\utils\HtmlUtils;
 
 /**
  * WpPostBean
  * @author Hugues
  * @since 1.22.00.00
- * @version 1.22.09.23
+ * @version v1.23.05.28
  */
 class WpPostBean extends UtilitiesBean
 {
@@ -30,15 +31,15 @@ class WpPostBean extends UtilitiesBean
     
     /**
      * @since 1.22.10.29
-     * @version 1.22.10.29
+     * @version v1.23.05.28
      */
-    public function getCategoryNavItem($url, $icon, $blnSelected=false)
+    public function getCategoryNavItem(string $url, string $icon, bool $blnSelected=false): string
     {
         // Construction du Lien
-        $strIcon = $this->getIcon($icon);
+        $strIcon = HtmlUtils::getIcon($icon);
         $label   = $this->WpPost->getField(self::WP_POSTTITLE);
         $aContent = $strIcon.self::CST_NBSP.$label;
-        $liContent = $this->getLink($aContent, $url, 'nav-link '.self::CST_TEXT_WHITE);
+        $liContent = HtmlUtils::getLink($aContent, $url, 'nav-link '.self::CST_TEXT_WHITE);
 
         // Construction de l'élément de la liste.
         $liAttributes = [self::ATTR_CLASS => 'nav-item'.($blnSelected ? ' '.self::CST_ACTIVE : '')];

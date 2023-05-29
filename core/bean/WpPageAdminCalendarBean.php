@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminCalendarBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminCalendarBean extends WpPageAdminBean
 {
@@ -43,9 +44,9 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
 
         /////////////////////////////////////////
         // Construction du Breadcrumbs
-        $buttonContent = $this->getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink($this->titreOnglet, parent::getOngletUrl(), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDark)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
     
@@ -111,7 +112,7 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
                 $urlElements[$k] = $v;
             }
             $href = $this->getUrl($urlElements);
-            $liContent = $this->getLink($aContent, $href, 'nav-link text-white');
+            $liContent = HtmlUtils::getLink($aContent, $href, 'nav-link text-white');
             
             // Si le slug affiché vaut celui du menu ou qu'on est sur la vue par défaut est le menu est inbox
             $blnActive = ($this->slugSubOnglet==$key || $this->slugSubOnglet=='' && $key==self::CST_CAL_MONTH);
@@ -176,15 +177,15 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
     
     /**
      * @since v1.22.11.21
-     * @version v1.22.11.21
+     * @version v1.23.05.28
      */
-    public function getColumnHoraire($h)
+    public function getColumnHoraire(int $h): string
     {
         $hPadded = str_pad((string) $h, 2, '0', STR_PAD_LEFT);
         $cushionAttributes = [self::ATTR_CLASS=>'fc-timegrid-slot-label-cushion fc-scrollgrid-shrink-cushion'];
-        $shrinkCushion = $this->getDiv(date('ga', mktime($h, 0, 0)), $cushionAttributes);
+        $shrinkCushion = HtmlUtils::getDiv(DateUtils::getStrDate('ga', mktime($h, 0, 0)), $cushionAttributes);
         $frameAttributes = [self::ATTR_CLASS=>'fc-timegrid-slot-label-frame fc-scrollgrid-shrink-frame'];
-        $shrinkFrame = $this->getDiv($shrinkCushion, $frameAttributes);
+        $shrinkFrame = HtmlUtils::getDiv($shrinkCushion, $frameAttributes);
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink',
             'data-time' => $hPadded.':00:00'

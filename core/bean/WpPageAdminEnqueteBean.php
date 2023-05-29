@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminEnqueteBean
  * @author Hugues
  * @since 1.22.09.20
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminEnqueteBean extends WpPageAdminBean
 {
@@ -86,7 +87,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
 
     /**
      * @since 1.22.09.20
-     * @version 1.22.10.19
+     * @version v1.23.05.28
      */
     public function getOngletContent()
     {
@@ -99,18 +100,15 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
             $this->CopsEnquete->getField(self::FIELD_ID)!='' &&
             $this->CopsEnquete->getField(self::FIELD_STATUT_ENQUETE)!=self::CST_ENQUETE_OPENED) {
                 $strRightPanel   = $this->CopsEnquete->getBean()->getReadEnqueteBlock();
-                $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
-                $strContent = $this->getIcon(self::I_BACKWARD).' '.self::LABEL_RETOUR;
+                $url = $this->getOngletUrl();
+                $strContent = HtmlUtils::getIcon(self::I_BACKWARD).' '.self::LABEL_RETOUR;
             } elseif ($this->slugSubOnglet==self::CST_ENQUETE_WRITE) {
                 $strRightPanel   = $this->CopsEnquete->getBean()->getWriteEnqueteBlock();
-                $attributes = [self::ATTR_HREF  => $this->getOngletUrl(), self::ATTR_CLASS => $strBtnClass];
-                $strContent = $this->getIcon(self::I_BACKWARD).' '.self::LABEL_RETOUR;
+                $url = $this->getOngletUrl();
+                $strContent = HtmlUtils::getIcon(self::I_BACKWARD).' '.self::LABEL_RETOUR;
             } else {
                 $strRightPanel   = $this->getFolderEnquetesList();
-                $attributes = [
-                    self::ATTR_HREF  => $this->getSubOngletUrl(self::CST_FOLDER_WRITE),
-                    self::ATTR_CLASS => $strBtnClass
-                ];
+                $url = $this->getSubOngletUrl(self::CST_FOLDER_WRITE);
                 $strContent = 'Ouvrir une enquête';
             }
         /////////////////////////////////////////
@@ -121,7 +119,7 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
             // Contenu du panneau principal
             $strRightPanel,
             // Eventuel bouton de retour si on est en train de lire ou rédiger un message
-            $this->getBalise(self::TAG_A, $strContent, $attributes),
+            HtmlUtils::getLink($strContent, $url, $strBtnClass),
         ];
         return $this->getRender($urlTemplate, $attributes);
     }

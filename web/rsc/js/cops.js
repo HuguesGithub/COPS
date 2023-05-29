@@ -514,9 +514,11 @@ $('#repeatStatus').on('click', function(){
     if ($(this).is(':checked')) {
         $('#mec_meta_box_period_form').show();
         $('#mec_meta_box_recursive_form').show();
+        $('#mec_meta_box_custom_form').show();
     } else {
         $('#mec_meta_box_period_form').hide();
         $('#mec_meta_box_recursive_form').hide();
+        $('#mec_meta_box_custom_form').hide();
     }
 });
 
@@ -527,5 +529,19 @@ $('#allDayEvent').on('click', function(){
     } else {
         $('#heureDebut').prop('readonly', false);
         $('#heureFin').prop('readonly', false);
+    }
+});
+
+$('#customEvent').on('click', function(){
+    if ($(this).is(':checked')) {
+        $('#customDay').prop('readonly', false).removeClass('disabled');
+        $('#customDayWeek').prop('readonly', false).removeClass('disabled');
+        $('#customMonth').prop('readonly', false).removeClass('disabled');
+        $('#repeatInterval').prop('readonly', true);
+    } else {
+        $('#customDay').prop('readonly', true).addClass('disabled');
+        $('#customDayWeek').prop('readonly', true).addClass('disabled');
+        $('#customMonth').prop('readonly', true).addClass('disabled');
+        $('#repeatInterval').prop('readonly', false);
     }
 });

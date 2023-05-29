@@ -3,12 +3,13 @@ namespace core\bean;
 
 use core\services\CopsStageServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminLibraryCopsBean
  * @author Hugues
  * @since 1.22.11.05
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
 {
@@ -118,9 +119,9 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_COPS];
         
-        $buttonContent = $this->getLink('COPS', $this->getUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink('COPS', $this->getUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         
         $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
         if ($this->catSlug=='individual') {
@@ -132,14 +133,14 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             $name = $this->objCops->getField(self::FIELD_NOM).' '.$this->objCops->getField(self::FIELD_PRENOM);
             $urlElements[self::FIELD_ID] = $id;
             
-            $buttonContent = $this->getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
+            $buttonContent = HtmlUtils::getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
             $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-            $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+            $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         } elseif ($this->catSlug!='') {
             $name = $this->arrMenu[$this->catSlug];
-            $buttonContent = $this->getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
+            $buttonContent = HtmlUtils::getLink($name, $this->getUrl($urlElements), self::CST_TEXT_WHITE);
             $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-            $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+            $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         } else {
             // TODO
         }
@@ -179,23 +180,21 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     }
     
     /**
-     * @param boolean $blnRanked
-     * @return string
      * @since v1.22.11.09
-     * @version v1.22.11.09
+     * @version v1.23.05.28
      */
-    public function getHeader($blnRanked=true)
+    public function getHeader(bool $blnRanked=true): string
     {
         // On va construire le Header du tableau
         $thAttributes = [self::ATTR_STYLE => 'width:50px'];
-        $headerContent  = $this->getTh('Masque', $thAttributes);
+        $headerContent  = HtmlUtils::getTh('Masque', $thAttributes);
         $thAttributes = [self::ATTR_CLASS => 'mailbox-name'];
-        $headerContent .= $this->getTh('Matricule', $thAttributes);
-        $headerContent .= $this->getTh(self::LABEL_NOM, $thAttributes);
-        $headerContent .= $this->getTh('Surnom', $thAttributes);
+        $headerContent .= HtmlUtils::getTh('Matricule', $thAttributes);
+        $headerContent .= HtmlUtils::getTh(self::LABEL_NOM, $thAttributes);
+        $headerContent .= HtmlUtils::getTh('Surnom', $thAttributes);
         if ($blnRanked) {
             // Les gradés uniquement
-            $headerContent .= $this->getTh('Section', $thAttributes);
+            $headerContent .= HtmlUtils::getTh('Section', $thAttributes);
         }
         return $headerContent;
     }
@@ -216,7 +215,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
             $aContent = '<i class="fa-solid fa-user-police-tie"></i>'.self::CST_NBSP.$value;
             $urlElements = [self::CST_SUBONGLET => self::CST_LIB_COPS, self::CST_CAT_SLUG => $key];
             $href = $this->getUrl($urlElements);
-            $liContent = $this->getLink($aContent, $href, $strClass);
+            $liContent = HtmlUtils::getLink($aContent, $href, $strClass);
             $strLiClass = 'nav-item'.($key==$this->catSlug ? ' '.self::CST_ACTIVE : '');
             $menuContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>$strLiClass]);
         }
@@ -364,7 +363,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     /**
      * @return string
      * @since v1.22.11.09
-     * @version v1.22.11.09
+     * @version v1.23.05.28
      */
     public function getRotationCops()
     {
@@ -384,25 +383,25 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         for ($i=0; $i<4; ++$i) {
             $strDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+$dAjust+$i*7, $yDate));
             $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$strDate]);
-            $divContent = $this->getLink($strDate, $href, self::CST_TEXT_WHITE);
-            $strHeader .= $this->getDiv($divContent, [self::ATTR_CLASS=>'col-3 table-bordered']);
+            $divContent = HtmlUtils::getLink($strDate, $href, self::CST_TEXT_WHITE);
+            $strHeader .= HtmlUtils::getDiv($divContent, [self::ATTR_CLASS=>'col-3 table-bordered']);
         }
 
         // Bouton précédent
         $prevDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+$dAjust-7, $yDate));
-        $aContent = $this->getIcon('caret-left');
+        $aContent = HtmlUtils::getIcon(self::I_CARET_LEFT);
         $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$prevDate]);
-        $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
-        $prevBtn  = $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
+        $btnContent = HtmlUtils::getLink($aContent, $href, self::CST_TEXT_WHITE);
+        $prevBtn  = HtmlUtils::getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
         $prevBtn .= self::CST_NBSP.$prevDate;
         
         // Bouton suivant
         $nextDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+$dAjust+7, $yDate));
-        $aContent = $this->getIcon('caret-right');
+        $aContent = HtmlUtils::getIcon(self::I_CARET_RIGHT);
         $href = $this->getUrl([self::CST_CAT_SLUG=>'rotation', 'strDate'=>$nextDate]);
-        $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
+        $btnContent = HtmlUtils::getLink($aContent, $href, self::CST_TEXT_WHITE);
         $nextBtn  = $nextDate.self::CST_NBSP;
-        $nextBtn .= $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
+        $nextBtn .= HtmlUtils::getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
         
         // Décalage de semaines
         $tsStart = mktime(0, 0, 0, 6, 3, 2030);
@@ -431,9 +430,9 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         $strRowB = '';
         $strRowC = '';
         for ($i=0; $i<12; ++$i) {
-            $strRowA .= $this->getDiv($arrSections['A'][$i%4], $divAttributes);
-            $strRowB .= $this->getDiv($arrSections['B'][$i%4], $divAttributes);
-            $strRowC .= $this->getDiv($arrSections['C'][$i%4], $divAttributes);
+            $strRowA .= HtmlUtils::getDiv($arrSections['A'][$i%4], $divAttributes);
+            $strRowB .= HtmlUtils::getDiv($arrSections['B'][$i%4], $divAttributes);
+            $strRowC .= HtmlUtils::getDiv($arrSections['C'][$i%4], $divAttributes);
         }
         
         $attributes = [$strHeader, $prevBtn, $nextBtn, $strRowA, $strRowB, $strRowC];
@@ -445,7 +444,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     /**
      * @return string
      * @since v1.22.11.09
-     * @version v1.22.11.09
+     * @version v1.23.05.28
      */
     public function getRotationAccueil()
     {
@@ -462,19 +461,19 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
 
         // Bouton précédent
         $prevDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate-7, $yDate));
-        $aContent = $this->getIcon('caret-left');
+        $aContent = HtmlUtils::getIcon(self::I_CARET_LEFT);
         $href = $this->getUrl([self::CST_CAT_SLUG=>'accueil', 'strDate'=>$prevDate]);
-        $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
-        $prevBtn  = $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
+        $btnContent = HtmlUtils::getLink($aContent, $href, self::CST_TEXT_WHITE);
+        $prevBtn  = HtmlUtils::getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
         $prevBtn .= self::CST_NBSP.$prevDate;
 
         // Bouton suivant
         $nextDate = date(self::FORMAT_DATE_DMY, mktime(0, 0, 0, $mDate, $dDate+7, $yDate));
-        $aContent = $this->getIcon('caret-right');
+        $aContent = HtmlUtils::getIcon(self::I_CARET_RIGHT);
         $href = $this->getUrl([self::CST_CAT_SLUG=>'accueil', 'strDate'=>$nextDate]);
-        $btnContent = $this->getLink($aContent, $href, self::CST_TEXT_WHITE);
+        $btnContent = HtmlUtils::getLink($aContent, $href, self::CST_TEXT_WHITE);
         $nextBtn  = $nextDate.self::CST_NBSP;
-        $nextBtn .= $this->getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
+        $nextBtn .= HtmlUtils::getButton($btnContent, [self::ATTR_CLASS=>self::CST_TEXT_WHITE]);
                 
         ///////////////////////////////////////////////////////
         // Gestion des Offiers de Police
@@ -554,9 +553,9 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     /**
      * @return string
      * @since v1.22.11.09
-     * @version v1.22.11.09
+     * @version v1.23.05.28
      */
-    public function buildWeekGrid()
+    public function buildWeekGrid(): string
     {
         $ulAttributes = [self::ATTR_CLASS => 'p-0', self::ATTR_STYLE => 'list-style-type: none;'];
         $strContent = '';
@@ -568,13 +567,13 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
                 $strHoraire = '';
                 $this->defineExtras($key, $quand, $strClass, $strStyle, $strHoraire);
                 
-                $divCreneauContent = $this->getDiv($strHoraire, [self::ATTR_CLASS=>'bg-dark mr-1 ml-1']);
+                $divCreneauContent = HtmlUtils::getDiv($strHoraire, [self::ATTR_CLASS=>'bg-dark mr-1 ml-1']);
                 $divCreneauContent .= $this->getBalise(self::TAG_UL, $str, $ulAttributes);
                 
                 $divAttributes = [self::ATTR_CLASS => 'col-6 p-0'.$strClass, self::ATTR_STYLE => $strStyle];
-                $divDayContent .= $this->getDiv($divCreneauContent, $divAttributes);
+                $divDayContent .= HtmlUtils::getDiv($divCreneauContent, $divAttributes);
             }
-            $strContent .= $this->getDiv($divDayContent, [self::ATTR_CLASS=>'col-2 table-bordered']);
+            $strContent .= HtmlUtils::getDiv($divDayContent, [self::ATTR_CLASS=>'col-2 table-bordered']);
         }
         return $strContent;
     }

@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\services;
+
+use core\utils\HtmlUtils;
+
 /**
  * Classe CopsLangueServices
  * @author Hugues
  * @since 1.22.04.28
- * @version 1.22.04.28
+ * @version v1.23.05.28
  */
 class CopsLangueServices extends LocalServices
 {
@@ -68,24 +69,17 @@ class CopsLangueServices extends LocalServices
   }
 
   /**
-   * @param array $attributes
-   *    [mixed]   : champs de l'objet
-   *    [orderby] : tri sur une colonne
-   *    [order]   : sens du tri
-   *    [limit]   : nombre d'éléments max
-   * @return string
    * @since 1.22.04.28
-   * @version 1.22.04.28
+   * @version v1.23.05.28
    */
     public function getSelectHtml(array $selectAttributes=[], array $requestAttributes=[]): string
     {
         $objBean = new UtilitiesBean();
         $objsCopsLangue = $this->getCopsLangues($requestAttributes);
-        $selectHtml  = $objBean->getBalise(self::TAG_OPTION);
+        $selectHtml  = HtmlUtils::getOption();
         foreach ($objsCopsLangue as $objCopsLangue) {
             $libelle = $objCopsLangue->getField(self::FIELD_LIBELLE);
-            $attributes = [self::ATTR_VALUE=>$objCopsLangue->getField(self::FIELD_ID)];
-            $selectHtml .= $objBean->getBalise(self::TAG_OPTION, $libelle, $attributes);
+            $selectHtml .= HtmlUtils::getOption($libelle, $objCopsLangue->getField(self::FIELD_ID));
         }
         return $objBean->getBalise(self::TAG_SELECT, $selectHtml, $selectAttributes);
     }

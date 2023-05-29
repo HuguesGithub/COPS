@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 
 /**
  * Classe WpPageAdminCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.14
+ * @version v1.23.05.28
  */
 class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 {
@@ -25,13 +26,13 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         $buttonContent = $this->getBalise(self::TAG_SPAN, $this->titreSubOnglet, $spanAttributes);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
     
     /**
      * @since 1.22.11.21
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
     public function getOngletContent()
     {
@@ -58,7 +59,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsCopsEventDate)) {
             $objCopsEventDate = array_shift($objsCopsEventDate);
-            if ($objCopsEventDate->getCopsEvent()->isAllDayEvent()) {
+            if ($objCopsEventDate->getEvent()->isAllDayEvent()) {
                 $this->objsAlldayEventDate[] = $objCopsEventDate;
             } else {
                 $this->objsTodayEventDate[] = $objCopsEventDate;
@@ -73,8 +74,8 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         }
         /////////////////////////////////////////
         
-        $this->prevCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d-1, $y));
-        $this->nextCurday = date(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d+1, $y));
+        $this->prevCurday = DateUtils::getStrDate(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d-1, $y));
+        $this->nextCurday = DateUtils::getStrDate(self::FORMAT_DATE_MDY, mktime(0, 0, 0, $m, $d+1, $y));
         
         $urlTemplate = self::PF_SECTION_CAL_DAY;
         $attributes = [
@@ -110,44 +111,44 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 
     /**
      * @since 1.22.11.21
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
-    public function getRowHeaders($strClass, $tsDisplay)
+    public function getRowHeaders(string $strClass, int $tsDisplay): string
     {
         $url = '#';
         $aClass = self::CST_FC_COL_HEADER_CELL_CSH.' '.self::CST_TEXT_WHITE;
-        $divContent = $this->getLink(DateUtils::arrFullDays[date('w', $tsDisplay)], $url, $aClass);
-        $thContent = $this->getDiv($divContent, [self::ATTR_CLASS=>self::CST_FC_SCROLLGRID_SYNC_IN]);
+        $divContent = HtmlUtils::getLink(DateUtils::arrFullDays[date('w', $tsDisplay)], $url, $aClass);
+        $thContent = HtmlUtils::getDiv($divContent, [self::ATTR_CLASS=>self::CST_FC_SCROLLGRID_SYNC_IN]);
         $attributes = [
             self::ATTR_ROLE => self::CST_COLUMNHEADER,
             self::ATTR_CLASS => self::CST_FC_COL_HEADER_CELL.' '.self::CST_FC_DAY.' '.$strClass,
-            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
-        return $this->getBalise(self::TAG_TH, $thContent, $attributes);
+        return HtmlUtils::getTh($thContent, $attributes);
     }
 
     /**
      * @since 1.22.11.21
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
-    public function getRowAllDay($strClass, $tsDisplay)
+    public function getRowAllDay(string $strClass, int $tsDisplay): string
     {
         $botAttributes = [
             self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BTM,
             self::ATTR_STYLE => 'margin-top: 0px;'
         ];
-        $divBottom = $this->getDiv('', $botAttributes);
+        $divBottom = HtmlUtils::getDiv('', $botAttributes);
         
         $allDayEvents = $this->getAllDayEvents($tsDisplay);
         
-        $divIn  = $this->getDiv($allDayEvents.$divBottom, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_EVENTS]);
-        $divIn .= $this->getDiv('', [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG]);
+        $divIn  = HtmlUtils::getDiv($allDayEvents.$divBottom, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_EVENTS]);
+        $divIn .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG]);
         
-        $tdContent = $this->getDiv($divIn, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN]);
+        $tdContent = HtmlUtils::getDiv($divIn, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN]);
         $attributes = [
             self::ATTR_ROLE => self::CST_GRIDCELL,
             self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' ' . $strClass,
-            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
     }
@@ -168,20 +169,20 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 
     /**
      * @since v1.22.11.21
-     * @version v1.22.11.21
+     * @version v1.23.05.28
      */
-    public function getRowHoraire($strClass, $tsDisplay)
+    public function getRowHoraire(string $strClass, int $tsDisplay): string
     {
-        $divContent  = $this->getDiv('', [self::ATTR_CLASS=>'fc-timegrid-col-bg']);
-        $divContent .= $this->getDiv($this->getDayCell(), [self::ATTR_CLASS=>'fc-timegrid-col-events']);
-        $divContent .= $this->getDiv('', [self::ATTR_CLASS=>'fc-timegrid-col-events']);
-        $divContent .= $this->getDiv('', [self::ATTR_CLASS=>'fc-timegrid-now-indicator-container']);
+        $divContent  = HtmlUtils::getDiv('', [self::ATTR_CLASS=>'fc-timegrid-col-bg']);
+        $divContent .= HtmlUtils::getDiv($this->getDayCell(), [self::ATTR_CLASS=>'fc-timegrid-col-events']);
+        $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>'fc-timegrid-col-events']);
+        $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>'fc-timegrid-now-indicator-container']);
         
-        $tdContent = $this->getDiv($divContent, [self::ATTR_CLASS=>'fc-timegrid-col-frame']);
+        $tdContent = HtmlUtils::getDiv($divContent, [self::ATTR_CLASS=>'fc-timegrid-col-frame']);
         $tdAttributes = [
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
-            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }

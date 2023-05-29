@@ -10,7 +10,7 @@ use core\services\CopsEventServices;
  * Classe CopsEventDate
  * @author Hugues
  * @since 1.22.11.25
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class CopsEventDateClass extends LocalDomainClass
 {
@@ -33,14 +33,14 @@ class CopsEventDateClass extends LocalDomainClass
     //////////////////////////////////////////////////
     /**
      * @since 1.22.06.13
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
     public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsEventDateClass';
         // On initialise l'event source
-        $this->objCopsEvent = $this->getCopsEvent();
+        $this->objCopsEvent = $this->getEvent();
     }
     /**
      * @version 1.22.06.13
@@ -51,11 +51,11 @@ class CopsEventDateClass extends LocalDomainClass
     
     /**
      * @version 1.22.06.13
-     * @since v1.23.05.21
+     * @since v1.23.05.28
      */
     public function getBean()
     {
-        $objCopsEvent = $this->getCopsEvent();
+        $objCopsEvent = $this->getEvent();
         if ($objCopsEvent->isAllDayEvent()) {
             $objBean = new CopsEventDateAlldayBean($this);
         } else {
@@ -66,12 +66,12 @@ class CopsEventDateClass extends LocalDomainClass
 
     /**
      * @since 1.22.11.25
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
-    public function getCopsEvent(): CopsEventClass
+    public function getEvent(): CopsEventClass
     {
         $this->objCopsEventServices = new CopsEventServices();
-        return $this->objCopsEventServices->getCopsEvent($this->eventId);
+        return $this->objCopsEventServices->getEvent($this->eventId??-1);
     }
 
     //////////////////////////////////////////////////
@@ -80,7 +80,7 @@ class CopsEventDateClass extends LocalDomainClass
 
     /**
      * @since v1.23.05.11
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
     public function getAmPmTime(string $field, bool $blnAmPm=true): string
     {
@@ -89,7 +89,7 @@ class CopsEventDateClass extends LocalDomainClass
         $h = floor($intTime/60);
 
         if (!$blnAmPm) {
-            $objCopsEvent = $this->getCopsEvent();
+            $objCopsEvent = $this->getEvent();
             $strTime  = $objCopsEvent->getField(self::FIELD_HEURE_DEBUT).' - ';
             $strTime .= $objCopsEvent->getField(self::FIELD_HEURE_FIN);
             return $strTime;

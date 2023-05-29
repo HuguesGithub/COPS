@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * Classe WpPageAdminLibraryCourseBean
  * @author Hugues
  * @since 1.22.11.05
- * @version 1.23.04.30
+ * @version v1.23.05.28
  */
 class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
 {
@@ -15,9 +17,9 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_STAGE];
         
-        $buttonContent = $this->getLink(self::LABEL_COURSES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink(self::LABEL_COURSES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
     }
     
     /**

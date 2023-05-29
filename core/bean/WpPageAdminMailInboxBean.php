@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
+namespace core\bean;
+
+use core\utils\HtmlUtils;
+
 /**
  * Classe WpPageAdminMailInboxBean
  * @author Hugues
  * @since 1.22.11.11
- * @version 1.22.11.11
+ * @version v1.23.05.28
  */
 class WpPageAdminMailInboxBean extends WpPageAdminMailBean
 {
@@ -17,7 +18,7 @@ class WpPageAdminMailInboxBean extends WpPageAdminMailBean
         $spanAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         $buttonContent = $this->getBalise(self::TAG_SPAN, self::LABEL_INBOX, $spanAttributes);
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
-        $this->breadCrumbsContent .= $this->getButton($buttonContent, $buttonAttributes);
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
     }
     

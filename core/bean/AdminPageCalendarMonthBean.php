@@ -1,22 +1,23 @@
 <?php
 namespace core\bean;
 
+use core\domain\MySQLClass;
 use core\services\CopsEventServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
-use core\domain\MySQLClass;
 
 /**
  * Classe AdminPageCalendarMonthBean
  * @author Hugues
  * @since v1.23.05.03
- * @version v1.23.05.21
+ * @version v1.23.05.28
  */
 class AdminPageCalendarMonthBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.02
-     * @version v1.23.05.07
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -32,7 +33,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
             self::CST_SUBONGLET => self::CST_CAL_MONTH,
             self::CST_CAL_CURDAY => $this->curStrDate
         ];
-        $strLink = $this->getLink(self::LABEL_MONTHLY, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_MONTHLY, UrlUtils::getAdminUrl($urlAttributes), '');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Récupération du contenu principal
@@ -91,12 +92,12 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         $calendarHeader = DateUtils::getStrDate('month y', $this->curStrDate);
         $mainContent = $this->getSectionCalendar($calendarHeader, $viewContent);
         
-        return $this->getDiv($mainContent, [self::ATTR_CLASS=>'col']);
+        return HtmlUtils::getDiv($mainContent, [self::ATTR_CLASS=>'col']);
     }
     
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.14
+     * @version v1.23.05.28
      */
     public function getMonthCell(string $displayDate, bool $blnMonday): string
     {
@@ -115,12 +116,12 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
             $urlElements[self::CST_SUBONGLET] = self::CST_CAL_WEEK;
             $aHref = UrlUtils::getAdminUrl($urlElements);
             $aClass = self::CST_FC_DAYGRID_DAY_NB.' '.self::CST_TEXT_WHITE;
-            $divContent = $this->getLink(DateUtils::getStrDate('W', $displayDate), $aHref, $aClass);
+            $divContent = HtmlUtils::getLink(DateUtils::getStrDate('W', $displayDate), $aHref, $aClass);
             $divAttributes = [
                 self::ATTR_CLASS => 'badge bg-primary',
                 self::ATTR_STYLE => 'position: absolute; left: 2px; top: 2px'
             ];
-            $strWeekLink = $this->getDiv($divContent, $divAttributes);
+            $strWeekLink = HtmlUtils::getDiv($divContent, $divAttributes);
         } else {
             $strWeekLink = '';
         }
@@ -130,8 +131,8 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         // Le jour et le lien vers celui-ci
         $urlElements[self::CST_SUBONGLET] = self::CST_CAL_DAY;
         $url = UrlUtils::getAdminUrl($urlElements);
-        $strLink = $this->getLink(substr($displayDate, 8, 2), $url, self::CST_FC_DAYGRID_DAY_NB);
-        $strContent  = $this->getDiv($strWeekLink.$strLink, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_TOP]);
+        $strLink = HtmlUtils::getLink(substr($displayDate, 8, 2), $url, self::CST_FC_DAYGRID_DAY_NB);
+        $strContent  = HtmlUtils::getDiv($strWeekLink.$strLink, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_TOP]);
         //////////////////////////////////////////////////////////////////////////////////
 
         //////////////////////////////////////////////////////////////////////////////////
@@ -139,14 +140,14 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         // D'abord les événements qui prenennt toute la journée
         // Ou les "long events" sur plusieurs jours
         $attr = [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_EVENTS];
-        $strContent .= $this->getDiv($this->getAllDayEvents($displayDate), $attr);
+        $strContent .= HtmlUtils::getDiv($this->getAllDayEvents($displayDate), $attr);
         // Puis ceux de la journée
         $locAttributes = [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG];
-        $strContent .= $this->getDiv($this->getDayEvents($displayDate), $locAttributes);
+        $strContent .= HtmlUtils::getDiv($this->getDayEvents($displayDate), $locAttributes);
         //////////////////////////////////////////////////////////////////////////////////
         
         $divAttributes = [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN];
-        $divContent = $this->getDiv($strContent, $divAttributes);
+        $divContent = HtmlUtils::getDiv($strContent, $divAttributes);
         
         $tdAttributes = [
             self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' '.$strClass,
@@ -157,7 +158,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.21
+     * @version v1.23.05.28
      */
     public function getAllDayEvents(string $displayDate): string
     {
@@ -179,8 +180,8 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         // On va trier les event "Allday" de ceux qui ne le sont pas.
         while (!empty($objsEventDate)) {
             $objEventDate = array_shift($objsEventDate);
-            if ($objEventDate->getCopsEvent()->isAllDayEvent()) {
-                if ($objEventDate->getCopsEvent()->isFirstDay($displayDate)) {
+            if ($objEventDate->getEvent()->isAllDayEvent()) {
+                if ($objEventDate->getEvent()->isFirstDay($displayDate)) {
                     $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
                 } elseif (DateUtils::isMonday($displayDate)) {
                     // On a un événement qui est couvert par la période mais dont le premier jour
@@ -208,7 +209,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
             self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BTM,
             self::ATTR_STYLE => 'margin-top: '.(25*$nbEvts).'px;'
         ];
-        $divBottom = $this->getDiv('', $botAttributes);
+        $divBottom = HtmlUtils::getDiv('', $botAttributes);
         /////////////////////////////////////////
 
         return $strContent.$divBottom;

@@ -3,12 +3,13 @@ namespace core\bean;
 
 use core\domain\CopsIndexClass;
 use core\services\CopsIndexServices;
+use core\utils\HtmlUtils;
 
 /**
  * CopsIndexReferenceBean
  * @author Hugues
  * @since 1.23.02.18
- * @version 1.23.04.30
+ * @version v1.23.04.28
  */
 class CopsIndexReferenceBean extends CopsBean
 {
@@ -26,31 +27,29 @@ class CopsIndexReferenceBean extends CopsBean
     }
 
     /**
-     * @return string
      * @since 1.22.10.21
-     * @version 1.22.10.22
+     * @version v1.23.05.28
      */
-    public function getCopsIndexReferenceRow($url, $blnShowColNature, $hasCopsEditor=false)
+    public function getCopsIndexReferenceRow(string $url, bool $blnShowColNature, bool $hasCopsEditor=false): string
     {
         // Si $blnShowColNature, on affiche la colonne Nature.
         // On veut afficher le nom, la nature (opt) et la description.
-        $url .= '&amp;'.self::CST_ACTION.'='.self::CST_ENQUETE_WRITE;
-        $url .= '&amp;id='.$this->obj->getField(self::FIELD_ID_IDX_REF);
-        
         $arrColumns = [];
         // Checkbox ?
         
         // Le nom.
-        $aAttributes = [self::ATTR_CLASS=>self::CST_TEXT_WHITE];
         if ($hasCopsEditor) {
-            $aAttributes[self::ATTR_HREF] = $url;
+            $url .= '&amp;'.self::CST_ACTION.'='.self::CST_ENQUETE_WRITE;
+            $url .= '&amp;id='.$this->obj->getField(self::FIELD_ID_IDX_REF);
+        } else {
+            $url = '#';
         }
         $spanLabel = $this->getBalise('strong', $this->obj->getField(self::FIELD_NOM_IDX));
         if (!empty($this->obj->getField(self::FIELD_PRENOM_IDX))) {
             $spanLabel .= ' '.$this->obj->getField(self::FIELD_PRENOM_IDX);
         }
         $label = $this->getBalise(self::TAG_SPAN, $spanLabel);
-        $lienEdition = $this->getBalise(self::TAG_A, $label, $aAttributes);
+        $lienEdition = HtmlUtils::getLink($label, $url, self::CST_TEXT_WHITE);
         $cell = $this->getBalise(self::TAG_TD, $lienEdition, [self::ATTR_CLASS=>'mailbox-name']);
         $arrColumns[] = $cell;
         
@@ -80,15 +79,12 @@ class CopsIndexReferenceBean extends CopsBean
         
         // Lien d'édition
         if ($hasCopsEditor) {
-            $aContent = $this->getIcon('square-pen');
-            $aAttributes = [self::ATTR_HREF => $url, self::ATTR_CLASS => self::CST_TEXT_WHITE];
-            $buttonContent = $this->getBalise(self::TAG_A, $aContent, $aAttributes);
+            $aContent = HtmlUtils::getIcon('square-pen');
+            $buttonContent = HtmlUtils::getLink($aContent, $url, self::CST_TEXT_WHITE);
             $buttonAttributes = [
-                self::ATTR_TYPE => self::TAG_BUTTON,
-                self::ATTR_CLASS => 'btn btn-default btn-sm',
                 self::ATTR_TITLE => self::LABEL_EDIT_ENTRY
             ];
-            $label = $this->getBalise(self::TAG_BUTTON, $buttonContent, $buttonAttributes);
+            $label = HtmlUtils::getButton($buttonContent, $buttonAttributes);
             $cell = $this->getBalise(self::TAG_TD, $label);
             $arrColumns[] = $cell;
         }

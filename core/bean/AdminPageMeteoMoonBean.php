@@ -3,13 +3,14 @@ namespace core\bean;
 
 use core\services\CopsLuneServices;
 use core\utils\DateUtils;
+use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoMoonBean
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.04.30
+ * @version v1.23.05.28
  */
 class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 {
@@ -17,7 +18,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
      * Affichage des données de la table wp_7_cops_lune pour une semaine donnée.
      * Par défaut, on affiche de la précente nouvelle lune jusqu'au thirdquarter correspondant.
      * @since v1.23.04.27
-     * @version v1.23.04.30
+     * @version v1.23.05.28
      */
     public function getContentOnglet(): string
     {
@@ -54,34 +55,34 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
 
         // Construction du Header et du Body
-        $label = $this->getButton($this->getIcon(self::I_ANGLE_LEFT, 'feather icon-chevron-left'));
+        $label = HtmlUtils::getButton(HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'feather icon-chevron-left'));
         $strPrevDate = DateUtils::getDateAjout($prevDate, [-1, 0, 0], self::FORMAT_DATE_YMD);
         $urlAttributes = [
             self::CST_ONGLET    => self::ONGLET_METEO,
             self::CST_SUBONGLET => self::CST_MOON,
             self::CST_DATE      => $strPrevDate,
         ];
-        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
-        $strHeader = $this->getBalise(self::TAG_TH, $link, [self::ATTR_CLASS=>self::STYLE_TEXT_CENTER]);
-        $strBody = $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $link = HtmlUtils::getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strHeader = HtmlUtils::getTh($link, [self::ATTR_CLASS=>self::STYLE_TEXT_CENTER]);
+        $strBody = HtmlUtils::getTh(self::CST_NBSP);
 
         $objCopsLuneLast = array_pop($objsCopsLune);
 
         while (!empty($objsCopsLune)) {
             $objCopsLune = array_shift($objsCopsLune);
-            $strHeader .= $this->getBalise(self::TAG_TH, $objCopsLune->getMoonStatus());
+            $strHeader .= HtmlUtils::getTh($objCopsLune->getMoonStatus());
             $strBody .= $this->getBalise(self::TAG_TD, $objCopsLune->getDateHeure());
         }
 
         // On doit ajouter une dernière colonne pour passer à la semaine suivante
-        $label = $this->getButton($this->getIcon(self::I_ANGLE_RIGHT, 'feather icon-chevron-right'));
+        $label = HtmlUtils::getButton(HtmlUtils::getIcon(self::I_ANGLE_RIGHT, 'feather icon-chevron-right'));
         $nextDate = $objCopsLuneLast->getField(self::FIELD_DATE_LUNE);
         $strNextDate = DateUtils::getDateAjout($nextDate, [2, 0, 0], self::FORMAT_DATE_YMD);
         $urlAttributes[self::CST_DATE] = $strNextDate;
-        $link = $this->getLink($label, UrlUtils::getAdminUrl($urlAttributes), '');
-        $strHeader .= $this->getBalise(self::TAG_TH, $link, [self::ATTR_CLASS=>self::STYLE_TEXT_CENTER]);
+        $link = HtmlUtils::getLink($label, UrlUtils::getAdminUrl($urlAttributes));
+        $strHeader .= HtmlUtils::getTh($link, [self::ATTR_CLASS=>self::STYLE_TEXT_CENTER]);
         // On doit ajouter une dernière colonne vide
-        $strBody .= $this->getBalise(self::TAG_TH, self::CST_NBSP);
+        $strBody .= HtmlUtils::getTh(self::CST_NBSP);
 
         $strHeader = $this->getBalise(self::TAG_TR, $strHeader);
         $strBody = $this->getBalise(self::TAG_TR, $strBody);
