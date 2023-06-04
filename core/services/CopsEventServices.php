@@ -1,6 +1,7 @@
 <?php
 namespace core\services;
 
+use core\bean\UtilitiesBean;
 use core\daoimpl\CopsEventDaoImpl;
 use core\domain\CopsEventClass;
 use core\domain\CopsEventCategorieClass;
@@ -207,9 +208,131 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.16
-     * @version v1.23.05.21
+     * @version v1.23.06.04
      */
     public function addEventDates(CopsEventClass $objEvent): void
+    {
+        if ($objEvent->getField(self::FIELD_CUSTOM_EVENT)==1) {
+            $this->addCustomEventDates($objEvent);
+        } else {
+            $this->addBasicEventDates($objEvent);
+        }
+    }
+
+    /**
+     * @since v1.23.05.30
+     * @version v1.23.06.04
+     */
+    public function addCustomEventDates(CopsEventClass $objEvent): void
+    {
+        $objEventServices = new CopsEventServices();
+        $objEventDate = new CopsEventDateClass();
+
+        // TODO
+        // La date de début indique à partir de quand on place ces jours Custom.
+        // Si on veut le dernier lundi de mai, et qu'on a comme date de début le 01/01/2030, ça retourne le 27/05/2030
+        // Si on a comme date de début le 01/06/2030, ça retourne le 26/05/2031
+        // Mais pour le moment, on va juste récupérer l'année de la date de début...
+        $strDateDebut = UtilitiesBean::fromPost(self::FIELD_DATE_DEBUT);
+        $year = substr($strDateDebut, 0, 4);
+
+        $strToTimeBase  = DateUtils::$arrOrdinals[1*$objEvent->getField(self::FIELD_CUSTOM_DAY)].' ';
+        $strToTimeBase .= DateUtils::$arrFullEnglishDays[1*$objEvent->getField(self::FIELD_CUSTOM_DAY_WEEK)].' of ';
+
+        // Si la répétition est mensuelle, doit faire tourner la valeur du mois. Sinon, elle est fixée.
+        $repeatType = $objEvent->getField(self::FIELD_REPEAT_TYPE);
+        if ($repeatType==self::CST_EVENT_RT_YEARLY) {
+            $month = 1*$objEvent->getField(self::FIELD_CUSTOM_MONTH);
+        } elseif ($repeatType==self::CST_EVENT_RT_MONTHLY) {
+            $month = 1;
+        } else {
+            // TODO : On a choisi une mauvaise valeur comme type de répétition.
+            return;
+        }
+        $strToTime = $strToTimeBase.DateUtils::$arrFullEnglishMonths[$month].' '.$year;
+        $dEvent = date('Y-m-d', strtotime($strToTime));
+
+        // On intialise les données du premier eventDate à insérer.
+        $objEventDate->setField(self::FIELD_EVENT_ID, $objEvent->getField(self::FIELD_ID));
+        // Les dates
+        $objEventDate->setField(self::FIELD_DSTART, $dEvent);
+        $objEventDate->setField(self::FIELD_DEND, $dEvent);
+        // Les heures
+        if ($objEvent->isAllDayEvent()) {
+            $tStart = 0;
+            $tEnd   = 1440;
+        } else {
+            [$h, $i, ] = explode(':', (string) $objEvent->getField(self::FIELD_HEURE_DEBUT));
+            $tStart = $i+60*(int)$h;
+            [$h, $i, ] = explode(':', (string) $objEvent->getField(self::FIELD_HEURE_FIN));
+            $tEnd   = $i+60*(int)$h;
+        }
+        $objEventDate->setField(self::FIELD_TSTART, $tStart);
+        $objEventDate->setField(self::FIELD_TEND, $tEnd);
+
+        $repeatEndValue = $objEvent->getField(self::FIELD_REPEAT_END_VALUE);
+        switch ($objEvent->getField(self::FIELD_REPEAT_END)) {
+            case self::CST_EVENT_RT_ENDREPEAT :
+                // On répète un certain nombre de fois
+                for ($i=0; $i<$repeatEndValue; ++$i) {
+                    $objEventServices->insertEventDate($objEventDate);
+
+                    if ($repeatType==self::CST_EVENT_RT_YEARLY) {
+                        ++$year;
+                        $strToTime = $strToTimeBase.DateUtils::$arrFullEnglishMonths[$month].' '.$year;
+                    } else {
+                        // Monthly
+                        ++$month;
+                        if ($month>12) {
+                            $month = 1;
+                            ++$year;
+                        }
+                        $strToTime = $strToTimeBase.DateUtils::$arrFullEnglishMonths[$month].' '.$year;
+                    }
+                    $dEvent = date('Y-m-d', strtotime($strToTime));
+                    $objEventDate->setField(self::FIELD_DSTART, $dEvent);
+                    $objEventDate->setField(self::FIELD_DEND, $dEvent);
+                }
+            break;
+            case self::CST_EVENT_RT_NEVER :
+                // On répète ad vitaam. Bon, techniquement, jusqu'à la dernière date.
+                $repeatEndValue = self::CST_LAST_DATE;
+            // no break
+            case self::CST_EVENT_RT_ENDDATE :
+                // On répète jusqu'à dépasser une date
+                while ($dEvent<$repeatEndValue) {
+                    // On insère l'event_date
+                    $objEventServices->insertEventDate($objEventDate);
+
+                    if ($repeatType==self::CST_EVENT_RT_YEARLY) {
+                        ++$year;
+                        $strToTime = $strToTimeBase.DateUtils::$arrFullEnglishMonths[$month].' '.$year;
+                    } else {
+                        // Monthly
+                        ++$month;
+                        if ($month>12) {
+                            $month = 1;
+                            ++$year;
+                        }
+                        $strToTime = $strToTimeBase.DateUtils::$arrFullEnglishMonths[$month].' '.$year;
+                    }
+                    $dEvent = date('Y-m-d', strtotime($strToTime));
+                    $objEventDate->setField(self::FIELD_DSTART, $dEvent);
+                    $objEventDate->setField(self::FIELD_DEND, $dEvent);
+                }
+            break;
+            default :
+                // Pas de répétition
+                $objEventServices->insertEventDate($objEventDate);
+            break;
+        }
+    }
+
+    /**
+     * @since v1.23.05.30
+     * @version v1.23.06.04
+     */
+    public function addBasicEventDates(CopsEventClass $objEvent): void
     {
         $objEventServices = new CopsEventServices();
         $objEventDate = new CopsEventDateClass();
@@ -248,7 +371,7 @@ class CopsEventServices extends LocalServices
                     $objEventServices->insertEventDate($objEventDate);
                     // On incrémente les date de début et de fin
                     $dStart = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
-                    $dEnd = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
+                    $dEnd = DateUtils::getDateAjout($dEnd, $arrIncr, self::FORMAT_DATE_YMD);
                     // On met àjour l'objet
                     $objEventDate->setField(self::FIELD_DSTART, $dStart);
                     $objEventDate->setField(self::FIELD_DEND, $dEnd);
@@ -265,7 +388,7 @@ class CopsEventServices extends LocalServices
                     $objEventServices->insertEventDate($objEventDate);
                     // On incrémente les date de début et de fin
                     $dStart = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
-                    $dEnd = DateUtils::getDateAjout($dStart, $arrIncr, self::FORMAT_DATE_YMD);
+                    $dEnd = DateUtils::getDateAjout($dEnd, $arrIncr, self::FORMAT_DATE_YMD);
                     // On met àjour l'objet
                     $objEventDate->setField(self::FIELD_DSTART, $dStart);
                     $objEventDate->setField(self::FIELD_DEND, $dEnd);

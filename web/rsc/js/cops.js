@@ -534,14 +534,14 @@ $('#allDayEvent').on('click', function(){
 
 $('#customEvent').on('click', function(){
     if ($(this).is(':checked')) {
-        $('#customDay').prop('readonly', false).removeClass('disabled');
-        $('#customDayWeek').prop('readonly', false).removeClass('disabled');
-        $('#customMonth').prop('readonly', false).removeClass('disabled');
+        $('#customDay').removeClass('disabled');
+        $('#customDayWeek').removeClass('disabled');
+        $('#customMonth').removeClass('disabled');
         $('#repeatInterval').prop('readonly', true);
     } else {
-        $('#customDay').prop('readonly', true).addClass('disabled');
-        $('#customDayWeek').prop('readonly', true).addClass('disabled');
-        $('#customMonth').prop('readonly', true).addClass('disabled');
+        $('#customDay').addClass('disabled');
+        $('#customDayWeek').addClass('disabled');
+        $('#customMonth').addClass('disabled');
         $('#repeatInterval').prop('readonly', false);
     }
 });

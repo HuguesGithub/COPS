@@ -9,7 +9,7 @@ use core\utils\DateUtils;
  * Classe CopsEventClass
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.28
+ * @version v1.23.06.04
  */
 class CopsEventClass extends LocalDomainClass
 {
@@ -29,6 +29,10 @@ class CopsEventClass extends LocalDomainClass
     protected $repeatInterval;
     protected $repeatEnd;
     protected $repeatEndValue;
+    protected $customEvent;
+    protected $customDay;
+    protected $customDayWeek;
+    protected $customMonth;
 
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -108,7 +112,9 @@ class CopsEventClass extends LocalDomainClass
     public function checkFields(): bool
     {
         $blnOk = true;
-        if ($this->eventLibelle=='' || $this->dateDebut=='' || $this->dateFin=='') {
+        if ($this->eventLibelle=='') {
+            $blnOk = false;
+        } elseif ($this->customEvent==0 && ($this->dateDebut=='' || $this->dateFin=='')) {
             $blnOk = false;
         } elseif (!$this->isValidInterval()) {
             $blnOk = false;

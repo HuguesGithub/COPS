@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * DateUtils
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.05.28
+ * @version v1.23.06.04
  */
 class DateUtils implements ConstantsInterface
 {
@@ -23,10 +23,17 @@ class DateUtils implements ConstantsInterface
 
     public static $arrShortDays = [0=>'Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
 
+    public static $arrFullEnglishMonths = [
+        1=>'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
     public static $arrFullEnglishDays = [
         0=>'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     ];
     public static $arrShortEnglishDays = [0=>'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    public static $arrOrdinals = [1=>'first', 2=>'second', 3=>'third', 4=>'fourth', -1=>'last'];
 
     /**
      * @since v1.23.05.05
@@ -40,47 +47,16 @@ class DateUtils implements ConstantsInterface
 
     /**
      */
-    public static function getCopsDate(string $format): string
+    public static function getCopsDate(string $strFormat): string
     {
         $strCopsDate = get_option(self::CST_CAL_COPSDATE);
         $h = substr((string) $strCopsDate, 0, 2);
         $i = substr((string) $strCopsDate, 3, 2);
         $s = substr((string) $strCopsDate, 6, 2);
-        $his = substr((string) $strCopsDate, 0, 8);
         $d = substr((string) $strCopsDate, 9, 2);
         $m = substr((string) $strCopsDate, 12, 2);
         $y = substr((string) $strCopsDate, 15);
-        $dmy = substr((string) $strCopsDate, 9);
-        $tsCops = mktime($h, $i, $s, $m, $d, $y);
-
-        switch ($format) {
-            case self::FORMAT_STRJOUR :
-                $strJour = self::arrFullDays[date('N', $tsCops)];
-                $attributes = [$strJour, $d, self::arrFullMonths[$m*1], $y];
-                $formatted = implode(' ', $attributes);
-                break;
-            case self::FORMAT_SIDEBAR_DATE :
-                $formatted = self::arrShortDays[date('N', $tsCops)].' '.$dmy.'<br>'.$his;
-                break;
-            case self::FORMAT_TS_NOW :
-                $formatted = mktime($h, $i, $s, $m, $d, $y);
-                break;
-            case self::FORMAT_TS_START_DAY :
-                $formatted = mktime(0, 0, 0, $m, $d, $y);
-                break;
-            case self::FORMAT_DATE_HIS    :
-            case self::FORMAT_DATE_DMDY   :
-            case self::FORMAT_DATE_YMD    :
-            case self::FORMAT_DATE_MDY    :
-            case self::FORMAT_DATE_DMY    :
-            case self::FORMAT_DATE_YMDHIS :
-                $formatted = date($format, mktime($h, $i, $s, $m, $d, $y));
-                break;
-            default :
-                $formatted = $format;
-                break;
-        }
-        return $formatted;
+        return static::getStrDate($strFormat, [$d, $m, $y, $h, $i, $s]);
     }
 
     /**
@@ -88,9 +64,7 @@ class DateUtils implements ConstantsInterface
      * @version v1.23.04.30
      */
     public static function setCopsDate(int $tsNow): void
-    {
-        update_option(self::CST_CAL_COPSDATE, date('h:i:s d/m/Y', $tsNow));
-    }
+    { update_option(self::CST_CAL_COPSDATE, date('h:i:s d/m/Y', $tsNow)); }
 
     /**
      * Retourne au format donné le date obtenue en ajoutant $nbJours à la date passée.
@@ -111,20 +85,23 @@ class DateUtils implements ConstantsInterface
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
-    public static function getStrDate(string $strFormat, string|int $when): string
+    public static function getStrDate(string $strFormat, $when): string
     {
         // On détermine si $when est string ou int.
-        if (is_int($when)) {
+        if (is_numeric($when)) {
             // Si int, c'est un timestamp.
             [$d, $m, $y, $h, $i, $s] = explode(' ', date('d m Y h i s', $when));
+        } elseif (is_array($when)) {
+            // A priori, rien à faire
+            [$d, $m, $y, $h, $i, $s] = $when;
+            $tsCops = mktime($h, $i, $s, $m, $d, $y);
+            $his = $h.':'.$i.':'.$s;
+            $dmy = $d.'/'.$m.'/'.$y;
         } else {
             // Si string, c'est une chaine de type YYYY-mm-dd HH:ii:ss ou autre.
             [$d, $m, $y, $h, $i, $s] = static::parseDate($when);
-            if ($s<10) {
-                $s = str_pad($s, 2, '0', STR_PAD_LEFT);
-            }
         }
 
         switch ($strFormat) {
@@ -151,6 +128,20 @@ class DateUtils implements ConstantsInterface
             case 'd month' :
                 $strFormatted = $d.' '.static::$arrFullMonths[$m*1];
             break;
+            case self::FORMAT_SIDEBAR_DATE :
+                $strFormatted = static::$arrShortDays[date('N', $tsCops)].' '.$dmy.'<br>'.$his;
+                break;
+            case self::FORMAT_STRJOUR :
+                $strJour = static::$arrFullDays[date('N', $tsCops)];
+                $attributes = [$strJour, $d, self::arrFullMonths[$m*1], $y];
+                $strFormatted = implode(' ', $attributes);
+                break;
+            case self::FORMAT_TS_NOW :
+                $strFormatted = mktime($h, $i, $s, $m, $d, $y);
+                break;
+            case self::FORMAT_TS_START_DAY :
+                $strFormatted = mktime(0, 0, 0, $m, $d, $y);
+                break;
             case self::FORMAT_DATE_DMONTHY :
                 $strFormatted = $d.' '.static::$arrFullMonths[$m*1].' '.$y;
             break;
@@ -163,7 +154,12 @@ class DateUtils implements ConstantsInterface
             case 'ga'  :
             case 'Ymd' :
             case 'd m y h i s' :
-            case self::FORMAT_DATE_YMD :
+            case self::FORMAT_DATE_YMD    :
+            case self::FORMAT_DATE_HIS    :
+            case self::FORMAT_DATE_DMDY   :
+            case self::FORMAT_DATE_MDY    :
+            case self::FORMAT_DATE_DMY    :
+            case self::FORMAT_DATE_YMDHIS :
                 $tsDisplay = mktime($h, $i, $s, $m, $d, $y);
                 $strFormatted = date($strFormat, $tsDisplay);
             break;

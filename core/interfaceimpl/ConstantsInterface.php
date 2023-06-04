@@ -4,17 +4,17 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.05.28
+ * @version v1.23.06.04
  */
 interface ConstantsInterface
 {
     public const VERSION              = 'v1.22.10.09';
-  /////////////////////////////////////////////////
-  // Ajax Infos
+    /////////////////////////////////////////////////
+    // Ajax Infos
     public const AJAX_ACTION            = 'ajaxAction';
 
-  /////////////////////////////////////////////////
-  // Tag's Attributes
+    /////////////////////////////////////////////////
+    // Tag's Attributes
     public const ATTR_ALT               = 'alt';
     public const ATTR_CLASS             = 'class';
     public const ATTR_HREF              = 'href';
@@ -44,10 +44,11 @@ interface ConstantsInterface
     public const CSS_FLOAT_LEFT         = 'float-left';
     public const CSS_FLOAT_RIGHT        = 'float-right';
 
-  /////////////////////////////////////////////////
-  // Constantes
+    /////////////////////////////////////////////////
+    // Constantes
     public const CST_ACTIVE             = 'active';
-  // Subonglet Calendar
+
+    // Subonglet Calendar
     public const CST_CAL_COPSDATE       = 'cops_date';
     public const CST_CAL_CURDAY         = 'curday';
     public const CST_CAL_DAY            = 'day';
@@ -315,36 +316,8 @@ interface ConstantsInterface
     public const WP_CF_SPECIALISATION   = 'specialisation';
     public const WP_CF_UTILITE          = 'utilite';
 
-  /*
-  const WP_CAT_ID_NEWS         = 2;
-  const WP_COMPARE             = 'compare';
-  const WP_CURPAGE             = 'cur_page';
-  const WP_EVENT_DATE          = 'event_date';
-  const WP_EVENT_PLACE         = 'event_place';
-  const WP_FIELD               = 'field';
-  const WP_KEY                 = 'key';
-  const WP_METAQUERY           = 'meta_query';
-  const WP_METAVALUE           = 'meta_value';
-  const WP_NUMBERPOSTS         = 'numberposts';
-  const WP_OFFSET              = 'offset';
-  const WP_PAGE                = 'page';
-  const WP_POST_ID_HOME        = 356;
-  const WP_POSTDATE            = 'post_date';
-  const WP_POSTTAG             = 'post_tag';
-  const WP_SLIDE_ACTIVE        = 'active_slide';
-  const WP_SLIDE_IMAGE         = 'slide_image';
-  const WP_SLIDE_ORDER         = 'slide_order';
-  const WP_SLIDE_URL           = 'slide_url';
-  const WP_SLIDE_URL_AWAY      = 'slide_url_away';
-  const WP_SLUG                = 'slug';
-  const WP_TAXONOMY            = 'taxonomy';
-  const WP_TAXQUERY            = 'tax_query';
-  const WP_TERMS               = 'terms';
-  const WP_VALUE               = 'value';
-
-  /////////////////////////////////////////////////
-  // Divers
-  */
+    /////////////////////////////////////////////////
+    // Divers
     public const CST_AMP          = '&amp;';
     public const CST_ANCHOR       = '#';
     public const CST_NBSP         = '&nbsp;';

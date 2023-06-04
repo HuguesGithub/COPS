@@ -12,7 +12,7 @@ use core\interfaceimpl\UrlsInterface;
  * Classe GlobalDomain
  * @author Hugues.
  * @since 1.22.04.27
- * @version v1.23.05.07
+ * @version v1.23.06.04
  */
 class GlobalDomainClass implements ConstantsInterface, LabelsInterface, UrlsInterface, FieldsInterface
 {
@@ -44,10 +44,10 @@ class GlobalDomainClass implements ConstantsInterface, LabelsInterface, UrlsInte
 
   /**
    * @since 1.22.04.27
-   * @version 1.22.04.27
+   * @version v1.23.06.04
    */
     public function getField(string $key): mixed
-    { return (property_exists($this, $key) ? $this->{$key} : null); }
+    { return property_exists($this, $key) ? $this->{$key} : null; }
 
   /**
    * @since 1.22.04.27

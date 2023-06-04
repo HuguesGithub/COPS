@@ -2,12 +2,13 @@
 namespace core\daoimpl;
 
 use core\domain\MySQLClass;
+use core\utils\LogUtils;
 
 /**
  * Classe LocalDaoImpl
  * @author Hugues
  * @since 1.22.04.28
- * @version v1.23.05.28
+ * @version v1.23.06.04
  */
 class LocalDaoImpl extends GlobalDaoImpl
 {
@@ -87,7 +88,7 @@ class LocalDaoImpl extends GlobalDaoImpl
 
     /**
      * @since v1.23.05.26
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
     public function selectListDaoImpl($objMixed, string $request, array $attributes): array
     {
@@ -97,7 +98,7 @@ class LocalDaoImpl extends GlobalDaoImpl
         
         //////////////////////////////
         // Exécution de la requête
-        $this->traceRequest($prepRequest);
+        LogUtils::logRequest($prepRequest);
         $rows = MySQLClass::wpdbSelect($prepRequest);
         //////////////////////////////
         
@@ -139,14 +140,15 @@ class LocalDaoImpl extends GlobalDaoImpl
 
     /**
      * @since v1.23.05.26
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
     public function updateDaoImpl($objStd, string $request, string $fieldId): void
     {
         $prepObject = [];
         $arrFields  = $objStd->getFields();
         array_shift($arrFields);
-        foreach ($arrFields as $field) {
+        $arrKeys = array_keys($arrFields);
+        foreach ($arrKeys as $field) {
             if ($field=='stringClass') {
                 continue;
             }
@@ -155,6 +157,7 @@ class LocalDaoImpl extends GlobalDaoImpl
         $prepObject[] = $objStd->getField($fieldId);
 
         $sql = MySQLClass::wpdbPrepare($request, $prepObject);
+        LogUtils::logRequest($sql);
         MySQLClass::wpdbQuery($sql);
     }
 
@@ -164,7 +167,7 @@ class LocalDaoImpl extends GlobalDaoImpl
     
     /**
      * @since v1.23.05.26
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
     public function insert(string $dbTable, array $fields, array $attributes): int
     {
@@ -177,40 +180,12 @@ class LocalDaoImpl extends GlobalDaoImpl
         
         //////////////////////////////
         // Exécution de la requête
-        $this->traceRequest($prepRequest);
+        LogUtils::logRequest($prepRequest);
         MySQLClass::wpdbQuery($prepRequest);
         //////////////////////////////
 
         return MySQLClass::getLastInsertId();
     }
-
-    /**
-     * @since v1.23.05.26
-     * @version v1.23.05.28
-     */
-    public function traceRequest(string $prepRequest): void
-    {
-        // On récupère le nom de base et on le suffixe avec la date du jour
-        $baseName = PLUGIN_PATH.self::WEB_LOG_REQUEST;
-        $todayName = substr($baseName, 0, -4).'_'.date('Ymd').'.log';
-
-        // S'il existe et qu'il est trop gros, on l'archive et on en créé un nouveau.
-        $fileSize = filesize($todayName);
-        if ($fileSize>10*1024*1024) {
-            $copyName = substr($todayName, 0, -4).'_01.log';
-            rename($todayName, $copyName);
-        }
-
-        // Sinon, on continue à utiliser l'existant
-        $fp = fopen($todayName, 'a');
-        if (!$fp) {
-            return;
-        }
-        $strMessage = "[".date('Y-m-d H:i:s')."] - ".$prepRequest."\r\n";
-        fwrite($fp, $strMessage);
-        fclose($fp);
-    }
-
 
 // TODO : à supprimer.
   public function getSelect($dbTable)
@@ -240,16 +215,19 @@ class LocalDaoImpl extends GlobalDaoImpl
         return $arrFields;
     }
         
-
+    /**
+     * @since
+     * @version v1.23.06.04
+     */
     public function selectDaoImpl($request, $prepObject)
     {
         //////////////////////////////
         // Préparation de la requête
         $prepRequest  = MySQLClass::wpdbPrepare($request, $prepObject);
-        $this->traceRequest($prepRequest);
         
         //////////////////////////////
         // Exécution de la requête
+        LogUtils::logRequest($prepRequest);
         return MySQLClass::wpdbSelect($prepRequest);
     }
 

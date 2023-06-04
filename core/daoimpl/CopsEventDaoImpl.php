@@ -6,19 +6,20 @@ use core\domain\CopsEventClass;
 use core\domain\CopsEventDateClass;
 use core\domain\CopsEventCategorieClass;
 use core\services\CopsEventServices;
+use core\utils\LogUtils;
 
 /**
  * Classe CopsEventDaoImpl
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.28
+ * @version v1.23.06.04
  */
 class CopsEventDaoImpl extends LocalDaoImpl
 {
     /**
      * Class constructor
      * @since 1.22.06.13
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
     public function __construct()
     {
@@ -45,6 +46,10 @@ class CopsEventDaoImpl extends LocalDaoImpl
             self::FIELD_REPEAT_INTERVAL,
             self::FIELD_REPEAT_END,
             self::FIELD_REPEAT_END_VALUE,
+            self::FIELD_CUSTOM_EVENT,
+            self::FIELD_CUSTOM_DAY,
+            self::FIELD_CUSTOM_DAY_WEEK,
+            self::FIELD_CUSTOM_MONTH,
         ];
         $this->dbFields_ced = [
             self::FIELD_ID,
@@ -99,13 +104,13 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.05.21
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
     public function updateEvent(CopsEventClass $objEvent)
     {
         // On récupère les champs
         $dbFields = $this->dbFields;
-        $fieldId = array_pop($dbFields);
+        $fieldId = array_shift($dbFields);
         // On défini la requête de mise à jour
         $request = $this->getUpdateRequest($dbFields, $this->dbTable, $fieldId);
         // On met à jour
@@ -114,7 +119,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.05.25
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
     public function deleteEvent(array $attributes): void
     {
@@ -125,7 +130,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
         //////////////////////////////
         // Exécution de la requête
-        $this->traceRequest($prepRequest);
+        LogUtils::logRequest($prepRequest);
         MySQLClass::wpdbQuery($prepRequest);
         //////////////////////////////
     }
@@ -169,7 +174,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.05.21
-     * @version v1.23.05.28
+     * @version v1.23.06.04
      */
     public function deleteEventDate(array $attributes): void
     {
@@ -180,7 +185,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
         //////////////////////////////
         // Exécution de la requête
-        $this->traceRequest($prepRequest);
+        LogUtils::logRequest($prepRequest);
         MySQLClass::wpdbQuery($prepRequest);
         //////////////////////////////
     }

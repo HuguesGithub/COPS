@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.05.28
+ * @version v1.23.06.04
  */
 interface UrlsInterface
 {
@@ -34,6 +34,11 @@ interface UrlsInterface
     public const WEB_PA_CALENDAR_HOME       = self::WEB_PAGES_ADMIN.'page-admin-calendar-home.tpl';
     public const WEB_PA_CALENDAR_DELETE     = self::WEB_PAGES_ADMIN.'page-admin-calendar-delete.tpl';
     public const WEB_PA_CALENDAR_EVENT_EDIT = self::WEB_PAGES_ADMIN.'page-admin-calendar-event-edit.tpl';
+    public const WEB_PA_CAL_EVT_EDIT_CATEG  = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-categ-block.tpl';
+    public const WEB_PA_CAL_EVT_EDIT_DATE   = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-date-block.tpl';
+    public const WEB_PA_CAL_EVT_EDIT_REPTYPE= self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-period-block.tpl';
+    public const WEB_PA_CAL_EVT_EDIT_REPINT = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-recursive-block.tpl';
+    public const WEB_PA_CAL_EVT_EDIT_CUSTOM = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-custom-block.tpl';
     public const WEB_PA_CALENDAR_EVENT_LIST = self::WEB_PAGES_ADMIN.'page-admin-calendar-events-list.tpl';
     public const WEB_PAFS_CALENDAR          = self::WEB_PA_FRAGMENTS.'page-admin-fragments-section-calendar.tpl';
     public const WEB_PAFT_EVENT_ROW         = self::WEB_PA_FRAGMENTS.'page-admin-fragments-tr-event-row.tpl';

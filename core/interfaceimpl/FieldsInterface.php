@@ -88,6 +88,10 @@ interface FieldsInterface
     public const FIELD_REPEAT_INTERVAL    = 'repeatInterval';
     public const FIELD_REPEAT_END         = 'repeatEnd';
     public const FIELD_REPEAT_END_VALUE   = 'repeatEndValue';
+    public const FIELD_CUSTOM_EVENT       = 'customEvent';
+    public const FIELD_CUSTOM_DAY         = 'customDay';
+    public const FIELD_CUSTOM_DAY_WEEK    = 'customDayWeek';
+    public const FIELD_CUSTOM_MONTH       = 'customMonth';
 
     // TODO : Confirmer utilisation et définition dans table.
     public const FIELD_MINUTE_DEBUT       = 'minuteDebut';

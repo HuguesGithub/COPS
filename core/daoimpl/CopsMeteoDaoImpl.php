@@ -2,6 +2,7 @@
 namespace core\daoimpl;
 
 use core\domain\CopsMeteoClass;
+use core\utils\LogUtils;
 
 /**
  * Classe CopsMeteoDaoImpl
@@ -67,13 +68,13 @@ class CopsMeteoDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.04.29
-     * @version v1.23.04.30
+     * @version v1.23.06.04
      */
     public function insertMeteo(array $attributes): void
     {
         $request  = "INSERT INTO ".$this->dbTable." (".implode(', ', $this->dbFields).") ";
         $request .= "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');";
-        $this->traceRequest($request);
+        LogUtils::logRequest($prepRequest);
         MySQLClass::wpdbQuery($request);
     }
 
