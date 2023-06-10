@@ -11,7 +11,7 @@
               </span>
             </div>
             <div class="col-2">
-              <a href="#" class="btn btn-default btn-sm float-right"><i class="fa-solid fa-cloud-arrow-down"></i></a>
+              <a href="#" class="btn btn-default btn-sm float-end"><i class="fa-solid fa-cloud-arrow-down"></i></a>
             </div>
           </div>
         </article>

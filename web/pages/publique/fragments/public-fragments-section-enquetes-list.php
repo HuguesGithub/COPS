@@ -16,7 +16,7 @@
 
           <button type="button" class="btn btn-default btn-sm"><a href="%4$s" class="text-white"><i class="fa-solid fa-arrows-rotate"></i></a></button>
 
-          <div class="float-right">
+          <div class="float-end">
             %2$s
             <!--
             <div class="btn-group">
@@ -49,7 +49,7 @@
 
           <button type="button" class="btn btn-default btn-sm"><i class="fa-solid fa-arrows-rotate"></i></button>
 
-          <div class="float-right">
+          <div class="float-end">
             %2$s
           <!--
             <div class="btn-group">

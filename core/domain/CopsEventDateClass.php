@@ -113,4 +113,11 @@ class CopsEventDateClass extends LocalDomainClass
     {
         return $curDate==$this->dStart;
     }
+
+    /**
+     * @since 1.23.06.06
+     * @version v1.23.06.11
+     */
+    public function isSeveralDays(): bool
+    { return $this->dStart!=$this->dEnd; }
 }

@@ -330,7 +330,7 @@ function checkCaracteristiques() {
     $('#card-caracs').addClass('card-success').removeClass('card-danger card-warning');
   } else if (sumCaracPoints>21) {
     $('#card-caracs').addClass('card-danger').removeClass('card-success card-warning');
-    displayToast('<div class="toast show bg-danger"><div class="toast-header"><i class="fas fa-exclamation-circle mr-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Vous ne disposez que de 21 points à répartir entre vos caractéristiques.</div></div>');
+    displayToast('<div class="toast show bg-danger"><div class="toast-header"><i class="fas fa-exclamation-circle ms-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Vous ne disposez que de 21 points à répartir entre vos caractéristiques.</div></div>');
   } else {
     $('#card-caracs').addClass('card-warning').removeClass('card-danger card-success');
   }
@@ -343,18 +343,18 @@ function checkCaracteristique(id) {
   let value = $('#'+id).val();
   // On va vérifier que la caractéristique est supérieure ou égale à 2 et inférieure ou égale à 5
   if (value<2) {
-    displayToast('<div class="toast show bg-warning"><div class="toast-header"><i class="fas fa-exclamation-circle mr-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Une caractéristique ne peut pas être plus basse que 2.</div></div>');
+    displayToast('<div class="toast show bg-warning"><div class="toast-header"><i class="fas fa-exclamation-circle ms-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Une caractéristique ne peut pas être plus basse que 2.</div></div>');
     bln_OK = false;
     $('#card-caracs').addClass('card-danger').removeClass('card-success card-warning');
   } else if (value>5) {
-    displayToast('<div class="toast show bg-warning"><div class="toast-header"><i class="fas fa-exclamation-circle mr-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Une caractéristique ne peut pas être plus élevée que 5.</div></div>');
+    displayToast('<div class="toast show bg-warning"><div class="toast-header"><i class="fas fa-exclamation-circle ms-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Une caractéristique ne peut pas être plus élevée que 5.</div></div>');
     bln_OK = false;
     $('#card-caracs').addClass('card-danger').removeClass('card-success card-warning');
   } else if (value==5) {
     // On doit vérifier si elle vaut 5 que c'est la seule
     $('#'+id).addClass('maxCarac');
     if ($('.maxCarac').length>1) {
-      displayToast('<div class="toast show bg-warning"><div class="toast-header"><i class="fas fa-exclamation-circle mr-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Une seule caractéristique peut être initialisée à 5.</div></div>');
+      displayToast('<div class="toast show bg-warning"><div class="toast-header"><i class="fas fa-exclamation-circle ms-2"></i><strong class="me-auto">OOps</strong></div><div class="toast-body">Une seule caractéristique peut être initialisée à 5.</div></div>');
       bln_OK = false;
       $('#card-caracs').addClass('card-danger').removeClass('card-success card-warning');
     }

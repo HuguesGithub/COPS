@@ -119,7 +119,7 @@
         <div class="card-footer clearfix">
             <input type="hidden" name="writeAction">
             <input type="hidden" name="id" value="%2$s">
-            <button class="btn btn-sm btn-primary float-left" data-trigger="click" data-action="submit" data-target="#%1$s">Envoyer</button>
+            <button class="btn btn-sm btn-primary float-start" data-trigger="click" data-action="submit" data-target="#%1$s">Envoyer</button>
         </div>
     </div>
 </form>

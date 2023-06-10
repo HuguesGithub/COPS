@@ -145,6 +145,8 @@ class HtmlUtils implements ConstantsInterface
             self::I_USERS,
             'book',
             'box-archive',
+            'calendar',
+            'calendar-week',
             'calendar-days',
             'envelope',
             'inbox',

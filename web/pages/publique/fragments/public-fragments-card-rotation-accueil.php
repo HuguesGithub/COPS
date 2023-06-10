@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="card-footer">
-        <div class="float-left">%2$s</div>
-        <div class="float-right">%3$s</div>
+        <div class="float-start">%2$s</div>
+        <div class="float-end">%3$s</div>
     </div>
 </div>

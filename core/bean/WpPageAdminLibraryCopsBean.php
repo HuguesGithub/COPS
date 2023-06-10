@@ -371,7 +371,8 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         // Si la date n'est pas définie, on récupère celle du jour.
         // Sinon, on récupère la date passée en paramètre.
-        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', DateUtils::getCopsDate(self::FORMAT_DATE_DMY)));
+        $strParam = (string) $this->initVar('strDate', DateUtils::getCopsDate(self::FORMAT_DATE_DMY));
+        [$dDate, $mDate, $yDate] = explode('-', $strParam);
         $tsNow = mktime(0, 0, 0, $mDate, $dDate, $yDate);
         
         // Si la date en question n'est pas un lundi, on récupère le lundi précédent.
@@ -452,7 +453,8 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         // Si la date n'est pas définie, on récupère celle du jour.
         // Sinon, on récupère la date passée en paramètre.
-        [$dDate, $mDate, $yDate] = explode('-', (string) $this->initVar('strDate', DateUtils::getCopsDate(self::FORMAT_DATE_DMY)));
+        $strParam = (string) $this->initVar('strDate', DateUtils::getCopsDate(self::FORMAT_DATE_DMY));
+        [$dDate, $mDate, $yDate] = explode('-', $strParam);
         $tsNow = mktime(0, 0, 0, $mDate, $dDate, $yDate);
         
         // Bandeau de la semaine
@@ -479,7 +481,8 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         // Gestion des Offiers de Police
         // Décalage de semaines
         $tsStart = mktime(0, 0, 0, 6, 3, 2030);
-        $nbDiffWeeks = (($tsNow-$tsStart)/60/60/24/7)%(is_countable($this->arrRotationsOP) ? count($this->arrRotationsOP) : 0);
+        $intModulo = is_countable($this->arrRotationsOP) ? count($this->arrRotationsOP) : 0;
+        $nbDiffWeeks = (($tsNow-$tsStart)/60/60/24/7)%$intModulo;
         if ($nbDiffWeeks<0) {
             $nbDiffWeeks = (is_countable($this->arrRotationsOP) ? count($this->arrRotationsOP) : 0)+$nbDiffWeeks;
         }
@@ -567,7 +570,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
                 $strHoraire = '';
                 $this->defineExtras($key, $quand, $strClass, $strStyle, $strHoraire);
                 
-                $divCreneauContent = HtmlUtils::getDiv($strHoraire, [self::ATTR_CLASS=>'bg-dark mr-1 ml-1']);
+                $divCreneauContent = HtmlUtils::getDiv($strHoraire, [self::ATTR_CLASS=>'bg-dark me-1 ms-1']);
                 $divCreneauContent .= $this->getBalise(self::TAG_UL, $str, $ulAttributes);
                 
                 $divAttributes = [self::ATTR_CLASS => 'col-6 p-0'.$strClass, self::ATTR_STYLE => $strStyle];

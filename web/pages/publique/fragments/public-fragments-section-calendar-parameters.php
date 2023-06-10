@@ -33,7 +33,7 @@
 
 
     <div class="card-footer clearfix">
-      <input type="submit" class="btn btn-sm btn-info float-left" value="Mettre à jour"/>
+      <input type="submit" class="btn btn-sm btn-info float-start" value="Mettre à jour"/>
     </div>
   </div>
 </form>

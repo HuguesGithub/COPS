@@ -17,7 +17,11 @@ class WpPageAdminLibraryCourseBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_STAGE];
         
-        $buttonContent = HtmlUtils::getLink(self::LABEL_COURSES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink(
+            self::LABEL_COURSES,
+            $this->getOngletUrl($urlElements),
+            self::CST_TEXT_WHITE
+        );
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
     }

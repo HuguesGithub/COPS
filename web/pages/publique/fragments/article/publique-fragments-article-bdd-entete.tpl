@@ -1,6 +1,6 @@
 <article class="card col-12">
     <div class="card-header">
-        <h2 class="title bg-dark rounded pt-2 pb-2 text-center">Les bases de données du LAPD <a href="/wp-content/plugins/hj-cops/web/rsc/files/COPS_BDD.pdf" class="float-right mr-2 mb-3"><button class="btn btn-light"><i class="fa-solid fa-download"></i></button></a></h2>
+        <h2 class="title bg-dark rounded pt-2 pb-2 text-center">Les bases de données du LAPD <a href="/wp-content/plugins/hj-cops/web/rsc/files/COPS_BDD.pdf" class="float-end ms-2 mb-3"><button class="btn btn-light"><i class="fa-solid fa-download"></i></button></a></h2>
     </div>
   <div class="card-body">
     <p>Cette section décrit les différentes bases de données accessibles aux cops, avec plus ou moins de facilité. Hormis pour le Network lui-même, aucune de ces bases de données n'est directement reliée à ce dernier ; elles sont cependant accessibles depuis n'importe quel ordinateur relié au réseau interne du LAPD. Toutefois, pour éviter des allers-retours incessants pour les Détectives en mission, une version allégée de certaines de ces bases est enregistrée chaque matin dans les véhicules du LAPD, et est accessible via le MPTS.</p>

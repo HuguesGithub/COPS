@@ -4,11 +4,12 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.06.04
+ * @version v1.23.06.11
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.22.10.09';
+    public const VERSION              = 'v1.23.06.11';
+
     /////////////////////////////////////////////////
     // Ajax Infos
     public const AJAX_ACTION            = 'ajaxAction';
@@ -16,6 +17,7 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // Tag's Attributes
     public const ATTR_ALT               = 'alt';
+    public const ATTR_ARIA              = 'aria';
     public const ATTR_CLASS             = 'class';
     public const ATTR_HREF              = 'href';
     public const ATTR_NAME              = 'name';
@@ -31,6 +33,7 @@ interface ConstantsInterface
     public const ATTR_DATA_DATE         = 'data-date';
     public const ATTR_DATA_ICON         = 'data-icon';
     public const ATTR_DATA_TRIGGER      = 'trigger';
+    public const ATTR_DESCRIBEDBY       = 'describedby';
 
     public const ATTR_TIME              = 'time';
 
@@ -41,8 +44,9 @@ interface ConstantsInterface
 
     /////////////////////////////////////////////////
     // CSS
-    public const CSS_FLOAT_LEFT         = 'float-left';
-    public const CSS_FLOAT_RIGHT        = 'float-right';
+    public const CSS_FLOAT_LEFT         = 'float-start';
+    public const CSS_FLOAT_RIGHT        = 'float-end';
+    public const CSS_DISPLAY_NONE       = 'display:none;';
 
     /////////////////////////////////////////////////
     // Constantes
@@ -129,6 +133,8 @@ interface ConstantsInterface
     public const CST_WICON              = 'wicon';
     public const CST_WRITE              = 'write';
     public const CST_WRITE_ACTION       = 'writeAction';
+    public const CST_CUSHION            = '-cushion';
+    public const CST_FRAME              = '-frame';
 
     // Constantes de certains champs.
     public const CST_EVENT_RT_NEVER        = 'never';
@@ -143,7 +149,7 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // FC
     public const CST_FC_COL_HEADER_CELL    = 'fc-col-header-cell';
-    public const CST_FC_COL_HEADER_CELL_CSH= self::CST_FC_COL_HEADER_CELL.'-cushion';
+    public const CST_FC_COL_HEADER_CELL_CSH= self::CST_FC_COL_HEADER_CELL.self::CST_CUSHION;
 
     public const CST_FC_DAY                = 'fc-day';
     public const CST_FC_DAY_PAST           = self::CST_FC_DAY.'-past';
@@ -155,7 +161,7 @@ interface ConstantsInterface
     public const CST_FC_DAYGRID_DAY_BG     = self::CST_FC_DAYGRID_DAY.'-bg';
     public const CST_FC_DAYGRID_DAY_BTM    = self::CST_FC_DAYGRID_DAY.'-bottom';
     public const CST_FC_DAYGRID_DAY_EVENTS = self::CST_FC_DAYGRID_DAY.'-events';
-    public const CST_FC_DAYGRID_DAY_FRAME  = self::CST_FC_DAYGRID_DAY.'-frame';
+    public const CST_FC_DAYGRID_DAY_FRAME  = self::CST_FC_DAYGRID_DAY.self::CST_FRAME;
     public const CST_FC_DAYGRID_DAY_NB     = self::CST_FC_DAYGRID_DAY.'-number';
     public const CST_FC_DAYGRID_DAY_TOP    = self::CST_FC_DAYGRID_DAY.'-top';
     public const CST_FC_DG_EVENT_HAR_ABS   = 'fc-daygrid-event-harness-abs';
@@ -166,18 +172,18 @@ interface ConstantsInterface
 
     public const CST_FC_SCROLLGRID_SYNC_IN = 'fc-scrollgrid-sync-inner';
     public const CST_FC_SCROLLGRID_SHRINK  = 'fc-scrollgrid-shrink';
-    public const CST_FC_SCROLLGRID_SHRINK_CUSHION  = self::CST_FC_SCROLLGRID_SHRINK.'-cushion';
-    public const CST_FC_SCROLLGRID_SHRINK_FRAME    = self::CST_FC_SCROLLGRID_SHRINK.'-frame';
+    public const CST_FC_SCROLLGRID_SHRINK_CUSHION  = self::CST_FC_SCROLLGRID_SHRINK.self::CST_CUSHION;
+    public const CST_FC_SCROLLGRID_SHRINK_FRAME    = self::CST_FC_SCROLLGRID_SHRINK.self::CST_FRAME;
 
     public const CST_FC_TIMEGRID_COL       = 'fc-timegrid-col';
     public const CST_FC_TIMEGRID_COL_BG    = self::CST_FC_TIMEGRID_COL.'-bg';
     public const CST_FC_TIMEGRID_COL_EVENTS= self::CST_FC_TIMEGRID_COL.'-events';
-    public const CST_FC_TIMEGRID_COL_FRAME = self::CST_FC_TIMEGRID_COL.'-frame';
+    public const CST_FC_TIMEGRID_COL_FRAME = self::CST_FC_TIMEGRID_COL.self::CST_FRAME;
     public const CST_FC_TIMEGRID_NOW_IC    = 'fc-timegrid-now-indicator-container';
     public const CST_FC_TIMEGRID_SLOT      = 'fc-timegrid-slot';
     public const CST_FC_TIMEGRID_SLOT_LABEL= self::CST_FC_TIMEGRID_SLOT.' fc-timegrid-slot-label';
-    public const CST_FC_TIMEGRID_SLOT_LABEL_CUSHION = self::CST_FC_TIMEGRID_SLOT_LABEL.'-cushion';
-    public const CST_FC_TIMEGRID_SLOT_LABEL_FRAME   = self::CST_FC_TIMEGRID_SLOT_LABEL.'-frame ';
+    public const CST_FC_TIMEGRID_SLOT_LABEL_CUSHION = self::CST_FC_TIMEGRID_SLOT_LABEL.self::CST_CUSHION;
+    public const CST_FC_TIMEGRID_SLOT_LABEL_FRAME   = self::CST_FC_TIMEGRID_SLOT_LABEL.self::CST_FRAME;
     public const CST_FC_TIMEGRID_SLOT_LANE = self::CST_FC_TIMEGRID_SLOT.' fc-timegrid-slot-lane';
     public const CST_FC_TIMEGRID_SLOT_MINOR= self::CST_FC_TIMEGRID_SLOT.'-minor';
 
@@ -281,11 +287,17 @@ interface ConstantsInterface
     public const TAG_IMG                = 'img';
     public const TAG_INPUT              = 'input';
     public const TAG_LABEL              = 'label';
+    public const TAG_NAV                = 'nav';
     public const TAG_LI                 = 'li';
     public const TAG_P                  = 'p';
     public const TAG_SELECT             = 'select';
     public const TAG_SPAN               = 'span';
     public const TAG_STRONG             = 'strong';
+    public const TAG_TH                 = 'th';
+    public const TAG_THEAD              = 'thead';
+    public const TAG_BODY               = 'body';
+    public const TAG_TABLE              = 'table';
+    public const TAG_TFOOT              = 'tfoot';
     public const TAG_TD                 = 'td';
     public const TAG_TR                 = 'tr';
     public const TAG_UL                 = 'ul';

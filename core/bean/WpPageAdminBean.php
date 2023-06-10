@@ -242,19 +242,7 @@ class WpPageAdminBean extends WpPageBean
          
             // S'il a des enfants, on enrichit
             if ($hasChildren) {
-                $ulContent = '';
-                foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
-                    if ($strSubOnglet==$this->urlParams[self::CST_SUBONGLET] ||
-                        $this->urlParams[self::CST_SUBONGLET]=='date' && $strSubOnglet=='allDates') {
-                        $extraClass = ' '.self::CST_ACTIVE;
-                    } else {
-                        $extraClass = '';
-                    }
-                    $aContent  = HtmlUtils::getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
-                    $url = $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet;
-                    $liContent = HtmlUtils::getLink($aContent, $url, 'nav-link'.$extraClass);
-                    $ulContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
-                }
+                $ulContent = $this->getSideBarChildren($arrOnglet, $strOnglet);
                 $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
                 $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
             }
@@ -272,6 +260,28 @@ class WpPageAdminBean extends WpPageBean
              DateUtils::getCopsDate(self::FORMAT_DATE_HIS),
          ];
          return $this->getRender($urlTemplate, $attributes);
+     }
+
+     /**
+      * @since v1.23.06.05
+      * @version v1.23.06.11
+      */
+     public function getSideBarChildren(array $arrOnglet, string $strOnglet): string
+     {
+        $ulContent = '';
+        foreach ($arrOnglet[self::CST_CHILDREN] as $strSubOnglet => $label) {
+            if ($strSubOnglet==$this->urlParams[self::CST_SUBONGLET] ||
+                $this->urlParams[self::CST_SUBONGLET]=='date' && $strSubOnglet=='allDates') {
+                $extraClass = ' '.self::CST_ACTIVE;
+            } else {
+                $extraClass = '';
+            }
+            $aContent  = HtmlUtils::getIcon(self::I_CIRCLE, 'nav-icon').$this->getBalise(self::TAG_P, $label);
+            $url = $this->urlOnglet.$strOnglet.'&amp;subOnglet='.$strSubOnglet;
+            $liContent = HtmlUtils::getLink($aContent, $url, 'nav-link'.$extraClass);
+            $ulContent .= $this->getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
+        }
+        return $ulContent;
      }
 
      /**

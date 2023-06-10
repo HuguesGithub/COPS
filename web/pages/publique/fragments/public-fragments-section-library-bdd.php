@@ -1,5 +1,5 @@
 <a id="top"></a>
-<h1 class="bg-dark rounded pt-2 pb-2 text-center">Les bases de données du LAPD <a href="/wp-content/plugins/hj-cops/web/rsc/files/COPS_BDD.pdf" class="float-right mr-2 mb-3"><button class="btn btn-light"><i class="fa-solid fa-download"></i></button></a></h1>
+<h1 class="bg-dark rounded pt-2 pb-2 text-center">Les bases de données du LAPD <a href="/wp-content/plugins/hj-cops/web/rsc/files/COPS_BDD.pdf" class="float-end ms-2 mb-3"><button class="btn btn-light"><i class="fa-solid fa-download"></i></button></a></h1>
 
 <article class="card col-12">
   <div class="card-body">

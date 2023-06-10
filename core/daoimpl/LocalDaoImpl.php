@@ -119,12 +119,10 @@ class LocalDaoImpl extends GlobalDaoImpl
      * @since 1.23.03.15
      * @version 1.23.03.15
      */
-    public function insertDaoImpl(&$objMixed, string $request, string $fieldId): void
+    public function insertDaoImpl(&$objMixed, array $arrFields, string $request, string $fieldId): void
     {
         // On prépare les paramètres, en excluant le premier (l'id)
         $prepObject = [];
-        $arrFields  = $objMixed->getFields();
-        array_shift($arrFields);
         foreach ($arrFields as $field) {
             if ($field=='stringClass') {
                 continue;

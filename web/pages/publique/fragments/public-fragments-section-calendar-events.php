@@ -26,7 +26,7 @@
   </div>
 
   <div class="card-footer clearfix">
-    <a href="#" class="btn btn-sm btn-info float-left" data-action="display" data-target="#newEvent" data-trigger="click">Nouvel événement</a>
+    <a href="#" class="btn btn-sm btn-info float-start" data-action="display" data-target="#newEvent" data-trigger="click">Nouvel événement</a>
   </div>
 
 </div>

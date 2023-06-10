@@ -27,7 +27,7 @@
         <textarea id="compose-textarea" class="form-control" style="height: 300px; display: none;" name="compose-textarea">%5$s</textarea>
         <div class="note-editor note-frame card">
           <div class="note-toolbar card-header" role="toolbar">
-            <div class="btn-group note-view float-right">
+            <div class="btn-group note-view float-end">
               <!--
               <button type="button" class="note-btn btn btn-light btn-sm btn-fullscreen note-codeview-keep" tabindex="-1" title="" aria-label="Full Screen" data-original-title="Full Screen"><i class="note-icon-arrows-alt"></i></button>
               <button type="button" class="note-btn btn btn-light btn-sm btn-codeview note-codeview-keep" tabindex="-1" title="" aria-label="Code View" data-original-title="Code View"><i class="note-icon-code"></i></button>
@@ -57,7 +57,7 @@
   </div>
 
   <div class="card-footer">
-    <div class="float-right">
+    <div class="float-end">
       <button type="button" class="btn btn-default" data-action="draft"><i class="fa-solid fa-file-lines"></i> Brouillon</button>
       <button type="submit" class="btn btn-primary" data-action="send"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
     </div>

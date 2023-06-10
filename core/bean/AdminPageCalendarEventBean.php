@@ -1,6 +1,8 @@
 <?php
 namespace core\bean;
 
+use core\bean\TableauHtmlBean;
+use core\bean\TableauTFootHtmlBean;
 use core\bean\UtilitiesBean;
 use core\domain\CopsEventClass;
 use core\services\CopsEventServices;
@@ -49,7 +51,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             self::CST_ONGLET => self::ONGLET_CALENDAR,
             self::CST_SUBONGLET => self::CST_CAL_EVENT
         ];
-        $strLink = HtmlUtils::getLink(self::LABEL_EVENTS, UrlUtils::getAdminUrl($urlAttributes));
+        $strLink = HtmlUtils::getLink(self::LABEL_EVENTS, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Construction et renvoi du template
@@ -178,16 +180,97 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
      */
     public function getListContent(): string
     {
-        // TODO : reprendre la méthode originelle pour traiter notamment la pagination.
         $objCopsEventServices = new CopsEventServices();
-        $objsCopsEvent = $objCopsEventServices->getEvents([]);
-        $strTrs = '';
+        // On récupère les données éventuelles sur les filtres et les tris
+        $filterCateg = -1;
+        $curPage = $this->initVar(self::CST_CURPAGE, 1);
+        $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_DATE_DEBUT);
+        $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
 
-        while (!empty($objsCopsEvent)) {
-            $objCopsEvent = array_shift($objsCopsEvent);
-            $strTrs .= $objCopsEvent->getBean()->getTableRow();
+        // TODO : gestion des filtres
+
+        // Récupération des données
+        $attributes = [
+            self::SQL_ORDER_BY => $orderby,
+            self::SQL_ORDER => $order,
+        ];
+        $objsCopsEvent = $objCopsEventServices->getEvents($attributes);
+
+        //////////////////////////////////////////////////////
+        // Définition de l'objet Pagination
+        $objPagination = new PaginationHtmlBean();
+        $queryArg = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => self::CST_CAL_EVENT,
+            self::SQL_ORDER_BY => $orderby,
+            self::SQL_ORDER => $order,
+        ];
+        $objPagination->setData([
+            'objs' => $objsCopsEvent,
+            'curPage' => $curPage,
+            'queryArg' => $queryArg,
+        ]);
+
+        //////////////////////////////////////////////////////
+        // Définition du Header du tableau
+        $objRow = new TableauRowHtmlBean();
+        $objTableauCell = new TableauCellHtmlBean('Titre', self::TAG_TH);
+        $queryArg[self::SQL_ORDER_BY] = self::FIELD_EVENT_LIBELLE;
+        $objTableauCell->ableSort($queryArg);
+        $objRow->addCell($objTableauCell);
+        $objRow->addCell(new TableauCellHtmlBean('Catégorie', self::TAG_TH));
+        $objTableauCell = new TableauCellHtmlBean('Date de début', self::TAG_TH);
+        $queryArg[self::SQL_ORDER_BY] = self::FIELD_DATE_DEBUT;
+        $objTableauCell->ableSort($queryArg);
+        $objRow->addCell($objTableauCell);
+        $objRow->addCell(new TableauCellHtmlBean('Date de fin', self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean('Répétition', self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean('Nombre', self::TAG_TH));
+        $objHeader = new TableauTHeadHtmlBean();
+        $objHeader->addRow($objRow);
+        
+        //////////////////////////////////////////////////////
+        // Définition du Body du tableau
+        $objBody = new TableauBodyHtmlBean();
+        // On ajoute les lignes du tableau ici.
+        $objPagination->getDisplayedRows($objBody);
+        
+        //////////////////////////////////////////////////////
+        // Définition du Footer du tableau
+        $objRow = new TableauRowHtmlBean();
+        /*
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objsEventCateg =$objCopsEventServices->getEventCategories();
+        $strOptions = HtmlUtils::getOption('Catégorie', -1, $filterCateg==-1);
+        while (!empty($objsEventCateg)) {
+            $objEventCateg = array_shift($objsEventCateg);
+            $strOptions .= $objEventCateg->getBean()->getOption();
         }
+        $strSelect = HtmlUtils::getBalise(
+            self::TAG_SELECT,
+            $strOptions,
+            [self::ATTR_CLASS=>'browser-default custom-select form-control-sm']
+        );
+        $objRow->addCell(new TableauCellHtmlBean($strSelect, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        */
+        //////////////////////////////////////////////////////
 
+        $objFooter = new TableauTFootHtmlBean();
+        $objFooter->addRow($objRow);
+        
+        $objTable = new TableauHtmlBean();
+        $objTable->setSize('sm');
+        $objTable->setStripped();
+        $objTable->setClass('m-0 sortableTable');
+        $objTable->setAria('describedby', 'Liste événements');
+        $objTable->setTHead($objHeader);
+        $objTable->setBody($objBody);
+        $objTable->setTFoot($objFooter);
+        
         $urlElements = [
             self::CST_ONGLET => self::ONGLET_CALENDAR,
             self::CST_SUBONGLET => self::CST_CAL_EVENT,
@@ -197,9 +280,11 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         $urlTemplate = self::WEB_PA_CALENDAR_EVENT_LIST;
         $attributes = [
             // La liste des événements
-            $strTrs,
+            $objTable->getBean(),
             // Le lien pour créer un nouvel événement.
             UrlUtils::getAdminUrl($urlElements),
+            // La pagination éventuelle
+            $objPagination->getPaginationBlock(),
         ];
         return $this->getRender($urlTemplate, $attributes);
     }
@@ -239,6 +324,9 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             $objEvent->setField(self::FIELD_HEURE_FIN, static::fromPost(self::FIELD_HEURE_FIN));
         }
 
+        $continuEvent = static::fromPost(self::FIELD_CONTINU_EVENT, 0);
+        $objEvent->setField(self::FIELD_CONTINU_EVENT, $continuEvent);
+
         //////
         // Valeurs par défaut pour les champs en rapport avec la répétition de l'événement
         $objEvent->setField(self::FIELD_CUSTOM_EVENT, 0);
@@ -262,13 +350,12 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             if ($repeatEnd==self::CST_EVENT_RT_ENDDATE) {
                 $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost(self::FIELD_ENDDATE_VALUE));
             } elseif ($repeatEnd==self::CST_EVENT_RT_ENDREPEAT) {
-                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost('endRepetitionValue'));
+                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost(self::FIELD_ENDREPEAT_VALUE));
             } else {
                 $objEvent->setField(self::FIELD_REPEAT_END_VALUE, '');
             }
 
-            $customEvent = static::fromPost(self::FIELD_CUSTOM_EVENT);
-            if ($customEvent=='custom') {
+            if (static::fromPost(self::FIELD_CUSTOM_EVENT)==self::CST_EVENT_RT_CUSTOM) {
                 $objEvent->setField(self::FIELD_CUSTOM_EVENT, 1);
                 $objEvent->setField(self::FIELD_CUSTOM_DAY, static::fromPost(self::FIELD_CUSTOM_DAY));
                 $objEvent->setField(self::FIELD_CUSTOM_DAY_WEEK, static::fromPost(self::FIELD_CUSTOM_DAY_WEEK));
@@ -277,8 +364,8 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         }
         
         if ($objEvent->checkFields()) {
-            $id = static::fromPost(self::FIELD_ID, 0);
-            if ($id==0) {
+            $id = static::fromPost(self::FIELD_ID);
+            if ($id=='') {
                 $objCopsEventServices->insertEvent($objEvent);
             } else {
                 $objEvent->setField(self::FIELD_ID, $id);
@@ -440,10 +527,20 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             $strAllDayReadonlyRequired = self::CST_REQUIRED;
         }
 
+        /////////////////////////////////////////////////////////////////////////
+        // Gestion si événément Continu
+        if ($this->objCopsEvent->isContiniousEvent()) {
+            $strContiniousChecked = self::CST_CHECKED;
+        } else {
+            $strContiniousChecked = '';
+        }
+
         //////////////////////////////////////////////////////////
         $urlTemplate = self::WEB_PA_CAL_EVT_EDIT_DATE;
         $attributes = [
             ////////////////////////////////////////////////////
+            // Checked si événement continu
+            $strContiniousChecked,
             // Date de début
             $this->objCopsEvent->getField(self::FIELD_DATE_DEBUT),
             // Date de fin

@@ -53,11 +53,12 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
     public function insertAutopsie(&$objAutopsie)
     {
         // On récupère les champs
-        $fields = array_shift($this->dbFields);
+        $fields = $this->dbFields;
+        array_shift($fields);
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($fields, $this->dbTable);
         // On insère
-        $this->insertDaoImpl($objAutopsie, $request, self::FIELD_ID);
+        $this->insertDaoImpl($objAutopsie, $fields, $request, self::FIELD_ID);
     }
     
     /**

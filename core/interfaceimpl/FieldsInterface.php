@@ -81,6 +81,7 @@ interface FieldsInterface
     public const FIELD_EVENT_LIBELLE      = 'eventLibelle';
     public const FIELD_CATEG_ID           = 'categorieId';
     public const FIELD_ALL_DAY_EVENT      = 'allDayEvent';
+    public const FIELD_CONTINU_EVENT      = 'continuEvent';
     public const FIELD_HEURE_DEBUT        = 'heureDebut';
     public const FIELD_HEURE_FIN          = 'heureFin';
     public const FIELD_REPEAT_STATUS      = 'repeatStatus';
@@ -97,6 +98,7 @@ interface FieldsInterface
     public const FIELD_MINUTE_DEBUT       = 'minuteDebut';
     public const FIELD_MINUTE_FIN         = 'minuteFin';
     public const FIELD_ENDDATE_VALUE      = 'endDateValue';
+    public const FIELD_ENDREPEAT_VALUE    = 'endRepetitionValue';
 
     // TABLE cops_event_categorie
     public const FIELD_CATEG_LIBELLE      = 'categorieLibelle';

@@ -18,7 +18,11 @@ class WpPageAdminLibrarySkillBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_SKILL];
         
-        $buttonContent = HtmlUtils::getLink(self::LABEL_SKILLS, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink(
+            self::LABEL_SKILLS,
+            $this->getOngletUrl($urlElements),
+            self::CST_TEXT_WHITE
+        );
         $buttonAttributes = [self::ATTR_CLASS=>($this->btnDisabled)];
         $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
     }

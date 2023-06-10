@@ -33,7 +33,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             self::CST_SUBONGLET => self::CST_CAL_WEEK,
             self::CST_CAL_CURDAY => $this->curStrDate
         ];
-        $strLink = HtmlUtils::getLink(self::LABEL_WEEKLY, UrlUtils::getAdminUrl($urlAttributes));
+        $strLink = HtmlUtils::getLink(self::LABEL_WEEKLY, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Récupération du contenu principal
@@ -183,7 +183,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             while (!empty($objsEventDate)) {
                 $objEventDate = array_shift($objsEventDate);
                 if ($objEventDate->getEvent()->isAllDayEvent()) {
-                    if ($objEventDate->getEvent()->isFirstDay($curDay) || DateUtils::isMonday($curDay)) {
+                    if ($objEventDate->isFirstDay($curDay) || DateUtils::isMonday($curDay)) {
                         $tdContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_WEEK, $curDay, $nbEvts);
                     }
                     ++$nbEvts;
@@ -203,7 +203,10 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
             /////////////////////////////////////////
 
             // Construction du contenu de la cellule
-            $divContent  = HtmlUtils::getDiv($tdContent.$divBottom, [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_EVENTS]);
+            $divContent  = HtmlUtils::getDiv(
+                $tdContent.$divBottom,
+                [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_EVENTS]
+            );
             $divContent .= HtmlUtils::getDiv('', [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_BG]);
             $divAttributes = [self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN];
             $tdContent = HtmlUtils::getDiv($divContent, $divAttributes);

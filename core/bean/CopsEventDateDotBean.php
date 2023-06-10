@@ -30,7 +30,7 @@ class CopsEventDateDotBean extends CopsEventDateBean
         $ratio = 1190/1440;
         $strInset  = 'inset: ';
 
-        if (!$this->objEvent->isSeveralDays()) {
+        if (!$this->objEventDate->isSeveralDays()) {
             $intTop = round(2+$ratio*$this->objEventDate->getField(self::FIELD_TSTART));
             $height = $this->objEventDate->getField(self::FIELD_TEND)-$this->objEventDate->getField(self::FIELD_TSTART);
             $intHeight = round(-4+$ratio*($height));

@@ -32,7 +32,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
             self::CST_SUBONGLET => self::CST_CAL_DAY,
             self::CST_CAL_CURDAY => $this->curStrDate
         ];
-        $strLink = HtmlUtils::getLink(self::LABEL_DAILY, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_DAILY, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Récupération du contenu principal

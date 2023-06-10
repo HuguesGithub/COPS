@@ -77,7 +77,7 @@
   <!-- Main Footer -->
   <footer class="main-footer" style="height:56px;">
     <strong>To Protect And To Serve</strong>
-    <div class="float-right d-none d-sm-inline-block">
+    <div class="float-end d-none d-sm-inline-block">
       <strong>Version</strong> %7$s
     </div>
     <script type="text/javascript">var ajaxurl = 'https://cops.jhugues.fr/wp-admin/admin-ajax.php';</script>

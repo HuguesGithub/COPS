@@ -22,6 +22,7 @@ class CopsEventClass extends LocalDomainClass
     protected $dateDebut;
     protected $dateFin;
     protected $allDayEvent;
+    protected $continuEvent;
     protected $heureDebut;
     protected $heureFin;
     protected $repeatStatus;
@@ -154,6 +155,13 @@ class CopsEventClass extends LocalDomainClass
     }
 
     /**
+     * @since v1.23.06.05
+     * @version v1.23.06.11
+     */
+    public function isContiniousEvent(): bool
+    { return $this->continuEvent==1; }
+
+    /**
      * @since 1.23.04.21
      * @version v1.23.05.14
      */
@@ -169,23 +177,23 @@ class CopsEventClass extends LocalDomainClass
     {
         $this->objCopsEventServices->saveEvent($this);
         
-        if ($this->isRepetitive()) {
-            // On créé un nouvel objet event_date
-            $objCopsEventDate = new CopsEventDateClass();
-            // Que l'on assigne à l'event créé à l'instant.
-            $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
-            if ($this->isAllDayEvent()) {
-                // Toute la journée
-                $objCopsEventDate->setField(self::FIELD_TSTART, 0);
-                $objCopsEventDate->setField(self::FIELD_TEND, 1440);
-            } else {
-                // Heures et minutes renseignées
-                [$h, $i, ] = explode(':', (string) $this->heureDebut);
-                $objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-                [$h, $i, ] = explode(':', (string) $this->heureFin);
-                $objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
-            }
+        // On créé un nouvel objet event_date
+        $objCopsEventDate = new CopsEventDateClass();
+        // Que l'on assigne à l'event créé à l'instant.
+        $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
+        if ($this->isAllDayEvent()) {
+            // Toute la journée
+            $objCopsEventDate->setField(self::FIELD_TSTART, 0);
+            $objCopsEventDate->setField(self::FIELD_TEND, 1440);
+        } else {
+            // Heures et minutes renseignées
+            [$h, $i, ] = explode(':', (string) $this->heureDebut);
+            $objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
+            [$h, $i, ] = explode(':', (string) $this->heureFin);
+            $objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
+        }
 
+        if ($this->isRepetitive()) {
             $dateDebut = $this->dateDebut;
             $dateFin = $this->dateFin;
             
@@ -231,21 +239,8 @@ class CopsEventClass extends LocalDomainClass
             }
         } else {
             // S'il ne se répète pas, on insère une seule entrée dans event_date.
-            $objCopsEventDate = new CopsEventDateClass();
-            $objCopsEventDate->setField(self::FIELD_EVENT_ID, $this->id);
             $objCopsEventDate->setField(self::FIELD_DSTART, $this->dateDebut);
             $objCopsEventDate->setField(self::FIELD_DEND, $this->dateFin);
-            if ($this->isAllDayEvent()) {
-                // Toute la journée
-                $objCopsEventDate->setField(self::FIELD_TSTART, 0);
-                $objCopsEventDate->setField(self::FIELD_TEND, 1440);
-            } else {
-                // Heures et minutes renseignées
-                [$h, $i, ] = explode(':', (string) $this->heureDebut);
-                $objCopsEventDate->setField(self::FIELD_TSTART, $i+$h*60);
-                [$h, $i, ] = explode(':', (string) $this->heureFin);
-                $objCopsEventDate->setField(self::FIELD_TEND, $i+$h*60);
-            }
             $objCopsEventDate->saveEventDate();
         }
     }
@@ -452,5 +447,20 @@ class CopsEventClass extends LocalDomainClass
             $this->repeatEnd,
             $this->repeatEndValue
         ];
+    }
+
+    /**
+     * @since v1.23.06.10
+     * @version v1.23.06.11
+     */
+    public function getEventDates(): array
+    {
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_EVENT_ID => $this->id,
+            ],
+        ];
+        $this->objCopsEventServices = new CopsEventServices();
+        return $this->objCopsEventServices->getEventDates($attributes);
     }
 }

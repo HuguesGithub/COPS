@@ -22,7 +22,7 @@ class WpPostSkillBean extends WpPostBean
         $postContent = $this->WpPost->getField(self::WP_POSTCONTENT);
         $rkSpecialisation = $this->WpPost->getPostMeta(self::WP_CF_SPECIALISATION);
         $padUsable = ($this->WpPost->getPostMeta(self::WP_CF_ADRENALINE)==1);
-        $reference = $this->WpPost->getPostMeta('reference');
+        $reference = $this->WpPost->getPostMeta(self::FIELD_REFERENCE);
         $caracAssociee = $this->WpPost->getPostMeta(self::WP_CF_CARACASSOCIEE);
         ///////////////////////////////////////////////////////////////
 
@@ -44,25 +44,10 @@ class WpPostSkillBean extends WpPostBean
             // $objCopsSkill->getField(self::FIELD_SKILL_DESC)
             // $objCopsSkill->getField(self::FIELD_SKILL_USES)
 
-            if ($rkSpecialisation!='' && $rkSpecialisation!=$objCopsSkill->getField(self::FIELD_SPEC_LEVEL)) {
-                $objCopsSkill->setField(self::FIELD_SPEC_LEVEL, $rkSpecialisation);
-                $blnUpdate = true;
-            }
-
-            if ($padUsable!='' && $padUsable!=$objCopsSkill->getField(self::FIELD_PAN_USABLE)) {
-                $objCopsSkill->setField(self::FIELD_PAN_USABLE, $padUsable);
-                $blnUpdate = true;
-            }
-
-            if ($reference!='' && $reference!=$objCopsSkill->getField(self::FIELD_REFERENCE)) {
-                $objCopsSkill->setField(self::FIELD_REFERENCE, $reference);
-                $blnUpdate = true;
-            }
-
-            if ($caracAssociee!='' && $caracAssociee!=$objCopsSkill->getField(self::FIELD_DEFAULT_ABILITY)) {
-                $objCopsSkill->setField(self::FIELD_DEFAULT_ABILITY, $caracAssociee);
-                $blnUpdate = true;
-            }
+            $this->updateField($objCopsSkill, self::FIELD_SPEC_LEVEL, $rkSpecialisation, $blnUpdate);
+            $this->updateField($objCopsSkill, self::FIELD_PAN_USABLE, $padUsable, $blnUpdate);
+            $this->updateField($objCopsSkill, self::FIELD_REFERENCE, $reference, $blnUpdate);
+            $this->updateField($objCopsSkill, self::FIELD_DEFAULT_ABILITY, $caracAssociee, $blnUpdate);
 
             if ($blnUpdate) {
                 $objCopsSkillServices->update($objCopsSkill);
@@ -93,5 +78,16 @@ class WpPostSkillBean extends WpPostBean
         return $this->getRender($urlTemplate, $attributes);
     }
 
+    /**
+     * @since v1.23.06.05
+     * @version v1.23.06.11
+     */
+    public function updateField($objCopsSkill, string $field, $value, &$blnUpdate): void
+    {
+        if ($value!='' && $value!=$objCopsSkill->getField(field)) {
+            $objCopsSkill->setField(field, $value);
+            $blnUpdate = true;
+        }
+    }
 }
 

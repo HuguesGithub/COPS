@@ -37,7 +37,7 @@ class LocalActions extends GlobalActions implements ConstantsInterface, LabelsIn
   {
     $strContent  = '<div class="toast fade show bg-'.$type.'">';
     $strContent .= '  <div class="toast-header">';
-    $strContent .= '    <i class="fas fa-exclamation-circle mr-2"></i>';
+    $strContent .= '    <i class="fas fa-exclamation-circle me-2"></i>';
     $strContent .= '    <strong class="me-auto">'.$title.'</strong>';
     $strContent .= '    <small>à l\'instant</small>';
     $strContent .= '  </div>';

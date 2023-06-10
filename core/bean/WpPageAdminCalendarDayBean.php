@@ -144,7 +144,10 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         $divIn  = HtmlUtils::getDiv($allDayEvents.$divBottom, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_EVENTS]);
         $divIn .= HtmlUtils::getDiv('', [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_BG]);
         
-        $tdContent = HtmlUtils::getDiv($divIn, [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN]);
+        $tdContent = HtmlUtils::getDiv(
+            $divIn,
+            [self::ATTR_CLASS=>self::CST_FC_DAYGRID_DAY_FRAME.' '.self::CST_FC_SCROLLGRID_SYNC_IN]
+        );
         $attributes = [
             self::ATTR_ROLE => self::CST_GRIDCELL,
             self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' ' . $strClass,

@@ -54,7 +54,7 @@ function cops_autoloader($classname)
         if (isset($arr[$matches[1]])) {
             $filePath = PLUGIN_PATH.'core/'.$arr[$matches[1]].'/'.$classname.'.php';
             if (file_exists($filePath)) {
-                include_once($filePath);
+                include_once $filePath;
             }
         }
     }

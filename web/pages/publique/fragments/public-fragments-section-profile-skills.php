@@ -100,7 +100,7 @@
               <div class="col-4">
                 <div id="card-caracs" class="card">
                   <div class="card-header">
-                    <h2 class="title">Stage 1 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Stage 1 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Bonus</strong> : </p>
@@ -111,7 +111,7 @@
               <div class="col-4">
                 <div id="card-caracs" class="card">
                   <div class="card-header">
-                    <h2 class="title">Stage 2 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Stage 2 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Bonus</strong> : </p>
@@ -122,7 +122,7 @@
               <div class="col-4">
                 <div id="card-caracs" class="card">
                   <div class="card-header">
-                    <h2 class="title">Stage 3 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Stage 3 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Bonus</strong> : </p>
@@ -133,7 +133,7 @@
               <div class="col-4">
                 <div id="card-caracs" class="card">
                   <div class="card-header">
-                    <h2 class="title">Stage 4 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Stage 4 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Bonus</strong> : </p>

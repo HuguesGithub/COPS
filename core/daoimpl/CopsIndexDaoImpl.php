@@ -71,11 +71,12 @@ class CopsIndexDaoImpl extends LocalDaoImpl
     public function insertIndex(&$objCopsIndex)
     {
         // On récupère les champs
-        $fields = array_shift($this->dbFields);
+        $fields = $this->dbFields;
+        array_shift($fields);
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($fields, $this->dbTable);
         // On insère
-        $this->insertDaoImpl($objCopsIndex, $request, self::FIELD_ID);
+        $this->insertDaoImpl($objCopsIndex, $fields, $request, self::FIELD_ID);
     }
 
     /**
@@ -133,11 +134,11 @@ class CopsIndexDaoImpl extends LocalDaoImpl
     public function insertIndexReference(&$objCopsIndexReference)
     {
         // On récupère les champs
-        $fields = array_shift($this->dbFields_cir);
+        $fields = $this->dbFields_cir;
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($fields, $this->dbTable_cir);
         // On insère
-        $this->insertDaoImpl($objCopsIndexReference, $request, self::FIELD_ID_IDX_REF);
+        $this->insertDaoImpl($objCopsIndexReference, $fields, $request, self::FIELD_ID_IDX_REF);
     }
 
     /**

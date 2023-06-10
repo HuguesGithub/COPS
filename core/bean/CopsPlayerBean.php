@@ -59,27 +59,45 @@ class CopsPlayerBean extends UtilitiesBean
         0,
         // Langue 2
         $this->CopsLangueServices->getSelectHtml(
-            array_merge($selectAttributes, ['name'=>'carac-langue-02', 'id'=>'carac-langue-02'])
+            array_merge(
+                $selectAttributes,
+                [
+                    self::ATTR_NAME => 'carac-langue-02',
+                    self::ATTR_ID   => 'carac-langue-02',
+                ]
+            )
         ),
         // Langue 3
         $this->CopsLangueServices->getSelectHtml(
             array_merge(
                 $selectAttributes,
-                ['name'=>'carac-langue-03', 'id'=>'carac-langue-03', 'style'=>'display:none;']
+                [
+                    self::ATTR_NAME  => 'carac-langue-03',
+                    self::ATTR_ID    => 'carac-langue-03',
+                    self::ATTR_STYLE => self::CSS_DISPLAY_NONE,
+                ]
             )
         ),
         // Langue 4
         $this->CopsLangueServices->getSelectHtml(
             array_merge(
                 $selectAttributes,
-                ['name'=>'carac-langue-04', 'id'=>'carac-langue-04', 'style'=>'display:none;']
+                [
+                    self::ATTR_NAME  => 'carac-langue-04',
+                    self::ATTR_ID    => 'carac-langue-04',
+                    self::ATTR_STYLE => self::CSS_DISPLAY_NONE,
+                ]
             )
         ),
         // Langue 5
         $this->CopsLangueServices->getSelectHtml(
             array_merge(
                 $selectAttributes,
-                ['name'=>'carac-langue-05', 'id'=>'carac-langue-05', 'style'=>'display:none;']
+                [
+                    self::ATTR_NAME  => 'carac-langue-05',
+                    self::ATTR_ID    => 'carac-langue-05',
+                    self::ATTR_STYLE => self::CSS_DISPLAY_NONE,
+                ]
             )
         ),
         // Points de vie current

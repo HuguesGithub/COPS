@@ -6,7 +6,7 @@
         <th>
           <div class="fc-scroller-harness">
             <div class="fc-scroller" style="overflow: hidden scroll;">
-              <table class="fc-col-header" aria-describedby="Entête de colonnes du mois">
+              <table class="fc-col-header table-bordered " aria-describedby="Entête de colonnes du mois">
                 <colgroup></colgroup>
                 <tbody>
                   <tr>
@@ -31,7 +31,7 @@
           <div class="fc-scroller-harness fc-scroller-harness-liquid">
             <div class="fc-scroller fc-scroller-liquid-absolute" style="overflow: hidden scroll;">
               <div class="fc-daygrid-body fc-daygrid-body-unbalanced" style="height:498px;">
-                <table class="fc-scrollgrid-sync-table" style="height:498px;" aria-describedby="Affichage des événements du mois">
+                <table class="fc-scrollgrid-sync-table table-bordered " style="height:498px;" aria-describedby="Affichage des événements du mois">
                   <colgroup></colgroup>
                   <tbody>
                     %1$s

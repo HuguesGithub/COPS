@@ -7,7 +7,7 @@
         <th role="presentation">
           <div class="fc-scroller-harness">
             <div class="fc-scroller" style="overflow: hidden scroll;">
-              <table role="presentation" class="fc-col-header ">
+              <table role="presentation" class="fc-col-header table-bordered">
                 <colgroup>
                   <col style="width: 55px;">
                 </colgroup>
@@ -30,7 +30,7 @@
           <div class="fc-scroller-harness">
             <div class="fc-scroller" style="overflow: hidden scroll;">
               <div class="fc-daygrid-body fc-daygrid-body-unbalanced fc-daygrid-body-natural">
-                <table role="presentation" class="fc-scrollgrid-sync-table">
+                <table role="presentation" class="fc-scrollgrid-sync-table table-bordered">
                   <colgroup>
                     <col style="width: 55px;">
                   </colgroup>

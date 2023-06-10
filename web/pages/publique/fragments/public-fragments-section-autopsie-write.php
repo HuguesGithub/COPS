@@ -137,7 +137,7 @@
     <div class="card-footer">
         <input type="hidden" name="writeAction"/>
         <input type="hidden" name="id" value="%1$s"/>
-        <div class="float-right">
+        <div class="float-end">
               <button type="submit" class="btn btn-primary" data-action="send"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
         </div>
         <a href="/admin?onglet=autopsie" class="text-white"><button type="reset" class="btn btn-default" data-action="cancel"><i class="fa-solid fa-times"></i> Annuler</button></a>

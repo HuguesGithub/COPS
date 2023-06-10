@@ -74,8 +74,9 @@ class CopsMeteoDaoImpl extends LocalDaoImpl
     {
         $request  = "INSERT INTO ".$this->dbTable." (".implode(', ', $this->dbFields).") ";
         $request .= "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');";
+        $prepRequest = vsprintf($request, $attributes);
         LogUtils::logRequest($prepRequest);
-        MySQLClass::wpdbQuery($request);
+        MySQLClass::wpdbQuery($prepRequest);
     }
 
 }

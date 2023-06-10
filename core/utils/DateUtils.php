@@ -92,7 +92,7 @@ class DateUtils implements ConstantsInterface
         // On détermine si $when est string ou int.
         if (is_numeric($when)) {
             // Si int, c'est un timestamp.
-            [$d, $m, $y, $h, $i, $s] = explode(' ', date('d m Y h i s', $when));
+            [$d, $m, $y, $h, $i, $s] = explode(' ', date('d m Y H i s', $when));
         } elseif (is_array($when)) {
             // A priori, rien à faire
             [$d, $m, $y, $h, $i, $s] = $when;

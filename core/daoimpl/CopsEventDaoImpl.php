@@ -39,6 +39,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
             self::FIELD_DATE_DEBUT,
             self::FIELD_DATE_FIN,
             self::FIELD_ALL_DAY_EVENT,
+            self::FIELD_CONTINU_EVENT,
             self::FIELD_HEURE_DEBUT,
             self::FIELD_HEURE_FIN,
             self::FIELD_REPEAT_STATUS,
@@ -95,11 +96,12 @@ class CopsEventDaoImpl extends LocalDaoImpl
     public function insertEvent(CopsEventClass &$objEvent): void
     {
         // On récupère les champs
-        $fields = array_shift($this->dbFields);
+        $fields = $this->dbFields;
+        array_shift($fields);
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($fields, $this->dbTable);
         // On insère
-        $this->insertDaoImpl($objEvent, $request, self::FIELD_ID);
+        $this->insertDaoImpl($objEvent, $fields, $request, self::FIELD_ID);
     }
 
     /**
@@ -146,7 +148,8 @@ class CopsEventDaoImpl extends LocalDaoImpl
     public function getEventDates(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields_ced), $this->dbTable_ced);
-        $request .= " WHERE id LIKE '%s' AND dStart <= '%s' AND dEnd >= '%s'".$this->defaultOrderByAndLimit;
+        $request .= " WHERE id LIKE '%s' AND eventId LIKE '%s' AND dStart <= '%s' AND dEnd >= '%s'";
+        $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsEventDateClass(), $request, $attributes);
     }
 
@@ -158,11 +161,12 @@ class CopsEventDaoImpl extends LocalDaoImpl
     {
         /*
         // On récupère les champs
-        $fields = array_shift($this->dbFields_ced);
+        $fields = $this->dbFields_ced;
+        array_shift($fields);
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($fields, $this->dbTable_ced);
         // On insère
-        $this->insertDaoImpl($objEvent, $request, self::FIELD_ID);
+        $this->insertDaoImpl($objEvent, $fields, $request, self::FIELD_ID);
         */
 
         // Ne peut pas être migré "à la insertDaoImpl" car le nom de la table n'est pas dans dbTable

@@ -18,7 +18,11 @@ class WpPageAdminLibraryBddBean extends WpPageAdminLibraryBean
         
         $urlElements = [self::CST_SUBONGLET => self::CST_LIB_BDD];
 
-        $buttonContent = HtmlUtils::getLink(self::LABEL_DATABASES, $this->getOngletUrl($urlElements), self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink(
+            self::LABEL_DATABASES,
+            $this->getOngletUrl($urlElements),
+            self::CST_TEXT_WHITE
+        );
         $buttonAttributes = [self::ATTR_CLASS=>($this->catSlug==''?$this->btnDisabled:$this->btnDark)];
         $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         

@@ -27,14 +27,14 @@
               <div class="col-4">
                 <div class="card">
                   <div class="card-header">
-                    <h2 class="title">Nom Prénom 1 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Nom Prénom 1 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Métier</strong> : </p>
                     <dl>
                       <dt>Connaissances</dt>
-                      <dd>Connaissance 1 <span class="float-right">[Niveau]</span></dd>
-                      <dd>Connaissance 2 <span class="float-right">[Niveau]</span></dd>
+                      <dd>Connaissance 1 <span class="float-end">[Niveau]</span></dd>
+                      <dd>Connaissance 2 <span class="float-end">[Niveau]</span></dd>
                     </dl>
                   </div>
                   <div class="card-footer">
@@ -51,14 +51,14 @@
               <div class="col-4">
                 <div class="card">
                   <div class="card-header">
-                    <h2 class="title">Nom Prénom 1 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Nom Prénom 1 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Métier</strong> : </p>
                     <dl>
                       <dt>Connaissances</dt>
-                      <dd>Connaissance 1 <span class="float-right">[Niveau]</span></dd>
-                      <dd>Connaissance 2 <span class="float-right">[Niveau]</span></dd>
+                      <dd>Connaissance 1 <span class="float-end">[Niveau]</span></dd>
+                      <dd>Connaissance 2 <span class="float-end">[Niveau]</span></dd>
                     </dl>
                   </div>
                   <div class="card-footer">
@@ -75,14 +75,14 @@
               <div class="col-4">
                 <div class="card">
                   <div class="card-header">
-                    <h2 class="title">Nom Prénom 1 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Nom Prénom 1 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Métier</strong> : </p>
                     <dl>
                       <dt>Connaissances</dt>
-                      <dd>Connaissance 1 <span class="float-right">[Niveau]</span></dd>
-                      <dd>Connaissance 2 <span class="float-right">[Niveau]</span></dd>
+                      <dd>Connaissance 1 <span class="float-end">[Niveau]</span></dd>
+                      <dd>Connaissance 2 <span class="float-end">[Niveau]</span></dd>
                     </dl>
                   </div>
                   <div class="card-footer">
@@ -99,14 +99,14 @@
               <div class="col-4">
                 <div class="card">
                   <div class="card-header">
-                    <h2 class="title">Nom Prénom 1 <span class="float-right">[Niveau]</span></h2>
+                    <h2 class="title">Nom Prénom 1 <span class="float-end">[Niveau]</span></h2>
                   </div>
                   <div class="card-body">
                     <p><strong>Métier</strong> : </p>
                     <dl>
                       <dt>Connaissances</dt>
-                      <dd>Connaissance 1 <span class="float-right">[Niveau]</span></dd>
-                      <dd>Connaissance 2 <span class="float-right">[Niveau]</span></dd>
+                      <dd>Connaissance 1 <span class="float-end">[Niveau]</span></dd>
+                      <dd>Connaissance 2 <span class="float-end">[Niveau]</span></dd>
                     </dl>
                   </div>
                   <div class="card-footer">

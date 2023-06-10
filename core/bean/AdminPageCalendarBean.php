@@ -45,9 +45,9 @@ class AdminPageCalendarBean extends AdminPageBean
         // Construction du menu
         $this->arrSubOnglets = [
             self::CST_HOME      => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_HOME],
-            self::CST_CAL_MONTH => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_MONTHLY],
-            self::CST_CAL_WEEK  => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_WEEKLY],
-            self::CST_CAL_DAY   => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_DAILY],
+            self::CST_CAL_MONTH => [self::FIELD_ICON => 'calendar', self::FIELD_LABEL => self::LABEL_MONTHLY],
+            self::CST_CAL_WEEK  => [self::FIELD_ICON => 'calendar-week', self::FIELD_LABEL => self::LABEL_WEEKLY],
+            self::CST_CAL_DAY   => [self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => self::LABEL_DAILY],
             self::CST_CAL_EVENT => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_EVENTS]
         ];
         /////////////////////////////////////////
@@ -58,10 +58,15 @@ class AdminPageCalendarBean extends AdminPageBean
         $strLis = '';
         foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
             $urlAttributes[self::CST_SUBONGLET] = $slugSubOnglet;
+            $strIcon = '';
+
+            if (!empty($arrData[self::FIELD_ICON])) {
+                $strIcon = HtmlUtils::getIcon($arrData[self::FIELD_ICON]).self::CST_NBSP;
+            }
 
             $blnActive = ($curSubOnglet==$slugSubOnglet || $curSubOnglet=='' && $slugSubOnglet==self::CST_HOME);
             $strLink = HtmlUtils::getLink(
-                $arrData[self::FIELD_LABEL],
+                $strIcon.$arrData[self::FIELD_LABEL],
                 UrlUtils::getAdminUrl($urlAttributes),
                 self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
             );
@@ -73,10 +78,10 @@ class AdminPageCalendarBean extends AdminPageBean
         /////////////////////////////////////////
         // Construction du Breadcrumbs
         $this->styleBreadCrumbs = 'breadcrumb-item '.self::CSS_FLOAT_LEFT;
-        $strLink = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_HOUSE), UrlUtils::getAdminUrl(), '');
+        $strLink = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_HOUSE), UrlUtils::getAdminUrl(), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
         $urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR];
-        $strLink = HtmlUtils::getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
         /////////////////////////////////////////
 
@@ -153,7 +158,7 @@ class AdminPageCalendarBean extends AdminPageBean
         }
         // Un autre mois ou non
         // si le jour est dans un autre mois : fc-day-other
-        if (substr($strDate, 5, 2)!=substr($strToday, 5, 2)) {
+        if (substr($strDate, 5, 2)!=substr($strToday, 5, 2) || substr($strDate, 0, 4)!=substr($strToday, 0, 4)) {
             $strClass .= ' '.self::CST_FC_DAY_OTHER;
         }
         ///////////////////////////////////////////////////

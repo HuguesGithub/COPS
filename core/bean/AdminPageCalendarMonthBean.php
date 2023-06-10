@@ -33,7 +33,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
             self::CST_SUBONGLET => self::CST_CAL_MONTH,
             self::CST_CAL_CURDAY => $this->curStrDate
         ];
-        $strLink = HtmlUtils::getLink(self::LABEL_MONTHLY, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_MONTHLY, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Récupération du contenu principal
@@ -181,7 +181,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         while (!empty($objsEventDate)) {
             $objEventDate = array_shift($objsEventDate);
             if ($objEventDate->getEvent()->isAllDayEvent()) {
-                if ($objEventDate->getEvent()->isFirstDay($displayDate)) {
+                if ($objEventDate->isFirstDay($displayDate)) {
                     $strContent .= $objEventDate->getBean()->getCartouche(self::CST_CAL_MONTH, $displayDate, $nbEvts);
                 } elseif (DateUtils::isMonday($displayDate)) {
                     // On a un événement qui est couvert par la période mais dont le premier jour

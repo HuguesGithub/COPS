@@ -28,7 +28,7 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
         $urlAttributes = [
             self::CST_ONGLET => self::ONGLET_CALENDAR,
         ];
-        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($urlAttributes), '');
+        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         $strCards = $this->getCard();

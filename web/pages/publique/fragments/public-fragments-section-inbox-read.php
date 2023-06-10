@@ -9,7 +9,7 @@
   <div class="card-body p-0">
     <div class="mailbox-read-info">
       <h5>%1$s</h5>
-      <h6>%2$s <span class="mailbox-read-time float-right">%3$s</span></h6>
+      <h6>%2$s <span class="mailbox-read-time float-end">%3$s</span></h6>
     </div>
 
     <div class="mailbox-controls with-border text-center">%7$s</div>
@@ -22,7 +22,7 @@
   </div>
 
   <div class="card-footer d-none d-lg-block">
-    <div class="float-right">%8$s</div>
+    <div class="float-end">%8$s</div>
     %9$s
   </div>
 </div>
