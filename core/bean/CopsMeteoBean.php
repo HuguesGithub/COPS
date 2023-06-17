@@ -8,7 +8,7 @@ use core\utils\HtmlUtils;
  * CopsMeteoBean
  * @author Hugues
  * @since 1.23.04.36
- * @version v1.23.05.28
+ * @version v1.23.06.18
  */
 class CopsMeteoBean extends UtilitiesBean
 {
@@ -18,37 +18,41 @@ class CopsMeteoBean extends UtilitiesBean
     }
 
     /**
-     * @since v1.23.04.26
-     * @version v1.23.05.28
+     * @since v1.23.05.15
+     * @version v1.23.06.18
      */
-    public function getAdminRow(): string
+    public function getTableRow(): TableauRowHtmlBean
     {
-        // Initialisation de la ligne de données
-        $adminRow = '';
-        $adminRow .= HtmlUtils::getTh(self::CST_NBSP);
-
-        // On ajoute les différents champs
-        $adminRow .= HtmlUtils::getTh($this->objCopsMeteo->getField(self::FIELD_HEURE_METEO));
+        $objRow = new TableauRowHtmlBean();
+        //
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        //
+        $heureMeteo = $this->objCopsMeteo->getField(self::FIELD_HEURE_METEO);
+        $objRow->addCell(new TableauCellHtmlBean($heureMeteo, self::TAG_TH));
         // Construction découpée sinon trop longue.
         $wicon = $this->objCopsMeteo->getField(self::FIELD_WEATHER_ID);
         $strDiv = HtmlUtils::getDiv('', [self::ATTR_CLASS=>self::CST_WICON, self::ATTR_DATA_ICON=>$wicon]);
-        $adminRow .= $this->getBalise(self::TAG_TD, $strDiv);
-
-        $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_TEMPERATURE).'°C');
-        $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_WEATHER));
-        $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_FORCE_VENT).' km/h');
-
+        $objRow->addCell(new TableauCellHtmlBean($strDiv, self::TAG_TD, self::STYLE_TEXT_CENTER));
+        //
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsMeteo->getField(self::FIELD_TEMPERATURE).'°C'));
+        //
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsMeteo->getField(self::FIELD_WEATHER)));
+        //
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsMeteo->getField(self::FIELD_FORCE_VENT).' km/h'));
+        //
         $sensId = $this->objCopsMeteo->getField(self::FIELD_SENS_VENT);
         $strSpan = $this->getBalise(self::TAG_SPAN, '↑', [self::ATTR_CLASS=>'comp sa'.$sensId]);
-        $adminRow .= $this->getBalise(self::TAG_TD, $strSpan);
-        
-        $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_HUMIDITE).'%');
-        $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_BAROMETRE).' mbar');
-        $adminRow .= $this->getBalise(self::TAG_TD, $this->objCopsMeteo->getField(self::FIELD_VISIBILITE).' km');
+        $objRow->addCell(new TableauCellHtmlBean($strSpan, self::TAG_TD, self::STYLE_TEXT_CENTER));
+        //
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsMeteo->getField(self::FIELD_HUMIDITE).'%'));
+        //
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsMeteo->getField(self::FIELD_BAROMETRE).' mbar'));
+        //
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsMeteo->getField(self::FIELD_VISIBILITE).' km'));
+        //
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP));
 
-        $adminRow .= HtmlUtils::getTh(self::CST_NBSP);
-        // On retourne la ligne terminée
-        return $this->getBalise(self::TAG_TR, $adminRow);
+        return $objRow;
     }
 
     /**

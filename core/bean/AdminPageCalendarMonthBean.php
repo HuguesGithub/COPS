@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarMonthBean
  * @author Hugues
  * @since v1.23.05.03
- * @version v1.23.05.28
+ * @version v1.23.06.18
  */
 class AdminPageCalendarMonthBean extends AdminPageCalendarBean
 {
@@ -158,7 +158,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.28
+     * @version v1.23.06.18
      */
     public function getAllDayEvents(string $displayDate): string
     {
@@ -171,8 +171,8 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
                 self::FIELD_DSTART => $displayDate,
                 self::FIELD_DEND => $displayDate
             ],
-            self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
-            self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]
+            self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND, self::FIELD_TSTART],
+            self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC, self::SQL_ORDER_ASC]
         ];
         $this->objCopsEventServices = new CopsEventServices();
         $objsEventDate = $this->objCopsEventServices->getEventDates($attributes);

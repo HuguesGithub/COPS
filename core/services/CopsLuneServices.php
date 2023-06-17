@@ -8,7 +8,7 @@ use core\daoimpl\CopsLuneDaoImpl;
  * Classe CopsLuneServices
  * @author Hugues
  * @since v1.23.04.27
- * @version v1.23.04.30
+ * @version v1.23.06.18
  */
 class CopsLuneServices extends LocalServices
 {
@@ -35,7 +35,7 @@ class CopsLuneServices extends LocalServices
 
     /**
      * @since v1.23.04.27
-     * @version v1.23.04.30
+     * @version v1.23.06.18
      */
     public function getLunes(array $attributes): array
     {
@@ -43,7 +43,7 @@ class CopsLuneServices extends LocalServices
             $this->Dao = new CopsLuneDaoImpl();
         }
         $startDate = $attributes[self::SQL_WHERE_FILTERS][self::CST_STARTDATE] ?? self::CST_FIRST_DATE;
-        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::CAST_ENDDATE] ?? self::CST_LAST_DATE;
+        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::CST_ENDDATE] ?? self::CST_LAST_DATE;
         $typeLune = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_TYPE_LUNE] ?? self::SQL_JOKER_SEARCH;
 
         $prepAttributes = [

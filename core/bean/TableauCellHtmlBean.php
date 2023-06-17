@@ -8,31 +8,37 @@ use core\utils\UrlUtils;
  * Classe TableauCellHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.11
+ * @version v1.23.06.18
  */
 class TableauCellHtmlBean extends UtilitiesBean
 {
     private $strType;
     private $strClass;
     private $strContent;
+    private $arrAttributes;
 
     private $isSortable = false;
     private $urlElements = [];
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.06.18
      */
-    public function __construct(string $strContent, string $strType=self::TAG_TD, string $strClass='')
-    {
+    public function __construct(
+        string $strContent,
+        string $strType = self::TAG_TD,
+        string $strClass = '',
+        array $attributes = []
+    ) {
         $this->strType = $strType;
         $this->strContent = $strContent;
         $this->strClass = $strClass;
+        $this->arrAttributes = $attributes;
     }
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.06.18
      */
     public function getBean(): string
     {
@@ -49,10 +55,11 @@ class TableauCellHtmlBean extends UtilitiesBean
                 $this->urlElements[self::SQL_ORDER] = self::SQL_ORDER_ASC;
             }
             $cellContent = HtmlUtils::getLink($this->strContent, UrlUtils::getAdminUrl($this->urlElements));
-            return $this->getBalise($this->strType, $cellContent, [self::ATTR_CLASS => $strSort]);
+            $this->arrAttributes[self::ATTR_CLASS] = $strSort.$this->strClass;
+            return $this->getBalise($this->strType, $cellContent, $this->arrAttributes);
         } else {
-            $attributes = $this->strClass=='' ? [] : [self::ATTR_CLASS => $this->strClass];
-            return $this->getBalise($this->strType, $this->strContent, $attributes);
+            $this->arrAttributes[self::ATTR_CLASS] = $this->strClass;
+            return $this->getBalise($this->strType, $this->strContent, $this->arrAttributes);
         }
     }
 

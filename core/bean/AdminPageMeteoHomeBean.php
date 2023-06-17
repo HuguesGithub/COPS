@@ -1,13 +1,16 @@
 <?php
 namespace core\bean;
 
+use core\domain\CopsMeteoClass;
+use core\utils\DateUtils;
 use core\utils\HtmlUtils;
+use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoHomeBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.05.28
+ * @version v1.23.06.18
  */
 class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 {
@@ -15,7 +18,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.29
-     * @version v1.23.04.30
+     * @version v1.23.06.18
      */
     public function getContentOnglet(): string
     {
@@ -29,6 +32,13 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
         // Récupération des onglets de navigation.
         $strNavigation = $this->getContentPage();
+
+        // Construction du Breadcrumbs
+        $urlAttributes = [
+            self::CST_ONGLET => self::ONGLET_METEO,
+        ];
+        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
 
         // Initialisation de la liste des cards qu'on va afficher.
         // Card Meteo
@@ -58,10 +68,11 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
         // On va afficher la dernière donnée enregistrée
         // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
         $attributes = [
+            $this->strBreadcrumbs,
             $strNavigation,
             $strCards,
         ];
-        return $this->getRender(self::WEB_PA_METEO_HOME, $attributes);
+        return $this->getRender(self::WEB_PA_METEO, $attributes);
     }
 
     /**
@@ -76,7 +87,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.05.28
+     * @version v1.23.06.18
      */
     public function dealWithGetActions(): string
     {
@@ -87,7 +98,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
         // On construit l'url ciblée
         $url  = sprintf($this->ajaxUrl, $strDate, $m, $y);
-        $strCompteRendu = HtmlUtils::getLink('Date étudiée', $url, '');
+        $strCompteRendu = HtmlUtils::getLink('Date étudiée', $url);
 
         // On en récupère le contenu
         $str = file_get_contents($url);

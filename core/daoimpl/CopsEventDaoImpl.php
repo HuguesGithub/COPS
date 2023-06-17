@@ -12,7 +12,7 @@ use core\utils\LogUtils;
  * Classe CopsEventDaoImpl
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.06.04
+ * @version v1.23.06.18
  */
 class CopsEventDaoImpl extends LocalDaoImpl
 {
@@ -80,12 +80,13 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.05.28
+     * @version v1.23.06.18
      */
     public function getEvents(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
-        $request .= " WHERE id LIKE '%s' AND dateDebut <= '%s' AND dateFin >= '%s'".$this->defaultOrderByAndLimit;
+        $request .= " WHERE id LIKE '%s' AND categorieId LIKE '%s' AND dateDebut <= '%s' AND dateFin >= '%s'";
+        $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsEventClass(), $request, $attributes);
     }
 

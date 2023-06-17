@@ -8,7 +8,7 @@ use core\utils\HtmlUtils;
  * Classe PaginationHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.11
+ * @version v1.23.06.18
  */
 class PaginationHtmlBean extends UtilitiesBean
 {
@@ -36,11 +36,6 @@ class PaginationHtmlBean extends UtilitiesBean
         'first_last_numbers',
     ];
     private $option = 'full_numbers';
-
-    public function __construct()
-    {
-
-    }
 
     /**
      * @since v1.23.06.10
@@ -76,10 +71,14 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.06.18
      */
     public function getPaginationBlock(): string
     {
+        if ($this->nbPages<=1) {
+            return '';
+        }
+
         // Selon l'option choisie, on affiche une pagination plus ou moins enrichie.
         $ulContent = '';
         // Met-on les numéros ?
@@ -114,9 +113,6 @@ class PaginationHtmlBean extends UtilitiesBean
         }
 
         $strClass = 'pagination pagination-sm justify-content-end mb-O';
-        if ($this->nbPages==1) {
-            $strClass .= ' hidePagination';
-        }
         $navContent = $this->getBalise(self::TAG_UL, $ulContent, [self::ATTR_CLASS => $strClass]);
         $navAttributes = [self::ATTR_ARIA => [self::TAG_LABEL => 'Pagination liste']];
         return $this->getBalise(self::TAG_NAV, $navContent, $navAttributes);
@@ -143,13 +139,13 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.06.18
      */
     public function getQueryArg(): string
     {
         $this->queryArg['page'] = 'hj-cops/admin_manage.php';
         $remArg = ['form', 'id'];
-        return add_query_arg($this->queryArg, remove_query_arg($remArg, 'http://cops.jhugues.fr/wp-admin/admin.php'));
+        return add_query_arg($this->queryArg, remove_query_arg($remArg, 'https://cops.jhugues.fr/wp-admin/admin.php'));
     }
 
 }

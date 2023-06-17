@@ -4,11 +4,11 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.06.11
+ * @version v1.23.06.18
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.06.11';
+    public const VERSION              = 'v1.23.06.18';
 
     /////////////////////////////////////////////////
     // Ajax Infos
@@ -46,7 +46,10 @@ interface ConstantsInterface
     // CSS
     public const CSS_FLOAT_LEFT         = 'float-start';
     public const CSS_FLOAT_RIGHT        = 'float-end';
+    public const CSS_TEXT_END           = 'text-end';
     public const CSS_DISPLAY_NONE       = 'display:none;';
+    public const CSS_COL_1              = ' col-1';
+    public const CSS_COL_2              = ' col-2';
 
     /////////////////////////////////////////////////
     // Constantes

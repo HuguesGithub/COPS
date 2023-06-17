@@ -8,7 +8,7 @@ use core\utils\LogUtils;
  * Classe CopsMeteoDaoImpl
  * @author Hugues
  * @since 1.23.4.20
- * @version v1.23.04.30
+ * @version v1.23.06.18
  */
 class CopsMeteoDaoImpl extends LocalDaoImpl
 {
@@ -56,27 +56,29 @@ class CopsMeteoDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     /**
      * @since 1.23.4.20
-     * @version v1.23.04.30
+     * @version v1.23.06.18
      */
     public function getMeteos(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
         $request .= " WHERE dateMeteo LIKE '%s'";
-        $request .= " ORDER BY %s %s LIMIT %s";
+        $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsMeteoClass(), $request, $attributes);
     }
 
     /**
      * @since v1.23.04.29
-     * @version v1.23.06.04
+     * @version v1.23.06.18
      */
-    public function insertMeteo(array $attributes): void
+    public function insertMeteo(CopsMeteoClass &$objMeteo): void
     {
-        $request  = "INSERT INTO ".$this->dbTable." (".implode(', ', $this->dbFields).") ";
-        $request .= "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');";
-        $prepRequest = vsprintf($request, $attributes);
-        LogUtils::logRequest($prepRequest);
-        MySQLClass::wpdbQuery($prepRequest);
+        // On récupère les champs
+        $fields = $this->dbFields;
+        array_shift($fields);
+        // On défini la requête d'insertion
+        $request = $this->getInsertRequest($fields, $this->dbTable);
+        // On insère
+        $this->insertDaoImpl($objMeteo, $fields, $request, self::FIELD_ID);
     }
 
 }

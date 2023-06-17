@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\HtmlUtils;
+use core\utils\UrlUtils;
 
 /**
  * CopsEventCategorieBean
  * @author Hugues
  * @since v1.23.05.15
- * @version v1.23.05.28
+ * @version v1.23.06.18
  */
 class CopsEventCategorieBean extends UtilitiesBean
 {
@@ -16,11 +17,17 @@ class CopsEventCategorieBean extends UtilitiesBean
         $this->objEventCategorie = $obj;
     }
 
-    public function getOption(string $selValue=''): string
+    /**
+     * @since v1.23.06.18
+     * @version v1.23.06.18
+     */
+    public function getLi(array $urlElements): string
     {
         $label = $this->objEventCategorie->getField(self::FIELD_CATEG_LIBELLE);
-        $value = $this->objEventCategorie->getField(self::FIELD_ID);
-        return HtmlUtils::getOption($label, $value, $selValue==$value);
+        $urlElements['filterCateg'] = $this->objEventCategorie->getField(self::FIELD_ID);
+        $href = UrlUtils::getAdminUrl($urlElements);
+        $liContent = HtmlUtils::getLink($label, $href, 'dropdown-item');
+        return HtmlUtils::getBalise(self::TAG_LI, $liContent);
     }
 
 }

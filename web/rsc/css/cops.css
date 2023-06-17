@@ -282,48 +282,49 @@ border-color: #4b545c;
 .wicon {
     background-position: 50%;
     background-repeat: no-repeat;
-    height: 40px;
-    width: 40px;
+    background-size: 30px;
+    height: 30px;
+    width: 30px;
 }
-.wicon[data-icon="1"]{background-image:url(../img/svg/wt-1.svg);background-size:40px}
-.wicon[data-icon="2"]{background-image:url(../img/svg/wt-2.svg);background-size:40px}
-.wicon[data-icon="3"]{background-image:url(../img/svg/wt-3.svg);background-size:40px}
-.wicon[data-icon="4"]{background-image:url(../img/svg/wt-4.svg);background-size:40px}
-.wicon[data-icon="5"]{background-image:url(../img/svg/wt-5.svg);background-size:40px}
-.wicon[data-icon="6"]{background-image:url(../img/svg/wt-6.svg);background-size:40px}
-.wicon[data-icon="7"]{background-image:url(../img/svg/wt-7.svg);background-size:40px}
-.wicon[data-icon="8"]{background-image:url(../img/svg/wt-8.svg);background-size:40px}
-.wicon[data-icon="9"]{background-image:url(../img/svg/wt-9.svg);background-size:40px}
-.wicon[data-icon="10"]{background-image:url(../img/svg/wt-10.svg);background-size:40px}
-.wicon[data-icon="11"]{background-image:url(../img/svg/wt-11.svg);background-size:40px}
-.wicon[data-icon="12"]{background-image:url(../img/svg/wt-12.svg);background-size:40px}
-.wicon[data-icon="13"]{background-image:url(../img/svg/wt-13.svg);background-size:40px}
-.wicon[data-icon="14"]{background-image:url(../img/svg/wt-14.svg);background-size:40px}
-.wicon[data-icon="15"]{background-image:url(../img/svg/wt-15.svg);background-size:40px}
-.wicon[data-icon="16"]{background-image:url(../img/svg/wt-16.svg);background-size:40px}
-.wicon[data-icon="17"]{background-image:url(../img/svg/wt-17.svg);background-size:40px}
-.wicon[data-icon="18"]{background-image:url(../img/svg/wt-18.svg);background-size:40px}
-.wicon[data-icon="19"]{background-image:url(../img/svg/wt-19.svg);background-size:40px}
-.wicon[data-icon="20"]{background-image:url(../img/svg/wt-20.svg);background-size:40px}
-.wicon[data-icon="21"]{background-image:url(../img/svg/wt-21.svg);background-size:40px}
-.wicon[data-icon="22"]{background-image:url(../img/svg/wt-22.svg);background-size:40px}
-.wicon[data-icon="23"]{background-image:url(../img/svg/wt-23.svg);background-size:40px}
-.wicon[data-icon="24"]{background-image:url(../img/svg/wt-24.svg);background-size:40px}
-.wicon[data-icon="25"]{background-image:url(../img/svg/wt-25.svg);background-size:40px}
-.wicon[data-icon="26"]{background-image:url(../img/svg/wt-26.svg);background-size:40px}
-.wicon[data-icon="27"]{background-image:url(../img/svg/wt-27.svg);background-size:40px}
-.wicon[data-icon="28"]{background-image:url(../img/svg/wt-28.svg);background-size:40px}
-.wicon[data-icon="29"]{background-image:url(../img/svg/wt-29.svg);background-size:40px}
-.wicon[data-icon="30"]{background-image:url(../img/svg/wt-30.svg);background-size:40px}
-.wicon[data-icon="31"]{background-image:url(../img/svg/wt-31.svg);background-size:40px}
-.wicon[data-icon="32"]{background-image:url(../img/svg/wt-32.svg);background-size:40px}
-.wicon[data-icon="33"]{background-image:url(../img/svg/wt-33.svg);background-size:40px}
-.wicon[data-icon="34"]{background-image:url(../img/svg/wt-34.svg);background-size:40px}
-.wicon[data-icon="35"]{background-image:url(../img/svg/wt-35.svg);background-size:40px}
-.wicon[data-icon="36"]{background-image:url(../img/svg/wt-36.svg);background-size:40px}
+.wicon[data-icon="1"]{background-image:url(../img/svg/wt-1.svg);}
+.wicon[data-icon="2"]{background-image:url(../img/svg/wt-2.svg);}
+.wicon[data-icon="3"]{background-image:url(../img/svg/wt-3.svg);}
+.wicon[data-icon="4"]{background-image:url(../img/svg/wt-4.svg);}
+.wicon[data-icon="5"]{background-image:url(../img/svg/wt-5.svg);}
+.wicon[data-icon="6"]{background-image:url(../img/svg/wt-6.svg);}
+.wicon[data-icon="7"]{background-image:url(../img/svg/wt-7.svg);}
+.wicon[data-icon="8"]{background-image:url(../img/svg/wt-8.svg);}
+.wicon[data-icon="9"]{background-image:url(../img/svg/wt-9.svg);}
+.wicon[data-icon="10"]{background-image:url(../img/svg/wt-10.svg);}
+.wicon[data-icon="11"]{background-image:url(../img/svg/wt-11.svg);}
+.wicon[data-icon="12"]{background-image:url(../img/svg/wt-12.svg);}
+.wicon[data-icon="13"]{background-image:url(../img/svg/wt-13.svg);}
+.wicon[data-icon="14"]{background-image:url(../img/svg/wt-14.svg);}
+.wicon[data-icon="15"]{background-image:url(../img/svg/wt-15.svg);}
+.wicon[data-icon="16"]{background-image:url(../img/svg/wt-16.svg);}
+.wicon[data-icon="17"]{background-image:url(../img/svg/wt-17.svg);}
+.wicon[data-icon="18"]{background-image:url(../img/svg/wt-18.svg);}
+.wicon[data-icon="19"]{background-image:url(../img/svg/wt-19.svg);}
+.wicon[data-icon="20"]{background-image:url(../img/svg/wt-20.svg);}
+.wicon[data-icon="21"]{background-image:url(../img/svg/wt-21.svg);}
+.wicon[data-icon="22"]{background-image:url(../img/svg/wt-22.svg);}
+.wicon[data-icon="23"]{background-image:url(../img/svg/wt-23.svg);}
+.wicon[data-icon="24"]{background-image:url(../img/svg/wt-24.svg);}
+.wicon[data-icon="25"]{background-image:url(../img/svg/wt-25.svg);}
+.wicon[data-icon="26"]{background-image:url(../img/svg/wt-26.svg);}
+.wicon[data-icon="27"]{background-image:url(../img/svg/wt-27.svg);}
+.wicon[data-icon="28"]{background-image:url(../img/svg/wt-28.svg);}
+.wicon[data-icon="29"]{background-image:url(../img/svg/wt-29.svg);}
+.wicon[data-icon="30"]{background-image:url(../img/svg/wt-30.svg);}
+.wicon[data-icon="31"]{background-image:url(../img/svg/wt-31.svg);}
+.wicon[data-icon="32"]{background-image:url(../img/svg/wt-32.svg);}
+.wicon[data-icon="33"]{background-image:url(../img/svg/wt-33.svg);}
+.wicon[data-icon="34"]{background-image:url(../img/svg/wt-34.svg);}
+.wicon[data-icon="35"]{background-image:url(../img/svg/wt-35.svg);}
+.wicon[data-icon="36"]{background-image:url(../img/svg/wt-36.svg);}
 #weather .wicon {
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
 }
 #weather .wind {
     border-top: 1px solid #ddd;

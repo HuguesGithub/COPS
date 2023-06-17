@@ -5,21 +5,23 @@ namespace core\bean;
  * Classe TableauRowHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.11
+ * @version v1.23.06.18
  */
 class TableauRowHtmlBean extends UtilitiesBean
 {
     private $strClass;
     private $arrCells;
+    private $attributes;
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.06.18
      */
     public function __construct()
     {
         $this->strClass = '';
         $this->arrCells = [];
+        $this->attributes = [];
     }
     
     /**
@@ -28,10 +30,23 @@ class TableauRowHtmlBean extends UtilitiesBean
      */
     public function addCell($objCell): void
     { $this->arrCells[] = $objCell; }
+
+    /**
+     * @since v1.23.06.18
+     * @version v1.23.06.18
+     */
+    public function addStyle(string $strStyle): void
+    {
+        if (isset($this->attributes[self::ATTR_STYLE])) {
+            $this->attributes[self::ATTR_STYLE] .= ' '.$strStyle;
+        } else {
+            $this->attributes[self::ATTR_STYLE] = $strStyle;
+        }
+    }
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.06.18
      */
     public function getBean(): string
     {
@@ -41,7 +56,8 @@ class TableauRowHtmlBean extends UtilitiesBean
             $strRowContent .= $objCell->getBean();
         }
         // On initialise le tableau des attributs
-        $attributes = $this->strClass=='' ? [] : [self::ATTR_CLASS => $this->strClass];
+        $this->attributes[self::ATTR_CLASS] = $this->strClass;
+        $attributes = $this->attributes;
         // On retourne la balise
         return $this->getBalise(self::TAG_TR, $strRowContent, $attributes);
     }

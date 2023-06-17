@@ -14,10 +14,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
   integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-<!--
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
--->
 <link rel="stylesheet" href="<?php echo PLUGINS_COPS; ?>web/rsc/fontawesome-6.1.1/css/all.min.css">
 <link rel="stylesheet" type="text/css" media="all" href="<?php echo PLUGINS_MYCOMMON; ?>web/rsc/css/jquery-ui.min.css"/>
 <link rel="stylesheet" type="text/css" media="all" href="<?php echo PLUGINS_COPS; ?>web/rsc/css/cops.css"/>
@@ -27,8 +23,8 @@
   if (empty($Cops)) {
     $Cops = new Cops();
   }
-  $AdminPageBean = new \core\bean\AdminPageBean();
-  echo $AdminPageBean->getContentPage();
+  $objAdminPageBean = new \core\bean\AdminPageBean();
+  echo $objAdminPageBean->getContentPage();
 ?>
 <script type='text/javascript' src='<?php echo PLUGINS_COPS; ?>web/rsc/js/jquery.min.js'></script>
 <script type='text/javascript' src='<?php echo PLUGINS_MYCOMMON; ?>web/rsc/js/jquery-ui.min.js'></script>

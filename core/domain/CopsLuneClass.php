@@ -8,7 +8,7 @@ use core\utils\DateUtils;
  * Classe CopsLuneClass
  * @author Hugues
  * @since 1.23.4.27
- * @version v1.23.04.30
+ * @version v1.23.06.18
  */
 class CopsLuneClass extends LocalDomainClass
 {
@@ -74,11 +74,11 @@ class CopsLuneClass extends LocalDomainClass
 
     /**
      * @since v1.23.04.27
-     * @version v1.23.04.30
+     * @version v1.23.06.18
      */
     public function getDateHeure(): string
     {
-        return DateUtils::getStrDate(self::FORMAT_DATE_DMYHIS, $this->dateLune.' '.$this->heureLune);
+        return DateUtils::getStrDate(self::FORMAT_DATE_DMYHIS, $this->dateLune.' '.$this->heureLune.':00');
     }
 
 }

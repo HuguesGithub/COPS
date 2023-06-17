@@ -14,7 +14,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarEventBean
  * @author Hugues
  * @since v1.23.05.15
- * @version v1.23.06.04
+ * @version v1.23.06.18
  */
 class AdminPageCalendarEventBean extends AdminPageCalendarBean
 {
@@ -176,13 +176,13 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.05.21
+     * @version v1.23.06.18
      */
     public function getListContent(): string
     {
         $objCopsEventServices = new CopsEventServices();
         // On récupère les données éventuelles sur les filtres et les tris
-        $filterCateg = -1;
+        $filterCateg = $this->initVar('filterCateg', self::SQL_JOKER_SEARCH);
         $curPage = $this->initVar(self::CST_CURPAGE, 1);
         $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_DATE_DEBUT);
         $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
@@ -191,6 +191,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
         // Récupération des données
         $attributes = [
+            self::SQL_WHERE_FILTERS => [self::FIELD_CATEG_ID => $filterCateg],
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ];
@@ -204,6 +205,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
             self::CST_SUBONGLET => self::CST_CAL_EVENT,
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
+            'filterCateg' => $filterCateg,
         ];
         $objPagination->setData([
             'objs' => $objsCopsEvent,
@@ -218,14 +220,14 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         $queryArg[self::SQL_ORDER_BY] = self::FIELD_EVENT_LIBELLE;
         $objTableauCell->ableSort($queryArg);
         $objRow->addCell($objTableauCell);
-        $objRow->addCell(new TableauCellHtmlBean('Catégorie', self::TAG_TH));
-        $objTableauCell = new TableauCellHtmlBean('Date de début', self::TAG_TH);
+        $objRow->addCell(new TableauCellHtmlBean('Catégorie', self::TAG_TH, self::CSS_COL_2));
+        $objTableauCell = new TableauCellHtmlBean('Date de début', self::TAG_TH, self::CSS_COL_2);
         $queryArg[self::SQL_ORDER_BY] = self::FIELD_DATE_DEBUT;
         $objTableauCell->ableSort($queryArg);
         $objRow->addCell($objTableauCell);
-        $objRow->addCell(new TableauCellHtmlBean('Date de fin', self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean('Répétition', self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean('Nombre', self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean('Date de fin', self::TAG_TH, self::CSS_COL_2));
+        $objRow->addCell(new TableauCellHtmlBean('Répétition', self::TAG_TH, self::CSS_COL_1));
+        $objRow->addCell(new TableauCellHtmlBean('Nombre', self::TAG_TH, self::CSS_COL_1));
         $objHeader = new TableauTHeadHtmlBean();
         $objHeader->addRow($objRow);
         
@@ -238,30 +240,19 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         //////////////////////////////////////////////////////
         // Définition du Footer du tableau
         $objRow = new TableauRowHtmlBean();
-        /*
+        $objRow->addStyle('line-height:30px;');
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
         $objsEventCateg =$objCopsEventServices->getEventCategories();
-        $strOptions = HtmlUtils::getOption('Catégorie', -1, $filterCateg==-1);
-        while (!empty($objsEventCateg)) {
-            $objEventCateg = array_shift($objsEventCateg);
-            $strOptions .= $objEventCateg->getBean()->getOption();
-        }
-        $strSelect = HtmlUtils::getBalise(
-            self::TAG_SELECT,
-            $strOptions,
-            [self::ATTR_CLASS=>'browser-default custom-select form-control-sm']
-        );
-        $objRow->addCell(new TableauCellHtmlBean($strSelect, self::TAG_TH));
+        $rowContent = $this->getCategorieFilter($objsEventCateg, $filterCateg);
+        $objRow->addCell(new TableauCellHtmlBean($rowContent, self::TAG_TH));
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
-        */
-        //////////////////////////////////////////////////////
-
         $objFooter = new TableauTFootHtmlBean();
         $objFooter->addRow($objRow);
-        
+
+        //////////////////////////////////////////////////////
         $objTable = new TableauHtmlBean();
         $objTable->setSize('sm');
         $objTable->setStripped();
@@ -589,4 +580,44 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         ];
         return $this->getRender($urlTemplate, $attributes);
     }
+
+    /**
+     * @since v1.23.06.18
+     * @version v1.23.06.18
+     */
+    public function getCategorieFilter(array $objsEventCateg, $selectedValue=''): string
+    {
+        $urlElements = [
+            self::CST_ONGLET => self::ONGLET_CALENDAR,
+            self::CST_SUBONGLET => self::CST_CAL_EVENT,
+        ];
+        $strLabel = 'Catégorie';
+        $strLis = '';
+        while (!empty($objsEventCateg)) {
+            $objEventCateg = array_shift($objsEventCateg);
+            $strLis .= $objEventCateg->getBean()->getLi($urlElements);
+            if ($objEventCateg->getField(self::FIELD_ID)==$selectedValue) {
+                $strLabel = $objEventCateg->getField(self::FIELD_CATEG_LIBELLE);
+            }
+        }
+        $ulAttributes = [
+            self::ATTR_CLASS => 'dropdown-menu',
+            self::ATTR_STYLE => 'height: 200px; overflow: auto;',
+        ];
+        $ul = HtmlUtils::getBalise(self::TAG_UL, $strLis, $ulAttributes);
+
+        $btnAttributes = [
+            self::ATTR_CLASS => ' btn_outline btn-sm dropdown-toggle',
+            'aria-expanded' => false,
+            'data-bs-toggle' => 'dropdown',
+        ];
+        $strButton = HtmlUtils::getButton($strLabel, $btnAttributes);
+
+        $divAttributes = [
+            self::ATTR_CLASS => 'dropdown dropup',
+            self::ATTR_STYLE => 'position: absolute; margin-top: -17px;',
+        ];
+        return HtmlUtils::getDiv($strButton.$ul, $divAttributes);
+    }
+    
 }

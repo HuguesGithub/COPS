@@ -12,7 +12,7 @@ use core\utils\DateUtils;
  * Classe CopsEventServices
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.05.28
+ * @version v1.23.06.18
  */
 class CopsEventServices extends LocalServices
 {
@@ -54,11 +54,12 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.05.21
+     * @version v1.23.06.18
      */
     public function getEvents(array $attributes): array
     {
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $categId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_CATEG_ID] ?? self::SQL_JOKER_SEARCH;
         $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_DEBUT] ?? self::CST_LAST_DATE;
         $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_FIN] ?? self::CST_FIRST_DATE;
 
@@ -83,6 +84,7 @@ class CopsEventServices extends LocalServices
 
         $prepAttributes = [
             $id,
+            $categId,
             $startDate,
             $endDate,
             $orderBy,

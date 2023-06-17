@@ -7,7 +7,7 @@ use core\domain\CopsSoleilClass;
  * CopsSoleilBean
  * @author Hugues
  * @since v1.23.04.26
- * @version v1.23.04.30
+ * @version v1.23.06.18
  */
 class CopsSoleilBean extends UtilitiesBean
 {
@@ -18,7 +18,7 @@ class CopsSoleilBean extends UtilitiesBean
 
     /**
      * @since v1.23.04.26
-     * @version v1.23.04.30
+     * @version v1.23.06.18
      */
     public function getColumn(): string
     {
@@ -47,7 +47,10 @@ class CopsSoleilBean extends UtilitiesBean
         $strColContent = '';
         $strMinuit = '00:00';
         $strTitleNuit = 'Nuit %s - %s.';
-        $strTitleJour = 'Journée %s - %s.\r\nDurée : %s';
+        $strTitleAube = 'Aube %s - %s.';
+        $strTitleAurore = 'Aurore %s - %s.';
+        $strTitleJour = 'Journée %s - %s.&#xA;Durée : %s';
+        $strTitleCrepuscule = 'Crépucule %s - %s.';
         $posTop = 0;
         $height = 0;
         $margin = 30;
@@ -67,13 +70,13 @@ class CopsSoleilBean extends UtilitiesBean
         // Le premier créneau de nuit nautique
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_CIVIL_AM);
-        $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
+        $strTitle = sprintf($strTitleAube, $heureStart, $heureFin);
         $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $amNautikColor, $posTop, $height);
 
         // Le premier créneau de nuit civil
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_LEVER);
-        $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
+        $strTitle = sprintf($strTitleAurore, $heureStart, $heureFin);
         $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $amCivilColor, $posTop, $height);
 
         // La journée
@@ -86,13 +89,13 @@ class CopsSoleilBean extends UtilitiesBean
         // Le deuxième créneau de nuit civil
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_CIVIL_PM);
-        $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
+        $strTitle = sprintf($strTitleCrepuscule, $heureStart, $heureFin);
         $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $pmCivilColor, $posTop, $height);
 
         // Le deuxième créneau de nuit nautique
         $heureStart = $heureFin;
         $heureFin = $this->objCopsSoleil->getField(self::FIELD_HEURE_NAUTIK_PM);
-        $strTitle = sprintf($strTitleNuit, $heureStart, $heureFin);
+        $strTitle = sprintf($strTitleCrepuscule, $heureStart, $heureFin);
         $strColContent .= $this->buidBlocHoraire($heureStart, $heureFin, $strTitle, $pmNautikColor, $posTop, $height);
 
         // Le deuxième créneau de nuit astronomique
@@ -150,10 +153,7 @@ class CopsSoleilBean extends UtilitiesBean
 
         /////////////////////////////////////////////////////////////////
         // C'est fini, on retourne la cellule
-        $attributes = [
-            self::ATTR_STYLE => 'position: relative; height: 100%;',
-        ];
-        return $this->getBalise(self::TAG_TD, $strColContent, $attributes);
+        return $strColContent;
     }
 
     /**

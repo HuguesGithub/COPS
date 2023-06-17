@@ -1,6 +1,7 @@
 <?php
 namespace core\services;
 
+use core\domain\CopsMeteoClass;
 use core\domain\CopsSoleilClass;
 use core\daoimpl\CopsMeteoDaoImpl;
 
@@ -8,7 +9,7 @@ use core\daoimpl\CopsMeteoDaoImpl;
  * Classe CopsMeteoServices
  * @author Hugues
  * @since 1.22.04.29
- * @version v1.23.04.30
+ * @version v1.23.06.18
  */
 class CopsMeteoServices extends LocalServices
 {
@@ -52,25 +53,14 @@ class CopsMeteoServices extends LocalServices
 
     /**
      * @since v1.23.04.29
-     * @version v1.23.04.30
+     * @version v1.23.06.18
      */
     public function insertMeteo(CopsMeteoClass $objCopsMeteo): void
     {
         if ($this->Dao==null) {
             $this->Dao = new CopsMeteoDaoImpl();
         }
-        $prepAttributes = [];
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_HEURE_METEO);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_TEMPERATURE);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_WEATHER);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_WEATHER_ID);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_FORCE_VENT);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_SENS_VENT);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_HUMIDITE);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_BAROMETRE);
-        $prepAttributes[] = $objCopsMeteo->getField(self::FIELD_VISIBILITE);
-        $this->Dao->insertMeteo($prepAttributes);
+        $this->Dao->insertMeteo($objCopsMeteo);
     }
 
     ////////////////////////////////////
