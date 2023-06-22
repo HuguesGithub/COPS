@@ -3,11 +3,13 @@ namespace core\bean;
 
 use core\domain\CopsIndexReferenceClass;
 use core\domain\MySQLClass;
+use core\utils\SessionUtils;
 
 /**
  * AdminPageIndexBean
  * @author Hugues
- * @since 1.23.04.20
+ * @since v1.23.04.20
+ * @version v1.23.06.25
  */
 class AdminPageIndexBean extends AdminPageBean
 {
@@ -47,7 +49,8 @@ class AdminPageIndexBean extends AdminPageBean
     }
 
     /**
-     * @since 1.23.04.20
+     * @since v1.23.04.20
+     * @version v1.23.06.25
      */
     public function controlerEtEnregistrerIndex(): void
     {
@@ -61,7 +64,7 @@ class AdminPageIndexBean extends AdminPageBean
         ];
         while (!empty($expectedFields)) {
             $field = array_shift($expectedFields);
-            $value = static::fromPost($field);
+            $value = SessionUtils::fromPost($field);
 
             $objCopsIndexReference->setField($field, $value);
         }

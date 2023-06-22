@@ -2,15 +2,20 @@
 namespace core\bean;
 
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 
 /**
  * Classe WpPageAdminCalendarEventBean
  * @author Hugues
  * @since 1.22.11.22
- * @version v1.23.05.28
+ * @version v1.23.06.25
  */
 class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
 {
+    /**
+     * @since v1.23.06.21
+     * @version v1.23.06.25
+     */
     public function __construct()
     {
         parent::__construct();
@@ -35,7 +40,7 @@ class WpPageAdminCalendarEventBean extends WpPageAdminCalendarBean
         $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, $buttonAttributes);
         /////////////////////////////////////////
 
-        if (static::fromPost(self::CST_WRITE_ACTION)!='') {
+        if (SessionUtils::fromPost(self::CST_WRITE_ACTION)!='') {
             $this->dealWithWriteAction();
         }
 

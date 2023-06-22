@@ -95,7 +95,6 @@ class CopsMeteoClass extends LocalDomainClass
         $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
         $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
 
-        //$this->id = $this->objCopsSoleil->getField(self::FIELD_ID);
         $this->dateMeteo = $Y.$m.$d;
 
         $this->maxTemp = -15;

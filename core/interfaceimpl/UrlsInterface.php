@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.06.04
+ * @version v1.23.06.25
  */
 interface UrlsInterface
 {
@@ -57,6 +57,7 @@ interface UrlsInterface
     public const WEB_PPFD_ALLDAY_EVENT      = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-allday-event.tpl';
     public const WEB_PPFD_DOT_EVENT         = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-dot-event.tpl';
     public const WEB_PPFD_INSET_EVENT       = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-inset-event.tpl';
+    public const WEB_PPFD_PFL_ABILITY       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-ability.tpl';
     public const WEB_PPFF_LIBRARY_INDEX     = self::WEB_PPF_FORM    .'publique-fragments-form-library-index.tpl';
     public const WEB_PPFS_CALENDAR          = self::WEB_PPF_SECTION .'publique-fragments-section-calendar.tpl';
     public const WEB_PPFS_CAL_DAY           = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-day.tpl';
@@ -70,5 +71,7 @@ interface UrlsInterface
     public const WEB_PPFS_LIB_SKILLS        = self::WEB_PPF_SECTION .'publique-fragments-section-library-skills.tpl';
     public const WEB_PPFS_ONGLET            = self::WEB_PPF_SECTION .'publique-fragments-section-onglet.tpl';
     public const WEB_PPFS_ONGLET_LIST       = self::WEB_PPF_SECTION .'publique-fragments-section-onglet-list.tpl';
+    public const WEB_PPFS_PFL_ABILITIES     = self::WEB_PPF_SECTION .'publique-fragments-section-profile-abilities.tpl';
+    public const WEB_PPFS_PFL_IDENTITY      = self::WEB_PPF_SECTION .'publique-fragments-section-profile-identity.tpl';
     
 }

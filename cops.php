@@ -98,7 +98,7 @@ add_action('wp_ajax_dealWithAjax', 'dealWithAjax_callback');
 add_action('wp_ajax_nopriv_dealWithAjax', 'dealWithAjax_callback');
 function dealWithAjax_callback(): never
 {
-  echo AjaxActions::dealWithAjax();
+  echo \core\actions\AjaxActions::dealWithAjax();
   die();
 }
 

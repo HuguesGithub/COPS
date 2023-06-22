@@ -389,15 +389,15 @@ class WpPageAdminMailBean extends WpPageAdminBean
         */
         // On créé un CopsMail
         $objCopsMail = new CopsMail();
-        $objCopsMail->setField(self::FIELD_MAIL_SUBJECT, stripslashes((string) static::fromPost('mailSubject')));
-        $objCopsMail->setField(self::FIELD_MAIL_CONTENT, stripslashes((string) static::fromPost('mailContent')));
+        $objCopsMail->setField(self::FIELD_MAIL_SUBJECT, stripslashes((string) SessionUtils::fromPost('mailSubject')));
+        $objCopsMail->setField(self::FIELD_MAIL_CONTENT, stripslashes((string) SessionUtils::fromPost('mailContent')));
         $objCopsMail->setField(self::FIELD_MAIL_DATE_ENVOI, DateUtils::getCopsDate(self::FORMAT_DATE_YMDHIS));
         $this->CopsMailServices->insertMail($objCopsMail);
         // Puis on créé un CopsMailJoint
         $objCopsMailJoint = new CopsMailJoint();
         $objCopsMailJoint->setField(self::FIELD_MAIL_ID, $objCopsMail->getField(self::FIELD_ID));
         $objCopsMailJoint->setField(self::FIELD_TO_ID, 0); // TODO
-        $objCopsMailJoint->setField(self::FIELD_FROM_ID, static::fromPost('mailFrom'));
+        $objCopsMailJoint->setField(self::FIELD_FROM_ID, SessionUtils::fromPost('mailFrom'));
         $objCopsMailJoint->setField(self::FIELD_FOLDER_ID, 2);
         $objCopsMailJoint->setField(self::FIELD_LU, 0);
         $objCopsMailJoint->setField(self::FIELD_NB_PJS, 0);
@@ -412,7 +412,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
     {
         /////////////////////////////////////////////////////////////////
         // Vient-on de poster un nouveau message ?
-        if (static::fromPost(self::CST_WRITE_ACTION)==self::CST_FOLDER_DRAFT) {
+        if (SessionUtils::fromPost(self::CST_WRITE_ACTION)==self::CST_FOLDER_DRAFT) {
             $this->dealWithDraftMessage();
         }
         

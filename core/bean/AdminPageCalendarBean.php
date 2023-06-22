@@ -3,23 +3,24 @@ namespace core\bean;
 
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageCalendrierBean
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.05.28
+ * @version v1.23.06.25
  */
 class AdminPageCalendarBean extends AdminPageBean
 {
     /**
      * @since v1.23.05.01
-     * @version v1.23.05.07
+     * @version v1.23.06.25
      */
     public static function getStaticContentPage(): string
     {
-        $objBean = match (static::fromGet(self::CST_SUBONGLET)) {
+        $objBean = match (SessionUtils::fromGet(self::CST_SUBONGLET)) {
             self::CST_CAL_EVENT => new AdminPageCalendarEventBean(),
             self::CST_CAL_DAY => new AdminPageCalendarDayBean(),
             self::CST_CAL_WEEK => new AdminPageCalendarWeekBean(),

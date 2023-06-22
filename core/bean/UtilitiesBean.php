@@ -5,6 +5,7 @@ use core\interfaceimpl\ConstantsInterface;
 use core\interfaceimpl\FieldsInterface;
 use core\interfaceimpl\LabelsInterface;
 use core\interfaceimpl\UrlsInterface;
+use core\utils\SessionUtils;
 
 /**
  * Classe UtilitiesBean
@@ -111,9 +112,9 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      */
     public function initVar(string $id, mixed $default=''): mixed
     {
-        $value = $this->fromPost($id);
+        $value = SessionUtils::fromPost($id);
         if ($value=='') {
-            $value = $this->fromGet($id);
+            $value = SessionUtils::fromGet($id);
             if ($value=='') {
                 $value = $default;
             }
@@ -142,47 +143,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
         ];
         return $this->getRender($urlTemplate, $args);
     }
-
-    /**
-     * Retourne une donnée du serveur après nettoyage
-     * @param string $field
-     * @return string
-     * @since 1.23.02.18
-     * @version 1.23.02.18
-     */
-    public static function fromServer(string $field): string
-    {
-        // Sanitize
-        if (isset($_SERVER[$field])) {
-            $strSanitized = htmlentities((string) $_SERVER[$field], ENT_QUOTES, 'UTF-8');
-        } else {
-            $strSanitized = '';
-        }
-        return filter_var($strSanitized, FILTER_SANITIZE_URL);
-    }
-
-    public static function fromPost(string $key, bool $isUrl=true): mixed
-    {
-        // Sanitize
-        if (isset($_POST[$key])) {
-            $strSanitized = htmlentities((string) $_POST[$key], ENT_QUOTES, 'UTF-8');
-        } else {
-            $strSanitized = '';
-        }
-        return $isUrl ? filter_var($strSanitized, FILTER_SANITIZE_URL) : $strSanitized;
-    }
-
-    public static function fromGet(string $key): mixed
-    {
-        // Sanitize
-        if (isset($_GET[$key])) {
-            $strSanitized = htmlentities((string) $_GET[$key], ENT_QUOTES, 'UTF-8');
-        } else {
-            $strSanitized = '';
-        }
-        return filter_var($strSanitized, FILTER_SANITIZE_URL);
-    }
-
+    
     /**
      * @return string
      * @since 1.22.10.18
@@ -190,7 +151,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
      */
     public function analyzeUri()
     {
-        $uri = static::fromServer('REQUEST_URI');
+        $uri = SessionUtils::fromServer('REQUEST_URI');
         $pos = strpos((string) $uri, '?');
         if ($pos!==false) {
             $arrParams = explode('&amp;', substr((string) $uri, $pos+1, strlen((string) $uri)));
@@ -208,7 +169,7 @@ class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterfac
         }
         if (isset($_POST)) {
             foreach ($_POST as $key => $value) {
-                $this->urlParams[$key] = static::fromPost($key);
+                $this->urlParams[$key] = SessionUtils::fromPost($key);
             }
         }
         return $uri;

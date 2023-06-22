@@ -12,7 +12,7 @@ use core\utils\LogUtils;
  * Classe CopsEventDaoImpl
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.06.18
+ * @version v1.23.06.25
  */
 class CopsEventDaoImpl extends LocalDaoImpl
 {
@@ -156,20 +156,10 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.05.21
-     * @version v1.23.05.28
+     * @version v1.23.06.25
      */
     public function insertEventDate(array $attributes): int
     {
-        /*
-        // On récupère les champs
-        $fields = $this->dbFields_ced;
-        array_shift($fields);
-        // On défini la requête d'insertion
-        $request = $this->getInsertRequest($fields, $this->dbTable_ced);
-        // On insère
-        $this->insertDaoImpl($objEvent, $fields, $request, self::FIELD_ID);
-        */
-
         // Ne peut pas être migré "à la insertDaoImpl" car le nom de la table n'est pas dans dbTable
         $fields = $this->dbFields_ced;
         array_shift($fields);

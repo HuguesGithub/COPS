@@ -4,13 +4,14 @@ namespace core\bean;
 use core\services\CopsMeteoServices;
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoMeteoBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.06.18
+ * @version v1.23.06.25
  */
 class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 {
@@ -43,7 +44,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.06.18
-     * @version v1.23.06.18
+     * @version v1.23.06.25
      */
     public function getListContent(): string
     {
@@ -128,7 +129,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $objCopsMeteoServices = new CopsMeteoServices();
 
         // On récupère le paramètre relatif à la date.
-        $strDate = static::fromGet(self::CST_DATE);
+        $strDate = SessionUtils::fromGet(self::CST_DATE);
         if ($strDate=='') {
             $strDate = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
         }

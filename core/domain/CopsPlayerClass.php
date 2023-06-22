@@ -1,134 +1,138 @@
 <?php
 namespace core\domain;
 
+use core\bean\CopsPlayerBean;
+
 /**
  * Classe CopsPlayerClass
  * @author Hugues
  * @version 1.22.04.28
- * @version 1.23.04.30
+ * @version v1.23.06.25
  */
 class CopsPlayerClass extends LocalDomainClass
 {
-  //////////////////////////////////////////////////
-  // ATTRIBUTES
-  //////////////////////////////////////////////////
-  /**
-   * Id technique de la donnée
-   * @var int $id
-   */
-  protected $id;
+    //////////////////////////////////////////////////
+    // ATTRIBUTES
+    //////////////////////////////////////////////////
+    protected $id;
+    protected $matricule;
+    protected $password;
+    //
+    protected $nom;
+    protected $prenom;
+    protected $surnom;
+    // Caractéristiques
+    protected $caracCarrure;
+    protected $caracCharme;
+    protected $caracCoordination;
+    protected $caracEducation;
+    protected $caracPerception;
+    protected $caracReflexes;
+    protected $caracSangfroid;
+    // Points de vie d'adrénaline et d'ancienneté
+    protected $pvMax;
+    protected $pvCur;
+    protected $padMax;
+    protected $padCur;
+    protected $panMax;
+    protected $panCur;
+    // Autres
+    protected $birthDate;
+    protected $taille;
+    protected $poids;
+    protected $sexe;
+    protected $ethnie;
+    protected $cheveux;
+    protected $yeux;
+    protected $etudes;
+    protected $origineSociale;
+    protected $grade;
+    protected $gradeRang;
+    protected $gradeEchelon;
+    protected $integrationDate;
+    protected $section;
+    protected $background;
+    protected $status;
+    protected $pxCumul;
+    protected $pxCur;
 
-  protected $matricule;
-  protected $password;
-  //
-  protected $nom;
-  protected $prenom;
-  protected $surnom;
-  // Caractéristiques
-  protected $carac_carrure;
-  protected $carac_charme;
-  protected $carac_coordination;
-  protected $carac_education;
-  protected $carac_perception;
-  protected $carac_reflexes;
-  protected $carac_sangfroid;
-  // Points de vie d'adrénaline et d'ancienneté
-  protected $pv_max;
-  protected $pv_cur;
-  protected $pad_max;
-  protected $pad_cur;
-  protected $pan_max;
-  protected $pan_cur;
-  // Autres
-  protected $birth_date;
-  protected $taille;
-  protected $poids;
-  protected $sexe;
-  protected $ethnie;
-  protected $cheveux;
-  protected $yeux;
-  protected $etudes;
-  protected $origine_sociale;
-  protected $grade;
-  protected $grade_rang;
-  protected $grade_echelon;
-  protected $integration_date;
-  protected $section;
-  protected $section_lieutenant;
-  protected $background;
-  protected $px_max;
+    //////////////////////////////////////////////////
+    // GETTERS & SETTERS
+    //////////////////////////////////////////////////
 
-
-  //////////////////////////////////////////////////
-  // GETTERS & SETTERS
-  //////////////////////////////////////////////////
-  /**
-   * @return int
-   * @version 1.22.04.27
-   * @since 1.22.04.27
-   */
-  public function getId()
-  { return $this->id; }
-  /**
-   * @param int $id
-   * @version 1.22.04.27
-   * @since 1.22.04.27
-   */
-  public function setId($id)
-  { $this->id = $id; }
-
-  //////////////////////////////////////////////////
-  // CONSTRUCT - CLASSVARS - CONVERT - BEAN
-  //////////////////////////////////////////////////
-  /**
-   * @param array $attributes
-   * @version 1.22.04.27
-   * @since 1.22.04.27
-   */
-  public function __construct(array $attributes=[])
-  {
-    parent::__construct($attributes);
-    $this->stringClass = 'core\domain\CopsPlayerClass';
-  }
-  /**
-   * @param array $row
-   * @return CopsPlayer
-   * @version 1.22.04.27
-   * @since 1.22.04.27
-   */
-  public static function convertElement($row)
-  { return parent::convertRootElement(new CopsPlayer(), $row); }
-  /**
-   * @return CopsPlayerBean
-   * @version 1.22.04.27
-   * @since 1.22.04.27
-   */
-  public function getBean()
-  { return new CopsPlayerBean($this); }
-
-  //////////////////////////////////////////////////
-  // METHODES
-  //////////////////////////////////////////////////
-
-  public function getMaskMatricule()
-  {
-    $maskMatricule = $this->id;
-    /*
-    if (!is_file('/wp-content/plugins/hj-cops/web/rsc/img/masks/mask-'.$maskMatricule.'.jpg')) {
-      $maskMatricule = '000';
+    //////////////////////////////////////////////////
+    // CONSTRUCT - CLASSVARS - CONVERT - BEAN
+    //////////////////////////////////////////////////
+    /**
+     * @param array $attributes
+     * @version 1.22.04.27
+     * @since 1.22.04.27
+     */
+    public function __construct(array $attributes=[])
+    {
+        parent::__construct($attributes);
+        $this->stringClass = 'core\domain\CopsPlayerClass';
     }
-    * */
-    return $maskMatricule;
-  }
+
+    /**
+     * @version 1.22.04.27
+     * @since 1.22.04.27
+     */
+    public static function convertElement($row): CopsPlayerClass
+    { return parent::convertRootElement(new CopsPlayerClass(), $row); }
+
+    /**
+     * @version 1.22.04.27
+     * @since 1.22.04.27
+     */
+    public function getBean(): CopsPlayerBean
+    { return new CopsPlayerBean($this); }
+
+    //////////////////////////////////////////////////
+    // METHODES
+    //////////////////////////////////////////////////
+
+    public function getMaskMatricule()
+    { return substr($this->matricule, -3); }
+  
+    public function getFullName()
+    { return $this->prenom.' '.$this->nom; }
+
+    /*
+     * @since v1.23.06.20
+     * @version v1.23.06.25
+    */
+    public function getCurrentCarac(string $carac): string
+    {
+        $scoreBase = $this->getField($carac);
+        // TODO : ajouter les bonus/malus à la carractéristique.
+        // Envisager de le coloriser pour mettre en évidence le bonus ou le malus ?
+        return 0;//$scoreBase;
+    }
+  
+    /*
+     * @since v1.23.06.20
+     * @version v1.23.06.25
+    */
+    public function getInitMin()
+    { return 3-$this->getCurrentCarac(self::FIELD_CARAC_REFLEXES); }
+
+
+
+
+
+
+
+
+
+
+    /*
   public function getMatricule()
   { return substr($this->matricule, -3); }
 
-  public function getFullName()
-  { return $this->prenom.' '.$this->nom; }
-
   /**
    * @since 1.23.04.21
-   */
+   * /
     public static function getCurrentCopsPlayer()
     {
         $attributes = [];
@@ -163,24 +167,5 @@ class CopsPlayerClass extends LocalDomainClass
   public function updateCopsPlayer()
   {  $this->Services->updateLocal($this); }
 
-  /*
-   * @since 1.22.05.25
-   * @version 1.22.05.25
-   */
-  public function getCurrentCarac($carac)
-  {
-    $scoreBase = $this->getField($carac);
-    // TODO : ajouter les bonus/malus à la carractéristique.
-    // Envisager de le coloriser pour mettre en évidence le bonus ou le malus ?
-    return $scoreBase;
-  }
-
-  /*
-   * @since 1.22.05.25
-   * @version 1.22.05.25
-   */
-  public function getInitMin()
-  { return 3-$this->getCurrentCarac(self::FIELD_CARAC_REFLEXES); }
-
-
+  */
 }

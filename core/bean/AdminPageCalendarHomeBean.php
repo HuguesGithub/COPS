@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * AdminPageCalendarHomeBean
  * @author Hugues
  * @since v1.23.05.02
- * @version v1.23.05.28
+ * @version v1.23.06.25
  */
 class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 {
@@ -114,25 +114,25 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.02
-     * @version v1.23.05.07
+     * @version v1.23.06.25
      */
     public function dealWithGetActions(): void
     {
         // Change-t-on la date ingame ?
-        if (static::fromPost(self::CST_CHANGE_DATE)!='') {
+        if (SessionUtils::fromPost(self::CST_CHANGE_DATE)!='') {
             // Le formulaire a été soumis, on défini une nouvelle date et un nouvel horaire.
-            $h = static::fromPost('sel-h');
-            $i = static::fromPost('sel-i');
-            $s = static::fromPost('sel-s');
-            $m = static::fromPost('sel-m');
-            $d = static::fromPost('sel-d');
-            $y = static::fromPost('sel-y');
+            $h = SessionUtils::fromPost('sel-h');
+            $i = SessionUtils::fromPost('sel-i');
+            $s = SessionUtils::fromPost('sel-s');
+            $m = SessionUtils::fromPost('sel-m');
+            $d = SessionUtils::fromPost('sel-d');
+            $y = SessionUtils::fromPost('sel-y');
             DateUtils::setCopsDate(mktime($h, $i, $s, $m, $d, $y));
-        } elseif (static::fromGet(self::CST_ACTION)==self::CST_ADD) {
+        } elseif (SessionUtils::fromGet(self::CST_ACTION)==self::CST_ADD) {
             // On a appuyé sur un des boutons pour incrémenter les secondes, minutes ou heures.
             $tsNow = DateUtils::getCopsDate(self::FORMAT_TS_NOW);
-            $qty = static::fromGet(self::CST_QUANTITY);
-            $tsNow += match (static::fromGet(self::CST_UNITE)) {
+            $qty = SessionUtils::fromGet(self::CST_QUANTITY);
+            $tsNow += match (SessionUtils::fromGet(self::CST_UNITE)) {
                 's' => $qty,
                 'm' => $qty*60,
                 'h' => $qty*60*60,

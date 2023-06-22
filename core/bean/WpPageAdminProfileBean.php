@@ -1,20 +1,27 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+use core\utils\UrlUtils;
+
 /**
- * Classe AdminCopsProfilePageBean
+ * Classe WpPageAdminProfileBean
  * @author Hugues
- * @since 1.22.04.28
- * @version 1.23.04.30
+ * @since v1.23.06.20
+ * @version v1.23.06.25
  */
-class AdminCopsProfilePageBean extends WpPageAdminBean
+class WpPageAdminProfileBean extends WpPageAdminBean
 {
+    /**
+     * @since v1.23.06.20
+     * @version v1.23.06.25
+     */
     public function __construct()
     {
         parent::__construct();
 
         /////////////////////////////////////////
-        // Construction du menu de l'inbox
+        // Construction du menu du profil
         $this->arrSubOnglets = [
             self::CST_PFL_IDENTITY    => [self::FIELD_LABEL => self::LABEL_IDENTITY],
             self::CST_PFL_ABILITIES   => [self::FIELD_LABEL => self::LABEL_ABILITIES],
@@ -24,13 +31,76 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
             self::CST_PFL_BACKGROUND  => [self::FIELD_LABEL => self::LABEL_BACKGROUND]
         ];
         /////////////////////////////////////////
+
+        /////////////////////////////////////////
+        $this->urlAttributes = [
+            self::WP_PAGE=>$this->slugPage,
+            self::CST_ONGLET=>self::ONGLET_PROFILE,
+        ];
+        $buttonContent = HtmlUtils::getLink(
+            self::LABEL_PROFILE,
+            UrlUtils::getPublicUrl($this->urlAttributes),
+            self::CST_TEXT_WHITE
+        );
+        $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, [self::ATTR_CLASS=>' '.self::BTS_BTN_DARK]);
+        /////////////////////////////////////////
     }
+     
+    /**
+     * @since v1.23.06.20
+     * @version v1.23.06.25
+     */
+    public static function getStaticWpPageBean($slugSubContent)
+    {
+        return match ($slugSubContent) {
+            self::CST_PFL_IDENTITY => new WpPageAdminProfileIdentityBean(),
+            self::CST_PFL_ABILITIES => new WpPageAdminProfileAbilityBean(),
+            //self::CST_MAIL_READ, self::CST_MAIL_WRITE => new WpPageAdminMailBean(),
+            default => new WpPageAdminProfileAbilityBean(),
+        };
+    }
+
+    public function getTabsBar(): string
+    {
+        /////////////////////////////////////////
+        // Construction des onglets
+        $strLis = '';
+        foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
+            $this->urlAttributes[self::CST_SUBONGLET] = $slugSubOnglet;
+            $strIcon = '';
+
+            if (!empty($arrData[self::FIELD_ICON])) {
+                $strIcon = HtmlUtils::getIcon($arrData[self::FIELD_ICON]).self::CST_NBSP;
+            }
+
+            $blnActive = $this->slugSubOnglet==$slugSubOnglet;
+            $blnActive |= $this->slugSubOnglet=='' && $slugSubOnglet==self::CST_PFL_ABILITIES;
+            $strLink = HtmlUtils::getLink(
+                $strIcon.$arrData[self::FIELD_LABEL],
+                UrlUtils::getPublicUrl($this->urlAttributes),
+                self::NAV_LINK.' '.self::CST_TEXT_WHITE
+            );
+            $strLis .= $this->getBalise(
+                self::TAG_LI,
+                $strLink,
+                [self::ATTR_CLASS=>self::NAV_ITEM.($blnActive ? ' btn-info' : ' '.self::BTS_BTN_DARK)]
+            );
+        }
+        $attributes = [self::ATTR_CLASS=>implode(' ', [self::NAV, self::NAV_PILLS, self::NAV_FILL])];
+        /////////////////////////////////////////
+
+        return $this->getBalise(self::TAG_UL, $strLis, $attributes);
+    }
+
+    
+    
+    /*
 
     /**
      * @return string
      * @since 1.22.04.28
      * @version 1.22.06.09
-     */
+     * /
     public function getBoard()
     {
         $this->subOnglet = $this->initVar(self::CST_SUBONGLET, self::CST_PFL_IDENTITY);
@@ -83,7 +153,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   /**
    * @since 1.22.04.28
    * @version 1.22.04.29
-   */
+   * /
   public function getOngletContent()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-article-onglet-menu-panel.php';
@@ -98,96 +168,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   /**
    * @since 1.22.04.29
    * @version 1.22.04.29
-   */
-  public function getSubongletAbilities()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-abilities.php';
-    $attributes = [
-        // Id
-        $this->CopsPlayer->getField(self::FIELD_ID),
-        // Carrure
-        $this->CopsPlayer->getField(self::FIELD_CARAC_CARRURE),
-        // Charme
-        $this->CopsPlayer->getField(self::FIELD_CARAC_CHARME),
-        // Coordination
-        $this->CopsPlayer->getField(self::FIELD_CARAC_COORDINATION),
-        // Education
-        $this->CopsPlayer->getField(self::FIELD_CARAC_EDUCATION),
-        // Perception
-        $this->CopsPlayer->getField(self::FIELD_CARAC_PERCEPTION),
-        // Réflexes
-        $this->CopsPlayer->getField(self::FIELD_CARAC_REFLEXES),
-        // Sang-froid
-        $this->CopsPlayer->getField(self::FIELD_CARAC_SANG_FROID),
-        // Bonus/Malus Carrure
-        $this->CopsPlayer->getCurrentCarac(self::FIELD_CARAC_CARRURE),
-        // Bonus/Malus Charme
-        $this->CopsPlayer->getCurrentCarac(self::FIELD_CARAC_CHARME),
-        // Bonus/Malus Coordination
-        $this->CopsPlayer->getCurrentCarac(self::FIELD_CARAC_COORDINATION),
-        // Bonus/Malus Education
-        $this->CopsPlayer->getCurrentCarac(self::FIELD_CARAC_EDUCATION),
-        // Bonus/Malus Perception
-        $this->CopsPlayer->getCurrentCarac(self::FIELD_CARAC_PERCEPTION),
-        // Bonus/Malus Réflexes
-        $this->CopsPlayer->getCurrentCarac(self::FIELD_CARAC_REFLEXES),
-        // Bonus/Malus Sang-froid
-        $this->CopsPlayer->getCurrentCarac(self::FIELD_CARAC_SANG_FROID),
-        // Initiative minimale
-        $this->CopsPlayer->getInitMin(),
-        // PV Current
-        $this->CopsPlayer->getField(self::FIELD_PV_CUR),
-        // PV Max
-        $this->CopsPlayer->getField(self::FIELD_PV_MAX),
-        // Pts Adrénaline Current
-        $this->CopsPlayer->getField(self::FIELD_PAD_CUR),
-        // Pts Adrénaline Max
-        $this->CopsPlayer->getField(self::FIELD_PAD_MAX),
-        // Pts Ancienneté Current
-        $this->CopsPlayer->getField(self::FIELD_PAN_CUR),
-        // Pts Ancienneté Max
-        $this->CopsPlayer->getField(self::FIELD_PAN_MAX),
-        // Pts Expérience Current
-        $this->CopsPlayer->getField(self::FIELD_PX_CUR),
-        // A priori, plus rien après
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-    ];
-    return $this->getRender($urlTemplate, $attributes);
-  }
-
-  /**
-   * @since 1.22.04.29
-   * @version 1.22.04.29
-   */
+   * /
   public function getSubongletBackground()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-background.php';
@@ -210,7 +191,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   /**
    * @since 1.22.04.29
    * @version 1.22.04.29
-   */
+   * /
   public function getSubongletContacts()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-contacts.php';
@@ -226,7 +207,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   /**
    * @since 1.22.04.29
    * @version 1.22.04.29
-   */
+   * /
   public function getSubongletEquipment()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-equipment.php';
@@ -242,7 +223,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   /**
    * @since 1.22.04.28
    * @version 1.22.04.28
-   */
+   * /
   public function getSubongletIdentity()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-identity.php';
@@ -287,7 +268,7 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
   /**
    * @since 1.22.04.29
    * @version 1.22.04.29
-   */
+   * /
   public function getSubongletSkills()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-section-profile-skills.php';
@@ -299,5 +280,5 @@ class AdminCopsProfilePageBean extends WpPageAdminBean
     ];
     return $this->getRender($urlTemplate, $attributes);
   }
-
+*/
 }

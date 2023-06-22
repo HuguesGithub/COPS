@@ -7,15 +7,60 @@ use core\utils\HtmlUtils;
  * CopsPlayerBean
  * @author Hugues
  * @since 1.22.04.27
- * @version v1.23.05.28
+ * @version v1.23.06.25
  */
 class CopsPlayerBean extends UtilitiesBean
 {
-  public function __construct($obj=null)
-  {
-    $this->CopsPlayer = ($obj==null ? new CopsPlayer() : $obj);
-    $this->CopsLangueServices = new CopsLangueServices();
-  }
+    /**
+     * @since v1.23.06.21
+     * @version v1.23.06.25
+     */
+    public function __construct($obj=null)
+    {
+        $this->objCopsPlayer = $obj;
+    }
+
+    /**
+     * @since v1.23.06.20
+     * @version v.23.06.25
+     */
+    public function getProfileAbility(string $field): string
+    {
+        $label = match($field) {
+            self::FIELD_CARAC_CARRURE => self::LABEL_CARRURE,
+            self::FIELD_CARAC_CHARME => self::LABEL_CHARME,
+            self::FIELD_CARAC_COORDINATION => self::LABEL_COORDINATION,
+            self::FIELD_CARAC_EDUCATION => self::LABEL_EDUCATION,
+            self::FIELD_CARAC_PERCEPTION => self::LABEL_PERCEPTION,
+            self::FIELD_CARAC_REFLEXES => self::LABEL_REFLEXES,
+            self::FIELD_CARAC_SANGFROID => self::LABEL_SANGFROID,
+            self::FIELD_PV_MAX => self::LABEL_POINTSDEVIE,
+            self::FIELD_PAD_MAX => self::LABEL_POINTSADRE,
+            self::FIELD_PAN_MAX => self::LABEL_POINTSANC,
+            self::FIELD_PX_CUMUL => self::LABEL_POINTSEXPE,
+            default => 'Erreur CopsPlayerBean > getProfileAbility()',
+        };
+
+        $curValue = match($field) {
+            self::FIELD_PV_MAX => $this->objCopsPlayer->getField(self::FIELD_PV_CUR),
+            self::FIELD_PAD_MAX => $this->objCopsPlayer->getField(self::FIELD_PAD_CUR),
+            self::FIELD_PAN_MAX => $this->objCopsPlayer->getField(self::FIELD_PAN_CUR),
+            self::FIELD_PX_CUMUL => $this->objCopsPlayer->getField(self::FIELD_PX_CUR),
+            default => $this->objCopsPlayer->getCurrentCarac($field),
+        };
+
+        $urlTemplate = self::WEB_PPFD_PFL_ABILITY;
+        $attributes = [
+            $label,
+            $this->objCopsPlayer->getField(self::FIELD_ID),
+            'field_'.$field,
+            $this->objCopsPlayer->getField($field),
+            self::CST_READONLY,
+            $curValue,
+        ];
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
 
   /*
  * @since 1.22.04.28

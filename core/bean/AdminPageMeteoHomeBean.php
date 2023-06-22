@@ -4,13 +4,14 @@ namespace core\bean;
 use core\domain\CopsMeteoClass;
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoHomeBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.06.18
+ * @version v1.23.06.25
  */
 class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 {
@@ -23,7 +24,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
     public function getContentOnglet(): string
     {
         // Gestion d'éventuels traitements.
-        $strDate = static::fromGet(self::CST_DATE);
+        $strDate = SessionUtils::fromGet(self::CST_DATE);
         if ($strDate!='') {
             $strCompteRendu = $this->dealWithGetActions();
         } else {
@@ -87,12 +88,12 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.06.18
+     * @version v1.23.06.25
      */
     public function dealWithGetActions(): string
     {
         $objCopsMeteo = new CopsMeteoClass();
-        $strDate = static::fromGet(self::CST_DATE);
+        $strDate = SessionUtils::fromGet(self::CST_DATE);
         [, $m, $y, , ,] = DateUtils::parseDate($strDate);
         $strDate = str_replace('-', '', $strDate);
 

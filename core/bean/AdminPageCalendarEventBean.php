@@ -8,13 +8,14 @@ use core\domain\CopsEventClass;
 use core\services\CopsEventServices;
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
  * Classe AdminPageCalendarEventBean
  * @author Hugues
  * @since v1.23.05.15
- * @version v1.23.06.18
+ * @version v1.23.06.25
  */
 class AdminPageCalendarEventBean extends AdminPageCalendarBean
 {
@@ -292,30 +293,30 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.06.04
+     * @version v1.23.06.25
      */
     public function dealWithWriteAction(): void
     {
         $objEvent = new CopsEventClass();
         $objCopsEventServices = new CopsEventServices();
 
-        $eventLibelle = stripslashes(static::fromPost(self::FIELD_EVENT_LIBELLE, false));
+        $eventLibelle = stripslashes(SessionUtils::fromPost(self::FIELD_EVENT_LIBELLE, false));
         $objEvent->setField(self::FIELD_EVENT_LIBELLE, $eventLibelle);
-        $objEvent->setField(self::FIELD_CATEG_ID, static::fromPost(self::FIELD_CATEG_ID));
-        $objEvent->setField(self::FIELD_DATE_DEBUT, static::fromPost(self::FIELD_DATE_DEBUT));
-        $objEvent->setField(self::FIELD_DATE_FIN, static::fromPost(self::FIELD_DATE_FIN));
+        $objEvent->setField(self::FIELD_CATEG_ID, SessionUtils::fromPost(self::FIELD_CATEG_ID));
+        $objEvent->setField(self::FIELD_DATE_DEBUT, SessionUtils::fromPost(self::FIELD_DATE_DEBUT));
+        $objEvent->setField(self::FIELD_DATE_FIN, SessionUtils::fromPost(self::FIELD_DATE_FIN));
 
-        $allDayEvent = static::fromPost(self::FIELD_ALL_DAY_EVENT, 0);
+        $allDayEvent = SessionUtils::fromPost(self::FIELD_ALL_DAY_EVENT, 0);
         $objEvent->setField(self::FIELD_ALL_DAY_EVENT, $allDayEvent);
         if ($allDayEvent==1) {
             $objEvent->setField(self::FIELD_HEURE_DEBUT, '');
             $objEvent->setField(self::FIELD_HEURE_FIN, '');
         } else {
-            $objEvent->setField(self::FIELD_HEURE_DEBUT, static::fromPost(self::FIELD_HEURE_DEBUT));
-            $objEvent->setField(self::FIELD_HEURE_FIN, static::fromPost(self::FIELD_HEURE_FIN));
+            $objEvent->setField(self::FIELD_HEURE_DEBUT, SessionUtils::fromPost(self::FIELD_HEURE_DEBUT));
+            $objEvent->setField(self::FIELD_HEURE_FIN, SessionUtils::fromPost(self::FIELD_HEURE_FIN));
         }
 
-        $continuEvent = static::fromPost(self::FIELD_CONTINU_EVENT, 0);
+        $continuEvent = SessionUtils::fromPost(self::FIELD_CONTINU_EVENT, 0);
         $objEvent->setField(self::FIELD_CONTINU_EVENT, $continuEvent);
 
         //////
@@ -330,32 +331,32 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         $objEvent->setField(self::FIELD_REPEAT_END_VALUE, '');
         //////
 
-        $repeatStatus = static::fromPost(self::FIELD_REPEAT_STATUS, 0);
+        $repeatStatus = SessionUtils::fromPost(self::FIELD_REPEAT_STATUS, 0);
         $objEvent->setField(self::FIELD_REPEAT_STATUS, $repeatStatus);
 
         if ($repeatStatus==1) {
-            $objEvent->setField(self::FIELD_REPEAT_TYPE, static::fromPost(self::FIELD_REPEAT_TYPE));
-            $objEvent->setField(self::FIELD_REPEAT_INTERVAL, static::fromPost(self::FIELD_REPEAT_INTERVAL));
-            $repeatEnd = static::fromPost(self::FIELD_REPEAT_END);
+            $objEvent->setField(self::FIELD_REPEAT_TYPE, SessionUtils::fromPost(self::FIELD_REPEAT_TYPE));
+            $objEvent->setField(self::FIELD_REPEAT_INTERVAL, SessionUtils::fromPost(self::FIELD_REPEAT_INTERVAL));
+            $repeatEnd = SessionUtils::fromPost(self::FIELD_REPEAT_END);
             $objEvent->setField(self::FIELD_REPEAT_END, $repeatEnd);
             if ($repeatEnd==self::CST_EVENT_RT_ENDDATE) {
-                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost(self::FIELD_ENDDATE_VALUE));
+                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, SessionUtils::fromPost(self::FIELD_ENDDATE_VALUE));
             } elseif ($repeatEnd==self::CST_EVENT_RT_ENDREPEAT) {
-                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, static::fromPost(self::FIELD_ENDREPEAT_VALUE));
+                $objEvent->setField(self::FIELD_REPEAT_END_VALUE, SessionUtils::fromPost(self::FIELD_ENDREPEAT_VALUE));
             } else {
                 $objEvent->setField(self::FIELD_REPEAT_END_VALUE, '');
             }
 
-            if (static::fromPost(self::FIELD_CUSTOM_EVENT)==self::CST_EVENT_RT_CUSTOM) {
+            if (SessionUtils::fromPost(self::FIELD_CUSTOM_EVENT)==self::CST_EVENT_RT_CUSTOM) {
                 $objEvent->setField(self::FIELD_CUSTOM_EVENT, 1);
-                $objEvent->setField(self::FIELD_CUSTOM_DAY, static::fromPost(self::FIELD_CUSTOM_DAY));
-                $objEvent->setField(self::FIELD_CUSTOM_DAY_WEEK, static::fromPost(self::FIELD_CUSTOM_DAY_WEEK));
-                $objEvent->setField(self::FIELD_CUSTOM_MONTH, static::fromPost(self::FIELD_CUSTOM_MONTH));
+                $objEvent->setField(self::FIELD_CUSTOM_DAY, SessionUtils::fromPost(self::FIELD_CUSTOM_DAY));
+                $objEvent->setField(self::FIELD_CUSTOM_DAY_WEEK, SessionUtils::fromPost(self::FIELD_CUSTOM_DAY_WEEK));
+                $objEvent->setField(self::FIELD_CUSTOM_MONTH, SessionUtils::fromPost(self::FIELD_CUSTOM_MONTH));
             }
         }
         
         if ($objEvent->checkFields()) {
-            $id = static::fromPost(self::FIELD_ID);
+            $id = SessionUtils::fromPost(self::FIELD_ID);
             if ($id=='') {
                 $objCopsEventServices->insertEvent($objEvent);
             } else {

@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.05.14
+ * @version v1.23.06.25
  */
 interface FieldsInterface
 {
@@ -164,30 +164,31 @@ interface FieldsInterface
     public const FIELD_NOM                = 'nom';
     public const FIELD_PRENOM             = 'prenom';
     public const FIELD_SURNOM             = 'surnom';
-    public const FIELD_CARAC_CARRURE      = 'carac_carrure';
-    public const FIELD_CARAC_CHARME       = 'carac_charme';
-    public const FIELD_CARAC_COORDINATION = 'carac_coordination';
-    public const FIELD_CARAC_EDUCATION    = 'carac_education';
-    public const FIELD_CARAC_PERCEPTION   = 'carac_perception';
-    public const FIELD_CARAC_REFLEXES     = 'carac_reflexes';
-    public const FIELD_CARAC_SANG_FROID   = 'carac_sangfroid';
-    public const FIELD_BIRTH_DATE         = 'birth_date';
-    public const FIELD_PV_MAX             = 'pv_max';
-    public const FIELD_PV_CUR             = 'pv_cur';
-    public const FIELD_PAD_MAX            = 'pad_max';
-    public const FIELD_PAD_CUR            = 'pad_cur';
-    public const FIELD_PAN_MAX            = 'pan_max';
-    public const FIELD_PAN_CUR            = 'pan_cur';
+    public const FIELD_CARAC_CARRURE      = 'caracCarrure';
+    public const FIELD_CARAC_CHARME       = 'caracCharme';
+    public const FIELD_CARAC_COORDINATION = 'caracCoordination';
+    public const FIELD_CARAC_EDUCATION    = 'caracEducation';
+    public const FIELD_CARAC_PERCEPTION   = 'caracPerception';
+    public const FIELD_CARAC_REFLEXES     = 'caracReflexes';
+    public const FIELD_CARAC_SANGFROID    = 'caracSangfroid';
+    public const FIELD_BIRTH_DATE         = 'birthDate';
+    public const FIELD_PV_MAX             = 'pvMax';
+    public const FIELD_PV_CUR             = 'pvCur';
+    public const FIELD_PAD_MAX            = 'padMax';
+    public const FIELD_PAD_CUR            = 'padCur';
+    public const FIELD_PAN_MAX            = 'panMax';
+    public const FIELD_PAN_CUR            = 'panCur';
     public const FIELD_TAILLE             = 'taille';
     public const FIELD_POIDS              = 'poids';
     public const FIELD_GRADE              = 'grade';
-    public const FIELD_GRADE_ECHELON      = 'grade_echelon';
-    public const FIELD_GRADE_RANG         = 'grade_rang';
-    public const FIELD_INTEGRATION_DATE   = 'integration_date';
+    public const FIELD_GRADE_ECHELON      = 'gradeEchelon';
+    public const FIELD_GRADE_RANG         = 'gradeRang';
+    public const FIELD_INTEGRATION_DATE   = 'integrationDate';
     public const FIELD_SECTION            = 'section';
-    public const FIELD_SECTION_LIEUTENANT = 'section_lieutenant';
     public const FIELD_BACKGROUND         = 'background';
-    public const FIELD_PX_CUR             = 'px_cur';
+    public const FIELD_STATUS             = 'status';
+    public const FIELD_PX_CUMUL           = 'pxCumul';
+    public const FIELD_PX_CUR             = 'pxCur';
 
     // TABLE cops_skill
     public const FIELD_SKILL_NAME         = 'skillName';

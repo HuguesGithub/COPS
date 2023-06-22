@@ -3,15 +3,13 @@ namespace core\bean;
 
 use core\domain\WpPageClass;
 use core\services\WpPostServices;
+use core\utils\SessionUtils;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * WpPageBean
  * @author Hugues
  * @since 1.22.04.27
- * @version 1.22.10.18
+ * @version v1.23.06.25
  */
 class WpPageBean extends UtilitiesBean
 {
@@ -49,14 +47,14 @@ class WpPageBean extends UtilitiesBean
     /**
      * @return mixed WpPageHomeBen|WpPageAdminBean
      * @since 1.22.04.27
-     * @version 1.23.02.18
+     * @version v1.23.06.25
      */
     public static function getPageBean()
     {
         if (is_front_page()) {
             $returned = new WpPageHomeBean();
         } else {
-            $uri = static::fromServer('REQUEST_URI');
+            $uri = SessionUtils::fromServer('REQUEST_URI');
             $arrUri = explode('/', $uri);
             if (!isset($arrUri[1])) {
                 $returned = new WpPageHomeBean();

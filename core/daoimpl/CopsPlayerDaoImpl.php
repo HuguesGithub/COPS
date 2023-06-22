@@ -1,113 +1,108 @@
 <?php
-namespace core\bean;
+namespace core\daoimpl;
 
-use core\domain\MySQLClass;
 use core\domain\CopsPlayerClass;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * Classe CopsPlayerDaoImpl
  * @author Hugues
  * @since 1.22.04.28
- * @version 1.22.04.28
+ * @version v1.23.06.25
  */
 class CopsPlayerDaoImpl extends LocalDaoImpl
 {
-  /**
-   * Class constructor
-   * @since 1.22.04.28
-   * @version 1.22.04.28
-   */
-  public function __construct()
-  {
-    ////////////////////////////////////
-    // Définition des variables spécifiques
-    //$this->ObjClass = new CopsPlayer();
-    $this->dbTable  = "wp_7_cops_player";
-    ////////////////////////////////////
+    /**
+     * Class constructor
+     * @since v1.23.06.19
+     * @version v1.23.06.25
+     */
+    public function __construct()
+    {
+        ////////////////////////////////////
+        // Définition des variables spécifiques
+        $this->dbTable  = "wp_7_cops_player";
+        ////////////////////////////////////
 
-    parent::__construct();
+        ////////////////////////////////////
+        // Définition des champs spécifiques
+        $this->dbFields = [
+            self::FIELD_ID,
+            self::FIELD_MATRICULE,
+            self::FIELD_PASSWORD,
+            self::FIELD_NOM,
+            self::FIELD_PRENOM,
+            self::FIELD_SURNOM,
+            self::FIELD_CARAC_CARRURE,
+            self::FIELD_CARAC_CHARME,
+            self::FIELD_CARAC_COORDINATION,
+            self::FIELD_CARAC_EDUCATION,
+            self::FIELD_CARAC_PERCEPTION,
+            self::FIELD_CARAC_REFLEXES,
+            self::FIELD_CARAC_SANGFROID,
+            self::FIELD_BIRTH_DATE,
+            self::FIELD_PV_MAX,
+            self::FIELD_PV_CUR,
+            self::FIELD_PAD_MAX,
+            self::FIELD_PAD_CUR,
+            self::FIELD_PAN_MAX,
+            self::FIELD_PAN_CUR,
+            self::FIELD_TAILLE,
+            self::FIELD_POIDS,
+            // Sexe
+            // Ethnie
+            // Cheveux
+            // Yeux
+            // Etudes
+            // Origine sociale
+            self::FIELD_GRADE,
+            self::FIELD_GRADE_RANG,
+            self::FIELD_GRADE_ECHELON,
+            self::FIELD_INTEGRATION_DATE,
+            self::FIELD_SECTION,
+            self::FIELD_BACKGROUND,
+            // Status
+            self::FIELD_PX_CUMUL,
+            self::FIELD_PX_CUR,
+        ];
+        ////////////////////////////////////
 
-    ////////////////////////////////////
-    // Personnalisation de la requête avec les filtres
-    $this->whereFilters .= "AND id LIKE '%s' AND matricule LIKE '%s' AND password LIKE '%s' AND grade LIKE '%s' ";
-    ////////////////////////////////////
-  }
-
-  public function getCopsPlayers($attributes)
-  {
-    //////////////////////////////
-    // Construction de la requête
-    $request  = $this->select.vsprintf($this->whereFilters, $attributes[self::SQL_WHERE_FILTERS]);
-    // On trie la liste
-    // TODO : si $attributes[self::SQL_ORDER_BY] est un array
-    // vérifier que $attributes[self::SQL_ORDER] est bien un array aussi dont la taille correspond
-    // et construit l'order by en adéquation
-    $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER]." ";
-    // On limite si nécessaire
-    if ($attributes[self::SQL_LIMIT]!=-1) {
-      $request .= "LIMIT ".$attributes[self::SQL_LIMIT]." ";
+        parent::__construct();
     }
-    $request .= ";";
-    //////////////////////////////
 
-    //////////////////////////////
-    // Exécution de la requête
-    $rows = MySQLClass::wpdbSelect($request);
-    //////////////////////////////
+    ////////////////////////////////////
+    // METHODES
+    ////////////////////////////////////
 
-    //////////////////////////////
-    // Construction du résultat
-    $objsItem = [];
-    if (!empty($rows)) {
-      foreach ($rows as $row) {
-        $objsItem[] = CopsPlayerClass::convertElement($row);
-      }
+    ////////////////////////////////////
+    // wp_7_cops_player
+    ////////////////////////////////////
+
+    /**
+     * @since v1.23.06.19
+     * @version v1.23.06.25
+     */
+    public function getCopsPlayers(array $attributes): array
+    {
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
+        $request .= " WHERE id LIKE '%s' AND matricule LIKE '%s' AND password LIKE '%s'";
+        $request .= $this->defaultOrderByAndLimit;
+        return $this->selectListDaoImpl(new CopsPlayerClass(), $request, $attributes);
     }
-    return $objsItem;
-    //////////////////////////////
-  }
 
-  public function insert($obj)
-  {
-    $prepObject = $this->prepObject($obj);
-    $this->createEditDeleteEntry($this->insert, $prepObject);
-  }
-
-  public function update($obj)
-  {
-    $prepObject = $this->prepObject($obj, true);
-    $this->createEditDeleteEntry($this->update." WHERE id='%s';", $prepObject);
-  }
-
-  /**
-   * Créé, Edite, Supprime une Entrée
-   * @since 1.0.00
-   */
-  protected function createEditDeleteEntry($requete, $arrParams=[])
-  {
-    $sql = MySQLClass::wpdbPrepare($requete, $arrParams);
-    MySQLClass::wpdbQuery($sql);
-  }
-
-  public function prepObject($obj, $isUpdate=false)
-  {
-    $arr = [];
-    $vars = $obj->getClassVars();
-    if (!empty($vars)) {
-      foreach ($vars as $key => $value) {
-        if ($key=='id' || $key=='stringClass') {
-            continue;
-        }
-        $arr[] = $obj->getField($key);
-      }
-      if ($isUpdate) {
-          $arr[] = $obj->getField('id');
-      }
+    /**
+     * @since v1.23.06.21
+     * @version v1.23.06.25
+     */
+    public function updatePlayer(CopsPlayerClass $objPlayer)
+    {
+        // On récupère les champs
+        $dbFields = $this->dbFields;
+        $fieldId = array_shift($dbFields);
+        // On défini la requête de mise à jour
+        $request = $this->getUpdateRequest($dbFields, $this->dbTable, $fieldId);
+        // On met à jour
+        $this->updateDaoImpl($objPlayer, $request, $fieldId);
     }
-    return $arr;
-  }
+
 
 }

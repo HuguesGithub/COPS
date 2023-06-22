@@ -1,88 +1,83 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\services;
+
+use core\daoimpl\CopsPlayerDaoImpl;
+use core\domain\CopsPlayerClass;
+
 /**
  * Classe CopsPlayerServices
  * @author Hugues
- * @since 1.22.04.28
- * @version 1.22.04.28
+ * @since v1.23.06.21
+ * @version v1.23.06.25
  */
 class CopsPlayerServices extends LocalServices
 {
-  //////////////////////////////////////////////////
-  // CONSTRUCT
-  //////////////////////////////////////////////////
-  /**
-   * Class constructor
-   * @version 1.22.04.28
-   * @since 1.22.04.28
-   */
-  public function __construct()
-  {
-    $this->Dao = new CopsPlayerDaoImpl();
-  }
+    //////////////////////////////////////////////////
+    // CONSTRUCT
+    //////////////////////////////////////////////////
 
-  //////////////////////////////////////////////////
-  // METHODS
-  //////////////////////////////////////////////////
-  /**
-   * @param array $attributes [E|S]
-   * @since 1.22.04.28
-   * @version 1.22.05.20
-   */
-  public function initFilters(&$attributes)
-  {
-    if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-      $attributes[self::SQL_WHERE_FILTERS] = [
-          // Id
-          self::SQL_JOKER_SEARCH,
-          // Matricule
-          self::SQL_JOKER_SEARCH,
-          // Password
-          self::SQL_JOKER_SEARCH,
-          // Grade
-          self::SQL_JOKER_SEARCH,
-      ];
-    } else {
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID])) {
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = self::SQL_JOKER_SEARCH;
-      }
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_MATRICULE])) {
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_MATRICULE] = self::SQL_JOKER_SEARCH;
-      }
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_PASSWORD])) {
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_PASSWORD] = self::SQL_JOKER_SEARCH;
-      }
-      if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE])) {
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = self::SQL_JOKER_SEARCH;
-      }
-    }
-    if (!isset($attributes[self::SQL_ORDER_BY])) {
-      $attributes[self::SQL_ORDER_BY] = self::FIELD_MATRICULE;
-    }
-    if (!isset($attributes[self::SQL_ORDER])) {
-      $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
-    }
-    if (!isset($attributes[self::SQL_LIMIT])) {
-      $attributes[self::SQL_LIMIT] = -1;
-    }
-  }
+    //////////////////////////////////////////////////
+    // METHODS
+    //////////////////////////////////////////////////
 
-  /**
-   * @param array $attributes
-   *    [mixed]   : champs de l'objet
-   *    [orderby] : tri sur une colonne
-   *    [order]   : sens du tri
-   *    [limit]   : nombre d'éléments max
-   * @return array CopsPlayer
-   * @since 1.22.04.28
-   * @version 1.22.04.28
-   */
-  public function getCopsPlayers($attributes=[])
-  {
-    $this->initFilters($attributes);
-    return $this->Dao->getCopsPlayers($attributes);
-  }
+    /**
+     * @since v1.23.06.19
+     * @version v1.23.06.25
+     */
+    public function getCopsPlayers(array $attributes=[]): array
+    {
+        $this->Dao = new CopsPlayerDaoImpl();
+
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $matricule = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH;
+        $password = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_PASSWORD] ?? self::SQL_JOKER_SEARCH;
+
+        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
+        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+
+        // Traitement spécifique pour gérer le tri multi-colonnes
+        if (!isset($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = self::FIELD_MATRICULE;
+        } elseif (is_array($attributes[self::SQL_ORDER_BY])) {
+            $orderBy = '';
+            while (!empty($attributes[self::SQL_ORDER_BY])) {
+                $orderBy .= array_shift($attributes[self::SQL_ORDER_BY]).' ';
+                $orderBy .= array_shift($attributes[self::SQL_ORDER]).', ';
+            }
+            $orderBy = substr($orderBy, 0, -2);
+            $order = '';
+        } else {
+            $orderBy = $attributes[self::SQL_ORDER_BY];
+        }
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $id,
+            $matricule,
+            $password,
+            $orderBy,
+            $order,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getCopsPlayers($prepAttributes);
+    }
+
+    /**
+     * @since v1.23.06.21
+     * @version v1.23.06.25
+     */
+    public function updatePlayer(CopsPlayerClass $objPlayer): void
+    {
+        // Une mise à jour.
+        $this->Dao->updatePlayer($objPlayer);
+    }
+
+
+
+
+
+
+
+
 
 }

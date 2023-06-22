@@ -1,89 +1,81 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\actions;
+
+use core\services\CopsPlayerServices;
+use core\utils\SessionUtils;
+
 /**
  * CopsPlayerActions
  * @author Hugues
- * @since 1.22.05.19
- * @version 1.22.05.19
+ * @since v1.23.06.21
+ * @version 1.23.06.25
  */
 class CopsPlayerActions extends LocalActions
 {
-  /**
-   * @since 1.22.05.19
-   * @version 1.22.05.19
-   */
-  public function __construct()
-  {
-    parent::__construct();
-    $this->CopsPlayerServices = new CopsPlayerServices();
-  }
-
-  /**
-   * @version 1.22.05.19
-   * @since 1.22.05.19
-   */
-  public static function dealWithStatic($params)
-  {
-    $CopsPlayerActions = new CopsPlayerActions();
-    $returned = match ($params[self::AJAX_ACTION]) {
-        'saveData' => $CopsPlayerActions->updateCopsPlayer($params),
-        default => self::getErrorActionContent($params[self::AJAX_ACTION]),
-    };
-    return $returned;
-  }
-
-  /**
-   * @since 1.22.05.19
-   * @version 1.22.05.19
-   */
-  public function updateCopsPlayer($params)
-  {
-    $value  = $params['value'] ?? '';
-    $id     = $params['id'];
-    $field  = substr((string) $params['field'], 6);
-    $CopsPlayers = $this->CopsPlayerServices->getCopsPlayers([self::SQL_WHERE_FILTERS=>[self::FIELD_ID=>$id]]);
-    $CopsPlayer = array_shift($CopsPlayers);
-    if ($CopsPlayer->getField(self::FIELD_ID)=='') {
-      $returned = $this->getToastContentJson('danger', 'Erreur', 'Cet identifiant <strong>'.$id.'</strong> ne correspond à aucun personnage.');
-    } else {
-      switch ($field) {
-        case self::FIELD_BIRTH_DATE :
-          //$value = substr($value, 6).'-'.substr($value, 3, 2).'-'.substr($value, 0, 2);
-        case self::FIELD_NOM                :
-        case self::FIELD_PRENOM             :
-        case self::FIELD_SURNOM             :
-        case self::FIELD_CARAC_CARRURE      :
-        case self::FIELD_CARAC_CHARME       :
-        case self::FIELD_CARAC_COORDINATION :
-        case self::FIELD_CARAC_EDUCATION    :
-        case self::FIELD_CARAC_PERCEPTION   :
-        case self::FIELD_CARAC_REFLEXES     :
-        case self::FIELD_CARAC_SANG_FROID   :
-        case self::FIELD_PV_CUR             :
-        case self::FIELD_PAD_CUR            :
-        case self::FIELD_PAN_CUR            :
-        case self::FIELD_TAILLE             :
-        case self::FIELD_POIDS              :
-        case self::FIELD_GRADE              :
-        case self::FIELD_GRADE_RANG         :
-        case self::FIELD_GRADE_ECHELON      :
-        case self::FIELD_INTEGRATION_DATE   :
-        case self::FIELD_SECTION            :
-        case self::FIELD_SECTION_LIEUTENANT :
-        case self::FIELD_BACKGROUND         :
-        case self::FIELD_PX_CUR             :
-          $CopsPlayer->setField($field, $value);
-          $this->CopsPlayerServices->update($CopsPlayer);
-          $returned = $this->getToastContentJson('success', 'Succès', 'Le champ <em>'.$field.'</em> du personnage a été mis à jour.');
-        break;
-        default :
-          $returned = $this->getToastContentJson('warning', 'Erreur', 'Le champ passé en paramètre n\'a pas une valeur attendue : <strong>'.$field.'</strong>.');
-        break;
-      }
+    /**
+     * @since v1.23.06.21
+     * @version 1.23.06.25
+     */
+    public static function dealWithStatic(): string
+    {
+        $ajaxAction = $_POST[self::AJAX_ACTION];
+        $objCopsPlayerActions = new CopsPlayerActions();
+        return match ($ajaxAction) {
+            'saveData' => $objCopsPlayerActions->updateCopsPlayer(),
+            //default => static::getErrorActionContent($ajaxAction),
+        };
     }
-    return $returned;
-  }
+
+    /**
+     * @since v1.23.06.21
+     * @version 1.23.06.25
+     */
+    public function updateCopsPlayer(): string
+    {
+        // On défini les champs autorisés à la mise à jour
+        $allowedFields = [
+            self::FIELD_BIRTH_DATE, self::FIELD_NOM, self::FIELD_PRENOM, self::FIELD_SURNOM, self::FIELD_CARAC_CARRURE,
+            self::FIELD_CARAC_CHARME, self::FIELD_CARAC_COORDINATION, self::FIELD_CARAC_EDUCATION,
+            self::FIELD_CARAC_PERCEPTION, self::FIELD_CARAC_REFLEXES, self::FIELD_CARAC_SANGFROID, self::FIELD_PV_CUR,
+            self::FIELD_PAD_CUR, self::FIELD_PAN_CUR, self::FIELD_TAILLE, self::FIELD_POIDS, self::FIELD_GRADE,
+            self::FIELD_GRADE_RANG, self::FIELD_GRADE_ECHELON, self::FIELD_INTEGRATION_DATE, self::FIELD_SECTION,
+            self::FIELD_BACKGROUND, self::FIELD_PX_CUR,
+        ];
+
+        $id = $_POST['id'];
+        $value = $_POST['value'];
+        $field = substr($_POST['field'], 6);
+
+        /*
+        $id = SessionUtils::fromPost('id');
+        $value = SessionUtils::fromPost('value');
+        $field = substr(SessionUtils::fromPost('field'), 6);
+        */
+
+        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID=>$id];
+        $objCopsPlayerServices = new CopsPlayerServices();
+        $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
+        $objCopsPlayer = array_shift($objsCopsPlayer);
+
+        if ($objCopsPlayer->getField(self::FIELD_ID)=='') {
+            $returned = $this->getToastContentJson('danger', self::LABEL_ERREUR, vsprintf(self::DYN_WRONG_ID, [$id]));
+        } elseif (in_array($field, $allowedFields)) {
+            $objCopsPlayer->setField($field, $value);
+            $objCopsPlayerServices->updatePlayer($objCopsPlayer);
+            $returned = $this->getToastContentJson(
+                'success',
+                self::LABEL_SUCCES,
+                vsprintf(self::DYN_SUCCESS_FIELD_UPDATE, [$field])
+            );
+        } else {
+            $returned = $this->getToastContentJson(
+                'warning',
+                self::LABEL_ERREUR,
+                vsprintf(self::DYN_WRONG_FIELD, [$field])
+            );
+        }
+
+        return $returned;
+    }
 
 }

@@ -1,76 +1,77 @@
 <?php
 namespace core\bean;
 
+use core\domain\CopsPlayerClass;
 use core\services\WpCategoryServices;
 use core\services\CopsIndexServices;
+use core\services\CopsPlayerServices;
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
+use core\utils\UrlUtils;
 
 /**
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version v1.23.05.28
+ * @version v1.23.06.25
  */
 class WpPageAdminBean extends WpPageBean
 {
+    public $objCopsPlayer;
+    public $breadCrumbsContent = '';
+
     public $slugPage;
     public $slugOnglet;
     public $slugSubOnglet;
     
     public $arrSubOnglets = [];
+    public $urlAttributes = [];
 
     /**
      * Class Constructor
      * @since 1.22.10.18
-     * @version v1.23.05.28
+     * @version v1.23.06.25
      */
     public function __construct()
     {
-        $attributes = [];
+        $this->initLogIn();
+        $this->initSidebar();
+
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
-        
-        $this->urlOnglet = $this->getPageUrl().'?'.self::CST_ONGLET.'=';
-        $this->initServices();
-        
-        $this->analyzeUri();
-//        $this->CopsPlayerServices = new CopsPlayerServices();
-//        $this->CopsMailServices   = new CopsMailServices();
-        $strMatricule = static::fromPost(self::FIELD_MATRICULE);
-        $password = static::fromPost(self::FIELD_PASSWORD);
-        if ($strMatricule!='') {
-            // On cherche a priori à se logguer
-            $mdp = ($password ? '' : md5((string) $password));
-            $attributes[self::SQL_WHERE_FILTERS] = [
-                self::FIELD_ID => self::SQL_JOKER_SEARCH,
-                self::FIELD_MATRICULE => $strMatricule,
-                self::FIELD_PASSWORD  => $mdp
-            ];
-//            $objsCopsPlayer = $this->CopsPlayerServices->getCopsPlayers($attributes);
-//            if (!empty($objsCopsPlayer)) {
-//                $this->CopsPlayer = array_shift($objsCopsPlayer);
-                $_SESSION[self::FIELD_MATRICULE] = $strMatricule;
-//            } else {
-//                $_SESSION[self::FIELD_MATRICULE] = 'err_login';
-//            }
-        } elseif (isset($_GET['logout'])) {
-            // On cherche a priori à se déconnecter
-            unset($_SESSION[self::FIELD_MATRICULE]);
-        } elseif (isset($_SESSION[self::FIELD_MATRICULE])) {
-//            $this->CopsPlayer = CopsPlayer::getCurrentCopsPlayer();
+
+        // Le lien vers la Home
+        $aContent = HtmlUtils::getIcon(self::I_DESKTOP);
+        $this->urlAttributes = [self::WP_PAGE=>$this->slugPage];
+        $buttonContent = HtmlUtils::getLink(
+            $aContent,
+            UrlUtils::getPublicUrl($this->urlAttributes),
+            self::CST_TEXT_WHITE
+        );
+        if ($this->slugOnglet==self::ONGLET_DESK || $this->slugOnglet=='') {
+            $buttonAttributes = [self::ATTR_CLASS=>' '.self::BTS_BTN_DARK_DISABLED];
         } else {
-            // TODO
+            $buttonAttributes = [self::ATTR_CLASS=>' '.self::BTS_BTN_DARK];
         }
-        
+        $this->breadCrumbsContent = HtmlUtils::getButton($buttonContent, $buttonAttributes);
+    }
+
+    /**
+     * @since v1.23.06.19
+     * @version v1.23.06.25
+     */
+    public function initSidebar(): void
+    {
         $this->arrSidebarContent = [
             self::ONGLET_DESK => [
                 self::FIELD_ICON  => self::I_DESKTOP,
-                self::FIELD_LABEL => 'Bureau'
+                self::FIELD_LABEL => self::LABEL_BUREAU,
             ],
-            self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => self::LABEL_LIBRARY]
+//            self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => self::LABEL_LIBRARY]
         ];
+/*
     if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
             $this->arrSidebarContentNonGuest = [
                 self::ONGLET_INBOX => [self::FIELD_ICON  => 'envelope', self::FIELD_LABEL => self::LABEL_MESSAGERIE],
@@ -102,24 +103,197 @@ class WpPageAdminBean extends WpPageBean
                     ),
                 ),
             );
-            */
+            * /
         }
-
-        $this->btnDark = 'btn-dark';
-        $this->btnDisabled = 'btn-dark disabled';
-        
-        // Le lien vers la Home
-        $aContent = HtmlUtils::getIcon(self::I_DESKTOP);
-        $buttonContent = HtmlUtils::getLink($aContent, '/'.self::PAGE_ADMIN, self::CST_TEXT_WHITE);
-        if ($this->slugOnglet=='desk' || $this->slugOnglet=='') {
-            $buttonAttributes = [self::ATTR_CLASS=>$this->btnDisabled];
-        } else {
-            $buttonAttributes = [self::ATTR_CLASS=>$this->btnDark];
-        }
-        $this->breadCrumbsContent = HtmlUtils::getButton($buttonContent, $buttonAttributes);
-        /////////////////////////////////////////
-        $this->strTitle = '';
+*/
     }
+
+    /**
+     * @since v1.23.06.19
+     * @version v1.23.06.25
+     */
+    public function getContentHeader(): string
+    {
+        $urlTemplate = self::WEB_PPFS_CONTENT_HEADER;
+        $attributes = [
+            // Le Titre
+            $this->strTitle,
+            // Le BreadCrumb
+            HtmlUtils::getDiv($this->breadCrumbsContent, [self::ATTR_CLASS=>'btn-group float-sm-right']),
+        ];
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since v1.23.06.19
+     * @version v1.23.06.25
+     */
+    public function initLogIn(): void
+    {
+        // Récupération des données éventuelles relatives à l'identification
+        $strMatricule = SessionUtils::fromPost(self::FIELD_MATRICULE);
+        $password = SessionUtils::fromPost(self::FIELD_PASSWORD);
+        $objCopsPlayerServices = new CopsPlayerServices();
+
+        if ($strMatricule!='') {
+            // On cherche a priori à se logguer
+            $mdp = ($password=='' ? '' : md5((string) $password));
+            $attributes[self::SQL_WHERE_FILTERS] = [
+                self::FIELD_MATRICULE => $strMatricule,
+                self::FIELD_PASSWORD  => $mdp
+            ];
+            // On requête pour trouver le compte associé.
+            $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
+            if (!empty($objsCopsPlayer)) {
+                $this->objCopsPlayer = array_shift(($objsCopsPlayer));
+                SessionUtils::setSession(self::FIELD_MATRICULE, $strMatricule);
+            } else {
+                $this->objCopsPlayer = new CopsPlayerClass();
+            }
+        } elseif (SessionUtils::fromGet('logout')=='logout') {
+            // On cherche a priori à se déconnecter
+            SessionUtils::unsetSession(self::FIELD_MATRICULE);
+        } else {
+            $attributes[self::SQL_WHERE_FILTERS] = [
+                self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
+            ];
+            $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
+            if (!empty($objsCopsPlayer)) {
+                $this->objCopsPlayer = array_shift(($objsCopsPlayer));
+            } else {
+                $this->objCopsPlayer = new CopsPlayerClass();
+            }
+        }
+    }
+
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.06.25
+     */
+    protected function getSideBar(): string
+    {
+        $urlTemplate = self::WEB_PPF_SIDEBAR;
+        
+        $sidebarContent = '';
+        if (!isset($this->urlParams[self::CST_ONGLET])) {
+           $this->urlParams[self::CST_ONGLET] = '';
+        }
+        foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
+           $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
+           $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
+        
+           // Construction du label
+           $pContent  = $arrOnglet[self::FIELD_LABEL];
+           $pContent .= ($hasChildren ? HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'right') : '');
+        
+           // Construction du lien
+           $aContent  = HtmlUtils::getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
+           $aContent .= $this->getBalise(self::TAG_P, $pContent);
+           $strClasse = 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '');
+           $superLiContent = HtmlUtils::getLink($aContent, $this->urlOnglet.$strOnglet, $strClasse);
+        
+           // S'il a des enfants, on enrichit
+           if ($hasChildren) {
+               $ulContent = $this->getSideBarChildren($arrOnglet, $strOnglet);
+               $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
+               $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
+           }
+        
+           // Construction de l'élément de la liste
+           $liAttributes = [self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : '')];
+           $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
+        }
+        
+        $attributes = [
+            $sidebarContent,
+            // La date
+            DateUtils::getCopsDate(self::FORMAT_DATE_DMDY),
+            // L'heure
+            DateUtils::getCopsDate(self::FORMAT_DATE_HIS),
+        ];
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since 1.22.10.18
+     * @version 1.22.10.18
+     */
+    public function getNavigationBar()
+    {
+        $urlTemplate = self::WEB_PPFS_CONTENT_NAVBAR;
+
+        $strLis = '';
+
+        if ($this->objCopsPlayer->getField(self::FIELD_ID)!=64) {
+            // Si on est identifié, mais pas Guest...
+            $aContent = HtmlUtils::getIcon('user');
+            $liContent = HtmlUtils::getLink($aContent, '/admin?onglet=profile', 'nav-link');
+            $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
+        }
+        $aContent = HtmlUtils::getIcon('right-from-bracket');
+        $liContent = HtmlUtils::getLink($aContent, '/admin?logout=logout', 'nav-link');
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
+
+        $attributes = [$strLis];
+        return $this->getRender($urlTemplate, $attributes);
+
+        /*
+        // On détermine le nombre de messages non lus dans la boite de réception
+        $nbMailsNonLus = 0;
+//        $nbMailsNonLus = $this->CopsMailServices->getNombreMailsNonLus();
+
+        $attributes = [
+            // Nom Prénom de la personne logguée
+            '',
+            //$this->CopsPlayer->getFullName(),
+            // Si présence de notifications, le badge
+            // <span class="badge badge-warning navbar-badge">0</span>
+            '',
+            // La liste des notifications
+            // Ou un message adapté s'il n'y en a pas.
+            '<span class="dropdown-item dropdown-header">Aucune nouvelle Notification</span>',
+            // Si présence d'un nouveau mail, le badge
+            ($nbMailsNonLus!=0 ? '<span class="badge badge-success navbar-badge">'.$nbMailsNonLus.'</span>' : ''),
+            // Si Guest, on cache des trucs.
+            ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
+        ];
+
+      <li class="nav-item d-none d-sm-inline-block"%5$s>
+        <a class="nav-link" href="/admin?onglet=inbox"><i class="fa-solid fa-envelope"></i>%4$s</a>
+      </li>
+      <!-- /.nav-item -->
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item"%5$s>
+        <a class="nav-link" data-toggle="dropdown" href="#"><i class="fa-solid fa-bell"></i>%2$s</a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          %3$s
+          <div class="dropdown-divider"></div>
+          <a href="/admin?onglet=inbox&subOnglet=alert" class="dropdown-item dropdown-footer">Toutes les Notifications</a>
+        </div>
+      </li>
+      <!-- /.nav-item -->
+      <li class="nav-item d-none d-sm-inline-block"%5$s>
+        <a class="nav-link" href="/admin?onglet=settings"><i class="fa-solid fa-gear"></i></a>
+      </li>
+      <!-- /.nav-item -->
+        */
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private function initServices()
     {
@@ -151,25 +325,19 @@ class WpPageAdminBean extends WpPageBean
             $attributes = [($strNotification=='' ? 'd-none' : ''), $strNotification];
             return $this->getRender($urlTemplate, $attributes);
         }
-        try {
-            if (!isset($this->urlParams[self::CST_ONGLET])) {
-                $this->urlParams[self::CST_ONGLET] = '';
-             }
-                $objBean = match ($this->urlParams[self::CST_ONGLET]) {
-                    self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
-                    self::ONGLET_INBOX => WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet),
-                    self::ONGLET_LIBRARY => WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet),
-                    'player' => new AdminCopsPlayerPageBean(),
-                    self::ONGLET_PROFILE => new AdminCopsProfilePageBean(),
-                    self::ONGLET_ENQUETE => new WpPageAdminEnqueteBean(),
-                    self::ONGLET_AUTOPSIE => new WpPageAdminAutopsieBean(),
-                    default => $this,
-                };
-            $returned = $objBean->getBoard();
-        } catch (\Exception $Exception) {
-            throw $Exception;
-        }
-        return $returned;
+
+        $strOnglet = SessionUtils::fromGet(self::CST_ONGLET);
+        $objBean = match ($strOnglet) {
+            self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
+            self::ONGLET_INBOX => WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet),
+            self::ONGLET_LIBRARY => WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet),
+            'player' => new AdminCopsPlayerPageBean(),
+            self::ONGLET_PROFILE => WpPageAdminProfileBean::getStaticWpPageBean($this->slugSubOnglet),
+            self::ONGLET_ENQUETE => new WpPageAdminEnqueteBean(),
+            self::ONGLET_AUTOPSIE => new WpPageAdminAutopsieBean(),
+            default => $this,
+        };
+        return $objBean->getBoard();
     }
 
     /**
@@ -188,11 +356,9 @@ class WpPageAdminBean extends WpPageBean
             // Le contenu de la page
             $this->getOngletContent(),
             // L'id
-            '',
-            //$this->CopsPlayer->getMaskMatricule(),
+            $this->objCopsPlayer->getMaskMatricule(),
             // Le nom
-            '',
-            //$this->CopsPlayer->getFullName(),
+            $this->objCopsPlayer->getFullName().' <em>'.$this->objCopsPlayer->getField(self::FIELD_SURNOM).'</em>',
             // La barre de navigation
             $this->getNavigationBar(),
             // Header
@@ -214,53 +380,6 @@ class WpPageAdminBean extends WpPageBean
         return $this->getRender($urlTemplate, $attributes);
     }
     
-    /**
-     * @since 1.22.10.18
-     * @version v1.23.05.28
-     */
-     protected function getSideBar(): string
-     {
-         $urlTemplate = self::WEB_PPF_SIDEBAR;
-         
-         $sidebarContent = '';
-         if (!isset($this->urlParams[self::CST_ONGLET])) {
-            $this->urlParams[self::CST_ONGLET] = '';
-         }
-         foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
-            $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
-            $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
-         
-            // Construction du label
-            $pContent  = $arrOnglet[self::FIELD_LABEL];
-            $pContent .= ($hasChildren ? HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'right') : '');
-         
-            // Construction du lien
-            $aContent  = HtmlUtils::getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
-            $aContent .= $this->getBalise(self::TAG_P, $pContent);
-            $strClasse = 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '');
-            $superLiContent = HtmlUtils::getLink($aContent, $this->urlOnglet.$strOnglet, $strClasse);
-         
-            // S'il a des enfants, on enrichit
-            if ($hasChildren) {
-                $ulContent = $this->getSideBarChildren($arrOnglet, $strOnglet);
-                $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
-                $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
-            }
-         
-            // Construction de l'élément de la liste
-            $liAttributes = [self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : '')];
-            $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
-         }
-         
-         $attributes = [
-             $sidebarContent,
-             // La date
-             DateUtils::getCopsDate(self::FORMAT_DATE_DMDY),
-             // L'heure
-             DateUtils::getCopsDate(self::FORMAT_DATE_HIS),
-         ];
-         return $this->getRender($urlTemplate, $attributes);
-     }
 
      /**
       * @since v1.23.06.05
@@ -292,50 +411,6 @@ class WpPageAdminBean extends WpPageBean
      public function getOngletContent()
      { return ''; }
      
-    /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     */
-    public function getNavigationBar()
-    {
-        // On détermine le nombre de messages non lus dans la boite de réception
-        $nbMailsNonLus = 0;
-//        $nbMailsNonLus = $this->CopsMailServices->getNombreMailsNonLus();
-
-        $urlTemplate = self::WEB_PPFS_CONTENT_NAVBAR;
-        $attributes = [
-            // Nom Prénom de la personne logguée
-            '',
-            //$this->CopsPlayer->getFullName(),
-            // Si présence de notifications, le badge
-            // <span class="badge badge-warning navbar-badge">0</span>
-            '',
-            // La liste des notifications
-            // Ou un message adapté s'il n'y en a pas.
-            '<span class="dropdown-item dropdown-header">Aucune nouvelle Notification</span>',
-            // Si présence d'un nouveau mail, le badge
-            ($nbMailsNonLus!=0 ? '<span class="badge badge-success navbar-badge">'.$nbMailsNonLus.'</span>' : ''),
-            // Si Guest, on cache des trucs.
-            ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
-        ];
-        return $this->getRender($urlTemplate, $attributes);
-    }
-
-    /**
-     * @since 1.22.10.18
-     * @version v1.23.05.28
-     */
-    public function getContentHeader(): string
-    {
-        $urlTemplate = self::WEB_PPFS_CONTENT_HEADER;
-        $attributes = [
-            // Le Titre
-            $this->strTitle,
-            // Le BreadCrumb
-            HtmlUtils::getDiv($this->breadCrumbsContent, [self::ATTR_CLASS=>'btn-group float-sm-right']),
-        ];
-        return $this->getRender($urlTemplate, $attributes);
-    }
   
     /**
      * @since 1.22.10.18

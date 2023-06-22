@@ -3,13 +3,14 @@ namespace core\bean;
 
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
  * AdminPageMeteoBean
  * @author Hugues
  * @since 1.23.04.20
- * @version v1.23.06.18
+ * @version v1.23.06.25
  */
 class AdminPageMeteoBean extends AdminPageBean
 {
@@ -19,11 +20,12 @@ class AdminPageMeteoBean extends AdminPageBean
     */
 
     /**
-     * @since 1.23.04.20
+     * @since v1.23.04.20
+     * @version v1.23.06.25
      */
     public static function getStaticContentPage(): string
     {
-        $objBean = match (static::fromGet(self::CST_SUBONGLET)) {
+        $objBean = match (SessionUtils::fromGet(self::CST_SUBONGLET)) {
             self::CST_WEATHER => new AdminPageMeteoMeteoBean(),
             self::CST_SUN => new AdminPageMeteoSunBean(),
             self::CST_MOON => new AdminPageMeteoMoonBean(),

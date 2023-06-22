@@ -4,11 +4,11 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.06.18
+ * @version v1.23.06.25
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.06.18';
+    public const VERSION              = 'v1.23.06.25';
 
     /////////////////////////////////////////////////
     // Ajax Infos
@@ -39,6 +39,8 @@ interface ConstantsInterface
 
     /////////////////////////////////////////////////
     // Bootstrap
+    public const BTS_BTN_DARK           = 'btn-dark';
+    public const BTS_BTN_DARK_DISABLED  = 'btn-dark disabled';
     public const BTS_BTN_PRIMARY        = 'btn btn-primary';
     public const BTS_BTN_GROUP_SM       = 'btn-group btn-group-sm';
 
@@ -314,6 +316,7 @@ interface ConstantsInterface
     public const WP_METAKEY             = 'meta_key';
     public const WP_METAVALUENUM        = 'meta_value_num';
     public const WP_NAME                = 'name';
+    public const WP_PAGE                = 'page';
     public const WP_POST                = 'post';
     public const WP_POSTCONTENT         = 'post_content';
     public const WP_POSTNAME            = 'post_name';

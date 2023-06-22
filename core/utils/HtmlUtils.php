@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * HtmlUtils
  * @author Hugues
  * @since v1.23.05.23
- * @version v1.23.05.28
+ * @version v1.23.06.25
  */
 class HtmlUtils implements ConstantsInterface
 {
@@ -150,9 +150,11 @@ class HtmlUtils implements ConstantsInterface
             'calendar-days',
             'envelope',
             'inbox',
+            'right-from-bracket',
             'square-pen',
             'square-plus',
             'trash-alt',
+            'user',
         ];
         if ($prefix!='') {
             $prefix .= ' ';
