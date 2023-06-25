@@ -39,28 +39,28 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
             self::FIELD_CARAC_PERCEPTION,
             self::FIELD_CARAC_REFLEXES,
             self::FIELD_CARAC_SANGFROID,
-            self::FIELD_BIRTH_DATE,
             self::FIELD_PV_MAX,
             self::FIELD_PV_CUR,
             self::FIELD_PAD_MAX,
             self::FIELD_PAD_CUR,
             self::FIELD_PAN_MAX,
             self::FIELD_PAN_CUR,
+            self::FIELD_BIRTH_DATE,
             self::FIELD_TAILLE,
             self::FIELD_POIDS,
-            // Sexe
-            // Ethnie
-            // Cheveux
-            // Yeux
-            // Etudes
-            // Origine sociale
+            self::FIELD_SEXE,
+            self::FIELD_ETHNIE,
+            self::FIELD_CHEVEUX,
+            self::FIELD_YEUX,
+            self::FIELD_ETUDES,
+            self::FIELD_ORIGINE_SOCIALE,
             self::FIELD_GRADE,
             self::FIELD_GRADE_RANG,
             self::FIELD_GRADE_ECHELON,
             self::FIELD_INTEGRATION_DATE,
             self::FIELD_SECTION,
             self::FIELD_BACKGROUND,
-            // Status
+            self::FIELD_STATUS,
             self::FIELD_PX_CUMUL,
             self::FIELD_PX_CUR,
         ];

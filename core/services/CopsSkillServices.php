@@ -3,33 +3,90 @@ namespace core\services;
 
 use core\daoimpl\CopsSkillDaoImpl;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsSkillServices
  * @author Hugues
- * @since 1.22.05.30
- * @version 1.22.05.30
+ * @since v1.23.06.21
+ * @version v1.23.06.25
  */
 class CopsSkillServices extends LocalServices
 {
   //////////////////////////////////////////////////
   // CONSTRUCT
   //////////////////////////////////////////////////
-  /**
-   * Class constructor
-   * @version 1.22.05.30
-   * @since 1.22.05.30
-   */
-  public function __construct()
-  {
-    $this->Dao = new CopsSkillDaoImpl();
-  }
 
   //////////////////////////////////////////////////
   // METHODS
   //////////////////////////////////////////////////
+
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.06.25
+     */
+    public function getSkills(array $attributes=[]): array
+    {
+        $this->Dao = new CopsSkillDaoImpl();
+
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $id,
+            self::FIELD_SKILL_NAME,
+            self::SQL_ORDER_ASC,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+
+        return $this->Dao->getSkills($prepAttributes);
+    }
+
+    /**
+     * @since v1.23.06.23
+     * @version v1.23.06.25
+     */
+    public function getCopsSkillJoints(array $attributes=[]): array
+    {
+        $this->Dao = new CopsSkillDaoImpl();
+
+        $copsId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_COPS_ID] ?? self::SQL_JOKER_SEARCH;
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $copsId,
+            self::FIELD_ID,
+            self::SQL_ORDER_ASC,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+
+        return $this->Dao->getCopsSkillJoints($prepAttributes);
+    }
+
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.06.25
+     */
+    public function getSpecSkills(array $attributes=[]): array
+    {
+        $this->Dao = new CopsSkillDaoImpl();
+
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $id,
+            self::FIELD_SPEC_NAME,
+            self::SQL_ORDER_ASC,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+
+        return $this->Dao->getSpecSkills($prepAttributes);
+    }
+
+
+
+
+
+
   /**
    * @param array $attributes [E|S]
    * @since 1.22.05.30
@@ -77,22 +134,6 @@ class CopsSkillServices extends LocalServices
       $attributes[self::SQL_LIMIT] = -1;
     }
   }
-
-  /**
-   * @param array $attributes
-   *    [mixed]   : champs de l'objet
-   *    [orderby] : tri sur une colonne
-   *    [order]   : sens du tri
-   *    [limit]   : nombre d'éléments max
-   * @return array CopsSkill
-   * @since 1.22.05.30
-   * @version 1.22.05.30
-   */
-    public function getSkills($attributes=[])
-    {
-        $this->initFilters($attributes);
-        return $this->Dao->getSkills($attributes);
-    }
 
   /*
    * @since 1.22.05.30

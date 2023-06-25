@@ -19,11 +19,7 @@ class WpPageAdminProfileIdentityBean extends WpPageAdminProfileBean
         parent::__construct();
 
         /////////////////////////////////////////
-        $this->urlAttributes = [
-            self::WP_PAGE=>$this->slugPage,
-            self::CST_ONGLET=>self::ONGLET_PROFILE,
-            self::CST_SUBONGLET=>self::CST_PFL_IDENTITY,
-        ];
+        $this->urlAttributes[self::CST_SUBONGLET] = self::CST_PFL_IDENTITY;
         $buttonContent = HtmlUtils::getLink(
             self::LABEL_IDENTITY,
             UrlUtils::getPublicUrl($this->urlAttributes),
@@ -36,6 +32,10 @@ class WpPageAdminProfileIdentityBean extends WpPageAdminProfileBean
         /////////////////////////////////////////
     }
 
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.06.25
+     */
     public function getOngletContent(): string
     {
         $objCopsPlayerServices = new CopsPlayerServices();
@@ -63,8 +63,12 @@ class WpPageAdminProfileIdentityBean extends WpPageAdminProfileBean
             $this->objCopsPlayer->getField(self::FIELD_BIRTH_DATE),
             $this->objCopsPlayer->getField(self::FIELD_TAILLE),
             $this->objCopsPlayer->getField(self::FIELD_POIDS),
-
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+            // Grade, Rang, Echelon, Section, Date d'intégration
+            $this->objCopsPlayer->getField(self::FIELD_GRADE),
+            $this->objCopsPlayer->getField(self::FIELD_SECTION),
+            $this->objCopsPlayer->getField(self::FIELD_GRADE_RANG),
+            $this->objCopsPlayer->getField(self::FIELD_GRADE_ECHELON),
+            $this->objCopsPlayer->getField(self::FIELD_INTEGRATION_DATE),
         ];
         return $this->getTabsBar().$this->getRender($urlTemplate, $attributes);
     }

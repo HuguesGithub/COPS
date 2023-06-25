@@ -180,6 +180,12 @@ interface FieldsInterface
     public const FIELD_PAN_CUR            = 'panCur';
     public const FIELD_TAILLE             = 'taille';
     public const FIELD_POIDS              = 'poids';
+    public const FIELD_SEXE               = 'sexe';
+    public const FIELD_ETHNIE             = 'ethnie';
+    public const FIELD_CHEVEUX            = 'cheveux';
+    public const FIELD_YEUX               = 'yeux';
+    public const FIELD_ETUDES             = 'etudes';
+    public const FIELD_ORIGINE_SOCIALE    = 'origineSociale';
     public const FIELD_GRADE              = 'grade';
     public const FIELD_GRADE_ECHELON      = 'gradeEchelon';
     public const FIELD_GRADE_RANG         = 'gradeRang';
@@ -201,6 +207,11 @@ interface FieldsInterface
     // TABLE cops_skill_spec
     public const FIELD_SPEC_NAME          = 'specName';
     public const FIELD_SKILL_ID           = 'skillId';
+
+    // TABLE cops_player_skill_joint
+    public const FIELD_COPS_ID            = 'copsId';
+    public const FIELD_SPEC_SKILL_ID      = 'specSkillId';
+    public const FIELD_SCORE              = 'score';
 
     // TABLE cops_soleil
     public const FIELD_DATE_SOLEIL      = 'dateSoleil';

@@ -41,10 +41,10 @@ class WpPageAdminBean extends WpPageBean
         $this->slugPage = self::PAGE_ADMIN;
         $this->slugOnglet = $this->initVar(self::CST_ONGLET);
         $this->slugSubOnglet = $this->initVar(self::CST_SUBONGLET);
+        $this->urlAttributes = [self::WP_PAGE=>$this->slugPage];
 
         // Le lien vers la Home
         $aContent = HtmlUtils::getIcon(self::I_DESKTOP);
-        $this->urlAttributes = [self::WP_PAGE=>$this->slugPage];
         $buttonContent = HtmlUtils::getLink(
             $aContent,
             UrlUtils::getPublicUrl($this->urlAttributes),

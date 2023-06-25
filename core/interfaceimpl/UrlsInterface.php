@@ -58,6 +58,7 @@ interface UrlsInterface
     public const WEB_PPFD_DOT_EVENT         = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-dot-event.tpl';
     public const WEB_PPFD_INSET_EVENT       = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-inset-event.tpl';
     public const WEB_PPFD_PFL_ABILITY       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-ability.tpl';
+    public const WEB_PPFD_PFL_SKILL         = self::WEB_PPF_DIV     .'publique-fragments-div-profile-skill.tpl';
     public const WEB_PPFF_LIBRARY_INDEX     = self::WEB_PPF_FORM    .'publique-fragments-form-library-index.tpl';
     public const WEB_PPFS_CALENDAR          = self::WEB_PPF_SECTION .'publique-fragments-section-calendar.tpl';
     public const WEB_PPFS_CAL_DAY           = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-day.tpl';
@@ -73,5 +74,6 @@ interface UrlsInterface
     public const WEB_PPFS_ONGLET_LIST       = self::WEB_PPF_SECTION .'publique-fragments-section-onglet-list.tpl';
     public const WEB_PPFS_PFL_ABILITIES     = self::WEB_PPF_SECTION .'publique-fragments-section-profile-abilities.tpl';
     public const WEB_PPFS_PFL_IDENTITY      = self::WEB_PPF_SECTION .'publique-fragments-section-profile-identity.tpl';
+    public const WEB_PPFS_PFL_SKILLS        = self::WEB_PPF_SECTION .'publique-fragments-section-profile-skills.tpl';
     
 }

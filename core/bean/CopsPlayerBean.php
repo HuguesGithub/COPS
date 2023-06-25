@@ -55,7 +55,7 @@ class CopsPlayerBean extends UtilitiesBean
             $this->objCopsPlayer->getField(self::FIELD_ID),
             'field_'.$field,
             $this->objCopsPlayer->getField($field),
-            self::CST_READONLY,
+            '',//self::CST_READONLY,
             $curValue,
         ];
         return $this->getRender($urlTemplate, $attributes);

@@ -3,25 +3,26 @@ namespace core\bean;
 
 use core\domain\CopsPlayerClass;
 use core\services\CopsPlayerServices;
+use core\services\CopsSkillServices;
 use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
 /**
- * Classe WpPageAdminProfileAbilityBean
+ * Classe WpPageAdminProfileSkillsBean
  * @author Hugues
- * @since v1.23.06.20
+ * @since v1.23.06.23
  * @version v1.23.06.25
  */
-class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
+class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
 {
     public function __construct()
     {
         parent::__construct();
 
         /////////////////////////////////////////
-        $this->urlAttributes[self::CST_SUBONGLET] = self::CST_PFL_ABILITIES;
+        $this->urlAttributes[self::CST_SUBONGLET] = self::CST_PFL_SKILLS;
         $buttonContent = HtmlUtils::getLink(
-            self::LABEL_ABILITIES,
+            self::LABEL_SKILLS,
             UrlUtils::getPublicUrl($this->urlAttributes),
             self::CST_TEXT_WHITE
         );
@@ -34,6 +35,10 @@ class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
 
     public function getOngletContent(): string
     {
+        $colSkill1 = '';
+        $colSkill2 = '';
+        $colSkill3 = '';
+
         $objCopsPlayerServices = new CopsPlayerServices();
         $attributes[self::SQL_WHERE_FILTERS] = [
             self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
@@ -44,6 +49,27 @@ class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
         } else {
             $this->objCopsPlayer = new CopsPlayerClass();
         }
+        $objsSkillJoint = $this->objCopsPlayer->getCopsSkillJoints();
+
+        $arrSkillJointWithName = [];
+        while (!empty($objsSkillJoint)) {
+            $objSkillJoint = array_shift($objsSkillJoint);
+            $arrSkillJointWithName[] = [
+                self::ATTR_NAME => $objSkillJoint->getSkill()->getField(self::FIELD_SKILL_NAME),
+                'obj' => $objSkillJoint,
+            ];
+        }
+
+        $cpt = 0;
+        while (!empty($arrSkillJointWithName)) {
+            ++$cpt;
+            $arrData = array_shift($arrSkillJointWithName);
+            $objSkillJoint = $arrData['obj'];
+            ${'colSkill'.$cpt} .= $objSkillJoint->getBean()->getCartouche();
+            $cpt %= 3;
+        }
+
+    /*
 
         // Première colonne.
         $colCarac1  = $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_CARRURE);
@@ -71,17 +97,18 @@ class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
         $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAD_MAX);
         $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAN_MAX);
         $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PX_CUMUL);
+        */
 
-        $urlTemplate = self::WEB_PPFS_PFL_ABILITIES;
+        $urlTemplate = self::WEB_PPFS_PFL_SKILLS;
         $attributes = [
             // Url du formulaire
             UrlUtils::getPublicUrl($this->urlAttributes),
-            // Première colonne des caractéristiques
-            $colCarac1,
-            // Deuxième colonne des caractéristiques
-            $colCarac2,
-            // Troisième colonne des caractéristiques
-            $colCarac3,
+            // Première colonne des compétences
+            $colSkill1,
+            // Deuxième colonne des compétences
+            $colSkill2,
+            // Troisième colonne des compétences
+            $colSkill3,
         ];
         return $this->getTabsBar().$this->getRender($urlTemplate, $attributes);
     }

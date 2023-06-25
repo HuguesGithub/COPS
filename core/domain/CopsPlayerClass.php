@@ -2,6 +2,7 @@
 namespace core\domain;
 
 use core\bean\CopsPlayerBean;
+use core\services\CopsSkillServices;
 
 /**
  * Classe CopsPlayerClass
@@ -107,7 +108,7 @@ class CopsPlayerClass extends LocalDomainClass
         $scoreBase = $this->getField($carac);
         // TODO : ajouter les bonus/malus à la carractéristique.
         // Envisager de le coloriser pour mettre en évidence le bonus ou le malus ?
-        return 0;//$scoreBase;
+        return $scoreBase;
     }
   
     /*
@@ -118,7 +119,28 @@ class CopsPlayerClass extends LocalDomainClass
     { return 3-$this->getCurrentCarac(self::FIELD_CARAC_REFLEXES); }
 
 
+    /*
+     * @since v1.23.06.22
+     * @version v1.23.06.25
+    */
+    public function checkField(string $field, $value): bool
+    {
+        $arrNumFields = [self::FIELD_CARAC_CARRURE, self::FIELD_CARAC_CHARME, self::FIELD_CARAC_COORDINATION,
+            self::FIELD_CARAC_EDUCATION, self::FIELD_CARAC_PERCEPTION, self::FIELD_CARAC_REFLEXES,
+            self::FIELD_CARAC_SANGFROID, self::FIELD_PV_CUR, self::FIELD_PAD_CUR, self::FIELD_PAN_CUR,
+            self::FIELD_TAILLE, self::FIELD_POIDS, self::FIELD_GRADE_RANG, self::FIELD_GRADE_ECHELON, self::FIELD_PX_CUR
+        ];
+        return in_array($field, $arrNumFields) && is_numeric($value);
+    }
 
+    public function getCopsSkillJoints(): array
+    {
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::FIELD_COPS_ID => $this->id,
+        ];
+        $objSkillServices = new CopsSkillServices();
+        return $objSkillServices->getCopsSkillJoints($attributes);
+    }
 
 
 

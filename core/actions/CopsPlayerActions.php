@@ -27,8 +27,8 @@ class CopsPlayerActions extends LocalActions
     }
 
     /**
-     * @since v1.23.06.21
-     * @version 1.23.06.25
+     * @since vv1.23.06.21
+     * @version v1.23.06.25
      */
     public function updateCopsPlayer(): string
     {
@@ -42,15 +42,9 @@ class CopsPlayerActions extends LocalActions
             self::FIELD_BACKGROUND, self::FIELD_PX_CUR,
         ];
 
-        $id = $_POST['id'];
-        $value = $_POST['value'];
-        $field = substr($_POST['field'], 6);
-
-        /*
         $id = SessionUtils::fromPost('id');
         $value = SessionUtils::fromPost('value');
         $field = substr(SessionUtils::fromPost('field'), 6);
-        */
 
         $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID=>$id];
         $objCopsPlayerServices = new CopsPlayerServices();
@@ -60,13 +54,21 @@ class CopsPlayerActions extends LocalActions
         if ($objCopsPlayer->getField(self::FIELD_ID)=='') {
             $returned = $this->getToastContentJson('danger', self::LABEL_ERREUR, vsprintf(self::DYN_WRONG_ID, [$id]));
         } elseif (in_array($field, $allowedFields)) {
-            $objCopsPlayer->setField($field, $value);
-            $objCopsPlayerServices->updatePlayer($objCopsPlayer);
-            $returned = $this->getToastContentJson(
-                'success',
-                self::LABEL_SUCCES,
-                vsprintf(self::DYN_SUCCESS_FIELD_UPDATE, [$field])
-            );
+            if ($objCopsPlayer->checkField($field, $value)) {
+                $objCopsPlayer->setField($field, $value);
+                $objCopsPlayerServices->updatePlayer($objCopsPlayer);
+                $returned = $this->getToastContentJson(
+                    'success',
+                    self::LABEL_SUCCES,
+                    vsprintf(self::DYN_SUCCESS_FIELD_UPDATE, [$field])
+                );
+            } else {
+                $returned = $this->getToastContentJson(
+                    'warning',
+                    self::LABEL_ERREUR,
+                    vsprintf(self::DYN_WRONG_VALUE, [$value, $field])
+                );
+            }
         } else {
             $returned = $this->getToastContentJson(
                 'warning',

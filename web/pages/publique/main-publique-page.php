@@ -1,12 +1,11 @@
 <?php
 use core\bean\WpPageBean;
 
-$PageBean = WpPageBean::getPageBean();
-  define('COPS_SITE_URL', 'https://cops.jhugues.fr/');
-  define('PLUGINS_MYCOMMON', COPS_SITE_URL.'wp-content/plugins/mycommon/');
-  define('PLUGINS_COPS', COPS_SITE_URL.'wp-content/plugins/hj-cops/');
-  date_default_timezone_set('Europe/Paris');
-//  wp_head();
+$objPageBean = WpPageBean::getPageBean();
+define('COPS_SITE_URL', 'https://cops.jhugues.fr/');
+define('PLUGINS_MYCOMMON', COPS_SITE_URL.'wp-content/plugins/mycommon/');
+define('PLUGINS_COPS', COPS_SITE_URL.'wp-content/plugins/hj-cops/');
+date_default_timezone_set('Europe/Paris');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -30,22 +29,22 @@ $PageBean = WpPageBean::getPageBean();
       <div id="main" style="overflow: hidden;">
         <!-- Start Header -->
 <?php
-  if ($PageBean->hasHeader) {
-    echo $PageBean->getPublicHeader();
+  if ($objPageBean->hasHeader) {
+    echo $objPageBean->getPublicHeader();
   }
 ?>
         <!-- Finish Header -->
         <!-- Start Middle -->
 <?php
-  echo $PageBean->getContentPage();
+  echo $objPageBean->getContentPage();
 ?>
         <!-- Finish Middle -->
       </div>
         <!-- Finish Main -->
         <!-- Start Footer -->
 <?php
-  if ($PageBean->hasFooter) {
-    echo $PageBean->getPublicFooter();
+  if ($objPageBean->hasFooter) {
+    echo $objPageBean->getPublicFooter();
   }
 ?>
         <!-- Finish Footer -->

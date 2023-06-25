@@ -86,4 +86,5 @@ interface LabelsInterface
     public const DYN_WRONG_ID         = 'Cet identifiant <strong>%1$s</strong> ne correspond à aucune entrée.';
     public const DYN_SUCCESS_FIELD_UPDATE = 'Le champ <em>%1$s</em> du personnage a été mis à jour.';
     public const DYN_WRONG_FIELD      = 'Le champ passé en paramètre n\'a pas une valeur attendue : <strong>%1$s</strong>.';
+    public const DYN_WRONG_VALUE      = 'La valeur <strong>%1$s</strong> ne remplit pas le format attendu du champ <strong>%2$s</strong>.';
 }

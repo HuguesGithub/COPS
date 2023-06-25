@@ -1,6 +1,8 @@
 <?php
 namespace core\utils;
 
+use core\interfaceimpl\ConstantsInterface;
+
 /**
  * SessionUtils
  * @author Hugues
