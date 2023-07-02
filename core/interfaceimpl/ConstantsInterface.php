@@ -4,11 +4,11 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.06.25';
+    public const VERSION              = 'v1.23.07.02';
 
     /////////////////////////////////////////////////
     // Ajax Infos
@@ -263,6 +263,7 @@ interface ConstantsInterface
     public const ONGLET_LIBRARY         = 'library';
     public const ONGLET_METEO           = 'meteo';
     public const ONGLET_PROFILE         = 'profile';
+    public const ONGLET_USERS           = 'users';
     public const ONGLET_DESK            = 'desk';
 
     /////////////////////////////////////////////////

@@ -7,18 +7,18 @@ use core\utils\SessionUtils;
  * Classe AdminPageBean
  * @author Hugues
  * @since 1.23.04.20
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class AdminPageBean extends UtilitiesBean
 {
     /**
      * Class Constructor
      * @since 1.23.04.20
-     * @version v1.23.06.25
+     * @version v1.23.07.02
      */
     public function __construct()
     {
-        //$this->analyzeUri();
+        // TODO : $this->analyzeUri();
     }
 
     /**

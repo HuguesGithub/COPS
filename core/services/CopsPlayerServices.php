@@ -8,7 +8,7 @@ use core\domain\CopsPlayerClass;
  * Classe CopsPlayerServices
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class CopsPlayerServices extends LocalServices
 {
@@ -22,7 +22,7 @@ class CopsPlayerServices extends LocalServices
 
     /**
      * @since v1.23.06.19
-     * @version v1.23.06.25
+     * @version v1.23.07.02
      */
     public function getCopsPlayers(array $attributes=[]): array
     {
@@ -31,6 +31,8 @@ class CopsPlayerServices extends LocalServices
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
         $matricule = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH;
         $password = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_PASSWORD] ?? self::SQL_JOKER_SEARCH;
+        $grade = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] ?? self::SQL_JOKER_SEARCH;
+        $section = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_SECTION] ?? self::SQL_JOKER_SEARCH;
 
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
         $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
@@ -55,6 +57,8 @@ class CopsPlayerServices extends LocalServices
             $id,
             $matricule,
             $password,
+            $grade,
+            $section,
             $orderBy,
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,

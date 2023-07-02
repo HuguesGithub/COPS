@@ -8,7 +8,7 @@ use core\utils\UrlUtils;
  * Classe TableauCellHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.18
+ * @version v1.23.07.02
  */
 class TableauCellHtmlBean extends UtilitiesBean
 {
@@ -17,6 +17,7 @@ class TableauCellHtmlBean extends UtilitiesBean
     private $strContent;
     private $arrAttributes;
 
+    private $isPublic = false;
     private $isSortable = false;
     private $urlElements = [];
     
@@ -38,7 +39,7 @@ class TableauCellHtmlBean extends UtilitiesBean
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.18
+     * @version v1.23.07.02
      */
     public function getBean(): string
     {
@@ -54,8 +55,17 @@ class TableauCellHtmlBean extends UtilitiesBean
             } else {
                 $this->urlElements[self::SQL_ORDER] = self::SQL_ORDER_ASC;
             }
-            $cellContent = HtmlUtils::getLink($this->strContent, UrlUtils::getAdminUrl($this->urlElements));
-            $this->arrAttributes[self::ATTR_CLASS] = $strSort.$this->strClass;
+
+            if ($this->isPublic) {
+                $url = UrlUtils::getPublicUrl($this->urlElements);
+                $strClass = self::CST_TEXT_WHITE;
+            } else {
+                $url = UrlUtils::getAdminUrl($this->urlElements);
+                $strClass = '';
+            }
+
+            $cellContent = HtmlUtils::getLink($this->strContent, $url, $strClass);
+            $this->arrAttributes[self::ATTR_CLASS] = $strSort.' '.$this->strClass;
             return $this->getBalise($this->strType, $cellContent, $this->arrAttributes);
         } else {
             $this->arrAttributes[self::ATTR_CLASS] = $this->strClass;
@@ -72,4 +82,7 @@ class TableauCellHtmlBean extends UtilitiesBean
         $this->isSortable = true;
         $this->urlElements = $urlElements;
     }
+
+    public function setPublic(bool $isPublic=false): void
+    { $this->isPublic = $isPublic; }
 }

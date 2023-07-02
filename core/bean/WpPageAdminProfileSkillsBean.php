@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminProfileSkillsBean
  * @author Hugues
  * @since v1.23.06.23
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
 {
@@ -33,6 +33,10 @@ class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
         /////////////////////////////////////////
     }
 
+    /**
+     * @since v1.23.07.02
+     * @version v1.23.07.02
+     */
     public function getOngletContent(): string
     {
         $colSkill1 = '';
@@ -54,50 +58,33 @@ class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
         $arrSkillJointWithName = [];
         while (!empty($objsSkillJoint)) {
             $objSkillJoint = array_shift($objsSkillJoint);
+            $strSkillName = $objSkillJoint->getSkill()->getField(self::FIELD_SKILL_NAME);
+            $strSkillName = str_replace('É', 'E', $strSkillName);
             $arrSkillJointWithName[] = [
-                self::ATTR_NAME => $objSkillJoint->getSkill()->getField(self::FIELD_SKILL_NAME),
+                self::ATTR_NAME => $strSkillName.'-'.$objSkillJoint->getField(self::FIELD_SPEC_SKILL_ID),
                 'obj' => $objSkillJoint,
             ];
         }
 
+        usort($arrSkillJointWithName, fn($a, $b) => strcmp($a[self::ATTR_NAME], $b[self::ATTR_NAME]));
+
         $cpt = 0;
+        $nbSkills = count($arrSkillJointWithName);
+        $prevSkillName = '';
+        $prevColId = 0;
         while (!empty($arrSkillJointWithName)) {
-            ++$cpt;
             $arrData = array_shift($arrSkillJointWithName);
             $objSkillJoint = $arrData['obj'];
-            ${'colSkill'.$cpt} .= $objSkillJoint->getBean()->getCartouche();
-            $cpt %= 3;
+            $newSkillName = $objSkillJoint->getSkill()->getField(self::FIELD_SKILL_NAME);
+            $colId = ceil(3*$cpt/$nbSkills);
+            if ($newSkillName==$prevSkillName && $prevColId!=$colId) {
+                --$colId;
+            }
+            ${'colSkill'.$colId} .= $objSkillJoint->getBean()->getCartouche();
+            ++$cpt;
+            $prevSkillName = $newSkillName;
+            $prevColId = $colId;
         }
-
-    /*
-
-        // Première colonne.
-        $colCarac1  = $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_CARRURE);
-        $colCarac1 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_CHARME);
-        $colCarac1 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_COORDINATION);
-        $colCarac1 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_EDUCATION);
-
-        // Deuxième colonne.
-        $colCarac2  = $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_PERCEPTION);
-        $colCarac2 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_REFLEXES);
-
-        $strSpan = HtmlUtils::getBalise(self::TAG_SPAN, 'Init min.', [self::ATTR_CLASS=>'input-group-text col-9']);
-        $inputAttributes = [
-            self::ATTR_TYPE => 'number',
-            self::ATTR_CLASS => 'form-control text-center col-3',
-            self::ATTR_VALUE => $this->objCopsPlayer->getInitMin(),
-            self::CST_READONLY => '',
-        ];
-        $strInput = HtmlUtils::getBalise(self::TAG_INPUT, '', $inputAttributes);
-        $colCarac2 .= HtmlUtils::getDiv($strSpan.$strInput, [self::ATTR_CLASS=>'col-12 input-group mb-3']);
-        $colCarac2 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_SANGFROID);
-
-        // Troisième colonne
-        $colCarac3  = $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PV_MAX);
-        $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAD_MAX);
-        $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAN_MAX);
-        $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PX_CUMUL);
-        */
 
         $urlTemplate = self::WEB_PPFS_PFL_SKILLS;
         $attributes = [

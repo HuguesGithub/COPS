@@ -1,8 +1,6 @@
 <?php
 namespace core\bean;
 
-use core\domain\CopsPlayerClass;
-use core\services\CopsPlayerServices;
 use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
@@ -10,7 +8,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminProfileAbilityBean
  * @author Hugues
  * @since v1.23.06.20
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
 {
@@ -32,19 +30,12 @@ class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
         /////////////////////////////////////////
     }
 
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.07.02
+     */
     public function getOngletContent(): string
     {
-        $objCopsPlayerServices = new CopsPlayerServices();
-        $attributes[self::SQL_WHERE_FILTERS] = [
-            self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
-        ];
-        $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
-        if (!empty($objsCopsPlayer)) {
-            $this->objCopsPlayer = array_shift(($objsCopsPlayer));
-        } else {
-            $this->objCopsPlayer = new CopsPlayerClass();
-        }
-
         // Première colonne.
         $colCarac1  = $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_CARRURE);
         $colCarac1 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_CARAC_CHARME);

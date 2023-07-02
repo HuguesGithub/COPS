@@ -1,20 +1,25 @@
 <?php
 namespace core\bean;
 
+use core\domain\CopsPlayerClass;
+use core\services\CopsPlayerServices;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
  * Classe WpPageAdminProfileBean
  * @author Hugues
  * @since v1.23.06.20
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class WpPageAdminProfileBean extends WpPageAdminBean
 {
+    public $objCopsPlayer;
+    
     /**
      * @since v1.23.06.20
-     * @version v1.23.06.25
+     * @version v1.23.07.02
      */
     public function __construct()
     {
@@ -26,9 +31,12 @@ class WpPageAdminProfileBean extends WpPageAdminBean
             self::CST_PFL_IDENTITY    => [self::FIELD_LABEL => self::LABEL_IDENTITY],
             self::CST_PFL_ABILITIES   => [self::FIELD_LABEL => self::LABEL_ABILITIES],
             self::CST_PFL_SKILLS      => [self::FIELD_LABEL => self::LABEL_SKILLS],
+            /**
+             * TODO : à implémenter
             self::CST_PFL_EQUIPMENT   => [self::FIELD_LABEL => self::LABEL_EQUIPMENT],
             self::CST_PFL_CONTACTS    => [self::FIELD_LABEL => self::LABEL_CONTACTS],
             self::CST_PFL_BACKGROUND  => [self::FIELD_LABEL => self::LABEL_BACKGROUND]
+             */
         ];
         /////////////////////////////////////////
         $this->defaultSubOnglet = self::CST_PFL_IDENTITY;
@@ -43,7 +51,34 @@ class WpPageAdminProfileBean extends WpPageAdminBean
         );
         $this->breadCrumbsContent .= HtmlUtils::getButton($buttonContent, [self::ATTR_CLASS=>' '.self::BTS_BTN_DARK]);
         /////////////////////////////////////////
+
+        $this->initProfile();
     }
+
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.07.02
+     */
+    public function initProfile(): void
+    {
+        $objCopsPlayerServices = new CopsPlayerServices();
+        $id = SessionUtils::fromGet(self::FIELD_ID);
+        if ($id=='') {
+            $attributes[self::SQL_WHERE_FILTERS] = [
+                self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
+            ];
+        } else {
+            $attributes[self::SQL_WHERE_FILTERS] = [
+                self::FIELD_ID => $id,
+            ];
+        }
+        $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
+        if (!empty($objsCopsPlayer)) {
+            $this->objCopsPlayer = array_shift(($objsCopsPlayer));
+        } else {
+            $this->objCopsPlayer = new CopsPlayerClass();
+        }
+}
      
     /**
      * @since v1.23.06.20

@@ -1,8 +1,7 @@
 <?php
 namespace core\bean;
 
-use core\domain\CopsPlayerClass;
-use core\services\CopsPlayerServices;
+use core\enum\SectionEnum;
 use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
@@ -10,7 +9,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminProfileIdentityBean
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class WpPageAdminProfileIdentityBean extends WpPageAdminProfileBean
 {
@@ -34,42 +33,86 @@ class WpPageAdminProfileIdentityBean extends WpPageAdminProfileBean
 
     /**
      * @since v1.23.06.25
-     * @version v1.23.06.25
+     * @version v1.23.07.02
      */
     public function getOngletContent(): string
     {
-        $objCopsPlayerServices = new CopsPlayerServices();
-        $attributes[self::SQL_WHERE_FILTERS] = [
-            self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
-        ];
-        $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
-        if (!empty($objsCopsPlayer)) {
-            $this->objCopsPlayer = array_shift(($objsCopsPlayer));
-        } else {
-            $this->objCopsPlayer = new CopsPlayerClass();
-        }
-
         $urlTemplate = self::WEB_PPFS_PFL_IDENTITY;
         $attributes = [
             // Url du formulaire
             UrlUtils::getPublicUrl($this->urlAttributes),
+            // Onglets
+            $this->getTabsBar(),
+            // Premier Block
+            $this->getFirstBlock(),
+            // Deuxième Block
+            $this->getSecondBlock(),
+            // Troisième Block
+            $this->getThirdBlock(),
+        ];
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.07.02
+     */
+    public function getFirstBlock(): string
+    {
+        $urlTemplate = self::WEB_PPFD_PFL_ID_NAME;
+        $attributes = [
             // Id du profile
             $this->objCopsPlayer->getField(self::FIELD_ID),
             // Nom, Prénom et Surnom
             $this->objCopsPlayer->getField(self::FIELD_NOM),
             $this->objCopsPlayer->getField(self::FIELD_PRENOM),
             $this->objCopsPlayer->getField(self::FIELD_SURNOM),
+        ];
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.07.02
+     */
+    public function getSecondBlock(): string
+    {
+        $urlTemplate = self::WEB_PPFD_PFL_ID_PHYSIQUE;
+        $attributes = [
+            // Id du profile
+            $this->objCopsPlayer->getField(self::FIELD_ID),
             // Date de naissance, Taille, Poids
             $this->objCopsPlayer->getField(self::FIELD_BIRTH_DATE),
             $this->objCopsPlayer->getField(self::FIELD_TAILLE),
             $this->objCopsPlayer->getField(self::FIELD_POIDS),
+            // Cheveux et Yeux
+            $this->objCopsPlayer->getField(self::FIELD_CHEVEUX),
+            $this->objCopsPlayer->getField(self::FIELD_YEUX),
+            // Sexe et Ethnie
+            $this->objCopsPlayer->getField(self::FIELD_SEXE),
+            $this->objCopsPlayer->getField(self::FIELD_ETHNIE),
+        ];
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since v1.23.06.25
+     * @version v1.23.07.02
+     */
+    public function getThirdBlock(): string
+    {
+        $strSection = $this->objCopsPlayer->getField(self::FIELD_SECTION);
+        $urlTemplate = self::WEB_PPFD_PFL_ID_GRADE;
+        $attributes = [
+            // Id du profile
+            $this->objCopsPlayer->getField(self::FIELD_ID),
             // Grade, Rang, Echelon, Section, Date d'intégration
             $this->objCopsPlayer->getField(self::FIELD_GRADE),
-            $this->objCopsPlayer->getField(self::FIELD_SECTION),
+            SectionEnum::from($strSection)->label(),
             $this->objCopsPlayer->getField(self::FIELD_GRADE_RANG),
             $this->objCopsPlayer->getField(self::FIELD_GRADE_ECHELON),
             $this->objCopsPlayer->getField(self::FIELD_INTEGRATION_DATE),
         ];
-        return $this->getTabsBar().$this->getRender($urlTemplate, $attributes);
+        return $this->getRender($urlTemplate, $attributes);
     }
 }

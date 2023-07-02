@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\utils\HtmlUtils;
+use core\utils\UrlUtils;
 
 /**
  * CopsPlayerBean
  * @author Hugues
  * @since 1.22.04.27
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class CopsPlayerBean extends UtilitiesBean
 {
@@ -59,6 +60,38 @@ class CopsPlayerBean extends UtilitiesBean
             $curValue,
         ];
         return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.02
+     * @version v1.23.07.02
+     */
+    public function getTableRow()
+    {
+        $objRow = new TableauRowHtmlBean();
+        $urlElements = [
+            self::WP_PAGE => self::PAGE_ADMIN,
+            self::CST_ONGLET => self::ONGLET_PROFILE,
+            self::FIELD_ID => $this->objCopsPlayer->getField(self::FIELD_ID),
+        ];
+        $strLink = HtmlUtils::getLink(
+            $this->objCopsPlayer->getField(self::FIELD_MATRICULE),
+            UrlUtils::getPublicUrl($urlElements),
+            self::CST_TEXT_WHITE.' ',
+        );
+        $objRow->addCell(new TableauCellHtmlBean($strLink));
+        // Le Nom du COPS
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsPlayer->getField(self::FIELD_NOM)));
+        // Le Prénom du COPS
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsPlayer->getField(self::FIELD_PRENOM)));
+        // Le Surnom du COPS
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsPlayer->getField(self::FIELD_SURNOM)));
+        // Le Grade du COPS
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsPlayer->getField(self::FIELD_GRADE)));
+        // La Section du COPS
+        $objRow->addCell(new TableauCellHtmlBean($this->objCopsPlayer->getField(self::FIELD_SECTION)));
+
+        return $objRow;
     }
 
 

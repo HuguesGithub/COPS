@@ -3,12 +3,13 @@ namespace core\bean;
 
 use core\bean\TableauBodyHtmlBean;
 use core\utils\HtmlUtils;
+use core\utils\UrlUtils;
 
 /**
  * Classe PaginationHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.18
+ * @version v1.23.07.02
  */
 class PaginationHtmlBean extends UtilitiesBean
 {
@@ -139,13 +140,17 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.18
+     * @version v1.23.07.02
      */
     public function getQueryArg(): string
     {
-        $this->queryArg['page'] = 'hj-cops/admin_manage.php';
-        $remArg = ['form', 'id'];
-        return add_query_arg($this->queryArg, remove_query_arg($remArg, 'https://cops.jhugues.fr/wp-admin/admin.php'));
+        if (isset($this->queryArg['page'])) {
+            return UrlUtils::getPublicUrl($this->queryArg);
+        } else {
+            $this->queryArg['page'] = 'hj-cops/admin_manage.php';
+            $remArg = ['form', 'id'];
+            return add_query_arg($this->queryArg, remove_query_arg($remArg, 'https://cops.jhugues.fr/wp-admin/admin.php'));
+        }
     }
 
 }

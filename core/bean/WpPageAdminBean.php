@@ -14,7 +14,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -60,7 +60,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since v1.23.06.19
-     * @version v1.23.06.25
+     * @version v1.23.07.02
      */
     public function initSidebar(): void
     {
@@ -72,6 +72,10 @@ class WpPageAdminBean extends WpPageBean
 //            self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => self::LABEL_LIBRARY]
         ];
 /*
+            self::ONGLET_USERS => [
+                self::FIELD_ICON  => self::I_USERS,
+                self::FIELD_LABEL => 'COPS',
+            ],
     if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
             $this->arrSidebarContentNonGuest = [
                 self::ONGLET_INBOX => [self::FIELD_ICON  => 'envelope', self::FIELD_LABEL => self::LABEL_MESSAGERIE],
@@ -168,7 +172,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since v1.23.06.25
-     * @version v1.23.06.25
+     * @version v1.23.07.02
      */
     protected function getSideBar(): string
     {
@@ -179,29 +183,31 @@ class WpPageAdminBean extends WpPageBean
            $this->urlParams[self::CST_ONGLET] = '';
         }
         foreach ($this->arrSidebarContent as $strOnglet => $arrOnglet) {
-           $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
-           $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
+            $curOnglet = ($strOnglet==$this->urlParams[self::CST_ONGLET]);
+            $hasChildren = isset($arrOnglet[self::CST_CHILDREN]);
         
-           // Construction du label
-           $pContent  = $arrOnglet[self::FIELD_LABEL];
-           $pContent .= ($hasChildren ? HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'right') : '');
+            // Construction du label
+            $pContent  = $arrOnglet[self::FIELD_LABEL];
+            $pContent .= ($hasChildren ? HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'right') : '');
         
-           // Construction du lien
-           $aContent  = HtmlUtils::getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
-           $aContent .= $this->getBalise(self::TAG_P, $pContent);
-           $strClasse = 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '');
-           $superLiContent = HtmlUtils::getLink($aContent, $this->urlOnglet.$strOnglet, $strClasse);
+            // Construction du lien
+            $aContent  = HtmlUtils::getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
+            $aContent .= $this->getBalise(self::TAG_P, $pContent);
+            $strClasse = 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '');
+            unset($this->urlAttributes[self::CST_SUBONGLET]);
+            $urlAttributes = array_merge($this->urlAttributes, [self::CST_ONGLET => $strOnglet]);
+            $superLiContent = HtmlUtils::getLink($aContent, UrlUtils::getPublicUrl($urlAttributes), $strClasse);
         
-           // S'il a des enfants, on enrichit
-           if ($hasChildren) {
-               $ulContent = $this->getSideBarChildren($arrOnglet, $strOnglet);
-               $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
-               $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
-           }
+            // S'il a des enfants, on enrichit
+            if ($hasChildren) {
+                $ulContent = $this->getSideBarChildren($arrOnglet, $strOnglet);
+                $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
+                $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
+            }
         
-           // Construction de l'élément de la liste
-           $liAttributes = [self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : '')];
-           $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
+            // Construction de l'élément de la liste
+            $liAttributes = [self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : '')];
+            $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
         }
         
         $attributes = [
@@ -216,23 +222,24 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since 1.22.10.18
-     * @version 1.22.10.18
+     * @version v1.23.07.02
      */
     public function getNavigationBar()
     {
         $urlTemplate = self::WEB_PPFS_CONTENT_NAVBAR;
 
         $strLis = '';
-
         if ($this->objCopsPlayer->getField(self::FIELD_ID)!=64) {
             // Si on est identifié, mais pas Guest...
             $aContent = HtmlUtils::getIcon('user');
-            $liContent = HtmlUtils::getLink($aContent, '/admin?onglet=profile', 'nav-link');
-            $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
+            $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, self::CST_ONGLET=>self::ONGLET_PROFILE]);
+            $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
+            $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);
         }
         $aContent = HtmlUtils::getIcon('right-from-bracket');
-        $liContent = HtmlUtils::getLink($aContent, '/admin?logout=logout', 'nav-link');
-        $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>'nav-item']);
+        $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, 'logout'=>'logout']);
+        $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);
 
         $attributes = [$strLis];
         return $this->getRender($urlTemplate, $attributes);
@@ -295,19 +302,13 @@ class WpPageAdminBean extends WpPageBean
 
 
 
-    private function initServices()
-    {
-        // On initialise les services
-        $this->objWpCategoryServices = new WpCategoryServices();
-        $this->objCopsIndexServices  = new CopsIndexServices();
-    }
 
     /**
      * @return string
      * @since 1.22.10.18
-     * @version 1.22.10.19
+     * @version v1.23.07.02
      */
-    public function getContentPage()
+    public function getContentPage(): string
     {
         if (!static::isCopsLogged()) {
             // Soit on n'est pas loggué et on affiche la mire d'identification.
@@ -328,11 +329,12 @@ class WpPageAdminBean extends WpPageBean
 
         $strOnglet = SessionUtils::fromGet(self::CST_ONGLET);
         $objBean = match ($strOnglet) {
+            self::ONGLET_PROFILE => WpPageAdminProfileBean::getStaticWpPageBean($this->slugSubOnglet),
+
+
             self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
             self::ONGLET_INBOX => WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet),
             self::ONGLET_LIBRARY => WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet),
-            'player' => new AdminCopsPlayerPageBean(),
-            self::ONGLET_PROFILE => WpPageAdminProfileBean::getStaticWpPageBean($this->slugSubOnglet),
             self::ONGLET_ENQUETE => new WpPageAdminEnqueteBean(),
             self::ONGLET_AUTOPSIE => new WpPageAdminAutopsieBean(),
             default => $this,
@@ -344,9 +346,9 @@ class WpPageAdminBean extends WpPageBean
      * Retourne le contenu de l'interface
      * @return string
      * @since 1.22.10.18
-     * @version 1.22.10.18
+     * @version v1.23.07.02
      */
-    public function getBoard()
+    public function getBoard(): string
     {
         // Soit on est loggué et on affiche le contenu du bureau du cops
         $urlTemplate = self::WEB_PP_BOARD;
@@ -358,7 +360,7 @@ class WpPageAdminBean extends WpPageBean
             // L'id
             $this->objCopsPlayer->getMaskMatricule(),
             // Le nom
-            $this->objCopsPlayer->getFullName().' <em>'.$this->objCopsPlayer->getField(self::FIELD_SURNOM).'</em>',
+            $this->objCopsPlayer->getFullName(),
             // La barre de navigation
             $this->getNavigationBar(),
             // Header

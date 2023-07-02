@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.06.25
+ * @version v1.23.07.02
  */
 interface UrlsInterface
 {
@@ -40,6 +40,7 @@ interface UrlsInterface
     public const WEB_PA_CAL_EVT_EDIT_REPINT = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-recursive-block.tpl';
     public const WEB_PA_CAL_EVT_EDIT_CUSTOM = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-custom-block.tpl';
     public const WEB_PA_CALENDAR_EVENT_LIST = self::WEB_PAGES_ADMIN.'page-admin-calendar-events-list.tpl';
+    public const WEB_PA_PROFILE_USER_LIST   = self::WEB_PAGES_ADMIN.'page-admin-profile-users-list.tpl';
     public const WEB_PAF_PAGINATION         = self::WEB_PA_FRAGMENTS.'page-admin-fragments-pagination.tpl';
     public const WEB_PAFS_CALENDAR          = self::WEB_PA_FRAGMENTS.'page-admin-fragments-section-calendar.tpl';
     public const WEB_PAFT_EVENT_ROW         = self::WEB_PA_FRAGMENTS.'page-admin-fragments-tr-event-row.tpl';
@@ -59,6 +60,9 @@ interface UrlsInterface
     public const WEB_PPFD_INSET_EVENT       = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-inset-event.tpl';
     public const WEB_PPFD_PFL_ABILITY       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-ability.tpl';
     public const WEB_PPFD_PFL_SKILL         = self::WEB_PPF_DIV     .'publique-fragments-div-profile-skill.tpl';
+    public const WEB_PPFD_PFL_ID_GRADE      = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-grade.tpl';
+    public const WEB_PPFD_PFL_ID_NAME       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-name.tpl';
+    public const WEB_PPFD_PFL_ID_PHYSIQUE   = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-physique.tpl';
     public const WEB_PPFF_LIBRARY_INDEX     = self::WEB_PPF_FORM    .'publique-fragments-form-library-index.tpl';
     public const WEB_PPFS_CALENDAR          = self::WEB_PPF_SECTION .'publique-fragments-section-calendar.tpl';
     public const WEB_PPFS_CAL_DAY           = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-day.tpl';
