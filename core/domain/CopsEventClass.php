@@ -9,7 +9,7 @@ use core\utils\DateUtils;
  * Classe CopsEventClass
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.06.04
+ * @version v1.23.07.09
  */
 class CopsEventClass extends LocalDomainClass
 {
@@ -384,6 +384,7 @@ class CopsEventClass extends LocalDomainClass
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.07.09
      */
     public function isSeveralWeeks(): bool
     {
@@ -395,11 +396,12 @@ class CopsEventClass extends LocalDomainClass
         $d = substr((string) $this->dateDebut, 8);
         $y = substr((string) $this->dateDebut, 0, 4);
         $tsDeb = mktime(0, 0, 0, $m, $d, $y);
-        return (date('W', $tsDeb)!=date('W', $tsFin));
+        return date('W', $tsDeb)!=date('W', $tsFin);
     }
 
     /**
      * @since 1.23.04.21
+     * @version v1.23.07.09
      */
     public function isOverThisWeek(int $tsDisplay): bool
     {
@@ -407,7 +409,7 @@ class CopsEventClass extends LocalDomainClass
         $d = substr((string) $this->dateFin, 8);
         $y = substr((string) $this->dateFin, 0, 4);
         $tsFin = mktime(0, 0, 0, $m, $d, $y);
-        return (date('W', $tsDisplay)!=date('W', $tsFin));
+        return date('W', $tsDisplay)!=date('W', $tsFin);
     }
 
     /**

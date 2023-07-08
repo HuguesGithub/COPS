@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * Classe PaginationHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.07.02
+ * @version v1.23.07.09
  */
 class PaginationHtmlBean extends UtilitiesBean
 {
@@ -140,16 +140,18 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.02
+     * @version v1.23.07.09
      */
     public function getQueryArg(): string
     {
+        $urlRoot = 'https://cops.jhugues.fr/wp-admin/admin.php';
+        
         if (isset($this->queryArg['page'])) {
             return UrlUtils::getPublicUrl($this->queryArg);
         } else {
             $this->queryArg['page'] = 'hj-cops/admin_manage.php';
             $remArg = ['form', 'id'];
-            return add_query_arg($this->queryArg, remove_query_arg($remArg, 'https://cops.jhugues.fr/wp-admin/admin.php'));
+            return add_query_arg($this->queryArg, remove_query_arg($remArg, $urlRoot));
         }
     }
 

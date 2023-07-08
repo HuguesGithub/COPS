@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminUserBean
  * @author Hugues
  * @since v1.23.06.26
- * @version v1.23.07.02
+ * @version v1.23.07.09
  */
 class WpPageAdminUserBean extends WpPageAdminBean
 {
@@ -41,9 +41,9 @@ class WpPageAdminUserBean extends WpPageAdminBean
      
     /**
      * @since v1.23.06.26
-     * @version v1.23.07.02
+     * @version v1.23.07.09
      */
-    public static function getStaticWpPageBean($slugSubContent)
+    public static function getStaticWpPageBean(): WpPageAdminUserBean
     { return new WpPageAdminUserBean(); }
 
     /**
