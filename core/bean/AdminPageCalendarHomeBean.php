@@ -16,29 +16,12 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.02
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getContentOnglet(): string
     {
         $this->dealWithGetActions();
-
-        // Récupération des onglets de navigation.
-        $strNavigation = $this->getContentPage();
-        
-        // Construction du Breadcrumbs
-        $this->buildBreadCrumbs();
-
-        $strCards = $this->getCard();
-
-        //
-        $attributes = [
-            $this->pageTitle,
-            $this->pageSubTitle,
-            $this->strBreadcrumbs,
-            $strNavigation,
-            $strCards,
-        ];
-        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+        return parent::getContentOnglet();
     }
 
     /**

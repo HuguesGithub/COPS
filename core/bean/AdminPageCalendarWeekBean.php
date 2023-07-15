@@ -16,34 +16,16 @@ use core\utils\UrlUtils;
 class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 {
     /**
-     * @since v1.23.05.04
-     * @version v1.23.07.15
+     * @since v1.23.05.02
+     * @version v1.23.07.22
      */
     public function getContentOnglet(): string
     {
         // Récupération de la date
         $this->curStrDate = $this->initVar(self::CST_CAL_CURDAY, DateUtils::getCopsDate(self::FORMAT_DATE_YMD));
-
-        // Récupération des onglets de navigation.
-        $strNavigation = $this->getContentPage();
-
-        // Construction du Breadcrumbs
-        $this->buildBreadCrumbs();
-
-        // Récupération du contenu principal
-        $strCards = $this->getCard();
-
-        // Construction et renvoi du template
-        $attributes = [
-            $this->pageTitle,
-            $this->pageSubTitle,
-            $this->strBreadcrumbs,
-            $strNavigation,
-            $strCards,
-        ];
-        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+        return parent::getContentOnglet();
     }
-
+    
     /**
      * @since v1.23.07.08
      * @version v1.23.07.15

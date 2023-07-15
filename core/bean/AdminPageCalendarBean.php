@@ -83,15 +83,33 @@ class AdminPageCalendarBean extends AdminPageBean
         $strLink = HtmlUtils::getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
-
+ 
     /**
-     * @since v1.23.05.01
-     * @version v1.23.05.07
+     * @since v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getContentOnglet(): string
     {
-        return 'Default. Specific getContentOnglet() to be defined.';
+        // Récupération des onglets de navigation.
+        $strNavigation = $this->getContentPage();
+
+        // Construction du Breadcrumbs
+        $this->buildBreadCrumbs();
+
+        // Récupération du contenu principal
+        $strCards = $this->getCard();
+
+        // Construction et renvoi du template
+        $attributes = [
+            $this->pageTitle,
+            $this->pageSubTitle,
+            $this->strBreadcrumbs,
+            $strNavigation,
+            $strCards,
+        ];
+        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
     }
+
 
     /**
      * @since v1.23.05.03

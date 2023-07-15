@@ -21,7 +21,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.15
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getContentOnglet(): string
     {
@@ -44,21 +44,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
         }
         /////////////////////////////////////////
 
-        // Récupération des onglets de navigation.
-        $strNavigation = $this->getContentPage();
-
-        // Construction du Breadcrumbs
-        $this->buildBreadCrumbs();
-
-        // Construction et renvoi du template
-        $attributes = [
-            $this->pageTitle,
-            $this->pageSubTitle,
-            $this->strBreadcrumbs,
-            $strNavigation,
-            $this->getCard(),
-        ];
-        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+        return parent::getContentOnglet();
     }
 
     /**
