@@ -10,10 +10,20 @@ use core\utils\UrlUtils;
  * AdminPageCalendrierBean
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.06.25
+ * @version v1.23.07.15
  */
 class AdminPageCalendarBean extends AdminPageBean
 {
+    /**
+     * @since v1.23.07.09
+     * @version v1.23.07.15
+     */
+    public function __construct()
+    {
+        $this->pageTitle = self::LABEL_CALENDAR;
+        $this->pageSubTitle = 'Gestion de la partie administrative du calendrier';
+    }
+
     /**
      * @since v1.23.05.01
      * @version v1.23.06.25
@@ -33,12 +43,10 @@ class AdminPageCalendarBean extends AdminPageBean
 
     /**
      * @since v1.23.05.01
-     * @version v1.23.05.28
+     * @version v1.23.07.15
      */
     public function getContentPage(): string
     {
-        // On récupère l'éventuel subonglet.
-        $curSubOnglet = $this->initVar(self::CST_SUBONGLET);
         // On récupère la date du jour.
         $this->curStrDate = $this->initVar(self::CST_CAL_CURDAY, DateUtils::getCopsDate(self::FORMAT_DATE_YMD));
 
@@ -55,38 +63,25 @@ class AdminPageCalendarBean extends AdminPageBean
 
         /////////////////////////////////////////
         // Construction des onglets
-        $urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR, self::CST_CAL_CURDAY=>$this->curStrDate];
-        $strLis = '';
-        foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
-            $urlAttributes[self::CST_SUBONGLET] = $slugSubOnglet;
-            $strIcon = '';
-
-            if (!empty($arrData[self::FIELD_ICON])) {
-                $strIcon = HtmlUtils::getIcon($arrData[self::FIELD_ICON]).self::CST_NBSP;
-            }
-
-            $blnActive = ($curSubOnglet==$slugSubOnglet || $curSubOnglet=='' && $slugSubOnglet==self::CST_HOME);
-            $strLink = HtmlUtils::getLink(
-                $strIcon.$arrData[self::FIELD_LABEL],
-                UrlUtils::getAdminUrl($urlAttributes),
-                self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
-            );
-            $strLis .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>self::NAV_ITEM]);
-        }
+        $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR, self::CST_CAL_CURDAY=>$this->curStrDate];
+        $strLis = $this->buildTabs();
         $attributes = [self::ATTR_CLASS=>implode(' ', [self::NAV, self::NAV_PILLS, self::NAV_FILL])];
-        /////////////////////////////////////////
-        
-        /////////////////////////////////////////
-        // Construction du Breadcrumbs
-        $this->styleBreadCrumbs = 'breadcrumb-item '.self::CSS_FLOAT_LEFT;
-        $strLink = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_HOUSE), UrlUtils::getAdminUrl(), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
-        $urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR];
-        $strLink = HtmlUtils::getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
         /////////////////////////////////////////
 
         return $this->getBalise(self::TAG_UL, $strLis, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.08
+     * @version v1.23.07.15
+     */
+    public function buildBreadCrumbs(): void
+    {
+        parent::buildBreadCrumbs();
+
+        $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR];
+        $strLink = HtmlUtils::getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
 
     /**

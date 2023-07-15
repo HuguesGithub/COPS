@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoMoonBean
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.06.18
+ * @version v1.23.07.15
  */
 class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 {
@@ -19,7 +19,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
      * Affichage des données de la table wp_7_cops_lune pour une semaine donnée.
      * Par défaut, on affiche de la précente nouvelle lune jusqu'au thirdquarter correspondant.
      * @since v1.23.04.27
-     * @version v1.23.06.18
+     * @version v1.23.07.15
      */
     public function getContentOnglet(): string
     {
@@ -27,19 +27,29 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         $strNavigation = $this->getContentPage();
 
         // Construction du Breadcrumbs
-        $urlAttributes = [
-            self::CST_ONGLET => self::ONGLET_METEO,
-            self::CST_SUBONGLET => self::CST_MOON,
-        ];
-        $strLink = HtmlUtils::getLink(self::LABEL_MOON, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->buildBreadCrumbs();
 
         $attributes = [
+            $this->pageTitle,
+            $this->pageSubTitle,
             $this->strBreadcrumbs,
             $strNavigation,
             $this->getCardOnglet('Données cycle lunaire', $this->getListContent()),
         ];
-        return $this->getRender(self::WEB_PA_METEO, $attributes);
+        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.08
+     * @version v1.23.07.15
+     */
+    public function buildBreadCrumbs(): void
+    {
+        parent::buildBreadCrumbs();
+
+        $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_MOON;
+        $strLink = HtmlUtils::getLink(self::LABEL_MOON, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
 
     /**

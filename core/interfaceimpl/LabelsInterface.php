@@ -4,14 +4,16 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.24
- * @version v1.23.06.25
+ * @version v1.23.07.15
  */
 interface LabelsInterface
 {
     public const LABEL_HOME           = 'Accueil';
     public const LABEL_ACTUELLE       = 'Actuelle';
     public const LABEL_YEARLY         = 'Annuel';
+    public const LABEL_WEAPONS        = 'Armes';
     public const LABEL_NO_RESULT      = 'Aucun résultat';
+    public const LABEL_OTHERS         = 'Autres';
     public const LABEL_DATABASES      = 'Bases de données';
     public const LABEL_BACKGROUND     = 'Background';
     public const LABEL_BAROMETER      = 'Baromètre';
@@ -77,6 +79,7 @@ interface LabelsInterface
     public const LABEL_TABLE_SOLEIL   = 'Table Soleil';
     public const LABEL_TEMP           = 'Temp.';
     public const LABEL_WIND           = 'Vent';
+    public const LABEL_CARS           = 'Véhicules';
     public const LABEL_VISIBILITY     = 'Visibilité';
     
     public const DYN_DISPLAYED_PAGINATION = '%1$s - %2$s sur %3$s';

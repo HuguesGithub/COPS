@@ -11,7 +11,7 @@ use core\domain\CopsIndexTomeClass;
  * Classe CopsIndexServices
  * @author Hugues
  * @since 1.22.10.21
- * @version v1.23.05.14
+ * @version v1.23.07.15
  */
 class CopsIndexServices extends LocalServices
 {
@@ -198,6 +198,29 @@ class CopsIndexServices extends LocalServices
     //////////////////////////////////////////////////
 
     /**
+     * @since v1.23.07.13
+     * @version v1.23.07.15
+     */
+    public function getIndexTomes(array $attributes=[]): array
+    {
+        $this->Dao = new CopsIndexDaoImpl();
+
+        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $abbr = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ABR_IDX_TOME] ?? self::SQL_JOKER_SEARCH;
+        ///////////////////////////////////////////////////////////
+
+        $prepAttributes = [
+            $id,
+            $abbr,
+            self::FIELD_NOM_IDX_TOME,
+            self::SQL_ORDER_ASC,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+        return $this->Dao->getIndexTomes($prepAttributes);
+    }
+
+
+    /**
      * Retourne l'entité correspondant à l'identifiant
      * @param int $tomeId
      * @return CopsIndexTome
@@ -213,15 +236,17 @@ class CopsIndexServices extends LocalServices
 
     /**
      * Retourne l'entité IndexTome correspondant au paramètre
-     * @param string $abr
-     * @return CopsIndexNatureClass
      * @since 1.23.02.20
-     * @version v1.23.05.14
+     * @version v1.23.07.15
      */
-    public function getIndexTomeByAbr($abr)
+    public function getIndexTomeByAbr(string $abr): CopsIndexTomeClass
     {
-        $attributes = [$abr];
-        $items = $this->Dao->getIndexTomes($attributes);
+        $attributes = [
+            self::SQL_WHERE_FILTERS => [
+                self::FIELD_ABR_IDX_TOME => $abr
+            ],
+        ];
+        $items = $this->getIndexTomes($attributes);
         return empty($items) ? new CopsIndexTomeClass : new CopsIndexTomeClass($items[0]);
     }
 }

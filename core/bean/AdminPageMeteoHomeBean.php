@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoHomeBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.06.25
+ * @version v1.23.07.15
  */
 class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 {
@@ -19,7 +19,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.29
-     * @version v1.23.06.18
+     * @version v1.23.07.15
      */
     public function getContentOnglet(): string
     {
@@ -35,11 +35,7 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
         $strNavigation = $this->getContentPage();
 
         // Construction du Breadcrumbs
-        $urlAttributes = [
-            self::CST_ONGLET => self::ONGLET_METEO,
-        ];
-        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->buildBreadCrumbs();
 
         // Initialisation de la liste des cards qu'on va afficher.
         // Card Meteo
@@ -69,11 +65,25 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
         // On va afficher la dernière donnée enregistrée
         // Et on veut permettre d'aller chercher la suivante pour mettre à jour les données correspondantes.
         $attributes = [
+            $this->pageTitle,
+            $this->pageSubTitle,
             $this->strBreadcrumbs,
             $strNavigation,
             $strCards,
         ];
-        return $this->getRender(self::WEB_PA_METEO, $attributes);
+        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.08
+     * @version v1.23.07.15
+     */
+    public function buildBreadCrumbs(): void
+    {
+        parent::buildBreadCrumbs();
+
+        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
 
     /**

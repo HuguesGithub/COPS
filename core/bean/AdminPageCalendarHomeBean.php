@@ -10,13 +10,13 @@ use core\utils\UrlUtils;
  * AdminPageCalendarHomeBean
  * @author Hugues
  * @since v1.23.05.02
- * @version v1.23.06.25
+ * @version v1.23.07.15
  */
 class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.02
-     * @version v1.23.05.28
+     * @version v1.23.07.15
      */
     public function getContentOnglet(): string
     {
@@ -26,21 +26,31 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
         $strNavigation = $this->getContentPage();
         
         // Construction du Breadcrumbs
-        $urlAttributes = [
-            self::CST_ONGLET => self::ONGLET_CALENDAR,
-        ];
-        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->buildBreadCrumbs();
 
         $strCards = $this->getCard();
 
         //
         $attributes = [
+            $this->pageTitle,
+            $this->pageSubTitle,
             $this->strBreadcrumbs,
             $strNavigation,
             $strCards,
         ];
-        return $this->getRender(self::WEB_PA_CALENDAR, $attributes);
+        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.08
+     * @version v1.23.07.15
+     */
+    public function buildBreadCrumbs(): void
+    {
+        parent::buildBreadCrumbs();
+
+        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
 
     /**

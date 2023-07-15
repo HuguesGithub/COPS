@@ -19,7 +19,7 @@ class LocalServices extends GlobalServices
    * L'objet Dao pour faire les requêtes
    * @var $Dao
    */
-  protected $Dao;
+  protected $Dao=null;
 
   //////////////////////////////////////////////////
   // LOCAL CRUD

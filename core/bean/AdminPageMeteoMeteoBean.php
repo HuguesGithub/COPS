@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoMeteoBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.06.25
+ * @version v1.23.07.15
  */
 class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 {
@@ -19,7 +19,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
      * Affichage des données de la table wp_7_cops_meteo pour une journée donnée.
      * Par défaut, la journée affichée est la journée ingame.
      * @since v1.23.04.26
-     * @version v1.23.06.18
+     * @version v1.23.07.15
      */
     public function getContentOnglet(): string
     {
@@ -27,19 +27,29 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $strNavigation = $this->getContentPage();
 
         // Construction du Breadcrumbs
-        $urlAttributes = [
-            self::CST_ONGLET => self::ONGLET_METEO,
-            self::CST_SUBONGLET => self::CST_WEATHER,
-        ];
-        $strLink = HtmlUtils::getLink(self::LABEL_WEATHER, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->buildBreadCrumbs();
 
         $attributes = [
+            $this->pageTitle,
+            $this->pageSubTitle,
             $this->strBreadcrumbs,
             $strNavigation,
             $this->getCardOnglet('Données météo', $this->getListContent()),
         ];
-        return $this->getRender(self::WEB_PA_METEO, $attributes);
+        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.08
+     * @version v1.23.07.15
+     */
+    public function buildBreadCrumbs(): void
+    {
+        parent::buildBreadCrumbs();
+
+        $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_WEATHER;
+        $strLink = HtmlUtils::getLink(self::LABEL_WEATHER, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
 
     /**

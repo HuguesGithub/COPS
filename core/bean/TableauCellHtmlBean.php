@@ -8,7 +8,7 @@ use core\utils\UrlUtils;
  * Classe TableauCellHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.07.02
+ * @version v1.23.07.15
  */
 class TableauCellHtmlBean extends UtilitiesBean
 {
@@ -39,13 +39,13 @@ class TableauCellHtmlBean extends UtilitiesBean
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.02
+     * @version v1.23.07.15
      */
-    public function getBean(): string
+    public function getBean(string $defaultSortCol = ''): string
     {
         if ($this->isSortable) {
             $strSort = 'sorting';
-            $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_DATE_DEBUT);
+            $orderby = $this->initVar(self::SQL_ORDER_BY, $defaultSortCol);
 
             if ($orderby==$this->urlElements[self::SQL_ORDER_BY]) {
                 $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);

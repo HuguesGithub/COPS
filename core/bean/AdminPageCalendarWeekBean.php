@@ -11,13 +11,13 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarWeekBean
  * @author Hugues
  * @since v1.23.05.04
- * @version v1.23.05.28
+ * @version v1.23.07.15
  */
 class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 {
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.28
+     * @version v1.23.07.15
      */
     public function getContentOnglet(): string
     {
@@ -28,24 +28,34 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
         $strNavigation = $this->getContentPage();
 
         // Construction du Breadcrumbs
-        $urlAttributes = [
-            self::CST_ONGLET => self::ONGLET_CALENDAR,
-            self::CST_SUBONGLET => self::CST_CAL_WEEK,
-            self::CST_CAL_CURDAY => $this->curStrDate
-        ];
-        $strLink = HtmlUtils::getLink(self::LABEL_WEEKLY, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->buildBreadCrumbs();
 
         // Récupération du contenu principal
         $strCards = $this->getCard();
 
         // Construction et renvoi du template
         $attributes = [
+            $this->pageTitle,
+            $this->pageSubTitle,
             $this->strBreadcrumbs,
             $strNavigation,
             $strCards,
         ];
-        return $this->getRender(self::WEB_PA_CALENDAR, $attributes);
+        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.08
+     * @version v1.23.07.15
+     */
+    public function buildBreadCrumbs(): void
+    {
+        parent::buildBreadCrumbs();
+
+        $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_CAL_WEEK;
+        $this->urlAttributes[self::CST_CAL_CURDAY] = $this->curStrDate;
+        $strLink = HtmlUtils::getLink(self::LABEL_WEEKLY, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
 
     /**

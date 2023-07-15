@@ -4,11 +4,11 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.07.02
+ * @version v1.23.07.15
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.07.02';
+    public const VERSION              = 'v1.23.07.15';
 
     /////////////////////////////////////////////////
     // Ajax Infos
@@ -50,6 +50,7 @@ interface ConstantsInterface
     public const CSS_FLOAT_RIGHT        = 'float-end';
     public const CSS_TEXT_END           = 'text-end';
     public const CSS_DISPLAY_NONE       = 'display:none;';
+    public const CSS_COL                = ' col';
     public const CSS_COL_1              = ' col-1';
     public const CSS_COL_2              = ' col-2';
 
@@ -108,6 +109,10 @@ interface ConstantsInterface
     public const CST_WEATHER            = 'weather';
     public const CST_SUN                = 'sun';
     public const CST_MOON               = 'moon';
+    // Subonglet Equipement
+    public const CST_EQPT_WEAPON        = 'weapon';
+    public const CST_EQPT_CAR           = 'car';
+    public const CST_EQPT_OTHER         = 'autres';
 
     public const CST_ACTION             = 'action';
     public const CST_ADD                = 'add';
@@ -258,6 +263,7 @@ interface ConstantsInterface
     public const ONGLET_AUTOPSIE        = 'autopsie';
     public const ONGLET_CALENDAR        = 'calendar';
     public const ONGLET_ENQUETE         = 'enquete';
+    public const ONGLET_EQUIPMENT       = 'equipment';
     public const ONGLET_INBOX           = 'inbox';
     public const ONGLET_INDEX           = 'index';
     public const ONGLET_LIBRARY         = 'library';

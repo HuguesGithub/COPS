@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.07.02
+ * @version v1.23.07.15
  */
 interface UrlsInterface
 {
@@ -25,15 +25,17 @@ interface UrlsInterface
     
     // Files
     public const WEB_PA_INDEX               = self::WEB_PAGES_ADMIN.'page-admin-index.tpl';
-    public const WEB_PA_METEO               = self::WEB_PAGES_ADMIN.'page-admin-meteo.tpl';
+    public const WEB_PA_DEFAULT             = self::WEB_PAGES_ADMIN.'page-admin-default.tpl';
     public const WEB_PA_METEO_HOME          = self::WEB_PAGES_ADMIN.'page-admin-meteo-home.tpl';
     public const WEB_PA_METEO_METEO         = self::WEB_PAGES_ADMIN.'page-admin-meteo-meteo.tpl';
     public const WEB_PA_METEO_MOON          = self::WEB_PAGES_ADMIN.'page-admin-meteo-moon.tpl';
     public const WEB_PA_METEO_SUN           = self::WEB_PAGES_ADMIN.'page-admin-meteo-soleil.tpl';
-    public const WEB_PA_CALENDAR            = self::WEB_PAGES_ADMIN.'page-admin-calendar.tpl';
     public const WEB_PA_CALENDAR_HOME       = self::WEB_PAGES_ADMIN.'page-admin-calendar-home.tpl';
     public const WEB_PA_CALENDAR_DELETE     = self::WEB_PAGES_ADMIN.'page-admin-calendar-delete.tpl';
     public const WEB_PA_CALENDAR_EVENT_EDIT = self::WEB_PAGES_ADMIN.'page-admin-calendar-event-edit.tpl';
+    public const WEB_PA_EQPT_WEAPON_EDIT    = self::WEB_PAGES_ADMIN.'page-admin-equipment-weapon-edit.tpl';
+    public const WEB_PA_EQUIPMENT_HOME      = self::WEB_PAGES_ADMIN.'page-admin-equipment-home.tpl';
+    public const WEB_PA_EQUIPMENT_WEAPON    = self::WEB_PAGES_ADMIN.'page-admin-equipment-weapon.tpl';
     public const WEB_PA_CAL_EVT_EDIT_CATEG  = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-categ-block.tpl';
     public const WEB_PA_CAL_EVT_EDIT_DATE   = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-date-block.tpl';
     public const WEB_PA_CAL_EVT_EDIT_REPTYPE= self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-period-block.tpl';
@@ -42,6 +44,7 @@ interface UrlsInterface
     public const WEB_PA_CALENDAR_EVENT_LIST = self::WEB_PAGES_ADMIN.'page-admin-calendar-events-list.tpl';
     public const WEB_PA_PROFILE_USER_LIST   = self::WEB_PAGES_ADMIN.'page-admin-profile-users-list.tpl';
     public const WEB_PAF_PAGINATION         = self::WEB_PA_FRAGMENTS.'page-admin-fragments-pagination.tpl';
+    public const WEB_PAF_DEFAULT_LIST       = self::WEB_PA_FRAGMENTS.'page-admin-fragments-default-list.tpl';
     public const WEB_PAFS_CALENDAR          = self::WEB_PA_FRAGMENTS.'page-admin-fragments-section-calendar.tpl';
     public const WEB_PAFT_EVENT_ROW         = self::WEB_PA_FRAGMENTS.'page-admin-fragments-tr-event-row.tpl';
 

@@ -77,6 +77,7 @@ function cops_menu()
       $arrUrlSubMenu = [
         'index' => 'Index',
         'calendar' => 'Calendrier',
+        'equipment' => 'Équipement',
         'meteo' => 'Météo',
         '-'              => '-----------------'
     ];

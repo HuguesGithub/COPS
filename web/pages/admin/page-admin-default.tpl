@@ -10,14 +10,14 @@
                 <div class="col-lg-8">
                     <div class="page-header-title">
                         <div class="d-inline">
-                            <h4>Calendrier</h4>
-                            <span>Gestion de la partie administrative du calendrier</span>
+                            <h4>%1$s</h4>
+                            <span>%2$s</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="page-header-breadcrumb">
-                        <ul class="breadcrumb-title">%1$s</ul>
+                        <ul class="breadcrumb-title">%3$s</ul>
                     </div>
                 </div>
             </div>
@@ -26,10 +26,9 @@
 
         <!-- Page-body start -->
         <div class="page-body">
-            %2$s
-            <div class="row">%3$s</div>
+            %4$s
+            <div class="row">%5$s</div>
         </div>
         <!-- Page-body end -->
-
     </div>
 </div>

@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoBean
  * @author Hugues
  * @since 1.23.04.20
- * @version v1.23.06.25
+ * @version v1.23.07.15
  */
 class AdminPageMeteoBean extends AdminPageBean
 {
@@ -18,6 +18,16 @@ class AdminPageMeteoBean extends AdminPageBean
     Les données relatives aux heures du soleil sont issues du site suivant :
     dateandtime.info/fr/citysunrisesunset.php?id=5368361
     */
+
+    /**
+     * @since v1.23.07.09
+     * @version v1.23.07.15
+     */
+    public function __construct()
+    {
+        $this->pageTitle = self::LABEL_WEATHER;
+        $this->pageSubTitle = 'Gestion de la partie administrative de la météo';
+    }
 
     /**
      * @since v1.23.04.20
@@ -37,12 +47,10 @@ class AdminPageMeteoBean extends AdminPageBean
 
     /**
      * @since 1.23.04.20
-     * @version v1.23.06.18
+     * @version v1.23.07.15
      */
     public function getContentPage(): string
     {
-        // On récupère l'éventuel subonglet.
-        $curSubOnglet = $this->initVar(self::CST_SUBONGLET);
         // On récupère la date du jour.
         $this->curStrDate = $this->initVar(self::CST_DATE, DateUtils::getCopsDate(self::FORMAT_DATE_YMD));
 
@@ -58,43 +66,25 @@ class AdminPageMeteoBean extends AdminPageBean
 
         /////////////////////////////////////////
         // Construction des onglets
-        $urlAttributes = [self::CST_ONGLET=>self::ONGLET_METEO];
-        $strLis = '';
-        foreach ($this->arrSubOnglets as $slugSubOnglet => $arrData) {
-            $urlAttributes[self::CST_SUBONGLET] = $slugSubOnglet;
-            if ($slugSubOnglet==self::CST_HOME) {
-                unset($urlAttributes[self::CST_DATE]);
-            } else {
-                $urlAttributes[self::CST_DATE] = $this->curStrDate;
-            }
-            $strIcon = '';
-
-            if (!empty($arrData[self::FIELD_ICON])) {
-                $strIcon = HtmlUtils::getIcon($arrData[self::FIELD_ICON]).self::CST_NBSP;
-            }
-
-            $blnActive = ($curSubOnglet==$slugSubOnglet || $curSubOnglet=='' && $slugSubOnglet==self::CST_HOME);
-            $strLink = HtmlUtils::getLink(
-                $strIcon.$arrData[self::FIELD_LABEL],
-                UrlUtils::getAdminUrl($urlAttributes),
-                self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
-            );
-            $strLis .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>self::NAV_ITEM]);
-        }
+        $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_METEO];
+        $strLis = $this->buildTabs();
         $attributes = [self::ATTR_CLASS=>implode(' ', [self::NAV, self::NAV_PILLS, self::NAV_FILL])];
         /////////////////////////////////////////
 
-        /////////////////////////////////////////
-        // Construction du Breadcrumbs
-        $this->styleBreadCrumbs = 'breadcrumb-item '.self::CSS_FLOAT_LEFT;
-        $strLink = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_HOUSE), UrlUtils::getAdminUrl(), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
-        $urlAttributes = [self::CST_ONGLET=>self::ONGLET_METEO];
-        $strLink = HtmlUtils::getLink(self::LABEL_WEATHER, UrlUtils::getAdminUrl($urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
-        /////////////////////////////////////////
-
         return $this->getBalise(self::TAG_UL, $strLis, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.08
+     * @version v1.23.07.15
+     */
+    public function buildBreadCrumbs(): void
+    {
+        parent::buildBreadCrumbs();
+
+        $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_METEO];
+        $strLink = HtmlUtils::getLink(self::LABEL_WEATHER, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
     }
 
     /**

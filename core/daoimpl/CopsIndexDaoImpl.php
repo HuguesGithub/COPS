@@ -6,14 +6,11 @@ use core\domain\CopsIndexReferenceClass;
 use core\domain\CopsIndexNatureClass;
 use core\domain\CopsIndexTomeClass;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsIndexDaoImpl
  * @author Hugues
  * @since 1.22.10.21
- * @version 1.23.2.15
+ * @version v1.23.07.15
  */
 class CopsIndexDaoImpl extends LocalDaoImpl
 {
@@ -23,7 +20,7 @@ class CopsIndexDaoImpl extends LocalDaoImpl
     /**
      * Class constructor
      * @since 1.22.10.21
-     * @version 1.23.2.15
+     * @version v1.23.07.15
      */
     public function __construct()
     {
@@ -233,18 +230,15 @@ class CopsIndexDaoImpl extends LocalDaoImpl
     }
 
     /**
-     * @param array
-     * @return array[CopsIndexTomeClass]
-     * @since 1.23.02.20
-     * @version 1.23.02.20
+     * @since v1.23.07.13
+     * @version v1.23.07.15
      */
-    public function getIndexTomes($attributes)
+    public function getIndexTomes(array $attributes): array
     {
-        $fields  = "idIdxTome, nomIdxTome, abrIdxTome";
-        $request  = $this->getSelectRequest($fields, $this->dbTable_cit);
-        $request .= " WHERE abrIdxTome = '%s'";
-        $request .= " ORDER BY nomIdxTome ASC;";
-        return $this->selectListDaoImpl(new CopsIndexTomeClass(), $request, $attributes[self::SQL_WHERE_FILTERS]);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_cit), $this->dbTable_cit);
+        $request .= " WHERE idIdxTome LIKE '%s' AND abrIdxTome = '%s' ";
+        $request .= $this->defaultOrderByAndLimit;
+        return $this->selectListDaoImpl(new CopsIndexTomeClass(), $request, $attributes);
     }
 
 }

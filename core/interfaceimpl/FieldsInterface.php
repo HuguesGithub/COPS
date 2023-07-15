@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.06.25
+ * @version v1.23.07.15
  */
 interface FieldsInterface
 {
@@ -241,6 +241,21 @@ interface FieldsInterface
 
     // TABLE cops_stage_spec
     public const FIELD_SPEC_DESC          = 'specDescription';
+
+    // TABLE cops_weapon
+    public const FIELD_NOM_ARME           = 'nomArme';
+    public const FIELD_TYPE_ARME          = 'typeArme';
+    public const FIELD_SKILL_USE          = 'compUtilisee';
+    public const FIELD_SCORE_PR           = 'scorePr';
+    public const FIELD_SCORE_PU           = 'scorePu';
+    public const FIELD_SCORE_FA           = 'scoreFa';
+    public const FIELD_SCORE_DIS          = 'scoreDis';
+    public const FIELD_SCORE_VRC          = 'scoreVrc';
+    public const FIELD_PORTEE             = 'portee';
+    public const FIELD_SCORE_VC           = 'scoreVc';
+    public const FIELD_SCORE_CT           = 'scoreCt';
+    public const FIELD_MUNITIONS          = 'munitions';
+    public const FIELD_PRIX               = 'prix';
 
 
     // Provenance ?
