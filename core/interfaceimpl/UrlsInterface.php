@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 interface UrlsInterface
 {
@@ -33,6 +33,7 @@ interface UrlsInterface
     public const WEB_PA_CALENDAR_HOME       = self::WEB_PAGES_ADMIN.'page-admin-calendar-home.tpl';
     public const WEB_PA_CALENDAR_DELETE     = self::WEB_PAGES_ADMIN.'page-admin-calendar-delete.tpl';
     public const WEB_PA_CALENDAR_EVENT_EDIT = self::WEB_PAGES_ADMIN.'page-admin-calendar-event-edit.tpl';
+    public const WEB_PA_EQPT_CAR_EDIT       = self::WEB_PAGES_ADMIN.'page-admin-equipment-car-edit.tpl';
     public const WEB_PA_EQPT_WEAPON_EDIT    = self::WEB_PAGES_ADMIN.'page-admin-equipment-weapon-edit.tpl';
     public const WEB_PA_EQUIPMENT_HOME      = self::WEB_PAGES_ADMIN.'page-admin-equipment-home.tpl';
     public const WEB_PA_EQUIPMENT_WEAPON    = self::WEB_PAGES_ADMIN.'page-admin-equipment-weapon.tpl';

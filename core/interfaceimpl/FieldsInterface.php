@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 interface FieldsInterface
 {
@@ -256,6 +256,21 @@ interface FieldsInterface
     public const FIELD_SCORE_CT           = 'scoreCt';
     public const FIELD_MUNITIONS          = 'munitions';
     public const FIELD_PRIX               = 'prix';
+
+    // TABLE cops_vehicule
+    public const FIELD_VEH_LABEL          = 'vehLabel';
+    public const FIELD_VEH_CATEG          = 'vehCategorie';
+    public const FIELD_VEH_SS_CATEG       = 'vehSousCategorie';
+    public const FIELD_VEH_PLACES         = 'vehPlaces';
+    public const FIELD_VEH_SPEED          = 'vehVitesse';
+    public const FIELD_VEH_ACCELERE       = 'vehAcceleration';
+    public const FIELD_VEH_PS             = 'vehPointStructure';
+    public const FIELD_VEH_AUTONOMIE      = 'vehAutonomie';
+    public const FIELD_VEH_FUEL           = 'vehCarburant';
+    public const FIELD_VEH_OPTIONS        = 'vehOptions';
+    public const FIELD_VEH_PRICE          = 'vehPrix';
+    public const FIELD_VEH_YEAR           = 'vehAnnee';
+    public const FIELD_VEH_REFERENCE      = 'vehReference';
 
 
     // Provenance ?

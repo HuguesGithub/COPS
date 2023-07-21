@@ -8,7 +8,7 @@ use core\utils\UrlUtils;
  * Classe TableauCellHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class TableauCellHtmlBean extends UtilitiesBean
 {
@@ -39,7 +39,7 @@ class TableauCellHtmlBean extends UtilitiesBean
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getBean(string $defaultSortCol = ''): string
     {
@@ -66,10 +66,10 @@ class TableauCellHtmlBean extends UtilitiesBean
 
             $cellContent = HtmlUtils::getLink($this->strContent, $url, $strClass);
             $this->arrAttributes[self::ATTR_CLASS] = $strSort.' '.$this->strClass;
-            return $this->getBalise($this->strType, $cellContent, $this->arrAttributes);
+            return HtmlUtils::getBalise($this->strType, $cellContent, $this->arrAttributes);
         } else {
             $this->arrAttributes[self::ATTR_CLASS] = $this->strClass;
-            return $this->getBalise($this->strType, $this->strContent, $this->arrAttributes);
+            return HtmlUtils::getBalise($this->strType, $this->strContent, $this->arrAttributes);
         }
     }
 

@@ -15,6 +15,7 @@ use core\utils\SessionUtils;
  */
 class UtilitiesBean implements ConstantsInterface, LabelsInterface, UrlsInterface, FieldsInterface
 {
+
     /**
      * @return bool
      */

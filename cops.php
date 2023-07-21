@@ -123,10 +123,12 @@ function exception_handler($objException)
     foreach ($arrTraces as $trace) {
         $strHandler .= '<li class="list-group-item">Fichier <strong>'.$trace['file'];
         $strHandler .= '</strong> ligne <em>'.$trace['line'].'</em> :<br>';
-        if (is_array($trace['args'])) {
-            $strHandler .= $trace['function'].'()</li>';
-        } else {
-            $strHandler .= $trace['class'].$trace['type'].$trace['function'].'('.implode(', ', $trace['args']).')</li>';
+        if (isset($trace['args'])) {
+            if (is_array($trace['args'])) {
+                $strHandler .= $trace['function'].'()</li>';
+            } else {
+                $strHandler .= $trace['class'].$trace['type'].$trace['function'].'('.implode(', ', $trace['args']).')</li>';
+            }
         }
     }
 

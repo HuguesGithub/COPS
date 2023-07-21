@@ -1,9 +1,6 @@
 <?php
 namespace core\bean;
 
-use core\bean\TableauHtmlBean;
-use core\bean\TableauTFootHtmlBean;
-use core\bean\UtilitiesBean;
 use core\domain\CopsEventClass;
 use core\services\CopsEventServices;
 use core\utils\DateUtils;
@@ -15,7 +12,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarEventBean
  * @author Hugues
  * @since v1.23.05.15
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageCalendarEventBean extends AdminPageCalendarBean
 {
@@ -49,7 +46,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -57,7 +54,11 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
         $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_CAL_EVENT;
         $strLink = HtmlUtils::getLink(self::LABEL_EVENTS, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**

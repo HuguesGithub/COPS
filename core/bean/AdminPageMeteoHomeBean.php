@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoHomeBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 {
@@ -76,14 +76,18 @@ class AdminPageMeteoHomeBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
         parent::buildBreadCrumbs();
 
         $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**

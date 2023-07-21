@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * Classe TableauRowHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.18
+ * @version v1.23.07.22
  */
 class TableauRowHtmlBean extends UtilitiesBean
 {
@@ -46,7 +48,7 @@ class TableauRowHtmlBean extends UtilitiesBean
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.18
+     * @version v1.23.07.22
      */
     public function getBean(): string
     {
@@ -59,6 +61,6 @@ class TableauRowHtmlBean extends UtilitiesBean
         $this->attributes[self::ATTR_CLASS] = $this->strClass;
         $attributes = $this->attributes;
         // On retourne la balise
-        return $this->getBalise(self::TAG_TR, $strRowContent, $attributes);
+        return HtmlUtils::getBalise(self::TAG_TR, $strRowContent, $attributes);
     }
 }

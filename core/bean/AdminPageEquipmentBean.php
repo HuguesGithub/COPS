@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * AdminPageEquipmentBean
  * @author Hugues
  * @since v1.23.07.08
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageEquipmentBean extends AdminPageBean
 {
@@ -25,13 +25,13 @@ class AdminPageEquipmentBean extends AdminPageBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public static function getStaticContentPage(): string
     {
         $objBean = match (SessionUtils::fromGet(self::CST_SUBONGLET)) {
             self::CST_EQPT_WEAPON => new AdminPageEquipmentWeaponBean(),
-            //self::CST_EQPT_CAR => new AdminPageEquipmentCarBean(),
+            self::CST_EQPT_CAR => new AdminPageEquipmentCarBean(),
             //self::CST_EQPT_OTHER => new AdminPageEquipmentOtherBean(),
             default => new AdminPageEquipmentHomeBean(),
         };
@@ -41,7 +41,7 @@ class AdminPageEquipmentBean extends AdminPageBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getContentPage(): string
     {
@@ -62,12 +62,12 @@ class AdminPageEquipmentBean extends AdminPageBean
         $attributes = [self::ATTR_CLASS=>implode(' ', [self::NAV, self::NAV_PILLS, self::NAV_FILL])];
         /////////////////////////////////////////
 
-        return $this->getBalise(self::TAG_UL, $strLis, $attributes);
+        return HtmlUtils::getBalise(self::TAG_UL, $strLis, $attributes);
     }
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -75,7 +75,11 @@ class AdminPageEquipmentBean extends AdminPageBean
 
         $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_EQUIPMENT];
         $strLink = HtmlUtils::getLink(self::LABEL_EQUIPMENT, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**

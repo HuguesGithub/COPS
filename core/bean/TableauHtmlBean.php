@@ -1,11 +1,13 @@
 <?php
 namespace core\bean;
 
+use core\utils\HtmlUtils;
+
 /**
  * Classe TableauHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.11
+ * @version v1.23.07.22
  */
 class TableauHtmlBean extends UtilitiesBean
 {
@@ -79,7 +81,7 @@ class TableauHtmlBean extends UtilitiesBean
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.07.22
      */
     public function getBean(): string
     {
@@ -89,6 +91,6 @@ class TableauHtmlBean extends UtilitiesBean
         $strTableContent .= $this->objBody!=null ? $this->objBody->getBean() : '';
         $strTableContent .= $this->objTFoot!=null ? $this->objTFoot->getBean() : '';
         // On retourne la balise
-        return $this->getBalise(self::TAG_TABLE, $strTableContent, $this->arrAttributes);
+        return HtmlUtils::getBalise(self::TAG_TABLE, $strTableContent, $this->arrAttributes);
     }
 }

@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoBean
  * @author Hugues
  * @since 1.23.04.20
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageMeteoBean extends AdminPageBean
 {
@@ -47,7 +47,7 @@ class AdminPageMeteoBean extends AdminPageBean
 
     /**
      * @since 1.23.04.20
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getContentPage(): string
     {
@@ -71,12 +71,12 @@ class AdminPageMeteoBean extends AdminPageBean
         $attributes = [self::ATTR_CLASS=>implode(' ', [self::NAV, self::NAV_PILLS, self::NAV_FILL])];
         /////////////////////////////////////////
 
-        return $this->getBalise(self::TAG_UL, $strLis, $attributes);
+        return HtmlUtils::getBalise(self::TAG_UL, $strLis, $attributes);
     }
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -84,7 +84,11 @@ class AdminPageMeteoBean extends AdminPageBean
 
         $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_METEO];
         $strLink = HtmlUtils::getLink(self::LABEL_WEATHER, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**

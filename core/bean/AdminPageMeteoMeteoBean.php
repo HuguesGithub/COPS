@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoMeteoBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 {
@@ -41,7 +41,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -49,7 +49,11 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
         $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_WEATHER;
         $strLink = HtmlUtils::getLink(self::LABEL_WEATHER, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**
@@ -177,7 +181,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.05.28
+     * @version v1.23.07.22
      */
     public function getCardContent(string &$titre, string &$strBody): void
     {
@@ -194,7 +198,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
         $objCopsMeteo = array_shift($objsCopsMeteo);
-        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsMeteo->getDateHeure()));
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsMeteo->getDateHeure()));
         $strDate = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
         $m = substr((string) $strDate, 4, 2);
         $d = substr((string) $strDate, 6);
@@ -207,7 +211,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);
         $objCopsMeteo = array_shift($objsCopsMeteo);
-        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsMeteo->getDateHeure()));
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsMeteo->getDateHeure()));
         $strDate = $objCopsMeteo->getField(self::FIELD_DATE_METEO);
         $m = substr((string) $strDate, 4, 2);
         $d = substr((string) $strDate, 6);
@@ -215,7 +219,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         $curDate = $y.'-'.$m.'-'.$d;
         $nextDate = DateUtils::getDateAjout($curDate, [1, 0, 0], self::FORMAT_DATE_YMD);
 
-        $strBody = $this->getBalise(self::TAG_UL, $strLis);
+        $strBody = HtmlUtils::getBalise(self::TAG_UL, $strLis);
 
         // On fabrique la liste des boutons pour action.
         $linkClass = self::BTS_BTN_PRIMARY;

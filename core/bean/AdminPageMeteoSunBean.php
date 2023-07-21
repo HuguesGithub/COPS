@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoSunBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageMeteoSunBean extends AdminPageMeteoBean
 {
@@ -40,7 +40,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -48,7 +48,11 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
 
         $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_SUN;
         $strLink = HtmlUtils::getLink(self::LABEL_SUN, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**
@@ -174,7 +178,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.04.30
+     * @version v1.23.07.22
      */
     public function getCardContent(string &$titre, string &$strBody): void
     {
@@ -191,7 +195,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsSoleil = $objCopsSoleilServices->getSoleils($attributes);
         $objCopsSoleil = array_shift($objsCopsSoleil);
-        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsSoleil->getDateHeure()));
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsSoleil->getDateHeure()));
 
         // On récupère la dernière date
         $attributes = [];
@@ -199,9 +203,9 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsSoleil = $objCopsSoleilServices->getSoleils($attributes);
         $objCopsSoleil = array_shift($objsCopsSoleil);
-        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsSoleil->getDateHeure()));
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsSoleil->getDateHeure()));
 
-        $strBody = $this->getBalise(self::TAG_UL, $strLis);
+        $strBody = HtmlUtils::getBalise(self::TAG_UL, $strLis);
     }
 
 }

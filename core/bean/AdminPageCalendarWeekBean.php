@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarWeekBean
  * @author Hugues
  * @since v1.23.05.04
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 {
@@ -28,7 +28,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -37,7 +37,11 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
         $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_CAL_WEEK;
         $this->urlAttributes[self::CST_CAL_CURDAY] = $this->curStrDate;
         $strLink = HtmlUtils::getLink(self::LABEL_WEEKLY, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**
@@ -119,7 +123,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.14
+     * @version v1.23.07.22
      */
     public function getRowHoraire(string $firstWeekDay): string
     {
@@ -140,7 +144,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
                 self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL.' '.self::CST_FC_DAY.' '.$this->getFcDayClass($curDay),
                 self::ATTR_DATA_DATE => $curDay
             ];
-            $strContent .= $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
+            $strContent .= HtmlUtils::getBalise(self::TAG_TD, $tdContent, $tdAttributes);
         }
 
         return $strContent;
@@ -148,7 +152,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.04
-     * @version v1.23.05.28
+     * @version v1.23.07.22
      */
     public function getRowAllDay(string $firstWeekDay): string
     {
@@ -209,7 +213,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
                 self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' '.$this->getFcDayClass($curDay),
                 self::ATTR_DATA_DATE => $curDay,
             ];
-            $strContent .= $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
+            $strContent .= HtmlUtils::getBalise(self::TAG_TD, $tdContent, $tdAttributes);
         }
 
         return $strContent;

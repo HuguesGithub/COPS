@@ -4,11 +4,11 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.07.15';
+    public const VERSION              = 'v1.23.07.22';
 
     /////////////////////////////////////////////////
     // Ajax Infos
@@ -271,6 +271,24 @@ interface ConstantsInterface
     public const ONGLET_PROFILE         = 'profile';
     public const ONGLET_USERS           = 'users';
     public const ONGLET_DESK            = 'desk';
+
+    /////////////////////////////////////////////////
+    // Pagination
+    public const PAGE_OPT_SIMPLE        = 'simple';
+    public const PAGE_OPT_NUMBERS       = 'numbers';
+    public const PAGE_OPT_SMP_NMB       = 'simple_numbers';
+    public const PAGE_OPT_FULL          = 'full';
+    public const PAGE_OPT_FULL_NMB      = 'full_numbers';
+    public const PAGE_OPT_FST_LAST_NMB  = 'first_last_numbers';
+    public const PAGE_NBPERPAGE         = 'nbPerPage';
+    public const PAGE_DEFAULT_NBPERPAGE = 10;
+    public const PAGE_OPTION            = 'option';
+    public const PAGE_OBJS              = 'objs';
+    public const PAGE_QUERY_ARG         = 'queryArg';
+    public const PAGE_PREVIOUS          = '&lsaquo;';
+    public const PAGE_NEXT              = '&rsaquo;';
+    public const PAGE_FIRST             = '&laquo;';
+    public const PAGE_LAST              = '&raquo;';
 
     /////////////////////////////////////////////////
     // Rôles

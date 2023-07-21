@@ -1,26 +1,33 @@
 <?php
 namespace core\daoimpl;
 
+use core\domain\CopsEquipmentCarClass;
 use core\domain\CopsEquipmentWeaponClass;
 
 /**
  * Classe CopsEquipmentDaoImpl
  * @author Hugues
  * @since v1.23.07.12
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class CopsEquipmentDaoImpl extends LocalDaoImpl
 {
+    public $dbTable_wpn;
+    public $dbTable_car;
+    public $dbFields_wpn;
+    public $dbFields_car;
+
     /**
      * Class constructor
      * @since v1.23.07.12
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function __construct()
     {
         ////////////////////////////////////
         // Définition des variables spécifiques
         $this->dbTable_wpn  = "wp_7_cops_weapon";
+        $this->dbTable_car  = "wp_7_cops_vehicule";
         ////////////////////////////////////
 
         ////////////////////////////////////
@@ -42,7 +49,23 @@ class CopsEquipmentDaoImpl extends LocalDaoImpl
             self::FIELD_PRIX,
             self::FIELD_TOME_IDX_ID,
         ];
-            ////////////////////////////////////
+        $this->dbFields_car = [
+            self::FIELD_ID,
+            self::FIELD_VEH_LABEL,
+            self::FIELD_VEH_CATEG,
+            self::FIELD_VEH_SS_CATEG,
+            self::FIELD_VEH_PLACES,
+            self::FIELD_VEH_SPEED,
+            self::FIELD_VEH_ACCELERE,
+            self::FIELD_VEH_PS,
+            self::FIELD_VEH_AUTONOMIE,
+            self::FIELD_VEH_FUEL,
+            self::FIELD_VEH_OPTIONS,
+            self::FIELD_VEH_PRICE,
+            self::FIELD_VEH_YEAR,
+            self::FIELD_VEH_REFERENCE,
+        ];
+        ////////////////////////////////////
 
         parent::__construct();
     }
@@ -50,6 +73,52 @@ class CopsEquipmentDaoImpl extends LocalDaoImpl
     ////////////////////////////////////
     // METHODES
     ////////////////////////////////////
+
+    ////////////////////////////////////
+    // wp_7_cops_vehicule
+    ////////////////////////////////////
+
+    /**
+     * @since v1.23.07.19
+     * @version v1.23.07.22
+     */
+    public function getVehicles(array $attributes): array
+    {
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_car), $this->dbTable_car);
+        $request .= " WHERE id LIKE '%s' ";
+        $request .= $this->defaultOrderByAndLimit;
+        return $this->selectListDaoImpl(new CopsEquipmentCarClass(), $request, $attributes);
+    }
+
+    /**
+     * @since v1.23.07.19
+     * @version v1.23.07.22
+     */
+    public function insertVehicle(CopsEquipmentCarClass &$obj): void
+    {
+        // On récupère les champs
+        $dbFields = $this->dbFields_car;
+        array_shift($dbFields);
+        // On défini la requête d'insertion
+        $request = $this->getInsertRequest($dbFields, $this->dbTable_car);
+        // On insère
+        $this->insertDaoImpl($obj, $dbFields, $request, self::FIELD_ID);
+    }
+
+    /**
+     * @since v1.23.07.19
+     * @version v1.23.07.22
+     */
+    public function updateVehicle(CopsEquipmentCarClass $obj)
+    {
+        // On récupère les champs
+        $dbFields = $this->dbFields_car;
+        $fieldId = array_shift($dbFields);
+        // On défini la requête de mise à jour
+        $request = $this->getUpdateRequest($dbFields, $this->dbTable_car, $fieldId);
+        // On met à jour
+        $this->updateDaoImpl($obj, $request, $fieldId);
+    }
 
     ////////////////////////////////////
     // wp_7_cops_weapon

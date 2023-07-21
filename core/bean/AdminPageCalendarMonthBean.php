@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarMonthBean
  * @author Hugues
  * @since v1.23.05.03
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageCalendarMonthBean extends AdminPageCalendarBean
 {
@@ -28,7 +28,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -37,12 +37,16 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
         $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_CAL_MONTH;
         $this->urlAttributes[self::CST_CAL_CURDAY] = $this->curStrDate;
         $strLink = HtmlUtils::getLink(self::LABEL_MONTHLY, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.07
+     * @version v1.23.05.22
      */
     public function getCard(): string
     {
@@ -67,7 +71,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
                 $displayDate = DateUtils::getDateAjout($startDate, [$j+$w*7, 0, 0], self::FORMAT_DATE_YMD);
                 $trContent .= $this->getMonthCell($displayDate, $j==0);
             }
-            $strContent .= $this->getBalise(self::TAG_TR, $trContent);
+            $strContent .= HtmlUtils::getBalise(self::TAG_TR, $trContent);
         }
         $urlTemplate = self::WEB_PPFS_CAL_MONTH;
         $attributes = [
@@ -89,7 +93,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.28
+     * @version v1.23.07.22
      */
     public function getMonthCell(string $displayDate, bool $blnMonday): string
     {
@@ -145,7 +149,7 @@ class AdminPageCalendarMonthBean extends AdminPageCalendarBean
             self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' '.$strClass,
             self::ATTR_DATA_DATE => $displayDate
         ];
-        return $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
+        return HtmlUtils::getBalise(self::TAG_TD, $divContent, $tdAttributes);
     }
     
     /**

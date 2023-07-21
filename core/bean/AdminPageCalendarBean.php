@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageCalendrierBean
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageCalendarBean extends AdminPageBean
 {
@@ -43,7 +43,7 @@ class AdminPageCalendarBean extends AdminPageBean
 
     /**
      * @since v1.23.05.01
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getContentPage(): string
     {
@@ -68,12 +68,12 @@ class AdminPageCalendarBean extends AdminPageBean
         $attributes = [self::ATTR_CLASS=>implode(' ', [self::NAV, self::NAV_PILLS, self::NAV_FILL])];
         /////////////////////////////////////////
 
-        return $this->getBalise(self::TAG_UL, $strLis, $attributes);
+        return HtmlUtils::getBalise(self::TAG_UL, $strLis, $attributes);
     }
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -81,7 +81,11 @@ class AdminPageCalendarBean extends AdminPageBean
 
         $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_CALENDAR];
         $strLink = HtmlUtils::getLink(self::LABEL_CALENDAR, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
  
     /**
@@ -181,7 +185,7 @@ class AdminPageCalendarBean extends AdminPageBean
 
     /**
      * @since v1.23.05.03
-     * @version v1.23.05.28
+     * @version v1.23.07.22
      */
     public function getColumnHoraire(int $h): string
     {
@@ -200,7 +204,7 @@ class AdminPageCalendarBean extends AdminPageBean
                 self::ATTR_TIME => $hPadded.':00:00'
             ],
         ];
-        $firstRow = $this->getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
+        $firstRow = HtmlUtils::getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
         
         $tdAttributes = [
             self::ATTR_CLASS => self::CST_FC_TIMEGRID_SLOT_LANE,
@@ -208,7 +212,7 @@ class AdminPageCalendarBean extends AdminPageBean
                 self::ATTR_TIME => $hPadded.':00:00'
             ],
         ];
-        $firstRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
+        $firstRow .= HtmlUtils::getBalise(self::TAG_TD, '', $tdAttributes);
         
         $tdAttributes = [
             self::ATTR_CLASS => self::CST_FC_TIMEGRID_SLOT_LABEL.' '.self::CST_FC_TIMEGRID_SLOT_MINOR,
@@ -216,15 +220,15 @@ class AdminPageCalendarBean extends AdminPageBean
                 self::ATTR_TIME => $hPadded.':30:00'
             ],
         ];
-        $secondRow = $this->getBalise(self::TAG_TD, '', $tdAttributes);
+        $secondRow = HtmlUtils::getBalise(self::TAG_TD, '', $tdAttributes);
         $tdAttributes = [
             self::ATTR_CLASS => self::CST_FC_TIMEGRID_SLOT_LANE.' '.self::CST_FC_TIMEGRID_SLOT_MINOR,
             self::ATTR_DATA => [
                 self::ATTR_TIME => $hPadded.':30:00'
             ],
         ];
-        $secondRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
+        $secondRow .= HtmlUtils::getBalise(self::TAG_TD, '', $tdAttributes);
         
-        return $this->getBalise(self::TAG_TR, $firstRow).$this->getBalise(self::TAG_TR, $secondRow);
+        return HtmlUtils::getBalise(self::TAG_TR, $firstRow).HtmlUtils::getBalise(self::TAG_TR, $secondRow);
     }
 }

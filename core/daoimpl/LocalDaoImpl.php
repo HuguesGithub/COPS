@@ -8,7 +8,7 @@ use core\utils\LogUtils;
  * Classe LocalDaoImpl
  * @author Hugues
  * @since 1.22.04.28
- * @version v1.23.06.04
+ * @version v1.23.07.22
  */
 class LocalDaoImpl extends GlobalDaoImpl
 {
@@ -18,6 +18,7 @@ class LocalDaoImpl extends GlobalDaoImpl
     protected $delete;
     protected $insert;
     protected $update;
+    public $dbTable;
 
     /**
    * Class Constructor

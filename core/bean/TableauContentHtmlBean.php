@@ -2,12 +2,13 @@
 namespace core\bean;
 
 use core\bean\TableauRowHtmlBean;
+use core\utils\HtmlUtils;
 
 /**
  * Classe TableauContentHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.06.11
+ * @version v1.23.07.22
  */
 class TableauContentHtmlBean extends UtilitiesBean
 {
@@ -34,7 +35,7 @@ class TableauContentHtmlBean extends UtilitiesBean
     
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.07.22
      */
     public function getBean(): string
     {
@@ -46,7 +47,7 @@ class TableauContentHtmlBean extends UtilitiesBean
         // On initialise le tableau des attributs
         $attributes = $this->strClass=='' ? [] : [self::ATTR_CLASS => $this->strClass];
         // On retourne la balise
-        return $this->getBalise($this->strType, $strContent, $attributes);
+        return HtmlUtils::getBalise($this->strType, $strContent, $attributes);
     }
     
 }

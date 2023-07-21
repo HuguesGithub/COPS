@@ -13,7 +13,7 @@ use core\utils\UrlUtils;
  * AdminPageEquipmentWeaponBean
  * @author Hugues
  * @since v1.23.07.09
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 {
@@ -61,14 +61,18 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 
     /**
      * @since v1.23.07.09
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
         parent::buildBreadCrumbs();
 
         $strLink = HtmlUtils::getLink(self::LABEL_WEAPONS, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**
@@ -194,7 +198,7 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 
     /**
      * @since v1.23.07.09
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function getListContent(): string
     {
@@ -226,9 +230,10 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
             //'filterCateg' => $filterCateg,
         ];
         $objPagination->setData([
-            'objs' => $objsCopsWeapon,
-            'curPage' => $this->curPage,
-            'queryArg' => $queryArg,
+            self::CST_CURPAGE => $this->curPage,
+            self::CST_URL => UrlUtils::getAdminUrl(),
+            self::PAGE_QUERY_ARG => $queryArg,
+            self::PAGE_OBJS => $objsCopsWeapon,
         ]);
 
         //////////////////////////////////////////////////////
@@ -238,22 +243,22 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
         $queryArg[self::SQL_ORDER_BY] = self::FIELD_NOM_ARME;
         $objTableauCell->ableSort($queryArg);
         $objRow->addCell($objTableauCell);
-        $tag = $this->getBalise('abbr', 'PR', [self::ATTR_TITLE=>'Précision']);
+        $tag = HtmlUtils::getBalise('abbr', 'PR', [self::ATTR_TITLE=>'Précision']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = $this->getBalise('abbr', 'PU', [self::ATTR_TITLE=>'Puissance']);
+        $tag = HtmlUtils::getBalise('abbr', 'PU', [self::ATTR_TITLE=>'Puissance']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = $this->getBalise('abbr', 'FA', [self::ATTR_TITLE=>'Force d\'arrêt']);
+        $tag = HtmlUtils::getBalise('abbr', 'FA', [self::ATTR_TITLE=>'Force d\'arrêt']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = $this->getBalise('abbr', 'VRC', [self::ATTR_TITLE=>'Valeur de Rafale Courte']);
+        $tag = HtmlUtils::getBalise('abbr', 'VRC', [self::ATTR_TITLE=>'Valeur de Rafale Courte']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
         $objRow->addCell(new TableauCellHtmlBean('Portée', self::TAG_TH, self::CSS_COL));
-        $tag = $this->getBalise('abbr', 'VC', [self::ATTR_TITLE=>'Valeur de Couverture']);
+        $tag = HtmlUtils::getBalise('abbr', 'VC', [self::ATTR_TITLE=>'Valeur de Couverture']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = $this->getBalise('abbr', 'CT', [self::ATTR_TITLE=>'Cadence de Tir']);
+        $tag = HtmlUtils::getBalise('abbr', 'CT', [self::ATTR_TITLE=>'Cadence de Tir']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = $this->getBalise('abbr', 'Mun', [self::ATTR_TITLE=>'Munitions']);
+        $tag = HtmlUtils::getBalise('abbr', 'Mun', [self::ATTR_TITLE=>'Munitions']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = $this->getBalise('abbr', 'Dis', [self::ATTR_TITLE=>'Dissimulation']);
+        $tag = HtmlUtils::getBalise('abbr', 'Dis', [self::ATTR_TITLE=>'Dissimulation']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
         $objRow->addCell(new TableauCellHtmlBean('Prix', self::TAG_TH, self::CSS_COL));
         $objHeader = new TableauTHeadHtmlBean();

@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoMoonBean
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 {
@@ -41,7 +41,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -49,7 +49,11 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
         $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_MOON;
         $strLink = HtmlUtils::getLink(self::LABEL_MOON, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**
@@ -167,7 +171,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.04.30
+     * @version v1.23.07.22
      */
     public function getCardContent(string &$titre, string &$strBody): void
     {
@@ -184,7 +188,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
         $objCopsLune = array_shift($objsCopsLune);
-        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsLune->getDateHeure()));
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, sprintf(self::DYN_FIRST_ENTRY, $objCopsLune->getDateHeure()));
 
         // On récupère la dernière date
         $attributes = [];
@@ -192,9 +196,9 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
         $objCopsLune = array_shift($objsCopsLune);
-        $strLis .= $this->getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsLune->getDateHeure()));
+        $strLis .= HtmlUtils::getBalise(self::TAG_LI, sprintf(self::DYN_LAST_ENTRY, $objCopsLune->getDateHeure()));
 
-        $strBody = $this->getBalise(self::TAG_UL, $strLis);
+        $strBody = HtmlUtils::getBalise(self::TAG_UL, $strLis);
     }
 
 }

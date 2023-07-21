@@ -9,11 +9,13 @@ use core\utils\UrlUtils;
  * Classe AdminPageBean
  * @author Hugues
  * @since 1.23.04.20
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageBean extends UtilitiesBean
 {
     public $breadCrumbsContent = '';
+    public $styleBreadCrumbs = '';
+    public $strBreadcrumbs = '';
 
     public $slugOnglet;
     public $slugSubOnglet;
@@ -53,7 +55,7 @@ class AdminPageBean extends UtilitiesBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildTabs(): string
     {
@@ -80,20 +82,24 @@ class AdminPageBean extends UtilitiesBean
                 UrlUtils::getAdminUrl($this->urlAttributes),
                 self::NAV_LINK.($blnActive ? ' '.self::CST_ACTIVE : '')
             );
-            $strLis .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>self::NAV_ITEM]);
+            $strLis .= HtmlUtils::getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>self::NAV_ITEM]);
         }
         return $strLis;
     }
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
         $this->styleBreadCrumbs = 'breadcrumb-item '.self::CSS_FLOAT_LEFT;
         $strLink = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_HOUSE), UrlUtils::getAdminUrl(), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
 }

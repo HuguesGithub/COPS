@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageCalendarHomeBean
  * @author Hugues
  * @since v1.23.05.02
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 {
@@ -26,14 +26,18 @@ class AdminPageCalendarHomeBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
         parent::buildBreadCrumbs();
 
         $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
 
     /**

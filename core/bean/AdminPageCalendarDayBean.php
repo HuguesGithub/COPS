@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.07.15
+ * @version v1.23.07.22
  */
 class AdminPageCalendarDayBean extends AdminPageCalendarBean
 {
@@ -27,7 +27,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.07.22
      */
     public function buildBreadCrumbs(): void
     {
@@ -36,7 +36,11 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
         $this->urlAttributes[self::CST_SUBONGLET]  = self::CST_CAL_DAY;
         $this->urlAttributes[self::CST_CAL_CURDAY] = $this->curStrDate;
         $strLink = HtmlUtils::getLink(self::LABEL_DAILY, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
-        $this->strBreadcrumbs .= $this->getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>$this->styleBreadCrumbs]);
+        $this->strBreadcrumbs .= HtmlUtils::getBalise(
+            self::TAG_LI,
+            $strLink,
+            [self::ATTR_CLASS=>$this->styleBreadCrumbs]
+        );
     }
     
     /**
@@ -131,7 +135,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @version v1.23.07.22
      */
     public function getRowAllDay(string $displayDate): string
     {
@@ -154,7 +158,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
             self::ATTR_CLASS => self::CST_FC_DAYGRID_DAY.' '.self::CST_FC_DAY.' ' . $this->getFcDayClass($displayDate),
             self::ATTR_DATA_DATE => $displayDate
         ];
-        return $this->getBalise(self::TAG_TD, $tdContent, $attributes);
+        return HtmlUtils::getBalise(self::TAG_TD, $tdContent, $attributes);
     }
     
     /**
@@ -174,7 +178,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.06
-     * @version v1.23.05.14
+     * @version v1.23.07.22
      */
     public function getRowHoraire(string $displayDate): string
     {
@@ -190,7 +194,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
             self::ATTR_CLASS => self::CST_FC_TIMEGRID_COL.' '.self::CST_FC_DAY.' '.$this->getFcDayClass($displayDate),
             self::ATTR_DATA_DATE => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $displayDate)
         ];
-        return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
+        return HtmlUtils::getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
 
     /**
