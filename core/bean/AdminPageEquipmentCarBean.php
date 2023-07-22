@@ -146,24 +146,15 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
         $rowContent = $this->getCategorieFilter($filterCateg);
         $objRow->addCell(new TableauCellHtmlBean($rowContent, self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
-        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        for ($i=0; $i<6; $i++) {
+            $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        }
         $objFooter = new TableauTFootHtmlBean();
         $objFooter->addRow($objRow);
 
         //////////////////////////////////////////////////////
         $objTable = new TableauHtmlBean();
-        $objTable->setSize('sm');
-        $objTable->setStripped();
-        $objTable->setClass('m-0 sortableTable text-center');
-        $objTable->setAria('describedby', 'Liste des véhicules');
-        $objTable->setTHead($objHeader);
-        $objTable->setBody($objBody);
-        $objTable->setTFoot($objFooter);
+        $objTable->defaultInit($objHeader, $objBody, $objFooter);
 
         $urlElements = [
             self::CST_ONGLET => self::ONGLET_EQUIPMENT,

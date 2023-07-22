@@ -29,6 +29,21 @@ class TableauHtmlBean extends UtilitiesBean
             ],
         ];
     }
+
+    /**
+     * @since v1.23.07.22
+     * @version v1.23.07.22
+     */
+    public function defaultInit($objHeader=null, $objBody=null, $objFooter=null): void
+    {
+        $this->setSize('sm');
+        $this->setStripped();
+        $this->setClass('m-0 sortableTable text-center');
+        $this->setAria('describedby', 'Liste des véhicules');
+        $this->setTHead($objHeader);
+        $this->setBody($objBody);
+        $this->setTFoot($objFooter);
+    }
     
     /**
      * @since v1.23.06.10
