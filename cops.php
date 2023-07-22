@@ -127,7 +127,8 @@ function exception_handler($objException)
             if (is_array($trace['args'])) {
                 $strHandler .= $trace['function'].'()</li>';
             } else {
-                $strHandler .= $trace['class'].$trace['type'].$trace['function'].'('.implode(', ', $trace['args']).')</li>';
+                $strHandler .= $trace['class'].$trace['type'].$trace['function'];
+                $strHandler .= '('.implode(', ', $trace['args']).')</li>';
             }
         }
     }

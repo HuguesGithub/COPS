@@ -14,51 +14,6 @@ use core\utils\UrlUtils;
  */
 class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
 {
-    public $curPage;
-    public $action;
-    public $id;
-
-    /**
-     * @since v1.23.07.19
-     * @version v1.23.07.15
-     */
-    public function getContentOnglet(): string
-    {
-        /////////////////////////////////////////
-        // On initialise l'éventuelle pagination, l'action ou l'id de l'événement concerné
-        $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
-        $this->action  = $this->initVar(self::CST_ACTION);
-        $this->id      = $this->initVar(self::FIELD_ID, 0);
-        /////////////////////////////////////////
-
-        /////////////////////////////////////////
-        // Si writeAction est défini, par formulaire pour Write, par url pour Delete
-        $writeAction = static::initVar(self::CST_WRITE_ACTION);
-        if ($writeAction==self::CST_WRITE) {
-            $this->dealWithWriteAction();
-        }
-        /////////////////////////////////////////
-
-        // Récupération des onglets de navigation.
-        $strNavigation = $this->getContentPage();
-        
-        /////////////////////////////////////////
-        // Construction du Breadcrumbs
-        /////////////////////////////////////////
-        $this->buildBreadCrumbs();
-        
-        $strCards = $this->getCard();
-
-        //
-        $attributes = [
-            $this->pageTitle,
-            $this->pageSubTitle,
-            $this->strBreadcrumbs,
-            $strNavigation,
-            $strCards,
-        ];
-        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
-    }
 
     /**
      * @since v1.23.07.19
@@ -126,7 +81,7 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
         // Définition du service
         $objCopsEquipmentServices = new CopsEquipmentServices();
         // On récupère les données éventuelles sur les filtres et les tris
-        // $filterCateg = $this->initVar('filterCateg', self::SQL_JOKER_SEARCH);
+        $filterCateg = $this->initVar('filterCateg', self::SQL_JOKER_SEARCH);
         $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_VEH_LABEL);
         $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
 
@@ -134,7 +89,7 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
 
         // Récupération des données
         $attributes = [
-            //*             self::SQL_WHERE_FILTERS => [self::FIELD_CATEG_ID => $filterCateg],
+            self::SQL_WHERE_FILTERS => [self::FIELD_VEH_CATEG => $filterCateg],
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ];
@@ -148,9 +103,8 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
             self::CST_SUBONGLET => self::CST_EQPT_CAR,
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
-            //'filterCateg' => $filterCateg,
+            'filterCateg' => $filterCateg,
         ];
-
         $objPagination->setData([
             self::CST_CURPAGE => $this->curPage,
             self::CST_URL => UrlUtils::getAdminUrl(),
@@ -165,6 +119,7 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
         $queryArg[self::SQL_ORDER_BY] = self::FIELD_VEH_LABEL;
         $objTableauCell->ableSort($queryArg);
         $objRow->addCell($objTableauCell);
+        $objRow->addCell(new TableauCellHtmlBean('Catégorie', self::TAG_TH, self::CSS_COL));
         $tag = HtmlUtils::getBalise('abbr', 'VM', [self::ATTR_TITLE=>'Vitesse Maximale']);
         $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
         $tag = HtmlUtils::getBalise('abbr', 'Acc', [self::ATTR_TITLE=>'Accélération']);
@@ -185,6 +140,22 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
         $objPagination->getDisplayedRows($objBody);
 
         //////////////////////////////////////////////////////
+        // Définition du Footer du tableau
+        $objRow = new TableauRowHtmlBean();
+        $objRow->addStyle('line-height:30px;');
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $rowContent = $this->getCategorieFilter($filterCateg);
+        $objRow->addCell(new TableauCellHtmlBean($rowContent, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
+        $objFooter = new TableauTFootHtmlBean();
+        $objFooter->addRow($objRow);
+
+        //////////////////////////////////////////////////////
         $objTable = new TableauHtmlBean();
         $objTable->setSize('sm');
         $objTable->setStripped();
@@ -192,6 +163,7 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
         $objTable->setAria('describedby', 'Liste des véhicules');
         $objTable->setTHead($objHeader);
         $objTable->setBody($objBody);
+        $objTable->setTFoot($objFooter);
 
         $urlElements = [
             self::CST_ONGLET => self::ONGLET_EQUIPMENT,
@@ -255,4 +227,51 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
         }
     }
 
+    /**
+     * @since v1.23.07.22
+     * @version v1.23.07.22
+     */
+    public function getCategorieFilter($selectedValue=''): string
+    {
+        $arrTypeVehicle = [
+            'aquatique' => 'Amphibie',
+            'moto'      => 'Moto',
+            'utilitaire'=> 'Utilitaire',
+            'voiture'   => 'Voiture',
+        ];
+
+        $urlElements = [
+            self::CST_ONGLET => self::ONGLET_EQUIPMENT,
+            self::CST_SUBONGLET => self::CST_EQPT_CAR,
+        ];
+        $strLabel = 'Catégorie';
+        $strLis = '';
+        foreach ($arrTypeVehicle as $value => $label) {
+            $urlElements['filterCateg'] = $value;
+            $href = UrlUtils::getAdminUrl($urlElements);
+            $liContent = HtmlUtils::getLink($label, $href, 'dropdown-item');
+            $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent);
+            if ($value==$selectedValue) {
+                $strLabel = $label;
+            }
+        }
+        $ulAttributes = [
+            self::ATTR_CLASS => 'dropdown-menu',
+            self::ATTR_STYLE => 'height: 200px; overflow: auto;',
+        ];
+        $ul = HtmlUtils::getBalise(self::TAG_UL, $strLis, $ulAttributes);
+
+        $btnAttributes = [
+            self::ATTR_CLASS => ' btn_outline btn-sm dropdown-toggle',
+            'aria-expanded' => false,
+            'data-bs-toggle' => 'dropdown',
+        ];
+        $strButton = HtmlUtils::getButton($strLabel, $btnAttributes);
+
+        $divAttributes = [
+            self::ATTR_CLASS => 'dropdown dropup',
+            self::ATTR_STYLE => 'position: absolute; margin-top: -17px;',
+        ];
+        return HtmlUtils::getDiv($strButton.$ul, $divAttributes);
+    }
 }

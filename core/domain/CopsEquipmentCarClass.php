@@ -100,7 +100,7 @@ class CopsEquipmentCarClass extends CopsEquipmentClass
             'voiture'   => 'Voiture',
         ];
         $selTypeCategValue = $this->getField(self::FIELD_VEH_CATEG);
-        $selTypeSsCategValue = $this->getField(self::FIELD_VEH_SS_CATEG);
+        // TODO : $selTypeSsCategValue = $this->getField(self::FIELD_VEH_SS_CATEG);
         $strContentSel = '';
         foreach($arrTypeVehicle as $value => $label) {
             $strContentSel .= HtmlUtils::getOption($label, $value, $value==$selTypeCategValue);
@@ -117,8 +117,8 @@ class CopsEquipmentCarClass extends CopsEquipmentClass
             $this->getField(self::FIELD_VEH_REFERENCE),
             // Type de véhicule (liste)
             $selTypeCateg,
-            // Compétence (liste)
-            '',//$selSkillUse,
+            // Sous Catégorie de véhicule (liste)
+            '',// TODO $selTypeSsCategValue,
             // Occupants
             $this->getField(self::FIELD_VEH_PLACES),
             // Vitesse

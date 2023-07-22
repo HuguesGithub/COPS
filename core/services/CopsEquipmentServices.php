@@ -50,6 +50,7 @@ class CopsEquipmentServices extends LocalServices
             $this->Dao = new CopsEquipmentDaoImpl();
         }
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $categ = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_VEH_CATEG] ?? self::SQL_JOKER_SEARCH;
 
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
         $orderBy = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_VEH_LABEL;
@@ -57,6 +58,7 @@ class CopsEquipmentServices extends LocalServices
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
             $id,
+            $categ,
             $orderBy,
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,

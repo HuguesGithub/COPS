@@ -24,6 +24,13 @@ class CopsEquipmentCarBean extends CopsBean
      */
     public function getTableRow(): TableauRowHtmlBean
     {
+        $arrTypeVehicle = [
+            'aquatique' => 'Amphibie',
+            'moto'      => 'Moto',
+            'utilitaire'=> 'Utilitaire',
+            'voiture'   => 'Voiture',
+        ];
+
         $objRow = new TableauRowHtmlBean();
         $urlElements = [
             self::CST_ONGLET => self::ONGLET_EQUIPMENT,
@@ -36,6 +43,8 @@ class CopsEquipmentCarBean extends CopsBean
             UrlUtils::getAdminUrl($urlElements),
         );
         $objRow->addCell(new TableauCellHtmlBean($strLink, self::TAG_TD, 'text-start'));
+        // La Catégorie
+        $objRow->addCell(new TableauCellHtmlBean($arrTypeVehicle[$this->obj->getField(self::FIELD_VEH_CATEG)]));
         // La Vitesse Maximale
         $objRow->addCell(new TableauCellHtmlBean($this->obj->getField(self::FIELD_VEH_SPEED)));
         // L'accélération

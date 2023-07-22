@@ -17,47 +17,6 @@ use core\utils\UrlUtils;
  */
 class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 {
-    /**
-     * @since v1.23.07.09
-     * @version v1.23.07.15
-     */
-    public function getContentOnglet(): string
-    {
-        /////////////////////////////////////////
-        // On initialise l'éventuelle pagination, l'action ou l'id de l'événement concerné
-        $this->curPage = $this->initVar(self::CST_CURPAGE, 1);
-        $this->action  = $this->initVar(self::CST_ACTION);
-        $this->id      = $this->initVar(self::FIELD_ID, 0);
-        /////////////////////////////////////////
-
-        /////////////////////////////////////////
-        // Si writeAction est défini, par formulaire pour Write, par url pour Delete
-        $writeAction = static::initVar(self::CST_WRITE_ACTION);
-        if ($writeAction==self::CST_WRITE) {
-            $this->dealWithWriteAction();
-        }
-        /////////////////////////////////////////
-
-        // Récupération des onglets de navigation.
-        $strNavigation = $this->getContentPage();
-        
-        /////////////////////////////////////////
-        // Construction du Breadcrumbs
-        /////////////////////////////////////////
-        $this->buildBreadCrumbs();
-        
-        $strCards = $this->getCard();
-
-        //
-        $attributes = [
-            $this->pageTitle,
-            $this->pageSubTitle,
-            $this->strBreadcrumbs,
-            $strNavigation,
-            $strCards,
-        ];
-        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
-    }
 
     /**
      * @since v1.23.07.09
