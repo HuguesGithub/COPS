@@ -9,17 +9,27 @@ use core\domain\CopsEquipmentWeaponClass;
  * Classe CopsEquipmentServices
  * @author Hugues
  * @since v1.23.07.12
- * @version v1.23.07.22
+ * @version v1.23.07.29
  */
 class CopsEquipmentServices extends LocalServices
 {
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
+    public function __construct()
+    {
+        $this->initDao();
+    }
 
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    private function initDao(): void
+    {
+        if ($this->objDao==null) {
+            $this->objDao = new CopsEquipmentDaoImpl();
+        }
+    }
 
     ////////////////////////////////////
     // wp_7_cops_vehicule
@@ -42,13 +52,10 @@ class CopsEquipmentServices extends LocalServices
 
     /**
      * @since v1.23.07.19
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
     public function getVehicles(array $attributes): array
     {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEquipmentDaoImpl();
-        }
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
         $categ = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_VEH_CATEG] ?? self::SQL_JOKER_SEARCH;
 
@@ -63,33 +70,22 @@ class CopsEquipmentServices extends LocalServices
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->Dao->getVehicles($prepAttributes);
+        return $this->objDao->getVehicles($prepAttributes);
     }
 
     /**
      * @since v1.23.07.19
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
     public function insertVehicle(CopsEquipmentCarClass &$obj): void
-    {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEquipmentDaoImpl();
-        }
-        $this->Dao->insertVehicle($obj);
-    }
+    { $this->objDao->insertVehicle($obj); }
 
     /**
      * @since v1.23.07.19
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
     public function updateVehicle(CopsEquipmentCarClass $obj): void
-    {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEquipmentDaoImpl();
-        }
-        // Une mise à jour.
-        $this->Dao->updateVehicle($obj);
-    }
+    { $this->objDao->updateVehicle($obj); }
 
     ////////////////////////////////////
     // wp_7_cops_weapon
@@ -112,13 +108,10 @@ class CopsEquipmentServices extends LocalServices
 
     /**
      * @since v1.23.07.12
-     * @version v1.23.07.15
+     * @version v1.23.07.29
      */
     public function getWeapons(array $attributes): array
     {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEquipmentDaoImpl();
-        }
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
 
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
@@ -131,31 +124,20 @@ class CopsEquipmentServices extends LocalServices
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->Dao->getWeapons($prepAttributes);
+        return $this->objDao->getWeapons($prepAttributes);
     }
 
     /**
      * @since v1.23.07.13
-     * @version v1.23.07.15
+     * @version v1.23.07.29
      */
     public function insertWeapon(CopsEquipmentWeaponClass &$obj): void
-    {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEquipmentDaoImpl();
-        }
-        $this->Dao->insertWeapon($obj);
-    }
+    { $this->objDao->insertWeapon($obj); }
 
     /**
      * @since v1.23.07.13
-     * @version v1.23.07.15
+     * @version v1.23.07.29
      */
     public function updateWeapon(CopsEquipmentWeaponClass $obj): void
-    {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsEquipmentDaoImpl();
-        }
-        // Une mise à jour.
-        $this->Dao->updateWeapon($obj);
-    }
+    { $this->objDao->updateWeapon($obj); }
 }

@@ -1,13 +1,14 @@
 <?php
 namespace core\services;
 
+use core\daoimpl\CopsLangueDaoImpl;
 use core\utils\HtmlUtils;
 
 /**
  * Classe CopsLangueServices
  * @author Hugues
  * @since 1.22.04.28
- * @version v1.23.05.28
+ * @version v1.23.07.29
  */
 class CopsLangueServices extends LocalServices
 {
@@ -16,18 +17,25 @@ class CopsLangueServices extends LocalServices
   //////////////////////////////////////////////////
   /**
    * Class constructor
-   * @version 1.22.04.28
+   * @version v1.23.07.29
    * @since 1.22.04.28
    */
   public function __construct()
   {
-    $this->Dao = new CopsLangueDaoImpl();
+    $this->initDao();
   }
 
   //////////////////////////////////////////////////
   // METHODS
   //////////////////////////////////////////////////
-  /**
+  private function initDao(): void
+  {
+      if ($this->objDao==null) {
+          $this->objDao = new CopsLangueDaoImpl();
+      }
+  }
+
+/**
    * @param array $attributes [E|S]
    * @since 1.22.04.28
    * @version 1.22.04.28
@@ -60,12 +68,12 @@ class CopsLangueServices extends LocalServices
    *    [limit]   : nombre d'éléments max
    * @return array CopsLangue
    * @since 1.22.04.28
-   * @version 1.22.04.28
+   * @version v1.23.07.29
    */
   public function getCopsLangues($attributes=[])
   {
     $this->initFilters($attributes);
-    return $this->Dao->getCopsLangues($attributes);
+    return $this->objDao->getCopsLangues($attributes);
   }
 
   /**

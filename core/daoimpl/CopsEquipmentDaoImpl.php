@@ -8,7 +8,7 @@ use core\domain\CopsEquipmentWeaponClass;
  * Classe CopsEquipmentDaoImpl
  * @author Hugues
  * @since v1.23.07.12
- * @version v1.23.07.22
+ * @version v1.23.07.29
  */
 class CopsEquipmentDaoImpl extends LocalDaoImpl
 {
@@ -20,7 +20,7 @@ class CopsEquipmentDaoImpl extends LocalDaoImpl
     /**
      * Class constructor
      * @since v1.23.07.12
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
     public function __construct()
     {
@@ -64,6 +64,7 @@ class CopsEquipmentDaoImpl extends LocalDaoImpl
             self::FIELD_VEH_PRICE,
             self::FIELD_VEH_YEAR,
             self::FIELD_VEH_REFERENCE,
+            self::FIELD_VEH_LGN_ROUGE,
         ];
         ////////////////////////////////////
 

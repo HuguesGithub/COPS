@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * Classe PaginationHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.07.22
+ * @version v1.23.07.29
  */
 class PaginationHtmlBean extends UtilitiesBean
 {
@@ -21,10 +21,11 @@ class PaginationHtmlBean extends UtilitiesBean
     private $queryArg;
     private $objs;
     private $url;
+    private $pageWidth;
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
     public function setData(array $arrData): void
     {
@@ -34,6 +35,8 @@ class PaginationHtmlBean extends UtilitiesBean
         $this->nbPerPage = $arrData[self::PAGE_NBPERPAGE] ?? self::PAGE_DEFAULT_NBPERPAGE;
         // Le visuel des boutons de pagination
         $this->option = $arrData[self::PAGE_OPTION] ?? self::PAGE_OPT_FULL_NMB;
+        // Le nombre de pages autour de la page courante
+        $this->pageWidth = $arrData['pageWidth'] ?? 2;
         /////////////////////////////////////////////////
 
         /////////////////////////////////////////////////
@@ -71,7 +74,7 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
     public function getPaginationBlock(): string
     {
@@ -86,9 +89,19 @@ class PaginationHtmlBean extends UtilitiesBean
             $this->option,
             [self::PAGE_OPT_NUMBERS, self::PAGE_OPT_SMP_NMB, self::PAGE_OPT_FULL_NMB, self::PAGE_OPT_FST_LAST_NMB]
         )) {
-            for ($i=1; $i<=$this->nbPages; $i++) {
+            $ulContent .= $this->getPaginationLink($this->curPage==1, 1, 1);
+            if ($this->curPage-$this->pageWidth>2) {
+                $ulContent .= $this->getPaginationLink(true, 0, '...');
+            }
+            $start = max($this->curPage-$this->pageWidth, 2);
+            $end = min($this->curPage+$this->pageWidth, $this->nbPages-1);
+            for ($i=$start; $i<=$end; $i++) {
                 $ulContent .= $this->getPaginationLink($this->curPage==$i, $i, $i);
             }
+            if ($this->curPage+$this->pageWidth<$this->nbPages-1) {
+                $ulContent .= $this->getPaginationLink(true, 0, '...');
+            }
+            $ulContent .= $this->getPaginationLink($this->curPage==$this->nbPages, $this->nbPages, $this->nbPages);
         }
 
         // Met-on previous et next ?
@@ -148,15 +161,20 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
     public function getQueryArg(): string
     {
+        return add_query_arg($this->queryArg, $this->url);
+        /**
+         * TODO
+         * A valider
         if (isset($this->queryArg[self::CST_CURPAGE])) {
             return UrlUtils::getPublicUrl($this->queryArg);
         } else {
             return add_query_arg($this->queryArg, $this->url);
         }
+         */
     }
 
 }

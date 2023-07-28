@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\services;
+
+use core\daoimpl\CopsEnqueteDaoImpl;
+
 /**
  * Classe CopsEnqueteServices
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.22.09.24
+ * @version v1.23.07.29
  */
 class CopsEnqueteServices extends LocalServices
 {
@@ -15,17 +16,24 @@ class CopsEnqueteServices extends LocalServices
     //////////////////////////////////////////////////
     /**
      * Class constructor
-     * @version 1.22.09.16
      * @since 1.22.09.16
+     * @version v1.23.07.29
      */
     public function __construct()
     {
-        $this->Dao = new CopsEnqueteDaoImpl();
+        $this->initDao();
     }
 
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    private function initDao(): void
+    {
+        if ($this->objDao==null) {
+            $this->objDao = new CopsEnqueteDaoImpl();
+        }
+    }
+
     /**
      * @param array $attributes [E|S]
      * @since 1.22.09.20
@@ -54,38 +62,38 @@ class CopsEnqueteServices extends LocalServices
      * @param array $attributes
      * @return array [CopsEnquete]
      * @since 1.22.09.20
-     * @version 1.22.09.20
+     * @version v1.23.07.29
      */
     public function getEnquetes($attributes)
     {
         $this->initFilters($attributes);
-        return $this->Dao->getEnquetes($attributes);
+        return $this->objDao->getEnquetes($attributes);
     }
   
     /**
      * @param integer
      * @return CopsEnquete
      * @since 1.22.09.21
-     * @version 1.22.09.21
+     * @version v1.23.07.29
      */
     public function getEnquete($enqueteId=-1)
     {
         $attributes = [$enqueteId];
-        $row = $this->Dao->getEnquete($attributes);
+        $row = $this->objDao->getEnquete($attributes);
         return new CopsEnquete($row[0]);
     }
   
     /**
      * @since 1.22.09.24
-     * @version 1.22.09.24
+     * @version v1.23.07.29
      */
     public function updateEnquete($objCopsEnquete)
-    { $this->Dao->updateEnquete($objCopsEnquete); }
+    { $this->objDao->updateEnquete($objCopsEnquete); }
     
     /**
      * @since 1.22.09.24
-     * @version 1.22.09.24
+     * @version v1.23.07.29
      */
     public function insertEnquete(&$objCopsEnquete)
-    { $this->Dao->insertEnquete($objCopsEnquete); }
+    { $this->objDao->insertEnquete($objCopsEnquete); }
 }

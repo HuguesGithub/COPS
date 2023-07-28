@@ -7,7 +7,7 @@ use core\utils\HtmlUtils;
  * Classe TableauHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.07.22
+ * @version v1.23.07.29
  */
 class TableauHtmlBean extends UtilitiesBean
 {
@@ -32,14 +32,14 @@ class TableauHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.07.22
-     * @version v1.23.07.22
+     * @version v1.23.07.29
      */
-    public function defaultInit($objHeader=null, $objBody=null, $objFooter=null): void
+    public function defaultInit($objHeader=null, $objBody=null, $objFooter=null, string $describedBy=''): void
     {
         $this->setSize('sm');
         $this->setStripped();
         $this->setClass('m-0 sortableTable text-center');
-        $this->setAria('describedby', 'Liste des véhicules');
+        $this->setAria('describedby', $describedBy);
         $this->setTHead($objHeader);
         $this->setBody($objBody);
         $this->setTFoot($objFooter);

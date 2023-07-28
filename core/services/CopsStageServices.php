@@ -3,14 +3,11 @@ namespace core\services;
 
 use core\daoimpl\CopsStageDaoImpl;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsStageServices
  * @author Hugues
  * @since 1.22.06.02
- * @version 1.22.06.03
+ * @version v1.23.07.29
  */
 class CopsStageServices extends LocalServices
 {
@@ -19,17 +16,24 @@ class CopsStageServices extends LocalServices
   //////////////////////////////////////////////////
   /**
    * Class constructor
-   * @version 1.22.06.02
+   * @version v1.23.07.29
    * @since 1.22.06.02
    */
   public function __construct()
   {
-    $this->Dao = new CopsStageDaoImpl();
+    $this->initDao();
   }
 
   //////////////////////////////////////////////////
   // METHODS
   //////////////////////////////////////////////////
+  private function initDao(): void
+  {
+      if ($this->objDao==null) {
+          $this->objDao = new CopsStageDaoImpl();
+      }
+  }
+
   /**
    * @param array $attributes [E|S]
    * @since 1.22.06.02
@@ -76,12 +80,12 @@ class CopsStageServices extends LocalServices
    *    [limit]   : nombre d'éléments max
    * @return array CopsStage
    * @since 1.22.06.02
-   * @version 1.22.06.02
+   * @version v1.23.07.29
    */
   public function getStages($attributes=[])
   {
     $this->initFilters($attributes);
-    return $this->Dao->getStages($attributes);
+    return $this->objDao->getStages($attributes);
   }
 
   /**
@@ -92,7 +96,7 @@ class CopsStageServices extends LocalServices
    *    [limit]   : nombre d'éléments max
    * @return array CopsStageCategorie
    * @since 1.22.06.02
-   * @version 1.22.06.02
+   * @version v1.23.07.29
    */
   public function getCopsStageCategories($attributes=[])
   {
@@ -116,12 +120,12 @@ class CopsStageServices extends LocalServices
       $attributes[self::SQL_LIMIT] = -1;
     }
 
-    return $this->Dao->getCopsStageCategories($attributes);
+    return $this->objDao->getCopsStageCategories($attributes);
   }
 
   /*
    * @since 1.22.07.06
-   * @version 1.22.07.06
+   * @version v1.23.07.29
    */
   public function getStageSpecs($stageId)
   {
@@ -135,7 +139,7 @@ class CopsStageServices extends LocalServices
       $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
     }
 
-    return $this->Dao->getCopsStageSpecs($attributes);
+    return $this->objDao->getCopsStageSpecs($attributes);
   }
 
 }

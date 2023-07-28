@@ -9,7 +9,7 @@ use core\daoimpl\CopsMeteoDaoImpl;
  * Classe CopsMeteoServices
  * @author Hugues
  * @since 1.22.04.29
- * @version v1.23.06.18
+ * @version v1.23.07.29
  */
 class CopsMeteoServices extends LocalServices
 {
@@ -18,50 +18,48 @@ class CopsMeteoServices extends LocalServices
     //////////////////////////////////////////////////
     /**
      * Class constructor
-     * @version 1.22.04.29
+     * @version v1.23.07.29
      * @since 1.22.04.29
      */
     public function __construct()
     {
-        $this->Dao = null;
+        $this->initDao();
     }
 
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    private function initDao(): void
+    {
+        if ($this->objDao==null) {
+            $this->objDao = new CopsMeteoDaoImpl();
+        }
+    }
 
     ////////////////////////////////////
     // WP_7_COPS_METEO
     ////////////////////////////////////
     /**
      * @since v1.23.04.29
-     * @version v1.23.04.30
+     * @version v1.23.07.29
      */
     public function getMeteos(array $params): array
     {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsMeteoDaoImpl();
-        }
         $prepAttributes = [];
         $prepAttributes[] = $params[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] ?? self::SQL_JOKER_SEARCH;
         $prepAttributes[] = $params[self::SQL_ORDER_BY] ?? self::FIELD_DATE_METEO;
         $prepAttributes[] = $params[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
         $prepAttributes[] = $params[self::SQL_LIMIT] ?? 9999;
-        return $this->Dao->getMeteos($prepAttributes);
+        return $this->objDao->getMeteos($prepAttributes);
     }
 
 
     /**
      * @since v1.23.04.29
-     * @version v1.23.06.18
+     * @version v1.23.07.29
      */
     public function insertMeteo(CopsMeteoClass $objCopsMeteo): void
-    {
-        if ($this->Dao==null) {
-            $this->Dao = new CopsMeteoDaoImpl();
-        }
-        $this->Dao->insertMeteo($objCopsMeteo);
-    }
+    { $this->objDao->insertMeteo($objCopsMeteo); }
 
     ////////////////////////////////////
 

@@ -12,7 +12,7 @@ use core\utils\DateUtils;
  * Classe CopsEventServices
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.06.18
+ * @version v1.23.07.29
  */
 class CopsEventServices extends LocalServices
 {
@@ -21,17 +21,23 @@ class CopsEventServices extends LocalServices
     //////////////////////////////////////////////////
     /**
      * Class constructor
-     * @version 1.22.06.13
+     * @version v1.23.07.29
      * @since 1.22.06.13
      */
     public function __construct()
     {
-        $this->Dao = new CopsEventDaoImpl();
+        $this->initDao();
     }
 
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    private function initDao(): void
+    {
+        if ($this->objDao==null) {
+            $this->objDao = new CopsEventDaoImpl();
+        }
+    }
 
     ////////////////////////////////////
     // wp_7_cops_event
@@ -54,7 +60,7 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.06.18
+     * @version v1.23.07.29
      */
     public function getEvents(array $attributes): array
     {
@@ -91,48 +97,44 @@ class CopsEventServices extends LocalServices
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->Dao->getEvents($prepAttributes);
+        return $this->objDao->getEvents($prepAttributes);
     }
 
     /**
      * @since v1.23.05.26
-     * @version v1.23.05.28
+     * @version v1.23.07.29
      */
     public function insertEvent(CopsEventClass &$objEvent): void
     {
-        $this->Dao->insertEvent($objEvent);
-        
+        $this->objDao->insertEvent($objEvent);
         $this->addEventDates($objEvent);
     }
 
     /**
      * @since v1.23.05.21
-     * @version v1.23.05.21
+     * @version v1.23.07.29
      */
     public function updateEvent(CopsEventClass $objEvent): void
     {
-        // Une mise à jour.
-        $this->Dao->updateEvent($objEvent);
-
+        $this->objDao->updateEvent($objEvent);
         // On doit vérifier s'il y avait des eventDate associés.
         // Le cas échéant, on doit les supprimer.
         $attributes = [self::FIELD_EVENT_ID => $objEvent->getField(self::FIELD_ID)];
         $this->deleteEventDate($attributes);
-
         // Une fois event mis à jour, on doit créer les eventDate associés.
         $this->addEventDates($objEvent);
     }
 
     /**
      * @since v1.23.05.25
-     * @version v1.23.05.28
+     * @version v1.23.07.29
      */
     public function deleteEvent(array $attributes): void
     {
         $attributes = [
             $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
         ];
-        $this->Dao->deleteEvent($attributes);
+        $this->objDao->deleteEvent($attributes);
     }
 
     ////////////////////////////////////
@@ -394,7 +396,7 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.07
+     * @version v1.23.07.29
      */
     public function getEventDates(array $attributes): array
     {
@@ -431,12 +433,12 @@ class CopsEventServices extends LocalServices
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->Dao->getEventDates($prepAttributes);
+        return $this->objDao->getEventDates($prepAttributes);
     }
 
     /**
      * @since v1.23.05.21
-     * @version v1.23.05.21
+     * @version v1.23.07.29
      */
     public function insertEventDate(CopsEventDateClass $objEventDate): void
     {
@@ -447,12 +449,12 @@ class CopsEventServices extends LocalServices
             $objEventDate->getField(self::FIELD_TSTART),
             $objEventDate->getField(self::FIELD_TEND),
         ];
-        $this->Dao->insertEventDate($attributes);
+        $this->objDao->insertEventDate($attributes);
     }
 
     /**
      * @since v1.23.05.21
-     * @version v1.23.05.21
+     * @version v1.23.07.29
      */
     public function deleteEventDate(array $attributes): void
     {
@@ -460,7 +462,7 @@ class CopsEventServices extends LocalServices
             $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::FIELD_EVENT_ID] ?? self::SQL_JOKER_SEARCH,
         ];
-        $this->Dao->deleteEventDate($attributes);
+        $this->objDao->deleteEventDate($attributes);
     }
 
     ////////////////////////////////////
@@ -484,7 +486,7 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.05.21
+     * @version v1.23.07.29
     */
     public function getEventCategories(array $attributes=[]): array
     {
@@ -499,7 +501,7 @@ class CopsEventServices extends LocalServices
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->Dao->getEventCategories($prepAttributes);
+        return $this->objDao->getEventCategories($prepAttributes);
     }
 
 }

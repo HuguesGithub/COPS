@@ -51,10 +51,13 @@
                     </div>
 
                     <div class="input-group mb-3">
-                        <span class="input-group-text col-3" for="vehPointStructure">Points de Structure</span>
+                        <span class="input-group-text col-2" for="vehPointStructure">Points de Structure</span>
                         <input type="text" name="vehPointStructure" id="vehPointStructure" class="form-control col-1" aria-label="Points de Structure" aria-describedby="Points de Structure" value="%12$s">
-                        <div class="col-2">&nbsp;</div>
-                        <span class="input-group-text col-3" for="vehAnnee">Année</span>
+                        <div class="col-1">&nbsp;</div>
+                        <span class="input-group-text col-2" for="vehLigneRouge">Ligne Rouge</span>
+                        <input type="text" name="vehLigneRouge" id="vehLigneRouge" class="form-control col-1" aria-label="Ligne Rouge" aria-describedby="Ligne Rouge" value="%15$s">
+                        <div class="col-1">&nbsp;</div>
+                        <span class="input-group-text col-2" for="vehAnnee">Année</span>
                         <input type="text" name="vehAnnee" id="vehAnnee" class="form-control col-1" aria-label="Année" aria-describedby="Année" value="%13$s">
                     </div>
 
@@ -68,7 +71,7 @@
             <div class="card-footer col-12">
                 <input type="hidden" name="writeAction" value="write">
                 <div class="btn-group">
-                    <button class="btn btn-sm btn-outline p-0"><a href="%15$s" style="margin: .25rem .5rem;text-decoration: none; color: black;">Annuler</a></button>
+                    <button class="btn btn-sm btn-outline p-0"><a href="%16$s" style="margin: .25rem .5rem;text-decoration: none; color: black;">Annuler</a></button>
                     <button class="btn btn-sm btn-primary">Envoyer</button>
                 </div>
             </div>

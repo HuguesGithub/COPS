@@ -1,12 +1,13 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\services;
+
+use core\daoimpl\CopsAutopsieDaoImpl;
+
 /**
  * Classe CopsAutopsieServices
  * @author Hugues
  * @since 1.22.10.09
- * @version 1.22.10.09
+ * @version v1.23.07.29
  */
 class CopsAutopsieServices extends LocalServices
 {
@@ -15,21 +16,28 @@ class CopsAutopsieServices extends LocalServices
     //////////////////////////////////////////////////
     /**
      * Class constructor
-     * @version 1.22.10.09
      * @since 1.22.10.09
+     * @version v1.23.07.29
      */
     public function __construct()
     {
-        $this->Dao = new CopsAutopsieDaoImpl();
+        $this->initDao();
     }
 
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    private function initDao(): void
+    {
+        if ($this->objDao==null) {
+            $this->objDao = new CopsAutopsieDaoImpl();
+        }
+    }
+
     /**
      * @param array $attributes [E|S]
      * @since 1.22.10.09
-     * @version 1.22.10.09
+     * @version v1.23.07.29
      */
     public function initFilters(&$attributes=[])
     {
@@ -54,38 +62,38 @@ class CopsAutopsieServices extends LocalServices
      * @param array $attributes
      * @return array [CopsAutopsie]
      * @since 1.22.10.09
-     * @version 1.22.10.09
+     * @version v1.23.07.29
      */
     public function getAutopsies($attributes)
     {
         $this->initFilters($attributes);
-        return $this->Dao->getAutopsies($attributes);
+        return $this->objDao->getAutopsies($attributes);
     }
   
     /**
      * @param integer
      * @return CopsAutopsie
      * @since 1.22.10.09
-     * @version 1.22.10.09
+     * @version v1.23.07.29
      */
     public function getAutopsie($autopsieId=-1)
     {
         $attributes = [$autopsieId];
-        $row = $this->Dao->getAutopsie($attributes);
+        $row = $this->objDao->getAutopsie($attributes);
         return new CopsAutopsie($row[0]);
     }
   
     /**
      * @since 1.22.10.10
-     * @version 1.22.10.10
+     * @version v1.23.07.29
      */
     public function updateAutopsie($objCopsAutopsie)
-    { $this->Dao->updateAutopsie($objCopsAutopsie); }
+    { $this->objDao->updateAutopsie($objCopsAutopsie); }
     
     /**
      * @since 1.22.10.10
-     * @version 1.22.10.10
+     * @version v1.23.07.29
      */
     public function insertAutopsie(&$objCopsAutopsie)
-    { $this->Dao->insertAutopsie($objCopsAutopsie); }
+    { $this->objDao->insertAutopsie($objCopsAutopsie); }
 }

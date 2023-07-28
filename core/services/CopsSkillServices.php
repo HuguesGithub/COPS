@@ -7,26 +7,34 @@ use core\daoimpl\CopsSkillDaoImpl;
  * Classe CopsSkillServices
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.06.25
+ * @version v1.23.07.29
  */
 class CopsSkillServices extends LocalServices
 {
   //////////////////////////////////////////////////
   // CONSTRUCT
   //////////////////////////////////////////////////
+  public function __construct()
+  {
+    $this->initDao();
+  }
 
   //////////////////////////////////////////////////
   // METHODS
   //////////////////////////////////////////////////
+  private function initDao(): void
+  {
+      if ($this->objDao==null) {
+          $this->objDao = new CopsSkillDaoImpl();
+      }
+  }
 
     /**
      * @since v1.23.06.25
-     * @version v1.23.06.25
+     * @version v1.23.07.29
      */
     public function getSkills(array $attributes=[]): array
     {
-        $this->Dao = new CopsSkillDaoImpl();
-
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
         ///////////////////////////////////////////////////////////
 
@@ -37,17 +45,15 @@ class CopsSkillServices extends LocalServices
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
 
-        return $this->Dao->getSkills($prepAttributes);
+        return $this->objDao->getSkills($prepAttributes);
     }
 
     /**
      * @since v1.23.06.23
-     * @version v1.23.06.25
+     * @version v1.23.07.29
      */
     public function getCopsSkillJoints(array $attributes=[]): array
     {
-        $this->Dao = new CopsSkillDaoImpl();
-
         $copsId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_COPS_ID] ?? self::SQL_JOKER_SEARCH;
         ///////////////////////////////////////////////////////////
 
@@ -58,17 +64,15 @@ class CopsSkillServices extends LocalServices
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
 
-        return $this->Dao->getCopsSkillJoints($prepAttributes);
+        return $this->objDao->getCopsSkillJoints($prepAttributes);
     }
 
     /**
      * @since v1.23.06.25
-     * @version v1.23.06.25
+     * @version v1.23.07.29
      */
     public function getSpecSkills(array $attributes=[]): array
     {
-        $this->Dao = new CopsSkillDaoImpl();
-
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
         ///////////////////////////////////////////////////////////
 
@@ -79,7 +83,7 @@ class CopsSkillServices extends LocalServices
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
 
-        return $this->Dao->getSpecSkills($prepAttributes);
+        return $this->objDao->getSpecSkills($prepAttributes);
     }
 
 
@@ -151,7 +155,7 @@ class CopsSkillServices extends LocalServices
       $attributes[self::SQL_ORDER] = self::SQL_ORDER_ASC;
     }
 
-    return $this->Dao->getCopsSkillSpecs($attributes);
+    return $this->objDao->getCopsSkillSpecs($attributes);
   }
 
 }

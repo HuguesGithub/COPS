@@ -1,43 +1,45 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\services;
+
+use core\daoimpl\CopsMailDaoImpl;
+
 /**
  * Classe CopsMailServices
  * @author Hugues
  * @since 1.22.04.29
- * @version 1.22.10.17
+ * @version v1.23.07.29
  */
 class CopsMailServices extends LocalServices
 {
   //////////////////////////////////////////////////
   // CONSTRUCT
   //////////////////////////////////////////////////
-  /**
-   * Class constructor
-   * @version 1.22.04.29
-   * @since 1.22.04.29
-   */
   public function __construct()
   {
-    $this->Dao = new CopsMailDaoImpl();
+    $this->initDao();
   }
 
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
+    private function initDao(): void
+    {
+        if ($this->objDao==null) {
+            $this->objDao = new CopsMailDaoImpl();
+        }
+    }
 
     ////////////////////////////////////
     // WP_7_COPS_MAIL
     ////////////////////////////////////
     /**
      * @since 1.22.05.04
-     * @version 1.22.05.04
+     * @version v1.23.07.29
      */
     public function getMail($mailId=-1)
     {
         $attributes = [$mailId];
-        $row = $this->Dao->getMail($attributes);
+        $row = $this->objDao->getMail($attributes);
         return new CopsMail($row[0]);
     }
     ////////////////////////////////////
@@ -50,7 +52,7 @@ class CopsMailServices extends LocalServices
      * @param array $attributes :
      *      - ['slug'] : pattern de recherche
      * @since 1.22.05.04
-     * @version 1.22.10.17
+     * @version v1.23.07.29
      */
     public function getMailFolders($attributes=[])
     {
@@ -59,7 +61,7 @@ class CopsMailServices extends LocalServices
             isset($attributes[self::FIELD_ID]) ?? self::SQL_JOKER_SEARCH,
             isset($attributes[self::FIELD_SLUG]) ?? self::SQL_JOKER_SEARCH
         ];
-        $rows = $this->Dao->getMailFolders($prepAttributes);
+        $rows = $this->objDao->getMailFolders($prepAttributes);
         while (!empty($rows)) {
             $objMailFolders[] = new CopsMailFolder(array_shift($rows));
         }
@@ -87,7 +89,7 @@ class CopsMailServices extends LocalServices
      * @param array $attributes :
      *      - ['id'] : pattern de recherche
      * @since 1.22.05.04
-     * @version 1.22.10.17
+     * @version v1.23.07.29
      */
     public function getMailUsers($attributes=[])
     {
@@ -96,7 +98,7 @@ class CopsMailServices extends LocalServices
             (!isset($attributes[self::FIELD_MAIL]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_MAIL]),
             (!isset($attributes['copsId']) ? self::SQL_JOKER_SEARCH : $attributes['copsId'])
         ];
-        $rows = $this->Dao->getMailUsers($prepAttributes);
+        $rows = $this->objDao->getMailUsers($prepAttributes);
         $objMailUsers = [];
         while (!empty($rows)) {
             $objMailUsers[] = new CopsMailUser(array_shift($rows));
@@ -128,7 +130,7 @@ class CopsMailServices extends LocalServices
      * @param array $attributes :
      *      - ['id'] : pattern de recherche
      * @since 1.22.05.04
-     * @version 1.22.10.17
+     * @version v1.23.07.29
      */
     public function getMailJoints($attributes=[], $blnBothFolders=false)
     {
@@ -139,7 +141,7 @@ class CopsMailServices extends LocalServices
             (!isset($attributes[self::FIELD_FOLDER_ID]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_FOLDER_ID]),
             (!isset($attributes[self::FIELD_LU]) ? self::SQL_JOKER_SEARCH : $attributes[self::FIELD_LU])
         ];
-        $rows = $this->Dao->getMailJoints($prepAttributes, $blnBothFolders);
+        $rows = $this->objDao->getMailJoints($prepAttributes, $blnBothFolders);
         $objMailJoints = [];
         while (!empty($rows)) {
             $objMailJoints[] = new CopsMailJoint(array_shift($rows));
@@ -202,7 +204,7 @@ class CopsMailServices extends LocalServices
   
     /**
      * @since 1.22.05.01
-     * @version 1.22.10.17
+     * @version v1.23.07.29
      */
     public function getPrevNextMailJoint($objCopsMailJoint, $prev=true)
     {
@@ -233,7 +235,7 @@ class CopsMailServices extends LocalServices
         $attributes[] = $objCopsMailJoint->getField(self::FIELD_FOLDER_ID);
         $attributes[] = $objCopsMailJoint->getMail()->getField(self::FIELD_MAIL_DATE_ENVOI);
 
-        $rows = $this->Dao->getPrevNextMailJoint($attributes, $blnBothFolders, $prev);
+        $rows = $this->objDao->getPrevNextMailJoint($attributes, $blnBothFolders, $prev);
         if (empty($rows)) {
             return new CopsMailJoint();
         } else {
@@ -258,14 +260,14 @@ class CopsMailServices extends LocalServices
      * @version 1.22.10.17
      */
     public function updateMailJoint($objCopsMailJoint)
-    { $this->Dao->updateMailJoint($objCopsMailJoint); }
+    { $this->objDao->updateMailJoint($objCopsMailJoint); }
 
     /**
      * @since 1.22.05.10
      * @version 1.22.10.17
      */
     public function insertMailJoint($objCopsMailJoint)
-    { $this->Dao->insertMailJoint($objCopsMailJoint); }
+    { $this->objDao->insertMailJoint($objCopsMailJoint); }
 
   ////////////////////////////////////
 
@@ -274,13 +276,13 @@ class CopsMailServices extends LocalServices
      * @version 1.22.10.17
      */
     public function updateMail($objCopsMail)
-    { $this->Dao->updateMail($objCopsMail); }
+    { $this->objDao->updateMail($objCopsMail); }
 
     /**
      * @since 1.22.05.10
      * @version 1.22.10.17
      */
     public function insertMail(&$objCopsMail)
-    { $this->Dao->insertMail($objCopsMail); }
+    { $this->objDao->insertMail($objCopsMail); }
 
 }

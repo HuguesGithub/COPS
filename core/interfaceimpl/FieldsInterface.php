@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.07.22
+ * @version v1.23.07.29
  */
 interface FieldsInterface
 {
@@ -271,6 +271,7 @@ interface FieldsInterface
     public const FIELD_VEH_PRICE          = 'vehPrix';
     public const FIELD_VEH_YEAR           = 'vehAnnee';
     public const FIELD_VEH_REFERENCE      = 'vehReference';
+    public const FIELD_VEH_LGN_ROUGE      = 'vehLigneRouge';
 
 
     // Provenance ?

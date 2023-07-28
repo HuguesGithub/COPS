@@ -8,26 +8,34 @@ use core\domain\CopsPlayerClass;
  * Classe CopsPlayerServices
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.07.02
+ * @version v1.23.07.29
  */
 class CopsPlayerServices extends LocalServices
 {
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
-
+    public function __construct()
+    {
+      $this->initDao();
+    }
+  
     //////////////////////////////////////////////////
     // METHODS
     //////////////////////////////////////////////////
-
+    private function initDao(): void
+    {
+        if ($this->objDao==null) {
+            $this->objDao = new CopsPlayerDaoImpl();
+        }
+    }
+  
     /**
      * @since v1.23.06.19
-     * @version v1.23.07.02
+     * @version v1.23.07.29
      */
     public function getCopsPlayers(array $attributes=[]): array
     {
-        $this->Dao = new CopsPlayerDaoImpl();
-
         $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
         $matricule = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH;
         $password = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_PASSWORD] ?? self::SQL_JOKER_SEARCH;
@@ -63,17 +71,17 @@ class CopsPlayerServices extends LocalServices
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->Dao->getCopsPlayers($prepAttributes);
+        return $this->objDao->getCopsPlayers($prepAttributes);
     }
 
     /**
      * @since v1.23.06.21
-     * @version v1.23.06.25
+     * @version v1.23.07.29
      */
     public function updatePlayer(CopsPlayerClass $objPlayer): void
     {
         // Une mise à jour.
-        $this->Dao->updatePlayer($objPlayer);
+        $this->objDao->updatePlayer($objPlayer);
     }
 
 
