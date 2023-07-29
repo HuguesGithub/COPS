@@ -161,12 +161,8 @@ class CopsEquipmentWeaponBean extends CopsBean
     {
         //////////////////////////////////////////////////////
         // Définition du Header du tableau
-        $objRow = new TableauRowHtmlBean();
-        $objTableauCell = new TableauCellHtmlBean('Nom', self::TAG_TH, 'col-3');
-        $queryArg[self::SQL_ORDER_BY] = self::FIELD_NOM_ARME;
-        $objTableauCell->ableSort($queryArg);
-        $objRow->addCell($objTableauCell);
         $headerElement = [
+            ['label' => 'Nom', 'sortable' => self::FIELD_VEH_LABEL, 'classe' => 'col-3'],
             ['label' => 'PR', 'abbr' => 'Précision'],
             ['label' => 'PU', 'abbr' => 'Puissance'],
             ['label' => 'FA', 'abbr' => 'Force d\'arrêt'],
@@ -178,18 +174,7 @@ class CopsEquipmentWeaponBean extends CopsBean
             ['label' => 'Dis', 'abbr' => 'Dissimulation'],
             ['label' => 'Prix'],
         ];
-        foreach ($headerElement as $element) {
-            if (isset($element['abbr'])) {
-                $tag = HtmlUtils::getBalise('abbr', $element['label'], [self::ATTR_TITLE=>$element['abbr']]);
-            } else {
-                $tag = $element['label'];
-            }
-            $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        }
 
-        $objHeader = new TableauTHeadHtmlBean();
-        $objHeader->addRow($objRow);
-
-        return $objHeader;
+        return static::getBuiltTableHeader($headerElement, $queryArg);
     }
 }

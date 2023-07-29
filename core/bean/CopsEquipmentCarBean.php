@@ -97,12 +97,8 @@ class CopsEquipmentCarBean extends CopsBean
      */
     public static function getTableHeader(array &$queryArg=[]): TableauTHeadHtmlBean
     {
-        $objRow = new TableauRowHtmlBean();
-        $objTableauCell = new TableauCellHtmlBean('Nom', self::TAG_TH, 'col-3');
-        $queryArg[self::SQL_ORDER_BY] = self::FIELD_VEH_LABEL;
-        $objTableauCell->ableSort($queryArg);
-        $objRow->addCell($objTableauCell);
         $headerElement = [
+            ['label' => 'Nom', 'sortable' => self::FIELD_VEH_LABEL, 'classe' => 'col-3'],
             ['label' => 'Catégorie'],
             ['label' => 'Date'],
             ['label' => 'Place'],
@@ -116,19 +112,7 @@ class CopsEquipmentCarBean extends CopsBean
             ['label' => 'Spécial'],
             ['label' => 'Réf', 'abbr' => 'Référence'],
         ];
-        foreach ($headerElement as $element) {
-            if (isset($element['abbr'])) {
-                $tag = HtmlUtils::getBalise('abbr', $element['label'], [self::ATTR_TITLE=>$element['abbr']]);
-            } else {
-                $tag = $element['label'];
-            }
-            $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        }
-
-        $objHeader = new TableauTHeadHtmlBean();
-        $objHeader->addRow($objRow);
-
-        return $objHeader;
+        return static::getBuiltTableHeader($headerElement, $queryArg);
     }
 
     /**
