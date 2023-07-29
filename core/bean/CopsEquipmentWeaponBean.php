@@ -166,24 +166,26 @@ class CopsEquipmentWeaponBean extends CopsBean
         $queryArg[self::SQL_ORDER_BY] = self::FIELD_NOM_ARME;
         $objTableauCell->ableSort($queryArg);
         $objRow->addCell($objTableauCell);
-        $tag = HtmlUtils::getBalise('abbr', 'PR', [self::ATTR_TITLE=>'Précision']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'PU', [self::ATTR_TITLE=>'Puissance']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'FA', [self::ATTR_TITLE=>'Force d\'arrêt']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'VRC', [self::ATTR_TITLE=>'Valeur de Rafale Courte']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $objRow->addCell(new TableauCellHtmlBean('Portée', self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'VC', [self::ATTR_TITLE=>'Valeur de Couverture']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'CT', [self::ATTR_TITLE=>'Cadence de Tir']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'Mun', [self::ATTR_TITLE=>'Munitions']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'Dis', [self::ATTR_TITLE=>'Dissimulation']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $objRow->addCell(new TableauCellHtmlBean('Prix', self::TAG_TH, self::CSS_COL));
+        $headerElement = [
+            ['label' => 'PR', 'abbr' => 'Précision'],
+            ['label' => 'PU', 'abbr' => 'Puissance'],
+            ['label' => 'FA', 'abbr' => 'Force d\'arrêt'],
+            ['label' => 'VRC', 'abbr' => 'Valeur de Rafale Courte'],
+            ['label' => 'Portée'],
+            ['label' => 'VC', 'abbr' => 'Valeur de Couverture'],
+            ['label' => 'CT', 'abbr' => 'Cadence de Tir'],
+            ['label' => 'Mun', 'abbr' => 'Munitions'],
+            ['label' => 'Dis', 'abbr' => 'Dissimulation'],
+            ['label' => 'Prix'],
+        ];
+        foreach ($headerElement as $element) {
+            if (isset($element['abbr'])) {
+                $tag = HtmlUtils::getBalise('abbr', $element['label'], [self::ATTR_TITLE=>$element['abbr']]);
+            } else {
+                $tag = $element['label'];
+            }
+            $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
+        }
 
         $objHeader = new TableauTHeadHtmlBean();
         $objHeader->addRow($objRow);

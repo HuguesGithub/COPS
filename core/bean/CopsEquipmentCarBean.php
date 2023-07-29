@@ -102,24 +102,28 @@ class CopsEquipmentCarBean extends CopsBean
         $queryArg[self::SQL_ORDER_BY] = self::FIELD_VEH_LABEL;
         $objTableauCell->ableSort($queryArg);
         $objRow->addCell($objTableauCell);
-        $objRow->addCell(new TableauCellHtmlBean('Catégorie', self::TAG_TH, self::CSS_COL));
-        $objRow->addCell(new TableauCellHtmlBean('Date', self::TAG_TH, self::CSS_COL));
-        $objRow->addCell(new TableauCellHtmlBean('Place', self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'LR', [self::ATTR_TITLE=>'Ligne Rouge']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'VM', [self::ATTR_TITLE=>'Vitesse Maximale (km/h)']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'Acc', [self::ATTR_TITLE=>'Accélération (0 à 100)']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'PS', [self::ATTR_TITLE=>'Points de Structure']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $objRow->addCell(new TableauCellHtmlBean('Autonomie', self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'Car', [self::ATTR_TITLE=>'Carburant']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
-        $objRow->addCell(new TableauCellHtmlBean('Prix', self::TAG_TH, self::CSS_COL));
-        $objRow->addCell(new TableauCellHtmlBean('Spécial', self::TAG_TH, self::CSS_COL));
-        $tag = HtmlUtils::getBalise('abbr', 'Réf', [self::ATTR_TITLE=>'Référence']);
-        $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
+        $headerElement = [
+            ['label' => 'Catégorie'],
+            ['label' => 'Date'],
+            ['label' => 'Place'],
+            ['label' => 'LR', 'abbr' => 'Ligne Rouge'],
+            ['label' => 'VM', 'abbr' => 'Vitesse Maximale (km/h)'],
+            ['label' => 'Acc', 'abbr' => 'Accélération (0 à 100)'],
+            ['label' => 'PS', 'abbr' => 'Points de Structure'],
+            ['label' => 'Autonomie'],
+            ['label' => 'Car', 'abbr' => 'Carburant'],
+            ['label' => 'Prix'],
+            ['label' => 'Spécial'],
+            ['label' => 'Réf', 'abbr' => 'Référence'],
+        ];
+        foreach ($headerElement as $element) {
+            if (isset($element['abbr'])) {
+                $tag = HtmlUtils::getBalise('abbr', $element['label'], [self::ATTR_TITLE=>$element['abbr']]);
+            } else {
+                $tag = $element['label'];
+            }
+            $objRow->addCell(new TableauCellHtmlBean($tag, self::TAG_TH, self::CSS_COL));
+        }
 
         $objHeader = new TableauTHeadHtmlBean();
         $objHeader->addRow($objRow);
