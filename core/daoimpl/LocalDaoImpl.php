@@ -8,7 +8,7 @@ use core\utils\LogUtils;
  * Classe LocalDaoImpl
  * @author Hugues
  * @since 1.22.04.28
- * @version v1.23.07.22
+ * @version v1.23.08.05
  */
 class LocalDaoImpl extends GlobalDaoImpl
 {
@@ -19,6 +19,13 @@ class LocalDaoImpl extends GlobalDaoImpl
     protected $insert;
     protected $update;
     public $dbTable;
+
+    public $arrLogs = [
+        'select' => false,
+        'update' => false,
+        'insert' => true,
+        'delete' => false,
+    ];
 
     /**
    * Class Constructor
@@ -89,7 +96,7 @@ class LocalDaoImpl extends GlobalDaoImpl
 
     /**
      * @since v1.23.05.26
-     * @version v1.23.06.04
+     * @version v1.23.08.05
      */
     public function selectListDaoImpl($objMixed, string $request, array $attributes): array
     {
@@ -99,7 +106,9 @@ class LocalDaoImpl extends GlobalDaoImpl
         
         //////////////////////////////
         // Exécution de la requête
-        LogUtils::logRequest($prepRequest);
+        if ($this->arrLogs['select']) {
+            LogUtils::logRequest($prepRequest);
+        }
         $rows = MySQLClass::wpdbSelect($prepRequest);
         //////////////////////////////
         
@@ -118,7 +127,7 @@ class LocalDaoImpl extends GlobalDaoImpl
      * @param mixed [E|S]
      * @param strin $request
      * @since 1.23.03.15
-     * @version 1.23.03.15
+     * @version v1.23.08.05
      */
     public function insertDaoImpl(&$objMixed, array $arrFields, string $request, string $fieldId): void
     {
@@ -133,13 +142,16 @@ class LocalDaoImpl extends GlobalDaoImpl
 
         // On prépare la requête, l'exécute et met à jour l'id de l'objet créé.
         $sql = MySQLClass::wpdbPrepare($request, $prepObject);
+        if ($this->arrLogs['insert']) {
+            LogUtils::logRequest($sql);
+        }
         MySQLClass::wpdbQuery($sql);
         $objMixed->setField($fieldId, MySQLClass::getLastInsertId());
     }
 
     /**
      * @since v1.23.05.26
-     * @version v1.23.06.04
+     * @version v1.23.08.05
      */
     public function updateDaoImpl($objStd, string $request, string $fieldId): void
     {
@@ -156,7 +168,9 @@ class LocalDaoImpl extends GlobalDaoImpl
         $prepObject[] = $objStd->getField($fieldId);
 
         $sql = MySQLClass::wpdbPrepare($request, $prepObject);
-        LogUtils::logRequest($sql);
+        if ($this->arrLogs['update']) {
+            LogUtils::logRequest($sql);
+        }
         MySQLClass::wpdbQuery($sql);
     }
 

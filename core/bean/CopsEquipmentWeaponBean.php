@@ -1,6 +1,7 @@
 <?php
 namespace core\bean;
 
+use core\services\CopsSkillServices;
 use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
@@ -8,7 +9,7 @@ use core\utils\UrlUtils;
  * CopsEquipmentWeaponBean
  * @author Hugues
  * @since v1.23.07.12
- * @version v1.23.07.29
+ * @version v1.23.08.05
  */
 class CopsEquipmentWeaponBean extends CopsBean
 {

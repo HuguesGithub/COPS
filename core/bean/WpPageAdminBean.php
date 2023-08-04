@@ -5,7 +5,9 @@ use core\domain\CopsPlayerClass;
 use core\services\WpCategoryServices;
 use core\services\CopsIndexServices;
 use core\services\CopsPlayerServices;
+use core\services\CopsTchatServices;
 use core\utils\DateUtils;
+use core\utils\DiceUtils;
 use core\utils\HtmlUtils;
 use core\utils\SessionUtils;
 use core\utils\UrlUtils;
@@ -14,7 +16,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version v1.23.07.02
+ * @version v1.23.08.05
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -222,7 +224,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since 1.22.10.18
-     * @version v1.23.07.02
+     * @version v1.23.08.05
      */
     public function getNavigationBar()
     {
@@ -231,6 +233,20 @@ class WpPageAdminBean extends WpPageBean
         $strLis = '';
         if ($this->objCopsPlayer->getField(self::FIELD_ID)!=64) {
             // Si on est identifié, mais pas Guest...
+            $objTchatServices = new CopsTchatServices();
+            $objsTchat = $objTchatServices->getTchats([], 'now');
+
+            // On peut accéder au Tchat et être prévenu s'il y a de nouveaux messages
+            $aContent = HtmlUtils::getIcon('comment');
+            if (!empty($objsTchat)) {
+                $aAttributes = [self::ATTR_CLASS => 'badge badge-warning navbar-badge'];
+                $aContent .= HtmlUtils::getBalise(self::TAG_SPAN, count($objsTchat), $aAttributes);
+            }
+            $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, self::CST_ONGLET=>self::ONGLET_TCHAT]);
+            $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
+            $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);
+
+            // On peut accéder au profil du personnage
             $aContent = HtmlUtils::getIcon('user');
             $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, self::CST_ONGLET=>self::ONGLET_PROFILE]);
             $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
@@ -306,7 +322,7 @@ class WpPageAdminBean extends WpPageBean
     /**
      * @return string
      * @since 1.22.10.18
-     * @version v1.23.07.02
+     * @version v1.23.08.05
      */
     public function getContentPage(): string
     {
@@ -330,6 +346,7 @@ class WpPageAdminBean extends WpPageBean
         $strOnglet = SessionUtils::fromGet(self::CST_ONGLET);
         $objBean = match ($strOnglet) {
             self::ONGLET_PROFILE => WpPageAdminProfileBean::getStaticWpPageBean($this->slugSubOnglet),
+            self::ONGLET_TCHAT => new WpPageAdminTchatBean(),
 
 
             self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
@@ -405,13 +422,51 @@ class WpPageAdminBean extends WpPageBean
         return $ulContent;
      }
 
-     /**
-      * @return string
-      * @since v1.22.11.11
-      * @version v1.22.11.11
-      */
-     public function getOngletContent()
-     { return ''; }
+    /**
+     * @since v1.22.11.11
+     * @version v1.23.08.05
+     */
+    public function getOngletContent(): string
+    {
+        /*
+        $nbDes = SessionUtils::fromGet('nbDes');
+        $seuil = SessionUtils::fromGet('seuil');
+        $nbBlueDice = SessionUtils::fromGet('nbBlue');
+        if ($nbBlueDice=='') {
+            $nbBlueDice = 0;
+        }
+        $nbBlackDice = SessionUtils::fromGet('nbBlack');
+        if ($nbBlackDice=='') {
+            $nbBlackDice = 0;
+        }
+        $diceType = SessionUtils::fromGet('diceType', '');
+        $blnExplosion = $seuil!=10;
+        $nbSucces = 0;
+        $nbCritics = 0;
+
+        $strResultat = '';
+        for ($i=1; $i<=$nbDes; $i++) {
+            if ($i<=$nbBlueDice) {
+                $color = 'b';
+            } elseif ($i>$nbDes-$nbBlackDice) {
+                $color = 'n';
+            } else {
+                $color = '';
+            }
+            $strResultat .= DiceUtils::rollSkill($seuil, $nbSucces, $nbCritics, $seuil!=10, $color);
+            if ($i<$nbDes) {
+                $strResultat .= ', ';
+            }
+        }
+
+        $strNbSucces = '<span class="'.($nbSucces>0 ? 'deRed' : '').'">'.$nbSucces.'</span> succès';
+        $strNbEchecs = '<span class="'.($nbCritics>0 ? '' : '').'">'.$nbCritics.'</span> échecs critiques';
+        $attributes = [
+            '<span class="jetDeDes">Guillermo a lancé ['.$nbDes.'D'.$seuil.'+] et a obtenu '.$strNbSucces.' et '.$strNbEchecs.' ('.$strResultat.')</span>',
+        ];
+        */
+        return 'WIP';
+    }
      
   
     /**

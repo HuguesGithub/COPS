@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * HtmlUtils
  * @author Hugues
  * @since v1.23.05.23
- * @version v1.23.06.25
+ * @version v1.23.08.05
  */
 class HtmlUtils implements ConstantsInterface
 {
@@ -111,7 +111,7 @@ class HtmlUtils implements ConstantsInterface
 
     /**
      * @since v1.23.05.23
-     * @version v1.23.05.28
+     * @version v1.23.08.05
      */
     public static function getIcon(string $tag, string $prefix='', string $label=''): string
     {
@@ -148,6 +148,7 @@ class HtmlUtils implements ConstantsInterface
             'calendar',
             'calendar-week',
             'calendar-days',
+            'comment',
             'envelope',
             'inbox',
             'right-from-bracket',

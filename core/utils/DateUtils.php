@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * DateUtils
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.06.04
+ * @version v1.23.08.05
  */
 class DateUtils implements ConstantsInterface
 {
@@ -85,7 +85,7 @@ class DateUtils implements ConstantsInterface
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.06.04
+     * @version v1.23.08.05
      */
     public static function getStrDate(string $strFormat, $when): string
     {
@@ -133,7 +133,7 @@ class DateUtils implements ConstantsInterface
                 break;
             case self::FORMAT_STRJOUR :
                 $strJour = static::$arrFullDays[date('N', $tsCops)];
-                $attributes = [$strJour, $d, self::arrFullMonths[$m*1], $y];
+                $attributes = [$strJour, $d, static::$arrFullMonths[$m*1], $y];
                 $strFormatted = implode(' ', $attributes);
                 break;
             case self::FORMAT_TS_NOW :
@@ -154,6 +154,7 @@ class DateUtils implements ConstantsInterface
             case 'ga'  :
             case 'Ymd' :
             case 'd m y h i s' :
+            case 'Y-m-d H:i:s' :
             case self::FORMAT_DATE_YMD    :
             case self::FORMAT_DATE_HIS    :
             case self::FORMAT_DATE_DMDY   :

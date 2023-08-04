@@ -2,20 +2,19 @@
 namespace core\domain;
 
 /**
- * Classe CopsStageCapaciteSpecialeClass
+ * Classe CopsTchatStatusClass
  * @author Hugues
- * @since 1.22.07.06
- * @version v1.23.08.05
+ * @since v1.23.08.05
  */
-class CopsStageCapaciteSpecialeClass extends LocalDomainClass
+class CopsTchatStatusClass extends LocalDomainClass
 {
     //////////////////////////////////////////////////
     // ATTRIBUTES
     //////////////////////////////////////////////////
     protected $id;
-    protected $specName;
-    protected $specDescription;
-    protected $stageId;
+    protected $salonId;
+    protected $playerId;
+    protected $lastRefreshed;
 
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -25,24 +24,21 @@ class CopsStageCapaciteSpecialeClass extends LocalDomainClass
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
     /**
-     * @param array $attributes
-     * @version 1.22.07.06
-     * @since 1.22.07.06
+     * @since v1.23.08.05
      */
-    public function __construct($attributes=[])
+    public function __construct(array $attributes=[])
     {
         parent::__construct($attributes);
-        $this->stringClass = 'core\domain\CopsStageCapaciteSpecialeClass';
+        $this->stringClass = 'core\domain\CopsTchatStatusClass';
     }
 
     /**
-     * @param array $row
-     * @return CopsStageCapaciteSpecialeClass
-     * @version 1.22.07.06
-     * @since 1.22.07.06
+     * @since v1.23.08.05
      */
-    public static function convertElement($row)
-    { return parent::convertRootElement(new CopsStageCapaciteSpecialeClass(), $row); }
+    public static function convertElement($row): CopsTchatStatusClass
+    {
+        return parent::convertRootElement(new CopsTchatStatusClass(), $row);
+    }
 
     //////////////////////////////////////////////////
     // METHODES

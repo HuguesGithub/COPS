@@ -13,6 +13,9 @@ date_default_timezone_set('Europe/Paris');
     <meta charset='utf-8'/>
     <meta content='width=device-width, initial-scale=1' name='viewport'/>
     <title>C.O.P.S. | Central Organisation for Public Security</title>
+    <!-- Bootstrap style -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <!-- COPS style -->
     <link rel="stylesheet" media="all" href="<?php echo PLUGINS_COPS; ?>web/rsc/css/cops.css" media="all" />
   <!-- Font Awesome Icons -->
@@ -53,7 +56,9 @@ date_default_timezone_set('Europe/Paris');
     <script type='text/javascript' src='<?php echo PLUGINS_COPS; ?>web/rsc/js/jquery.min.js'></script>
     <script type='text/javascript' src='<?php echo PLUGINS_COPS; ?>web/rsc/js/jquery-ui.min.js'></script>
     <!-- Bootstrap -->
-    <script src="<?php echo PLUGINS_COPS; ?>web/rsc/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
     <!-- overlayScrollbars -->
     <script src="<?php echo PLUGINS_COPS; ?>web/rsc/js/jquery.overlayScrollbars.min.js"></script>
     <!-- Theme script -->

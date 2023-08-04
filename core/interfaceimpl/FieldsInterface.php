@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.07.29
+ * @version v1.23.08.05
  */
 interface FieldsInterface
 {
@@ -232,6 +232,7 @@ interface FieldsInterface
     public const FIELD_STAGE_LEVEL        = 'stageNiveau';
     public const FIELD_STAGE_REFERENCE    = 'stageReference';
     public const FIELD_STAGE_REQUIS       = 'stagePreRequis';
+    public const FIELD_STAGE_REQUIS_NEW   = 'stagePreRequisNew';
     public const FIELD_STAGE_CUMUL        = 'stageCumul';
     public const FIELD_STAGE_DESC         = 'stageDescription';
     public const FIELD_STAGE_BONUS        = 'stageBonus';
@@ -241,6 +242,7 @@ interface FieldsInterface
 
     // TABLE cops_stage_spec
     public const FIELD_SPEC_DESC          = 'specDescription';
+    public const FIELD_STAGE_ID           = 'stageId';
 
     // TABLE cops_weapon
     public const FIELD_NOM_ARME           = 'nomArme';
@@ -272,7 +274,21 @@ interface FieldsInterface
     public const FIELD_VEH_YEAR           = 'vehAnnee';
     public const FIELD_VEH_REFERENCE      = 'vehReference';
     public const FIELD_VEH_LGN_ROUGE      = 'vehLigneRouge';
-
+    
+    // TABLE cops_tchat
+    public const FIELD_SALON_ID           = 'salonId';
+    public const FIELD_TO_PID             = 'toPlayerId';
+    public const FIELD_FROM_PID           = 'fromPlayerId';
+    public const FIELD_TIMESTAMP          = 'timestamp';
+    public const FIELD_TEXTE              = 'texte';
+    
+    // TABLE cops_tchat_salon
+    public const FIELD_NOM_SALON          = 'nomSalon';
+    public const FIELD_OWNER_ID           = 'ownerId';
+    
+    // TABLE cops_tchat_status
+    public const FIELD_PLAYER_ID          = 'playerId';
+    public const FIELD_LAST_REFRESHED     = 'lastRefreshed';
 
     // Provenance ?
     public const FIELD_ICON             = 'icon';

@@ -381,6 +381,51 @@ border-color: #4b545c;
   transform: scale(.85) translateY(-.5rem) translateX(.15rem);
 }
 
+.tchatSection {
+    background: black;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+.tchatDialog {
+    overflow: auto;
+    height: 400px;
+    border: 1px solid gray;
+    color: #F0FFF8;
+    /*text-shadow: 0 0 3px #80FFC0, 0 0 10px #00FF66, 0 0 20px #00FF66, 0 0 30px #00FF66;*/
+    font-family: Glass;
+    font-size: 15px;
+}
+.tchatContact {
+    height: 400px;
+    border: 1px solid gray;
+}
+.tchatInput {
+    border: 1px solid gray;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+.tchatInput input {
+    width: 100%;
+    background: black;
+    border: 1px solid gray;
+    padding: 5px;
+    color: aliceblue;
+}
+.jetDeDes {
+    text-shadow: none;
+    background: #545454;
+}
+.deRed {
+    color: #ff0000;
+    font-weight: bold;
+}
+.deWhite {
+    font-weight: bold;
+}
+.deBlue {
+    color: #0000ff;
+    font-weight: bold;
+}
 
 
 /******************************

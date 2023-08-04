@@ -1,34 +1,27 @@
 <?php
-declare(strict_types=1);
-
 namespace core\domain;
 
 use core\bean\CopsStageBean;
+use core\services\CopsStageServices;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsStageClass
  * @author Hugues
- * @version 1.22.06.03
  * @since 1.22.06.03
+ * @version v1.23.08.05
  */
 class CopsStageClass extends LocalDomainClass
 {
     //////////////////////////////////////////////////
     // ATTRIBUTES
     //////////////////////////////////////////////////
-    /**
-     * Id technique de la donnée
-     * @var int $id
-     */
     protected $id;
     protected $stageCategorieId;
     protected $stageLibelle;
     protected $stageNiveau;
     protected $stageReference;
     protected $stagePreRequis;
+    protected $stagePreRequisNew;
     protected $stageCumul;
     protected $stageDescription;
     protected $stageBonus;
@@ -52,11 +45,10 @@ class CopsStageClass extends LocalDomainClass
     }
 
     /**
-     * @param array $row
-     * @version 1.22.06.03
      * @since 1.22.06.03
+     * @version v1.23.08.05
      */
-    public static function convertElement(array $row): CopsStageClass
+    public static function convertElement($row): CopsStageClass
     { return parent::convertRootElement(new CopsStageClass(), $row); }
 
     /**
@@ -70,4 +62,9 @@ class CopsStageClass extends LocalDomainClass
     // METHODES
     //////////////////////////////////////////////////
 
+    public function getCategorie(): CopsStageCategorieClass
+    {
+        $objService = new CopsStageServices();
+        return $objService->getStageCategorie($this->stageCategorieId);
+    }
 }

@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.24
- * @version v1.23.07.15
+ * @version v1.23.08.05
  */
 interface LabelsInterface
 {
@@ -77,6 +77,7 @@ interface LabelsInterface
     public const LABEL_TABLE_LUNE     = 'Table Lune';
     public const LABEL_TABLE_WEATHER  = 'Table Météo';
     public const LABEL_TABLE_SOLEIL   = 'Table Soleil';
+    public const LABEL_TCHAT          = 'Tchat';
     public const LABEL_TEMP           = 'Temp.';
     public const LABEL_WIND           = 'Vent';
     public const LABEL_CARS           = 'Véhicules';

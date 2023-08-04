@@ -8,7 +8,7 @@ use core\utils\UrlUtils;
  * CopsEquipmentCarBean
  * @author Hugues
  * @since v1.23.07.19
- * @version v1.23.07.29
+ * @version v1.23.08.05
  */
 class CopsEquipmentCarBean extends CopsBean
 {
@@ -19,9 +19,7 @@ class CopsEquipmentCarBean extends CopsBean
                 '50cc'  => '50cc',
                 '125cc' => '125cc',
                 '250cc' => '250cc',
-                'elec'  => 'Electrique',
-            ]
-        ],
+                'elec'  => 'Electrique',]],
         'moto'      => [
             self::TAG_LABEL => 'Moto',
             self::FIELD_VEH_SS_CATEG => [
@@ -32,9 +30,7 @@ class CopsEquipmentCarBean extends CopsBean
                 'roadster' => 'Roadster',
                 'routiere' => 'Routière',
                 'sportive' => 'Sportive',
-                'tricycle' => 'Tricycle',
-            ],
-        ],
+                'tricycle' => 'Tricycle',]],
         'voiture'   => [
             self::TAG_LABEL => 'Voiture',
             self::FIELD_VEH_SS_CATEG => [
@@ -55,18 +51,14 @@ class CopsEquipmentCarBean extends CopsBean
                 'sport'    => 'Sportive',
                 'targa'    => 'Targa',
                 'tracto'   => 'Tractosaure',
-                'suv'      => 'SUV',
-            ],
-        ],
+                'suv'      => 'SUV',]],
         'utilitaire'   => [
             self::TAG_LABEL => 'Utilitaire',
             self::FIELD_VEH_SS_CATEG => [
                 'camion'   => 'Camion',
                 'pickup'   => 'Pick-up',
                 'tracteur' => 'Tracteur',
-                'van'      => 'Van',
-            ],
-        ],
+                'van'      => 'Van',]],
         'aquatique'   => [
             self::TAG_LABEL => 'Aquatique',
             self::FIELD_VEH_SS_CATEG => [
@@ -80,9 +72,7 @@ class CopsEquipmentCarBean extends CopsBean
                 'ssmarin'  => 'Sous-marin',
                 'voilier'  => 'Voilier',
                 'yacht'    => 'Yacht',
-                'zodiac'   => 'Zodiac',
-            ],
-        ],
+                'zodiac'   => 'Zodiac',]],
     ];
 
     public function __construct($objStd=null)

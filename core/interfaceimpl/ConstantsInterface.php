@@ -4,11 +4,11 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.07.22
+ * @version v1.23.08.05
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.07.22';
+    public const VERSION              = 'v1.23.08.05';
 
     /////////////////////////////////////////////////
     // Ajax Infos
@@ -262,6 +262,7 @@ interface ConstantsInterface
     public const ONGLET_ARCHIVE         = 'archive';
     public const ONGLET_AUTOPSIE        = 'autopsie';
     public const ONGLET_CALENDAR        = 'calendar';
+    public const ONGLET_DESK            = 'desk';
     public const ONGLET_ENQUETE         = 'enquete';
     public const ONGLET_EQUIPMENT       = 'equipment';
     public const ONGLET_INBOX           = 'inbox';
@@ -269,8 +270,8 @@ interface ConstantsInterface
     public const ONGLET_LIBRARY         = 'library';
     public const ONGLET_METEO           = 'meteo';
     public const ONGLET_PROFILE         = 'profile';
+    public const ONGLET_TCHAT           = 'tchat';
     public const ONGLET_USERS           = 'users';
-    public const ONGLET_DESK            = 'desk';
 
     /////////////////////////////////////////////////
     // Pagination

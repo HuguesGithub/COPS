@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageBean
  * @author Hugues
  * @since 1.23.04.20
- * @version v1.23.07.22
+ * @version v1.23.08.05
  */
 class AdminPageBean extends UtilitiesBean
 {
@@ -28,7 +28,7 @@ class AdminPageBean extends UtilitiesBean
 
     /**
      * @since 1.23.04.20
-     * @version v1.23.07.15
+     * @version v1.23.08.05
      */
     public function getContentPage(): string
     {
@@ -39,6 +39,7 @@ class AdminPageBean extends UtilitiesBean
                 self::ONGLET_INDEX => AdminPageIndexBean::getStaticContentPage(),
                 self::ONGLET_CALENDAR => AdminPageCalendarBean::getStaticContentPage(),
                 self::ONGLET_EQUIPMENT => AdminPageEquipmentBean::getStaticContentPage(),
+                self::ONGLET_LIBRARY => AdminPageLibraryBean::getStaticContentPage(),
                 default => 'Error. Unexpected Onglet Term [<strong>'.$this->slugOnglet.'</strong>].',
             };
         }

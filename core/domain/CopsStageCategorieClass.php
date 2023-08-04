@@ -4,14 +4,11 @@ namespace core\domain;
 use core\bean\CopsStageCategorieBean;
 use core\services\CopsStageServices;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsStageCategorieClass
  * @author Hugues
  * @since 1.22.06.02
- * @version 1.22.06.03
+ * @version v1.23.08.05
  */
 class CopsStageCategorieClass extends LocalDomainClass
 {
@@ -30,16 +27,26 @@ class CopsStageCategorieClass extends LocalDomainClass
     //////////////////////////////////////////////////
     /**
      * @param array $attributes
-     * @version 1.22.06.02
      * @since 1.22.06.02
+     * @version v1.23.08.05
      */
     public function __construct($attributes=[])
     {
         parent::__construct($attributes);
         $this->stringClass = 'core\domain\CopsStageCategorieClass';
 
+        $this->initServices();
+    }
+
+    /**
+     * @since v1.23.07.29
+     * @version v1.23.08.05
+     */
+    public function initServices()
+    {
         $this->objCopsStageServices = new CopsStageServices();
     }
+
     /**
      * @param array $row
      * @return CopsStageCategorieClass

@@ -1,14 +1,11 @@
 <?php
 namespace core\domain;
 
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
 /**
  * Classe LocalDomain
  * @author Hugues
  * @since 1.22.04.27
- * @version 1.22.04.27
+ * @version v1.23.08.05
  */
 class LocalDomainClass extends GlobalDomainClass
 {

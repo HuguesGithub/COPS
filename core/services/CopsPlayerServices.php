@@ -3,12 +3,13 @@ namespace core\services;
 
 use core\daoimpl\CopsPlayerDaoImpl;
 use core\domain\CopsPlayerClass;
+use core\utils\SessionUtils;
 
 /**
  * Classe CopsPlayerServices
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.07.29
+ * @version v1.23.08.05
  */
 class CopsPlayerServices extends LocalServices
 {
@@ -29,7 +30,32 @@ class CopsPlayerServices extends LocalServices
             $this->objDao = new CopsPlayerDaoImpl();
         }
     }
-  
+
+    /**
+     * @since v1.23.08.05
+     */
+    public static function getCurrentPlayer(): CopsPlayerClass
+    {
+        $objServices = new CopsPlayerServices();
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::FIELD_MATRICULE => SessionUtils::fromSession(self::FIELD_MATRICULE)
+        ];
+        $objsCopsPlayer = $objServices->getCopsPlayers($attributes);
+        return !empty($objsCopsPlayer) ? array_shift(($objsCopsPlayer)) : new CopsPlayerClass();
+    }
+
+    /**
+     * @since v1.23.08.05
+     */
+    public function getPlayer(int $id): CopsPlayerClass
+    {
+        $attributes[self::SQL_WHERE_FILTERS] = [
+            self::FIELD_ID => $id
+        ];
+        $objsCopsPlayer = $this->getCopsPlayers($attributes);
+        return !empty($objsCopsPlayer) ? array_shift(($objsCopsPlayer)) : new CopsPlayerClass();
+    }
+    
     /**
      * @since v1.23.06.19
      * @version v1.23.07.29

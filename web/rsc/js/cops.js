@@ -180,7 +180,33 @@ $(document).ready(function() {
     $('textarea').each(function(textarea) {
         $(this).height($(this)[0].scrollHeight);
     })
+
+    ///////////////////////////////////////////////////
+    // Start Tchat refresh
+    // On cherche le bouton de refresh éventuel dans l'écran
+    // Les boutons de refresh de tchat ont un data-ajax="refresh"
+    /*
+    if ($('button[data-ajax="refresh"').length!=0) {
+        $('button[data-ajax="refresh"').each(function(){
+            let obj = $(this);
+            let target = obj.data('target');
+            $(target).scrollTop($(target).scrollTop()+$(target+' > div:last').position().top)
+
+            timer = setInterval(function() { refreshTchat(obj, true); }, 15000);
+        });
+    }
+    ///////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////
+    // Start Navigation refresh
+    // Les nouveaux messages dans le Tchat général
+    timerNavigation = setInterval(function() { checkNotifications(); }, 15000);
+    */
+    ///////////////////////////////////////////////////
+    
 });
+let timer = null;
+let timerNavigation = null;
 
 function stretchColspanEvents() {
 	$('.fc-daygrid-event-harness[data-colspan!="0"]').each(function(){
@@ -228,6 +254,20 @@ function ajaxActionClick(obj) {
 	let actions = obj.data('ajax').split(',');
 	for (let oneAction of actions) {
 	    switch (oneAction) {
+            // Poster un message dans le tchat
+            case 'tchat' :
+                if (!obj.hasClass('disabled')) {
+                    obj.addClass('disabled').addClass('fa-spin');
+                    sendTchat(obj);
+                }
+                break;
+            // Rafraichir le tchat
+            case 'refresh':
+                if (!obj.hasClass('disabled')) {
+                    obj.addClass('disabled').addClass('fa-spin');
+                    refreshTchat(obj, false);
+                }
+                break;
 			case 'csvExport' :
 				csvExport(obj);
 				break;
@@ -236,9 +276,9 @@ function ajaxActionClick(obj) {
 }
 
 function ajaxActionChange(obj) {
-  let id = obj.attr('id');
-  let actions = obj.data('ajax').split(',');
-  for (let oneAction of actions) {
+    let id = obj.attr('id');
+    let actions = obj.data('ajax').split(',');
+    for (let oneAction of actions) {
     switch (oneAction) {
       case 'saveData' :
         saveData(obj);
@@ -545,3 +585,121 @@ $('#customEvent').on('click', function(){
         $('#repeatInterval').prop('readonly', false);
     }
 });
+
+
+///////////////////////////////////////////////////
+// FONCTIONS RELATIVES A LA BARRE DE NAVIGATION
+///////////////////////////////////////////////////
+/**
+ * Permet de vérifier la présence de nouvelles notifications
+ * @since v1.23.08.05 
+ */
+function checkNotifications() {
+    let data = {'action': 'dealWithAjax', 'ajaxAction': 'checkNotif'};
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {
+            try {
+                obj = JSON.parse(response);
+            } catch(e) {
+                
+            }
+        }
+    ).done(function(response) {
+        try {
+            obj = JSON.parse(response);
+            if (obj.comment && obj.comment!='') {
+                if ($('.fa-comment').siblings().length!=0) {
+                    $('.fa-comment').siblings().remove();
+                }
+                $('.fa-comment').parent().append(obj.comment);
+            }
+        } catch(e) {
+            
+        }
+    });
+}
+///////////////////////////////////////////////////
+
+///////////////////////////////////////////////////
+// FONCTIONS RELATIVES AU TCHAT
+///////////////////////////////////////////////////
+
+/**
+ * Permet d'envoyer une instruction via l'inerface de Tchat
+ * @since v1.23.08.05 
+ */
+function sendTchat(obj) {
+    let id = obj.attr('id');
+    let ajaxAction = obj.data('ajax');
+    let target = obj.data('target');
+    let value = $(target).val();
+    let data = {'action': 'dealWithAjax', 'ajaxAction': ajaxAction, 'value': value};
+    // On envoie par ajax les informations saisies
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {
+            try {
+                obj = JSON.parse(response);
+            } catch(e) {
+                
+            }
+        }
+    ).done(function(response) {
+        $(target).val('');
+        $('#'+id).removeClass('disabled').removeClass('fa-spin');
+        try {
+            obj = JSON.parse(response);
+            if (obj.toastContent) {
+                displayToast(obj.toastContent);
+            }
+            $('button[data-ajax="refresh"').each(function(){
+                let obj = $(this);
+                refreshTchat(obj, true);
+            });
+        } catch(e) {
+            
+        }
+    });
+}
+
+/**
+ * Permet de rafraichir le dialog du Tchat
+ * @since v1.23.08.05 
+ */
+function refreshTchat(obj, blnAutoRefresh) {
+    let id = obj.attr('id');
+    let ajaxAction = obj.data('ajax');
+    let target = obj.data('target');
+    let refreshed = $(target+' > div:last').data('refreshed');
+    let data = {'action': 'dealWithAjax', 'ajaxAction': ajaxAction, 'refreshed': refreshed};
+    // On envoie par ajax les informations saisies
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {
+            try {
+                obj = JSON.parse(response);
+            } catch(e) {
+                
+            }
+        }
+    ).done(function(response) {
+        $('#'+id).removeClass('disabled').removeClass('fa-spin');
+        try {
+            obj = JSON.parse(response);
+            if (obj.tchatContent) {
+                $(target).append(obj.tchatContent);
+            }
+            if (obj.toastContent && !blnAutoRefresh) {
+                displayToast(obj.toastContent);
+            }
+        } catch(e) {
+        }
+    });
+}
+///////////////////////////////////////////////////
+// FIN FONCTIONS RELATIVES AU TCHAT
+///////////////////////////////////////////////////

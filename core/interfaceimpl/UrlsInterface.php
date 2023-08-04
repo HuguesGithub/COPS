@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.07.22
+ * @version v1.23.08.05
  */
 interface UrlsInterface
 {
@@ -42,6 +42,7 @@ interface UrlsInterface
     public const WEB_PA_CAL_EVT_EDIT_REPTYPE= self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-period-block.tpl';
     public const WEB_PA_CAL_EVT_EDIT_REPINT = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-recursive-block.tpl';
     public const WEB_PA_CAL_EVT_EDIT_CUSTOM = self::WEB_PA_FRAGMENTS.'page-admin-fragments-edit-custom-block.tpl';
+    public const WEB_PA_LIBRARY_HOME        = self::WEB_PAGES_ADMIN.'page-admin-library-home.tpl';
     public const WEB_PA_CALENDAR_EVENT_LIST = self::WEB_PAGES_ADMIN.'page-admin-calendar-events-list.tpl';
     public const WEB_PA_PROFILE_USER_LIST   = self::WEB_PAGES_ADMIN.'page-admin-profile-users-list.tpl';
     public const WEB_PAF_PAGINATION         = self::WEB_PA_FRAGMENTS.'page-admin-fragments-pagination.tpl';
@@ -83,5 +84,6 @@ interface UrlsInterface
     public const WEB_PPFS_PFL_ABILITIES     = self::WEB_PPF_SECTION .'publique-fragments-section-profile-abilities.tpl';
     public const WEB_PPFS_PFL_IDENTITY      = self::WEB_PPF_SECTION .'publique-fragments-section-profile-identity.tpl';
     public const WEB_PPFS_PFL_SKILLS        = self::WEB_PPF_SECTION .'publique-fragments-section-profile-skills.tpl';
+    public const WEB_PPFS_TCHAT             = self::WEB_PPF_SECTION .'publique-fragments-section-tchat.tpl';
     
 }

@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * SessionUtils
  * @author Hugues
  * @since 1.23.06.21
- * @version v1.23.06.25
+ * @version v1.23.08.05
  */
 class SessionUtils implements ConstantsInterface
 {
@@ -36,6 +36,12 @@ class SessionUtils implements ConstantsInterface
         }
         return filter_var($strSanitized, FILTER_SANITIZE_URL);
     }
+
+    /**
+     * @since v1.23.08.05
+     */
+    public static function fromSession(string $key): mixed
+    { return $_SESSION[$key] ?? ''; }
 
     /**
      * @since 1.23.06.21
