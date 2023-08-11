@@ -124,40 +124,6 @@ class AdminPageLibrarySkillBean extends AdminPageLibraryBean
      */
     public function dealWithWriteAction(): void
     {
-        /*
-        // Définition du service
-        $objCopsStageServices = new CopsStageServices();
-        // Récupération des données
-        $objStage = $objCopsStageServices->getStage($this->id);
-
-        // Le libellé, on stripslashes pour protéger
-        $nomVehicule = stripslashes(SessionUtils::fromPost(self::FIELD_VEH_LABEL, false));
-        $objCopsCar->setField(self::FIELD_VEH_LABEL, $nomVehicule);
-
-        $objCopsCar->setField(self::FIELD_VEH_CATEG, SessionUtils::fromPost(self::FIELD_VEH_CATEG));
-        $objCopsCar->setField(self::FIELD_VEH_SS_CATEG, SessionUtils::fromPost(self::FIELD_VEH_SS_CATEG));
-        $objCopsCar->setField(self::FIELD_VEH_PLACES, SessionUtils::fromPost(self::FIELD_VEH_PLACES));
-        $objCopsCar->setField(self::FIELD_VEH_SPEED, SessionUtils::fromPost(self::FIELD_VEH_SPEED));
-        $objCopsCar->setField(self::FIELD_VEH_ACCELERE, SessionUtils::fromPost(self::FIELD_VEH_ACCELERE));
-        $objCopsCar->setField(self::FIELD_VEH_PS, SessionUtils::fromPost(self::FIELD_VEH_PS));
-        $objCopsCar->setField(self::FIELD_VEH_AUTONOMIE, SessionUtils::fromPost(self::FIELD_VEH_AUTONOMIE, false));
-        $objCopsCar->setField(self::FIELD_VEH_FUEL, SessionUtils::fromPost(self::FIELD_VEH_FUEL));
-        $objCopsCar->setField(self::FIELD_VEH_OPTIONS, SessionUtils::fromPost(self::FIELD_VEH_OPTIONS, false));
-        $objCopsCar->setField(self::FIELD_VEH_PRICE, SessionUtils::fromPost(self::FIELD_VEH_PRICE));
-        $objCopsCar->setField(self::FIELD_VEH_YEAR, SessionUtils::fromPost(self::FIELD_VEH_YEAR));
-        $objCopsCar->setField(self::FIELD_VEH_REFERENCE, SessionUtils::fromPost(self::FIELD_VEH_REFERENCE));
-        $objCopsCar->setField(self::FIELD_VEH_LGN_ROUGE, SessionUtils::fromPost(self::FIELD_VEH_LGN_ROUGE));
-
-        if ($objCopsCar->checkFields()) {
-            if ($this->id==0) {
-                $objCopsEquipmentServices->insertVehicle($objCopsCar);
-                $this->id = $objCopsCar->getField(self::FIELD_ID);
-            } else {
-                $objCopsEquipmentServices->updateVehicle($objCopsCar);
-            }
-        } else {
-            // TODO : Gestion de l'erreur ?
-        }
-        */
+        // TODO
     }
 }

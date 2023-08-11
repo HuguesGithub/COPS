@@ -2,6 +2,7 @@
 namespace core\utils;
 
 use core\interfaceimpl\ConstantsInterface;
+use core\utils\HtmlUtils;
 
 /**
  * DiceUtils
@@ -32,27 +33,31 @@ class DiceUtils implements ConstantsInterface
             $nbSucces += $color=='b' ? 2 : 1;
             if ($score==10 && $blnExplode) {
                 $somme = 10;
-                $strResultat = '[<span class="dice deRed successRoll">10</span>';
+                $strResultat  = '[';
+                $strResultat .= HtmlUtils::getBalise(self::TAG_SPAN, 10, [self::ATTR_CLASS => 'deRed']);
                 do {
                     $score = rand(1, 10);
                     $somme += $score;
                     if ($score>=$seuil) {
                         $nbSucces++;
-                        $strResultat .= ', <span class="dice deRed successRoll">'.$score.'</span>';
+                        $strResultat .= ', ';
+                        $strResultat .= HtmlUtils::getBalise(self::TAG_SPAN, $score, [self::ATTR_CLASS => 'deRed']);
                     } else {
-                        $strResultat .= ', <span class="dice failRoll">'.$score.'</span>';
+                        $strResultat .= ', ';
+                        $strResultat .= HtmlUtils::getBalise(self::TAG_SPAN, $score, [self::ATTR_CLASS => 'failRoll']);
                     }
                 } while ($score==10);
                 $strResultat .= ']';
-                $strResultat = '<span class="dice deRed successRoll">'.$somme.'</span> '.$strResultat.' ';
+                $strTmp = HtmlUtils::getBalise(self::TAG_SPAN, $somme, [self::ATTR_CLASS => 'deRed']);
+                $strResultat = $strTmp.$strResultat.' ';
             } else {
-                $strResultat .= '<span class="dice deRed successRoll">'.$score.'</span>';
+                $strResultat .= HtmlUtils::getBalise(self::TAG_SPAN, $score, [self::ATTR_CLASS => 'deRed']);
             }
         } else {
             if ($color=='n') {
                 $nbCritics++;
             }
-            $strResultat .= '<span class="dice failRoll">'.$score.'</span>';
+            $strResultat .= HtmlUtils::getBalise(self::TAG_SPAN, $score, [self::ATTR_CLASS => 'failRoll']);
         }
         return $strResultat;
     }

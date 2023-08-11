@@ -62,12 +62,6 @@ class CopsPlayerServices extends LocalServices
      */
     public function getCopsPlayers(array $attributes=[]): array
     {
-        $id = $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-        $matricule = $attributes[self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH;
-        $password = $attributes[self::FIELD_PASSWORD] ?? self::SQL_JOKER_SEARCH;
-        $grade = $attributes[self::FIELD_GRADE] ?? self::SQL_JOKER_SEARCH;
-        $section = $attributes[self::FIELD_SECTION] ?? self::SQL_JOKER_SEARCH;
-
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
         $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
 
@@ -88,11 +82,11 @@ class CopsPlayerServices extends LocalServices
         ///////////////////////////////////////////////////////////
 
         $prepAttributes = [
-            $id,
-            $matricule,
-            $password,
-            $grade,
-            $section,
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_PASSWORD] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_GRADE] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_SECTION] ?? self::SQL_JOKER_SEARCH,
             $orderBy,
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,

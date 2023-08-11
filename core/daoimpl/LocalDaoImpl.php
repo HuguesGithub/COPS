@@ -22,7 +22,10 @@ class LocalDaoImpl extends GlobalDaoImpl
     ];
 
     public function __construct()
-    {}
+    {
+        // TODO : Tous les enfants appellent ce constructeur. En théorie, faudrait les supprimer.
+        // Dans un premier temps, on laisse celui-ci, plus simple.
+    }
 
     /**
      * @since v1.23.05.26

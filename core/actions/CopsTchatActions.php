@@ -306,11 +306,11 @@ class CopsTchatActions extends LocalActions
         $msg .= "......../help [commande]<br>";
         $msg .= " - Pour faire un jet de dégât.<br>";
         $msg .= "......../dmg xD6 [+.]<br>";
-        $msg .= " - WIP.<br>";
+        $msg .= " - WIP Join.<br>";
         $msg .= "......../join<br>";
-        $msg .= " - WIP.<br>";
+        $msg .= " - WIP List.<br>";
         $msg .= "......../list<br>";
-        $msg .= " - WIP.<br>";
+        $msg .= " - WIP Alias.<br>";
         $msg .= "......../alias<br>";
         $msg .= "D'autres trucs à rajouter ?";
         

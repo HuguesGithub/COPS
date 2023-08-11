@@ -2,6 +2,7 @@
 namespace core\services;
 
 use core\daoimpl\CopsAutopsieDaoImpl;
+use core\domain\CopsAutopsieClass;
 
 /**
  * Classe CopsAutopsieServices
@@ -33,64 +34,45 @@ class CopsAutopsieServices extends LocalServices
             $this->objDao = new CopsAutopsieDaoImpl();
         }
     }
-
+  
     /**
-     * @param array $attributes [E|S]
      * @since 1.22.10.09
      * @version v1.23.08.12
      */
-    public function initFilters(&$attributes=[])
+    public function getAutopsie(int $autopsieId=-1): CopsAutopsieClass
     {
-        if (!isset($attributes['idxEnquete'])) {
-            $attributes['idxEnquete'] = self::SQL_JOKER_SEARCH;
-        }
-        if (!isset($attributes[self::SQL_ORDER_BY])) {
-            $attributes[self::SQL_ORDER_BY] = self::FIELD_DSTART;
-        }
-        if (!isset($attributes[self::SQL_ORDER])) {
-            $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
-        }
-        if (!isset($attributes[self::SQL_LIMIT])) {
-            $attributes[self::SQL_LIMIT] = -1;
-        }
+        $objs = $this->objDao->getAutopsies([self::FIELD_ID=>$autopsieId]);
+        return empty($objs) ? new CopsAutopsieClass() : array_shift($objs);
     }
 
     /**
-     * @param array $attributes
-     * @return array [CopsAutopsie]
      * @since 1.22.10.09
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
-    public function getAutopsies($attributes)
+    public function getAutopsies(array $attributes=[]): array
     {
-        $this->initFilters($attributes);
-        return $this->objDao->getAutopsies($attributes);
-    }
-  
-    /**
-     * @param integer
-     * @return CopsAutopsie
-     * @since 1.22.10.09
-     * @version v1.23.07.29
-     */
-    public function getAutopsie($autopsieId=-1)
-    {
-        $attributes = [$autopsieId];
-        $row = $this->objDao->getAutopsie($attributes);
-        return new CopsAutopsie($row[0]);
+        $prepAttributes = [
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_IDX_ENQUETE] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::SQL_ORDER_BY] ?? self::FIELD_DSTART,
+            $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_DESC,
+            $attributes[self::SQL_LIMIT] ?? 9999,
+        ];
+
+        return $this->objDao->getAutopsies($prepAttributes);
     }
   
     /**
      * @since 1.22.10.10
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
-    public function updateAutopsie($objCopsAutopsie)
+    public function updateAutopsie(CopsAutopsieClass $objCopsAutopsie): void
     { $this->objDao->updateAutopsie($objCopsAutopsie); }
     
     /**
      * @since 1.22.10.10
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
-    public function insertAutopsie(&$objCopsAutopsie)
+    public function insertAutopsie(CopsAutopsieClass &$objCopsAutopsie): void
     { $this->objDao->insertAutopsie($objCopsAutopsie); }
 }

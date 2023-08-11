@@ -54,7 +54,6 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
         $request .= " WHERE id LIKE '%s' AND idxEnquete LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
-//        $request .= " ORDER BY dStart DESC;";
         return $this->selectListDaoImpl(new CopsAutopsieClass(), $request, $attributes);
     }
     
