@@ -11,7 +11,7 @@ use core\domain\CopsIndexTomeClass;
  * Classe CopsIndexServices
  * @author Hugues
  * @since 1.22.10.21
- * @version v1.23.07.29
+ * @version v1.23.08.12
  */
 class CopsIndexServices extends LocalServices
 {
@@ -45,17 +45,12 @@ class CopsIndexServices extends LocalServices
     /**
      * @param array $attributes [E|S]
      * @since 1.22.10.21
-     * @version 1.23.02.15
+     * @version v1.23.08.12
      */
     public function initFilters(&$attributes=[])
     {
-        if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = [
-                // natureIdxId
-                self::SQL_JOKER_SEARCH,
-            ];
-        } elseif (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_IDX_ID])) {
-            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_IDX_ID] = self::SQL_JOKER_SEARCH;
+        if (!isset($attributes[self::FIELD_NATURE_IDX_ID])) {
+            $attributes[self::FIELD_NATURE_IDX_ID] = self::SQL_JOKER_SEARCH;
         } else {
             // TODO
         }
@@ -205,14 +200,14 @@ class CopsIndexServices extends LocalServices
 
     /**
      * @since v1.23.07.13
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
     public function getIndexTomes(array $attributes=[]): array
     {
         $this->objDao = new CopsIndexDaoImpl();
 
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-        $abbr = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ABR_IDX_TOME] ?? self::SQL_JOKER_SEARCH;
+        $id = $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $abbr = $attributes[self::FIELD_ABR_IDX_TOME] ?? self::SQL_JOKER_SEARCH;
         ///////////////////////////////////////////////////////////
 
         $prepAttributes = [
@@ -243,15 +238,11 @@ class CopsIndexServices extends LocalServices
     /**
      * Retourne l'entité IndexTome correspondant au paramètre
      * @since 1.23.02.20
-     * @version v1.23.07.15
+     * @version v1.23.08.12
      */
     public function getIndexTomeByAbr(string $abr): CopsIndexTomeClass
     {
-        $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ABR_IDX_TOME => $abr
-            ],
-        ];
+        $attributes = [self::FIELD_ABR_IDX_TOME => $abr];
         $items = $this->getIndexTomes($attributes);
         return empty($items) ? new CopsIndexTomeClass : new CopsIndexTomeClass($items[0]);
     }

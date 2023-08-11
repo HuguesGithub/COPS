@@ -9,7 +9,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminLibraryCopsBean
  * @author Hugues
  * @since 1.22.11.05
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
 {
@@ -127,7 +127,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         if ($this->catSlug=='individual') {
             $id = $this->initVar(self::FIELD_ID);
             $attributes = [];
-            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] = $id;
+            $attributes[self::FIELD_ID] = $id;
             $objsCops = $this->CopsPlayerServices->getCopsPlayers($attributes);
             $this->objCops = array_shift($objsCops);
             $name = $this->objCops->getField(self::FIELD_NOM).' '.$this->objCops->getField(self::FIELD_PRENOM);
@@ -250,7 +250,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     /**
      * @return string
      * @since v1.22.11.03
-     * @version v1.22.11.09
+     * @version v1.23.08.12
      */
     public function getListRanked()
     {
@@ -262,7 +262,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
 
         $listContent = '';
-        $attributes[self::SQL_WHERE_FILTERS] = [
+        $attributes = [
             self::FIELD_ID => self::SQL_JOKER_SEARCH,
             self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
             self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH
@@ -270,10 +270,10 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         //////////////////////////////////////////////////////////
         // Gestion du Capitaine (potentiellement des Capitaines)
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Capitaine';
+        $attributes[self::FIELD_GRADE] = 'Capitaine';
         $objCaptains = $this->CopsPlayerServices->getCopsPlayers($attributes);
         // Gestion des Lieutenants
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
+        $attributes[self::FIELD_GRADE] = 'Lieutenant';
         $objLieutenants = $this->CopsPlayerServices->getCopsPlayers($attributes);
         $objCopsPlayers = array_merge($objCaptains, $objLieutenants);
         $aAttributes = [self::CST_SUBONGLET => $this->slugSubOnglet, self::CST_CAT_SLUG => 'individual'];
@@ -304,7 +304,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
     /**
      * @return string
      * @since v1.22.11.03
-     * @version v1.22.11.09
+     * @version v1.23.08.12
      */
     public function getListTeam()
     {
@@ -316,7 +316,7 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         /////////////////////////////////////////
 
         $listContent = '';
-        $attributes[self::SQL_WHERE_FILTERS] = [
+        $attributes = [
             self::FIELD_ID => self::SQL_JOKER_SEARCH,
             self::FIELD_MATRICULE => self::SQL_JOKER_SEARCH,
             self::FIELD_PASSWORD => self::SQL_JOKER_SEARCH
@@ -324,11 +324,11 @@ class WpPageAdminLibraryCopsBean extends WpPageAdminLibraryBean
         
         //////////////////////////////////////////////////////////
         // Gestion du Lieutenant
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Lieutenant';
+        $attributes[self::FIELD_GRADE] = 'Lieutenant';
         $objLieutenants = $this->CopsPlayerServices->getCopsPlayers($attributes);
         // Gestion des Détectives
         $tsToday = DateUtils::getCopsDate(self::FORMAT_DATE_YMD);
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] = 'Détective';
+        $attributes[self::FIELD_GRADE] = 'Détective';
         $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM;
         $objDetectives = $this->CopsPlayerServices->getCopsPlayers($attributes);
         $objCopsPlayers = array_merge($objLieutenants, $objDetectives);

@@ -16,7 +16,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -132,7 +132,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since v1.23.06.19
-     * @version v1.23.06.25
+     * @version v1.23.08.12
      */
     public function initLogIn(): void
     {
@@ -144,7 +144,7 @@ class WpPageAdminBean extends WpPageBean
         if ($strMatricule!='') {
             // On cherche a priori à se logguer
             $mdp = ($password=='' ? '' : md5((string) $password));
-            $attributes[self::SQL_WHERE_FILTERS] = [
+            $attributes = [
                 self::FIELD_MATRICULE => $strMatricule,
                 self::FIELD_PASSWORD  => $mdp
             ];
@@ -160,7 +160,7 @@ class WpPageAdminBean extends WpPageBean
             // On cherche a priori à se déconnecter
             SessionUtils::unsetSession(self::FIELD_MATRICULE);
         } else {
-            $attributes[self::SQL_WHERE_FILTERS] = [
+            $attributes = [
                 self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
             ];
             $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
@@ -224,7 +224,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since 1.22.10.18
-     * @version v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getNavigationBar()
     {
@@ -243,6 +243,12 @@ class WpPageAdminBean extends WpPageBean
                 $aContent .= HtmlUtils::getBalise(self::TAG_SPAN, count($objsTchat), $aAttributes);
             }
             $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, self::CST_ONGLET=>self::ONGLET_TCHAT]);
+            $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
+            $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);
+
+            // On peut accéder aux settings techniques du personnage
+            $aContent = HtmlUtils::getIcon(self::I_GEAR);
+            $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, self::CST_ONGLET=>self::ONGLET_CONFIG]);
             $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
             $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);
 
@@ -295,10 +301,7 @@ class WpPageAdminBean extends WpPageBean
         </div>
       </li>
       <!-- /.nav-item -->
-      <li class="nav-item d-none d-sm-inline-block"%5$s>
-        <a class="nav-link" href="/admin?onglet=settings"><i class="fa-solid fa-gear"></i></a>
-      </li>
-      <!-- /.nav-item -->
+
         */
     }
 
@@ -320,9 +323,8 @@ class WpPageAdminBean extends WpPageBean
 
 
     /**
-     * @return string
      * @since 1.22.10.18
-     * @version v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getContentPage(): string
     {
@@ -343,19 +345,26 @@ class WpPageAdminBean extends WpPageBean
             return $this->getRender($urlTemplate, $attributes);
         }
 
-        $strOnglet = SessionUtils::fromGet(self::CST_ONGLET);
-        $objBean = match ($strOnglet) {
-            self::ONGLET_PROFILE => WpPageAdminProfileBean::getStaticWpPageBean($this->slugSubOnglet),
-            self::ONGLET_TCHAT => new WpPageAdminTchatBean(),
+        if ($this->objCopsPlayer->getField(self::FIELD_STATUS)==self::PS_1ST_CONNEXION) {
+            // Si le statut est à 11, l'utilisateur doit changer son mot de passe.
+            // On redirige donc automatiquement vers l'écran correspondant.
+            $objBean = new WpPageAdminConfigBean();
+        } else {
+            $strOnglet = SessionUtils::fromGet(self::CST_ONGLET);
+            $objBean = match ($strOnglet) {
+                self::ONGLET_PROFILE => WpPageAdminProfileBean::getStaticWpPageBean($this->slugSubOnglet),
+                self::ONGLET_TCHAT => new WpPageAdminTchatBean(),
+                self::ONGLET_CONFIG => new WpPageAdminConfigBean(),
 
 
-            self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
-            self::ONGLET_INBOX => WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet),
-            self::ONGLET_LIBRARY => WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet),
-            self::ONGLET_ENQUETE => new WpPageAdminEnqueteBean(),
-            self::ONGLET_AUTOPSIE => new WpPageAdminAutopsieBean(),
-            default => $this,
-        };
+                self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
+                self::ONGLET_INBOX => WpPageAdminMailBean::getStaticWpPageBean($this->slugSubOnglet),
+                self::ONGLET_LIBRARY => WpPageAdminLibraryBean::getStaticWpPageBean($this->slugSubOnglet),
+                self::ONGLET_ENQUETE => new WpPageAdminEnqueteBean(),
+                self::ONGLET_AUTOPSIE => new WpPageAdminAutopsieBean(),
+                default => $this,
+            };
+        }
         return $objBean->getBoard();
     }
 

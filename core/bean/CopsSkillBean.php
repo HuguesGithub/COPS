@@ -1,55 +1,73 @@
 <?php
-if (!defined('ABSPATH')) {
-  die('Forbidden');
-}
+namespace core\bean;
+
+use core\domain\CopsSkillClass;
+use core\services\CopsSkillServices;
+use core\utils\HtmlUtils;
+use core\utils\UrlUtils;
+
 /**
  * CopsSkillBean
  * @author Hugues
  * @since 1.22.05.30
- * @version 1.22.05.30
+ * @version v1.23.08.12
  */
-class CopsSkillBean extends UtilitiesBean
+class CopsSkillBean extends CopsBean
 {
-  public function __construct($Obj=null)
-  {
-    $this->CopsSkill = ($Obj==null ? new CopsSkill() : $Obj);
-  }
-
-  /**
-   * @since 1.22.05.30
-   * @version 1.22.05.30
-   */
-  public function getLibraryDisplay()
-  {
-    $urlTemplate = 'web/pages/public/fragments/public-fragments-article-library-skill.php';
-
-    if ($this->CopsSkill->getField(self::FIELD_SPEC_LEVEL)>0) {
-      $strSpecialisation = $this->CopsSkill->getField(self::FIELD_SPEC_LEVEL).'+ (';
-      $SkillSpecs = $this->CopsSkill->getSpecialisations();
-
-      while (!empty($SkillSpecs)) {
-        $SkillSpec = array_shift($SkillSpecs);
-        $strSpecialisation .= $SkillSpec->getField(self::FIELD_SPEC_NAME).', ';
-      }
-      $strSpecialisation = substr($strSpecialisation, 0, -2).')';
-    } else {
-      $strSpecialisation = 'Aucune';
+    public function __construct($objStd=null)
+    {
+        parent::__construct();
+        $this->obj          = $objStd;
     }
 
-    $attributes = [
-        // Le nom de la compétence
-        $this->CopsSkill->getField(self::FIELD_SKILL_NAME),
-        // Caractéristique associée
-        $this->CopsSkill->getField(self::FIELD_DEFAULT_ABILITY),
-        // Niveau spécialisation
-        $strSpecialisation,
-        // Adrénaline
-        ($this->CopsSkill->getField(self::FIELD_PAN_USABLE)==1?'Oui':'Non'),
-        // La description de la compétence
-        str_replace("\r\n", '<br>', (string) $this->CopsSkill->getField(self::FIELD_SKILL_DESC)),
-        // Exemples d'utilisation
-        str_replace("\r\n", '<br>', (string) $this->CopsSkill->getField(self::FIELD_SKILL_USES)),
-    ];
-    return $this->getRender($urlTemplate, $attributes);
-  }
+    /**
+     * @since v1.23.08.12
+     */
+    public static function getTableHeader(array &$queryArg=[]): TableauTHeadHtmlBean
+    {
+        $headerElement = [
+            ['label' => 'Nom', 'sortable' => self::FIELD_SKILL_NAME, 'classe' => 'col-3'],
+            ['label' => 'Description'],
+            ['label' => 'Spécialisation'],
+            ['label' => 'Adrénaline'],
+            ['label' => 'Référence'],
+        ];
+        return static::getBuiltTableHeader($headerElement, $queryArg);
+    }
+
+    /**
+     * @since v1.23.08.12
+     */
+    public function getTableRow(): TableauRowHtmlBean
+    {
+        $objRow = new TableauRowHtmlBean();
+
+        $urlElements = [
+            self::CST_ONGLET => self::ONGLET_LIBRARY,
+            self::CST_SUBONGLET => self::CST_LIB_SKILL,
+            self::FIELD_ID => $this->obj->getField(self::FIELD_ID),
+            self::CST_ACTION => self::CST_WRITE,
+        ];
+        $strLink = HtmlUtils::getLink(
+            $this->obj->getField(self::FIELD_SKILL_NAME),
+            UrlUtils::getAdminUrl($urlElements),
+        );
+        $objRow->addCell(new TableauCellHtmlBean($strLink, self::TAG_TD, 'text-start'));
+        // Description
+        $objRow->addCell(new TableauCellHtmlBean(
+            $this->obj->getField(self::FIELD_SKILL_DESC),
+            self::TAG_TD,
+            'text-start'
+        ));
+        // Spécialisation
+        $strSpecialisation = $this->obj->getField(self::FIELD_SPEC_LEVEL)!=0 ? 'Oui' : 'Non';
+        $objRow->addCell(new TableauCellHtmlBean($strSpecialisation));
+        // Adrénaline utilisable
+        $strAdrenaline = $this->obj->getField(self::FIELD_PAD_USABLE)!=0 ? 'Oui' : 'Non';
+        $objRow->addCell(new TableauCellHtmlBean($strAdrenaline));
+        // Référence
+        $objRow->addCell(new TableauCellHtmlBean($this->obj->getField(self::FIELD_REFERENCE)));
+
+        return $objRow;
+    }
 }

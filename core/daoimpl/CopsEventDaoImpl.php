@@ -12,22 +12,29 @@ use core\utils\LogUtils;
  * Classe CopsEventDaoImpl
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.06.25
+ * @version v1.23.08.12
  */
 class CopsEventDaoImpl extends LocalDaoImpl
 {
+    private $dbTable;
+    private $dbFields;
+    private $dbTableCec;
+    private $dbFieldsCec;
+    private $dbTableCed;
+    private $dbFieldsCed;
+
     /**
      * Class constructor
      * @since 1.22.06.13
-     * @version v1.23.06.04
+     * @version v1.23.08.12
      */
     public function __construct()
     {
         ////////////////////////////////////
         // Définition des variables spécifiques
         $this->dbTable  = "wp_7_cops_event";
-        $this->dbTable_cec  = "wp_7_cops_event_categorie";
-        $this->dbTable_ced  = "wp_7_cops_event_date";
+        $this->dbTableCec  = "wp_7_cops_event_categorie";
+        $this->dbTableCed  = "wp_7_cops_event_date";
         ////////////////////////////////////
 
         ////////////////////////////////////
@@ -52,7 +59,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
             self::FIELD_CUSTOM_DAY_WEEK,
             self::FIELD_CUSTOM_MONTH,
         ];
-        $this->dbFields_ced = [
+        $this->dbFieldsCed = [
             self::FIELD_ID,
             self::FIELD_EVENT_ID,
             self::FIELD_DSTART,
@@ -60,7 +67,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
             self::FIELD_TSTART,
             self::FIELD_TEND,
         ];
-        $this->dbFields_cec = [
+        $this->dbFieldsCec = [
             self::FIELD_ID,
             self::FIELD_CATEG_LIBELLE,
             self::FIELD_CATEG_COLOR,
@@ -144,11 +151,11 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getEventDates(array $attributes): array
     {
-        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_ced), $this->dbTable_ced);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCed), $this->dbTableCed);
         $request .= " WHERE id LIKE '%s' AND eventId LIKE '%s' AND dStart <= '%s' AND dEnd >= '%s'";
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsEventDateClass(), $request, $attributes);
@@ -156,15 +163,15 @@ class CopsEventDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.05.21
-     * @version v1.23.06.25
+     * @version v1.23.08.12
      */
     public function insertEventDate(array $attributes): int
     {
         // Ne peut pas être migré "à la insertDaoImpl" car le nom de la table n'est pas dans dbTable
-        $fields = $this->dbFields_ced;
+        $fields = $this->dbFieldsCed;
         array_shift($fields);
 
-        return $this->insert($this->dbTable_ced, $fields, $attributes);
+        return $this->insert($this->dbTableCed, $fields, $attributes);
     }
 
     /**
@@ -195,7 +202,7 @@ class CopsEventDaoImpl extends LocalDaoImpl
      */
     public function getEventCategories(array $attributes): array
     {
-        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_cec), $this->dbTable_cec);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCec), $this->dbTableCec);
         $request .= " WHERE id LIKE '%s'".$this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsEventCategorieClass(), $request, $attributes);
     }

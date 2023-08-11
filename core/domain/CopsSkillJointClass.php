@@ -10,7 +10,7 @@ use core\services\CopsSkillServices;
  * Classe CopsSkillJointClass
  * @author Hugues
  * @since v1.23.06.25
- * @version v1.23.06.25
+ * @version v1.23.08.12
  */
 class CopsSkillJointClass extends LocalDomainClass
 {
@@ -58,18 +58,24 @@ class CopsSkillJointClass extends LocalDomainClass
     // METHODES
     //////////////////////////////////////////////////
 
+    /**
+     * version @v1.23.08.12
+     */
     public function getSkill(): CopsSkillClass
     {
         $objSkillServices = new CopsSkillServices();
-        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID=>$this->skillId];
+        $attributes = [self::FIELD_ID=>$this->skillId];
         $objsSkills = $objSkillServices->getSkills($attributes);
-        return array_shift($objsSkills);
+        return empty($objsSkills) ? new CopsSkillClass() : array_shift($objsSkills);
     }
 
+    /**
+     * @version v1.23.08.12
+     */
     public function getSpecSkill(): CopsSkillSpecClass
     {
         $objSkillServices = new CopsSkillServices();
-        $attributes[self::SQL_WHERE_FILTERS] = [self::FIELD_ID=>$this->specSkillId];
+        $attributes = [self::FIELD_ID=>$this->specSkillId];
         $objsSpecSkill = $objSkillServices->getSpecSkills($attributes);
         return array_shift($objsSpecSkill);
     }

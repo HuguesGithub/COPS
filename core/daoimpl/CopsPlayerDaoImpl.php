@@ -7,10 +7,13 @@ use core\domain\CopsPlayerClass;
  * Classe CopsPlayerDaoImpl
  * @author Hugues
  * @since 1.22.04.28
- * @version v1.23.07.02
+ * @version v1.23.08.12
  */
 class CopsPlayerDaoImpl extends LocalDaoImpl
 {
+    private $dbTable;
+    private $dbFields;
+
     /**
      * Class constructor
      * @since v1.23.06.19
@@ -79,9 +82,9 @@ class CopsPlayerDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.06.19
-     * @version v1.23.07.02
+     * @version v1.23.08.12
      */
-    public function getCopsPlayers(array $attributes): array
+    public function getPlayers(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
         $request .= " WHERE id LIKE '%s' AND matricule LIKE '%s' AND password LIKE '%s'";

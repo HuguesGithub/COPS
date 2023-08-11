@@ -10,16 +10,16 @@ use core\domain\CopsStageCategorieClass;
  * Classe CopsStageDaoImpl
  * @author Hugues
  * @since 1.22.06.02
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 class CopsStageDaoImpl extends LocalDaoImpl
 {
-    public $dbTable;
-    public $dbTableCsc;
-    public $dbTableCss;
-    public $dbFields;
-    public $dbFieldsCsc;
-    public $dbFieldsCss;
+    private $dbTable;
+    private $dbFields;
+    private $dbTableCsc;
+    private $dbFieldsCsc;
+    private $dbTableCss;
+    private $dbFieldsCss;
 
     //////////////////////////////////////////////////
     // CONSTRUCT

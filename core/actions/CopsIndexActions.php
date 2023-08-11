@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace core\actions;
 
 use core\utils\DateUtils;
@@ -8,7 +6,7 @@ use core\utils\DateUtils;
 /**
  * CopsIndexActions
  * @since 1.22.10.22
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class CopsIndexActions extends LocalActions
 {
@@ -40,7 +38,7 @@ class CopsIndexActions extends LocalActions
 
     /**
      * @since 1.22.10.22
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function csvExport($params)
     {
@@ -51,7 +49,7 @@ class CopsIndexActions extends LocalActions
         // Récupération des paramètres
         $attributes = [];
         if (isset($params[self::FIELD_NATURE_ID]) && $params[self::FIELD_NATURE_ID]!='') {
-            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_NATURE_ID] = $params[self::FIELD_NATURE_ID];
+            $attributes[self::FIELD_NATURE_ID] = $params[self::FIELD_NATURE_ID];
         } else {
             $arrHeader[] = self::LABEL_NATURE;
         }

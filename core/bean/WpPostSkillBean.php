@@ -7,12 +7,13 @@ use core\services\CopsSkillServices;
  * WpPostSkillBean
  * @author Hugues
  * @since 1.22.00.00
- * @version 1.22.09.23
+ * @version v1.23.08.12
  */
 class WpPostSkillBean extends WpPostBean
 {
     /**
      * @return string
+     * @version v1.23.08.12
      */
     public function getContentDisplay()
     {
@@ -29,7 +30,7 @@ class WpPostSkillBean extends WpPostBean
         ///////////////////////////////////////////////////////////////
         // On recherche l'entrée correspondante en base
         $objCopsSkillServices = new CopsSkillServices();
-        $attributes = [self::SQL_WHERE_FILTERS => [self::FIELD_SKILL_ID => '%', self::FIELD_SKILL_NAME => $postTitle]];
+        $attributes = [self::FIELD_SKILL_ID => '%', self::FIELD_SKILL_NAME => $postTitle];
         $objsCopsSkill = $objCopsSkillServices->getSkills($attributes);
         ///////////////////////////////////////////////////////////////
 
@@ -45,7 +46,7 @@ class WpPostSkillBean extends WpPostBean
             // $objCopsSkill->getField(self::FIELD_SKILL_USES)
 
             $this->updateField($objCopsSkill, self::FIELD_SPEC_LEVEL, $rkSpecialisation, $blnUpdate);
-            $this->updateField($objCopsSkill, self::FIELD_PAN_USABLE, $padUsable, $blnUpdate);
+            $this->updateField($objCopsSkill, self::FIELD_PAD_USABLE, $padUsable, $blnUpdate);
             $this->updateField($objCopsSkill, self::FIELD_REFERENCE, $reference, $blnUpdate);
             $this->updateField($objCopsSkill, self::FIELD_DEFAULT_ABILITY, $caracAssociee, $blnUpdate);
 

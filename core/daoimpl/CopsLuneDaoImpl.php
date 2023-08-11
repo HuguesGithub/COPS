@@ -7,10 +7,13 @@ use core\domain\CopsLuneClass;
  * Classe CopsLuneDaoImpl
  * @author Hugues
  * @since v1.23.04.27
- * @version v1.23.04.30
+ * @version v1.23.08.12
  */
 class CopsLuneDaoImpl extends LocalDaoImpl
 {
+    private $dbTable;
+    private $dbFields;
+
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
@@ -48,14 +51,13 @@ class CopsLuneDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     /**
      * @since v1.23.04.27
-     * @version v1.23.04.30
+     * @version v1.23.08.12
      */
     public function getLunes(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
-        $request .= " WHERE dateLune BETWEEN '%s' AND '%s'";
-        $request .= " AND typeLune LIKE '%s' ";
-        $request .= " ORDER BY %s %s LIMIT %s";
+        $request .= " WHERE dateLune BETWEEN '%s' AND '%s' AND typeLune LIKE '%s' ";
+        $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsLuneClass(), $request, $attributes);
     }
 }

@@ -9,7 +9,7 @@ use core\utils\DateUtils;
  * Classe CopsEventClass
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.07.09
+ * @version v1.23.08.12
  */
 class CopsEventClass extends LocalDomainClass
 {
@@ -453,15 +453,11 @@ class CopsEventClass extends LocalDomainClass
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.08.12
      */
     public function getEventDates(): array
     {
-        $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_EVENT_ID => $this->id,
-            ],
-        ];
+        $attributes = [self::FIELD_EVENT_ID => $this->id];
         $this->objCopsEventServices = new CopsEventServices();
         return $this->objCopsEventServices->getEventDates($attributes);
     }

@@ -10,38 +10,17 @@ use core\utils\UrlUtils;
  * AdminPageEquipmentHomeBean
  * @author Hugues
  * @since v1.23.07.08
- * @version v1.23.07.22
+ * @version v1.23.08.12
  */
 class AdminPageEquipmentHomeBean extends AdminPageEquipmentBean
 {
     /**
      * @since v1.23.07.08
-     * @version v1.23.07.15
+     * @version v1.23.08.12
      */
     public function getContentOnglet(): string
     {
-        $this->dealWithGetActions();
-
-        // Récupération des onglets de navigation.
-        $strNavigation = $this->getContentPage();
-        
-        
-        /////////////////////////////////////////
-        // Construction du Breadcrumbs
-        /////////////////////////////////////////
-        $this->buildBreadCrumbs();
-
-        $strCards = $this->getCard();
-
-        //
-        $attributes = [
-            $this->pageTitle,
-            $this->pageSubTitle,
-            $this->strBreadcrumbs,
-            $strNavigation,
-            $strCards,
-        ];
-        return $this->getRender(self::WEB_PA_DEFAULT, $attributes);
+        return parent::getContentOnglet();
     }
 
     /**

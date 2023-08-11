@@ -8,7 +8,7 @@ use core\utils\UrlUtils;
  * CopsPlayerBean
  * @author Hugues
  * @since 1.22.04.27
- * @version v1.23.07.02
+ * @version v1.23.08.12
  */
 class CopsPlayerBean extends UtilitiesBean
 {
@@ -23,9 +23,9 @@ class CopsPlayerBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.20
-     * @version v.23.06.25
+     * @version v.23.08.12
      */
-    public function getProfileAbility(string $field): string
+    public function getProfileAbility(string $field, bool $isReadOnly=false): string
     {
         $label = match($field) {
             self::FIELD_CARAC_CARRURE => self::LABEL_CARRURE,
@@ -56,7 +56,7 @@ class CopsPlayerBean extends UtilitiesBean
             $this->objCopsPlayer->getField(self::FIELD_ID),
             'field_'.$field,
             $this->objCopsPlayer->getField($field),
-            '',//self::CST_READONLY,
+            $isReadOnly ? self::CST_READONLY : '',
             $curValue,
         ];
         return $this->getRender($urlTemplate, $attributes);

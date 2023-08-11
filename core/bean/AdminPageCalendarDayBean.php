@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.07.22
+ * @version v1.23.08.12
  */
 class AdminPageCalendarDayBean extends AdminPageCalendarBean
 {
@@ -45,7 +45,7 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.05
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getCard(): string
     {
@@ -59,12 +59,11 @@ class AdminPageCalendarDayBean extends AdminPageCalendarBean
         /////////////////////////////////////////
         // On récupère tous les events
         $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_DSTART => $displayDate,
-                self::FIELD_DEND => $displayDate
-            ],
+            self::FIELD_DSTART => $displayDate,
+            self::FIELD_DEND => $displayDate,
             self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
-            self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]];
+            self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]
+        ];
         $objsEventDate = $objCopsEventServices->getEventDates($attributes);
 
         $this->objsAlldayEventDate = [];

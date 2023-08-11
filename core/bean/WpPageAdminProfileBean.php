@@ -11,11 +11,13 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminProfileBean
  * @author Hugues
  * @since v1.23.06.20
- * @version v1.23.07.02
+ * @version v1.23.08.12
  */
 class WpPageAdminProfileBean extends WpPageAdminBean
 {
     public $objCopsPlayer;
+    protected $isCreate1stStep;
+    protected $isCreate2ndStep;
     
     /**
      * @since v1.23.06.20
@@ -57,28 +59,14 @@ class WpPageAdminProfileBean extends WpPageAdminBean
 
     /**
      * @since v1.23.06.25
-     * @version v1.23.07.02
+     * @version v1.23.08.12
      */
     public function initProfile(): void
     {
-        $objCopsPlayerServices = new CopsPlayerServices();
-        $id = SessionUtils::fromGet(self::FIELD_ID);
-        if ($id=='') {
-            $attributes[self::SQL_WHERE_FILTERS] = [
-                self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
-            ];
-        } else {
-            $attributes[self::SQL_WHERE_FILTERS] = [
-                self::FIELD_ID => $id,
-            ];
-        }
-        $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
-        if (!empty($objsCopsPlayer)) {
-            $this->objCopsPlayer = array_shift(($objsCopsPlayer));
-        } else {
-            $this->objCopsPlayer = new CopsPlayerClass();
-        }
-}
+        $intStatus = $this->objCopsPlayer->getField(self::FIELD_STATUS);
+        $this->isCreate1stStep = $intStatus==self::PS_CREATE_1ST_STEP;
+        $this->isCreate2ndStep = $intStatus==self::PS_CREATE_2ND_STEP;
+    }
      
     /**
      * @since v1.23.06.20

@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoMeteoBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.07.22
+ * @version v1.23.08.12
  */
 class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 {
@@ -58,7 +58,7 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.06.18
-     * @version v1.23.06.25
+     * @version v1.23.08.12
      */
     public function getListContent(): string
     {
@@ -153,9 +153,10 @@ class AdminPageMeteoMeteoBean extends AdminPageMeteoBean
         // TODO : Fin suppression.
 
         // Récupération des données de la journée
-        $sqlAllAttributes = [];
-        $sqlAllAttributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] = $strDate;
-        $sqlAllAttributes[self::SQL_ORDER_BY] = self::FIELD_HEURE_METEO;
+        $sqlAllAttributes = [
+            self::FIELD_DATE_METEO => $strDate,
+            self::SQL_ORDER_BY => self::FIELD_HEURE_METEO
+        ];
         $objsCopsMeteo = $objCopsMeteoServices->getMeteos($sqlAllAttributes);
 
         //////////////////////////////////////////////////////

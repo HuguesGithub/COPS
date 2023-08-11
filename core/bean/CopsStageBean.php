@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * CopsStageBean
  * @author Hugues
  * @since 1.22.06.03
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 class CopsStageBean extends CopsBean
 {
@@ -80,74 +80,12 @@ class CopsStageBean extends CopsBean
 
     /**
      * @since v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getEditInterfaceAttributes(): array
     {
         return [];
-        //////////////////////////////////////////////////////////
-        // Récupération du type de véhicule
-        // On va construire une liste déroulante.
-        $selTypeCategValue = $this->obj->getField(self::FIELD_VEH_CATEG);
-        $selTypeSsCategValue = $this->obj->getField(self::FIELD_VEH_SS_CATEG);
-        $strContentSel = '';
-        $strContentSelSsCateg = '';
-        foreach(static::$arrTypeVehicle as $value => $arr) {
-            $strContentSel .= HtmlUtils::getOption($arr[self::TAG_LABEL], $value, $value==$selTypeCategValue);
-            foreach($arr[self::FIELD_VEH_SS_CATEG] as $valueSsCateg => $labelSsCateg) {
-                $strContentSelSsCateg .= HtmlUtils::getOption(
-                    $labelSsCateg,
-                    $valueSsCateg,
-                    $valueSsCateg==$selTypeSsCategValue
-                );
-            }
-        }
-        $attributes = [
-            self::ATTR_CLASS => 'custom-select col-3',
-            self::ATTR_NAME  => self::FIELD_VEH_CATEG,
-            self::FIELD_ID   => self::FIELD_VEH_CATEG,
-        ];
-        $selTypeCateg = HtmlUtils::getBalise(self::TAG_SELECT, $strContentSel, $attributes);
-        $attributes = [
-            self::ATTR_CLASS => 'custom-select col-3',
-            self::ATTR_NAME  => self::FIELD_VEH_SS_CATEG,
-            self::FIELD_ID   => self::FIELD_VEH_SS_CATEG,
-        ];
-        $selTypeSsCateg = HtmlUtils::getBalise(self::TAG_SELECT, $strContentSelSsCateg, $attributes);
-        //////////////////////////////////////////////////////////
-
-        return [
-            // Id
-            $this->obj->getField(self::FIELD_ID),
-            // Nom
-            $this->obj->getField(self::FIELD_VEH_LABEL),
-            // Référence
-            $this->obj->getField(self::FIELD_VEH_REFERENCE),
-            // Type de véhicule (liste)
-            $selTypeCateg,
-            // Sous Catégorie de véhicule (liste)
-            $selTypeSsCateg,
-            // Occupants
-            $this->obj->getField(self::FIELD_VEH_PLACES),
-            // Vitesse
-            $this->obj->getField(self::FIELD_VEH_SPEED),
-            // Accélération
-            $this->obj->getField(self::FIELD_VEH_ACCELERE),
-            // Autonomie
-            $this->obj->getField(self::FIELD_VEH_AUTONOMIE),
-            // Carburant
-            $this->obj->getField(self::FIELD_VEH_FUEL),
-            // Prix
-            $this->obj->getField(self::FIELD_VEH_PRICE),
-            // Points de Structure
-            $this->obj->getField(self::FIELD_VEH_PS),
-            // Année
-            $this->obj->getField(self::FIELD_VEH_YEAR),
-            // Options
-            $this->obj->getField(self::FIELD_VEH_OPTIONS),
-            // Ligne Rouge
-            $this->obj->getField(self::FIELD_VEH_LGN_ROUGE),
-        ];
-
+        // TODO : A implémenter. Voir CopsEquipmentCarBean pour exemple
     }
 
 

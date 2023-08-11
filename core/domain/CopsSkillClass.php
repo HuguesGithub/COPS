@@ -1,16 +1,14 @@
 <?php
 namespace core\domain;
 
+use core\bean\CopsSkillBean;
 use core\services\CopsSkillServices;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsSkillClass
  * @author Hugues
- * @version 1.22.05.30
  * @since 1.22.05.30
+ * @version v1.23.08.12
  */
 class CopsSkillClass extends LocalDomainClass
 {
@@ -22,7 +20,7 @@ class CopsSkillClass extends LocalDomainClass
     protected $skillDescription;
     protected $skillUses;
     protected $specLevel;
-    protected $panUsable;
+    protected $padUsable;
     protected $reference;
     protected $defaultAbility;
 

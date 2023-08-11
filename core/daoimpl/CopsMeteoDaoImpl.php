@@ -8,10 +8,13 @@ use core\utils\LogUtils;
  * Classe CopsMeteoDaoImpl
  * @author Hugues
  * @since 1.23.4.20
- * @version v1.23.06.18
+ * @version v1.23.08.12
  */
 class CopsMeteoDaoImpl extends LocalDaoImpl
 {
+    private $dbTable;
+    private $dbFields;
+
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////

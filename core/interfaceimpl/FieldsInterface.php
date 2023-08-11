@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 interface FieldsInterface
 {
@@ -201,7 +201,7 @@ interface FieldsInterface
     public const FIELD_SKILL_DESC         = 'skillDescription';
     public const FIELD_SKILL_USES         = 'skillUses';
     public const FIELD_SPEC_LEVEL         = 'specLevel';
-    public const FIELD_PAN_USABLE         = 'panUsable';
+    public const FIELD_PAD_USABLE         = 'padUsable';
     public const FIELD_DEFAULT_ABILITY    = 'defaultAbility';
 
     // TABLE cops_skill_spec
@@ -295,7 +295,6 @@ interface FieldsInterface
     public const FIELD_FOLDER_ID        = 'folderId';
     public const FIELD_FROM_ID          = 'fromId';
     public const FIELD_LABEL            = 'label';
-    public const FIELD_LIBELLE          = 'libelle';
     public const FIELD_LU               = 'lu';
     public const FIELD_MAIL             = 'mail';
     public const FIELD_MAIL_ID          = 'mailId';

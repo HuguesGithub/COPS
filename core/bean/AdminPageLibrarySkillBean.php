@@ -1,29 +1,27 @@
 <?php
 namespace core\bean;
 
-use core\services\CopsEquipmentServices;
+use core\services\CopsSkillServices;
 use core\utils\HtmlUtils;
 use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
- * AdminPageEquipmentCarBean
+ * AdminPageLibrarySkillBean
  * @author Hugues
- * @since v1.23.07.19
- * @version v1.23.08.12
+ * @since v1.23.08.12
  */
-class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
+class AdminPageLibrarySkillBean extends AdminPageLibraryBean
 {
 
     /**
-     * @since v1.23.07.19
-     * @version v1.23.07.22
+     * @since v1.23.08.12
      */
     public function buildBreadCrumbs(): void
     {
         parent::buildBreadCrumbs();
 
-        $strLink = HtmlUtils::getLink(self::LABEL_CARS, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $strLink = HtmlUtils::getLink(self::LABEL_SKILLS, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= HtmlUtils::getBalise(
             self::TAG_LI,
             $strLink,
@@ -32,8 +30,7 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
     }
 
     /**
-     * @since v1.23.07.19
-     * @version v1.23.07.22
+     * @since v1.23.08.05
      */
     public function getCard(): string
     {
@@ -45,106 +42,77 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
     }
 
     /**
-     * @since v1.23.07.19
-     * @version v1.23.07.29
+     * @since v1.23.08.12
      */
     public function getEditContent(): string
     {
-        // Définition du service
-        $objCopsEquipmentServices = new CopsEquipmentServices();
-        // Récupération des données
-        $objCopsCar = $objCopsEquipmentServices->getVehicle($this->id);
-
-        $urlTemplate = self::WEB_PA_EQPT_CAR_EDIT;
-
-        // Récupération des éléments nécessaires à l'affichage de l'écran d'édition
-        $attributes = $objCopsCar->getBean()->getEditInterfaceAttributes();
-
-        // Gestion du lien d'annulation
-        $urlAttributes = [
-            self::CST_ONGLET => self::ONGLET_EQUIPMENT,
-            self::CST_SUBONGLET => self::CST_EQPT_CAR,
-            self::CST_CURPAGE => $this->curPage,
-        ];
-        $urlAnnulation = UrlUtils::getAdminUrl($urlAttributes);
-        $attributes[] = $urlAnnulation;
-        //////////////////////////////////////////////////////////
-
-        return $this->getRender($urlTemplate, $attributes);
+        return '';
+        // TODO
     }
 
     /**
-     * @since v1.23.07.19
-     * @version v1.23.08.12
+     * @since v1.23.08.12
      */
     public function getListContent(): string
     {
         // Définition du service
-        $objCopsEquipmentServices = new CopsEquipmentServices();
+        $objServices = new CopsSkillServices();
         // On récupère les données éventuelles sur les filtres et les tris
-        $filterCateg = $this->initVar('filterCateg', self::SQL_JOKER_SEARCH);
-        $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_VEH_LABEL);
+        $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_SKILL_NAME);
         $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
-
-        // TODO : gestion des filtres
 
         // Récupération des données
         $attributes = [
-            self::FIELD_VEH_CATEG => $filterCateg,
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ];
-        $objsCopsCar = $objCopsEquipmentServices->getVehicles($attributes);
+        $objsSkill = $objServices->getSkills($attributes);
 
         //////////////////////////////////////////////////////
         // Définition de l'objet Pagination
         $objPagination = new PaginationHtmlBean();
         $queryArg = [
-            self::CST_ONGLET => self::ONGLET_EQUIPMENT,
-            self::CST_SUBONGLET => self::CST_EQPT_CAR,
+            self::CST_ONGLET => self::ONGLET_LIBRARY,
+            self::CST_SUBONGLET => self::CST_LIB_SKILL,
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
-            'filterCateg' => $filterCateg,
         ];
         $objPagination->setData([
             self::CST_CURPAGE => $this->curPage,
             self::CST_URL => UrlUtils::getAdminUrl(),
             self::PAGE_QUERY_ARG => $queryArg,
-            self::PAGE_OBJS => $objsCopsCar,
+            self::PAGE_OBJS => $objsSkill,
         ]);
 
         //////////////////////////////////////////////////////
         // Définition du Header du tableau
-        $objHeader = CopsEquipmentCarBean::getTableHeader($queryArg);
+        $objHeader = CopsSkillBean::getTableHeader($queryArg);
         //////////////////////////////////////////////////////
         // Définition du Body du tableau
         $objBody = new TableauBodyHtmlBean();
         // On ajoute les lignes du tableau ici.
         $objPagination->getDisplayedRows($objBody);
-        //////////////////////////////////////////////////////
-        // Définition du Footer du tableau
-        $objFooter = CopsEquipmentCarBean::getTableFooter($filterCateg);
 
         //////////////////////////////////////////////////////
         $objTable = new TableauHtmlBean();
-        $objTable->defaultInit($objHeader, $objBody, $objFooter, 'Liste des véhicules');
+        $objTable->defaultInit($objHeader, $objBody, null, 'Liste des compétences');
 
         $urlElements = [
-            self::CST_ONGLET => self::ONGLET_EQUIPMENT,
-            self::CST_SUBONGLET => self::CST_EQPT_CAR,
+            self::CST_ONGLET => self::ONGLET_LIBRARY,
+            self::CST_SUBONGLET => self::CST_LIB_SKILL,
             self::CST_ACTION => self::CST_WRITE,
         ];
 
         $urlTemplate = self::WEB_PAF_DEFAULT_LIST;
         $attributes = [
             // Titre du card
-            'Liste des véhicules',
+            'Liste des compétences',
             // La liste des éléments
             $objTable->getBean(),
             // Le lien pour créer un nouvel événement.
             UrlUtils::getAdminUrl($urlElements),
             // Libellé bouton
-            'Nouveau véhicule',
+            'Nouvelle compétence',
             // La pagination éventuelle
             $objPagination->getPaginationBlock(),
         ];
@@ -152,15 +120,15 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
     }
 
     /**
-     * @since v1.23.07.19
-     * @version v1.23.07.29
+     * @since v1.23.08.12
      */
     public function dealWithWriteAction(): void
     {
+        /*
         // Définition du service
-        $objCopsEquipmentServices = new CopsEquipmentServices();
+        $objCopsStageServices = new CopsStageServices();
         // Récupération des données
-        $objCopsCar = $objCopsEquipmentServices->getVehicle($this->id);
+        $objStage = $objCopsStageServices->getStage($this->id);
 
         // Le libellé, on stripslashes pour protéger
         $nomVehicule = stripslashes(SessionUtils::fromPost(self::FIELD_VEH_LABEL, false));
@@ -190,5 +158,6 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
         } else {
             // TODO : Gestion de l'erreur ?
         }
+        */
     }
 }

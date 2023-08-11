@@ -9,7 +9,7 @@ use core\daoimpl\CopsMeteoDaoImpl;
  * Classe CopsMeteoServices
  * @author Hugues
  * @since 1.22.04.29
- * @version v1.23.07.29
+ * @version v1.23.08.12
  */
 class CopsMeteoServices extends LocalServices
 {
@@ -41,15 +41,16 @@ class CopsMeteoServices extends LocalServices
     ////////////////////////////////////
     /**
      * @since v1.23.04.29
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
     public function getMeteos(array $params): array
     {
-        $prepAttributes = [];
-        $prepAttributes[] = $params[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] ?? self::SQL_JOKER_SEARCH;
-        $prepAttributes[] = $params[self::SQL_ORDER_BY] ?? self::FIELD_DATE_METEO;
-        $prepAttributes[] = $params[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
-        $prepAttributes[] = $params[self::SQL_LIMIT] ?? 9999;
+        $prepAttributes = [
+            $params[self::FIELD_DATE_METEO] ?? self::SQL_JOKER_SEARCH,
+            $params[self::SQL_ORDER_BY] ?? self::FIELD_DATE_METEO,
+            $params[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
+            $params[self::SQL_LIMIT] ?? 9999,
+        ];
         return $this->objDao->getMeteos($prepAttributes);
     }
 

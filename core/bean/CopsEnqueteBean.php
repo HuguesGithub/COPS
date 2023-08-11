@@ -8,7 +8,7 @@ use core\utils\HtmlUtils;
  * CopsEnqueteBean
  * @author Hugues
  * @since 1.22.09.16
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class CopsEnqueteBean extends CopsBean
 {
@@ -320,10 +320,12 @@ class CopsEnqueteBean extends CopsBean
         return $this->getRender($urlTemplate, $attributes);
     }
     
+    /**
+     * @version v1.23.08.12
+     */
     public function getCopsAutopsies()
     {
-        $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS] = [
+        $attributes = [
             self::FIELD_IDX_ENQUETE => $this->obj->getField(self::FIELD_IDX_ENQUETE)
         ];
         return $this->objCopsAutopsieServices->getAutopsies($attributes);

@@ -12,7 +12,7 @@ use core\utils\DateUtils;
  * Classe CopsEventServices
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.07.29
+ * @version v1.23.08.12
  */
 class CopsEventServices extends LocalServices
 {
@@ -45,30 +45,20 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getEvent(int $id): CopsEventClass
     {
-        $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ID => $id,
-            ]
-        ];
-        $objsEvent = $this->getEvents($attributes);
+        $objsEvent = $this->getEvents([self::FIELD_ID => $id]);
         return !empty($objsEvent) ? array_shift($objsEvent) : new CopsEventClass();
     }
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
     public function getEvents(array $attributes): array
     {
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-        $categId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_CATEG_ID] ?? self::SQL_JOKER_SEARCH;
-        $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_DEBUT] ?? self::CST_LAST_DATE;
-        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_FIN] ?? self::CST_FIRST_DATE;
-
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
         $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
 
@@ -89,10 +79,10 @@ class CopsEventServices extends LocalServices
         ///////////////////////////////////////////////////////////
 
         $prepAttributes = [
-            $id,
-            $categId,
-            $startDate,
-            $endDate,
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_CATEG_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_DATE_DEBUT] ?? self::CST_LAST_DATE,
+            $attributes[self::FIELD_DATE_FIN] ?? self::CST_FIRST_DATE,
             $orderBy,
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
@@ -396,15 +386,10 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.05
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
     public function getEventDates(array $attributes): array
     {
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-        $eventId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_EVENT_ID] ?? self::SQL_JOKER_SEARCH;
-        $startDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DSTART] ?? self::CST_LAST_DATE;
-        $endDate = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DEND] ?? self::CST_FIRST_DATE;
-
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
         $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
 
@@ -425,10 +410,10 @@ class CopsEventServices extends LocalServices
         ///////////////////////////////////////////////////////////
 
         $prepAttributes = [
-            $id,
-            $eventId,
-            $startDate,
-            $endDate,
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_EVENT_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_DSTART] ?? self::CST_LAST_DATE,
+            $attributes[self::FIELD_DEND] ?? self::CST_FIRST_DATE,
             $orderBy,
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
@@ -471,34 +456,24 @@ class CopsEventServices extends LocalServices
 
     /**
      * @since v1.23.05.25
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getCategorie(int $id): CopsEventCategorieClass
     {
-        $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ID => $id,
-            ]
-        ];
-        $objsEventCategories = $this->getEventCategories($attributes);
-        return !empty($objsEventCategories) ? array_shift($objsEventCategories) : new CopsEventCategorieClass();
+        $objs = $this->getEventCategories([self::FIELD_ID => $id]);
+        return !empty($objs) ? array_shift($objs) : new CopsEventCategorieClass();
     }
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.07.29
+     * @version v1.23.08.12
     */
     public function getEventCategories(array $attributes=[]): array
     {
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-
-        $orderBy = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_CATEG_LIBELLE;
-        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
-
         $prepAttributes = [
-            $id,
-            $orderBy,
-            $order,
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::SQL_ORDER_BY] ?? self::FIELD_CATEG_LIBELLE,
+            $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
         return $this->objDao->getEventCategories($prepAttributes);

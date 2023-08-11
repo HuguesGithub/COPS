@@ -10,32 +10,41 @@ use core\domain\CopsIndexTomeClass;
  * Classe CopsIndexDaoImpl
  * @author Hugues
  * @since 1.22.10.21
- * @version v1.23.07.15
+ * @version v1.23.08.12
  */
 class CopsIndexDaoImpl extends LocalDaoImpl
 {
+    protected $dbTable;
+    protected $dbTableCir;
+    protected $dbTableCin;
+    protected $dbTableCit;
+    protected $dbFields;
+    protected $dbFieldsCir;
+    protected $dbFieldsCin;
+    protected $dbFieldsCit;
+
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
     /**
      * Class constructor
      * @since 1.22.10.21
-     * @version v1.23.07.15
+     * @version v1.23.08.12
      */
     public function __construct()
     {
         ////////////////////////////////////
         // Définition des variables spécifiques
         $this->dbTable      = "wp_7_cops_index";
-        $this->dbTable_cir  = "wp_7_cops_index_reference";
-        $this->dbTable_cin  = "wp_7_cops_index_nature";
-        $this->dbTable_cit  = "wp_7_cops_index_tome";
+        $this->dbTableCir  = "wp_7_cops_index_reference";
+        $this->dbTableCin  = "wp_7_cops_index_nature";
+        $this->dbTableCit  = "wp_7_cops_index_tome";
         ////////////////////////////////////
 
         ////////////////////////////////////
         // Définition des champs spécifiques
         $this->dbFields      = [self::FIELD_ID, self::FIELD_REF_IDX_ID, self::FIELD_TOME_IDX_ID, self::FIELD_PAGE];
-        $this->dbFields_cir  = [
+        $this->dbFieldsCir  = [
             self::FIELD_ID_IDX_REF,
             self::FIELD_NOM_IDX,
             self::FIELD_PRENOM_IDX,
@@ -45,27 +54,40 @@ class CopsIndexDaoImpl extends LocalDaoImpl
             self::FIELD_DESCRIPTION_MJ,
             self::FIELD_CODE
         ];
-        $this->dbFields_cin  = [self::FIELD_ID_IDX_NATURE, self::FIELD_NOM_IDX_NATURE];
-        $this->dbFields_cit  = [self::FIELD_ID_IDX_TOME, self::FIELD_NOM_IDX_TOME, self::FIELD_ABR_IDX_TOME];
+        $this->dbFieldsCin  = [self::FIELD_ID_IDX_NATURE, self::FIELD_NOM_IDX_NATURE];
+        $this->dbFieldsCit  = [self::FIELD_ID_IDX_TOME, self::FIELD_NOM_IDX_TOME, self::FIELD_ABR_IDX_TOME];
         ////////////////////////////////////
         
         parent::__construct();
     }
 
     //////////////////////////////////////////////////
-    // METHODS
+    // METHODES
     //////////////////////////////////////////////////
     
     //////////////////////////////////////////////////
     // WP_7_COPS_INDEX
     //////////////////////////////////////////////////
-
+  
     /**
-     * @param CopsIndexClass [E|S]
+     * @since 1.22.10.21
+     * @version v1.23.08.12
+     */
+    public function getIndexes(array $attributes): array
+    {
+        $fields = 'idIdx, referenceIdxId, tomeIdxId, page';
+        $request  = $this->getSelectRequest($fields, $this->dbTable);
+        $request .= " INNER JOIN ".$this->dbTable_cit." ON tomeIdxId = idIdxTome";
+        $request .= " WHERE referenceIdxId LIKE '%s'";
+        $request .= " ORDER BY idIdxTome ASC;";
+        return $this->selectListDaoImpl(new CopsIndexClass(), $request, $attributes);
+    }
+    
+    /**
      * @since 1.23.02.20
      * @version 1.23.03.15
      */
-    public function insertIndex(&$objCopsIndex)
+    public function insertIndex(CopsIndexClass &$obj): void
     {
         // On récupère les champs
         $fields = $this->dbFields;
@@ -73,50 +95,22 @@ class CopsIndexDaoImpl extends LocalDaoImpl
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($fields, $this->dbTable);
         // On insère
-        $this->insertDaoImpl($objCopsIndex, $fields, $request, self::FIELD_ID);
+        $this->insertDaoImpl($obj, $fields, $request, self::FIELD_ID);
     }
 
     /**
-     * @param CopsIndexClass
      * @since 1.22.10.21
-     * @version 1.22.10.21
+     * @version v1.23.08.12
      */
-    public function updateIndex($objCopsIndex)
+    public function updateIndex(CopsIndexClass $obj): void
     {
+        // On récupère les champs
+        $dbFields = $this->dbFields;
+        $fieldId = array_shift($dbFields);
         // On défini la requête de mise à jour
-        $request  = "UPDATE ".$this->dbTable;
-        $request .= " SET referenceIdxId='%s', tomeIdxId='%s', page='%s'";
-        $request .= " WHERE id = '%s';";
-        $this->updateDaoImpl($objCopsIndex, $request, self::FIELD_ID);
-    }
-
-    /**
-     * @param array
-     * @return array
-     * @since 1.22.10.21
-     * @version 1.22.10.21
-     */
-    public function getIndex($prepObject)
-    {
-        $fields = 'idIdx, referenceIdxId, tomeIdxId, page';
-        $request  = $this->getSelectRequest($fields, $this->dbTable, self::FIELD_ID);
-        return $this->selectDaoImpl($request, $prepObject);
-    }
-  
-    /**
-     * @param array $attributes
-     * @return array [CopsIndex]
-     * @since 1.22.10.21
-     * @version 1.22.10.21
-     */
-    public function getIndexes($attributes)
-    {
-        $fields = 'idIdx, referenceIdxId, tomeIdxId, page';
-        $request  = $this->getSelectRequest($fields, $this->dbTable);
-        $request .= " INNER JOIN ".$this->dbTable_cit." ON tomeIdxId = idIdxTome";
-        $request .= " WHERE referenceIdxId LIKE '%s'";
-        $request .= " ORDER BY idIdxTome ASC;";
-        return $this->selectListDaoImpl(new CopsIndexClass(), $request, $attributes[self::SQL_WHERE_FILTERS]);
+        $request = $this->getUpdateRequest($dbFields, $this->dbTable, $fieldId);
+        // On met à jour
+        $this->updateDaoImpl($obj, $request, $fieldId);
     }
 
     //////////////////////////////////////////////////
@@ -124,93 +118,63 @@ class CopsIndexDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
 
     /**
-     * @param CopsIndexReferenceClass $objCopsIndexReference [E|S]
-     * @since 1.23.02.20
-     * @version 1.23.03.16
-     */
-    public function insertIndexReference(&$objCopsIndexReference)
-    {
-        // On récupère les champs
-        $fields = $this->dbFields_cir;
-        // On défini la requête d'insertion
-        $request = $this->getInsertRequest($fields, $this->dbTable_cir);
-        // On insère
-        $this->insertDaoImpl($objCopsIndexReference, $fields, $request, self::FIELD_ID_IDX_REF);
-    }
-
-    /**
-     * @param CopsIndexReferenceClass
-     * @since 1.23.02.20
-     * @version 1.23.02.20
-     */
-    public function updateIndexReference($objCopsIndexReference)
-    {
-        // On défini la requête de mise à jour
-        $request  = "UPDATE ".$this->dbTable_cir;
-        $request .= " SET nomIdxReference = '%s', prenomIdxReference = '%s', akaIdxReference = '%s',";
-        $request .= " natureIdxId = '%s', descriptionPJ = '%s', descriptionMJ = '%s', reference = '%s', code = '%s'";
-        $request .= " WHERE idIdxReference = '%s';";
-        $this->updateDaoImpl($objCopsIndexReference, $request, self::FIELD_ID_IDX_REF);
-    }
-
-    /**
-     * @param array $attributes
-     * @return CopsIndexReference
-     * @since 1.23.02.20
-     * @version 1.23.02.20
-     */
-    public function getIndexReference($prepObject)
-    {
-        $fields  = "idIdxReference, nomIdxReference, prenomIdxReference, akaIdxReference, natureIdxId, ";
-        $fields .= "descriptionPJ, descriptionMJ, reference, code";
-        $request  = $this->getSelectRequest($fields, $this->dbTable_cir, self::FIELD_ID_IDX_REF);
-        return $this->selectDaoImpl($request, $prepObject);
-    }
-
-    /**
      * @param array $attributes
      * @return array [CopsIndexReference]
      * @since 1.23.02.15
-     * @version 1.23.02.15
+     * @version v1.23.08.12
      */
-    public function getIndexReferences($attributes)
+    public function getIndexReferences(array $attributes): array
     {
-        $fields  = "idIdxReference, nomIdxReference, prenomIdxReference, akaIdxReference, natureIdxId, ";
-        $fields .= "descriptionPJ, descriptionMJ, reference, code";
-        $request  = $this->getSelectRequest($fields, $this->dbTable_cir);
-        $request .= " WHERE natureIdxId LIKE '%s'";
-        $request .= " ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
-        return $this->selectListDaoImpl(new CopsIndexReferenceClass(), $request, $attributes[self::SQL_WHERE_FILTERS]);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCir), $this->dbTableCir);
+        $request .= " WHERE natureIdxId LIKE '%s' ";
+        $request .= $this->defaultOrderByAndLimit;
+        return $this->selectListDaoImpl(new CopsIndexReferenceClass(), $request, $attributes);
+    }
+
+    /**
+     * @since 1.23.02.20
+     * @version v1.23.08.12
+     */
+    public function insertIndexReference(CopsIndexReferenceClass &$obj)
+    {
+        // On récupère les champs
+        $fields = $this->dbFieldsCir;
+        array_shift($dbFields);
+        // On défini la requête d'insertion
+        $request = $this->getInsertRequest($fields, $this->dbTableCir);
+        // On insère
+        $this->insertDaoImpl($obj, $fields, $request, self::FIELD_ID_IDX_REF);
+    }
+
+    /**
+     * @since 1.23.02.20
+     * @version v1.23.08.12
+     */
+    public function updateIndexReference(CopsIndexReferenceClass $obj)
+    {
+        // On récupère les champs
+        $dbFields = $this->dbFieldsCir;
+        $fieldId = array_shift($dbFields);
+        // On défini la requête de mise à jour
+        $request = $this->getUpdateRequest($dbFields, $this->dbTableCir, $fieldId);
+        // On met à jour
+        $this->updateDaoImpl($obj, $request, $fieldId);
     }
 
     //////////////////////////////////////////////////
     // WP_7_COPS_INDEX_NATURE
     //////////////////////////////////////////////////
-    /**
-     * @param array
-     * @since 1.22.10.21
-     * @version 1.22.10.21
-     */
-    public function getIndexNature($prepObject)
-    {
-        $fields  = "idIdxNature, nomIdxNature";
-        $request  = $this->getSelectRequest($fields, $this->dbTable_cin, self::FIELD_ID_IDX_NATURE);
-        return $this->selectDaoImpl($request, $prepObject);
-    }
     
     /**
-     * @param array
-     * @return array[CopsIndexNatureClass]
      * @since 1.22.10.21
-     * @version 1.23.02.15
+     * @version v1.23.08.12
      */
-    public function getIndexNatures($attributes)
+    public function getIndexNatures(array $attributes): array
     {
-        $fields  = "idIdxNature, nomIdxNature";
-        $request  = $this->getSelectRequest($fields, $this->dbTable_cin);
-        $request .= " WHERE nomIdxNature LIKE '%s'";
-        $request .= " ORDER BY nomIdxNature ASC;";
-        return $this->selectListDaoImpl(new CopsIndexNatureClass(), $request, $attributes[self::SQL_WHERE_FILTERS]);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCin), $this->dbTableCin);
+        $request .= " WHERE nomIdxNature LIKE '%s' ";
+        $request .= $this->defaultOrderByAndLimit;
+        return $this->selectListDaoImpl(new CopsIndexNatureClass(), $request, $attributes);
     }
 
     //////////////////////////////////////////////////
@@ -218,24 +182,12 @@ class CopsIndexDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
 
     /**
-     * @param array
-     * @since 1.23.02.20
-     * @version 1.23.02.20
-     */
-    public function getIndexTome($prepObject)
-    {
-        $fields  = "idIdxTome, nomIdxTome, abrIdxTome";
-        $request  = $this->getSelectRequest($fields, $this->dbTable_cit, self::FIELD_ID_IDX_TOME);
-        return $this->selectDaoImpl($request, $prepObject);
-    }
-
-    /**
      * @since v1.23.07.13
-     * @version v1.23.07.15
+     * @version v1.23.08.12
      */
     public function getIndexTomes(array $attributes): array
     {
-        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_cit), $this->dbTable_cit);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCit), $this->dbTableCit);
         $request .= " WHERE idIdxTome LIKE '%s' AND abrIdxTome = '%s' ";
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsIndexTomeClass(), $request, $attributes);

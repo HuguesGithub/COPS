@@ -9,7 +9,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminCalendarMonthBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
 {
@@ -147,7 +147,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
     
     /**
      * @since v1.22.11.22
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getAllDayEvents(int $tsDisplay): string
     {
@@ -155,11 +155,9 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////
         // On récupère tous les events du jour
         $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ID => '%',
-                self::FIELD_DSTART => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
-                self::FIELD_DEND => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
-            ],
+            self::FIELD_ID => '%',
+            self::FIELD_DSTART => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
+            self::FIELD_DEND => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
             self::SQL_ORDER_BY => ['dStart', 'dEnd'],
             self::SQL_ORDER => ['ASC', 'DESC']
         ];

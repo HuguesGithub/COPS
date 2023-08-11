@@ -10,7 +10,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminLibraryIndexBean
  * @author Hugues
  * @since 1.22.10.21
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 {
@@ -216,7 +216,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
     
     /**
      * @since 1.22.10.21
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getListContent(): string
     {
@@ -259,7 +259,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         if (!$this->blnShowColNature) {
             $name = $this->objWpCategory->getField(self::WP_NAME);
             $objCopsIndexNature = $this->objCopsIndexServices->getCopsIndexNatureByName($name);
-            $attributes[self::SQL_WHERE_FILTERS] = [
+            $attributes = [
                 self::FIELD_NATURE_IDX_ID => $objCopsIndexNature->getField(self::FIELD_ID_IDX_NATURE)
             ];
         }

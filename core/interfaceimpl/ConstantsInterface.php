@@ -4,11 +4,11 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.08.05';
+    public const VERSION              = 'v1.23.08.12';
 
     /////////////////////////////////////////////////
     // Ajax Infos
@@ -262,6 +262,7 @@ interface ConstantsInterface
     public const ONGLET_ARCHIVE         = 'archive';
     public const ONGLET_AUTOPSIE        = 'autopsie';
     public const ONGLET_CALENDAR        = 'calendar';
+    public const ONGLET_CONFIG          = 'config';
     public const ONGLET_DESK            = 'desk';
     public const ONGLET_ENQUETE         = 'enquete';
     public const ONGLET_EQUIPMENT       = 'equipment';
@@ -292,6 +293,13 @@ interface ConstantsInterface
     public const PAGE_LAST              = '&raquo;';
 
     /////////////////////////////////////////////////
+    // PLAYER STATUS
+    public const PS_1ST_CONNEXION       = 11;
+    public const PS_CHANGE_MDP          = 21;
+    public const PS_CREATE_1ST_STEP     = 31;
+    public const PS_CREATE_2ND_STEP     = 32;
+
+    /////////////////////////////////////////////////
     // Rôles
     public const ROLE_GUEST             = 1;
     public const ROLE_PJ                = 10;
@@ -310,7 +318,6 @@ interface ConstantsInterface
     public const SQL_ORDER_ASC          = 'ASC';
     public const SQL_ORDER_BY           = 'orderby';
     public const SQL_ORDER_DESC         = 'DESC';
-    public const SQL_WHERE_FILTERS      = 'whereFilters';
 
     /////////////////////////////////////////////////
     // Tags

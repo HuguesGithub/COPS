@@ -7,7 +7,7 @@ use core\daoimpl\CopsAutopsieDaoImpl;
  * Classe CopsAutopsieServices
  * @author Hugues
  * @since 1.22.10.09
- * @version v1.23.07.29
+ * @version v1.23.08.12
  */
 class CopsAutopsieServices extends LocalServices
 {
@@ -37,15 +37,12 @@ class CopsAutopsieServices extends LocalServices
     /**
      * @param array $attributes [E|S]
      * @since 1.22.10.09
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
     public function initFilters(&$attributes=[])
     {
-        if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = [];
-        }
-        if (!isset($attributes[self::SQL_WHERE_FILTERS]['idxEnquete'])) {
-            $attributes[self::SQL_WHERE_FILTERS]['idxEnquete'] = self::SQL_JOKER_SEARCH;
+        if (!isset($attributes['idxEnquete'])) {
+            $attributes['idxEnquete'] = self::SQL_JOKER_SEARCH;
         }
         if (!isset($attributes[self::SQL_ORDER_BY])) {
             $attributes[self::SQL_ORDER_BY] = self::FIELD_DSTART;

@@ -10,6 +10,7 @@ use core\utils\DateUtils;
  * Classe CopsTchatServices
  * @author Hugues
  * @since v1.23.08.05
+ * @version v1.23.08.12
  */
 class CopsTchatServices extends LocalServices
 {
@@ -37,17 +38,12 @@ class CopsTchatServices extends LocalServices
 
     /**
      * @since v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getTchats(array $attributes=[], string $when='oneWeekAgo'): array
     {
-        // Si on cherche un message en particulier, mais j'en doute
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-
         // On est sur le Tchat Général par défaut qui a un salonId égal à 1.
-        $salonId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_SALON_ID] ?? 1;
-
-        // Pas de traitement spécifique pour le moment
-        $playerId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_TO_PID] ?? self::SQL_JOKER_SEARCH;
+        $salonId = $attributes[self::FIELD_SALON_ID] ?? 1;
 
         $objPlayer = CopsPlayerServices::getCurrentPlayer();
         // On doit récupérer la date de la dernière visite du joueur dans ce salon.
@@ -61,24 +57,21 @@ class CopsTchatServices extends LocalServices
         } else {
             $defaultValue = DateUtils::getStrDate('Y-m-d H:i:s', $tsToday);
         }
-        $tsDefault = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_TIMESTAMP] ?? $defaultValue;
+        $tsDefault = $attributes[self::FIELD_TIMESTAMP] ?? $defaultValue;
 
         // Une fois fait, on récupère la date disponible ou celle par défaut selon la plus vieille.
         if ($lastRefreshed=='' || $lastRefreshed>$tsDefault) {
             $lastRefreshed = $tsDefault;
         }
 
-        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
-        $orderBy = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_TIMESTAMP;
-        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
-            $id,
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
             $salonId,
-            $playerId,
+            $attributes[self::FIELD_TO_PID] ?? self::SQL_JOKER_SEARCH,
             $lastRefreshed,
-            $orderBy,
-            $order,
+            $attributes[self::SQL_ORDER_BY] ?? self::FIELD_TIMESTAMP,
+            $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
         return $this->objDao->getTchats($prepAttributes);
@@ -96,14 +89,13 @@ class CopsTchatServices extends LocalServices
 
     /**
      * @since v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getTchatStatus(int $salonId, $playerId): CopsTchatStatusClass
     {
         $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_SALON_ID => $salonId,
-                self::FIELD_TO_PID => $playerId
-            ]
+            self::FIELD_SALON_ID => $salonId,
+            self::FIELD_TO_PID => $playerId
         ];
         $objs = $this->getTchatStatuss($attributes);
 
@@ -122,32 +114,20 @@ class CopsTchatServices extends LocalServices
 
     /**
      * @since v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getTchatStatuss(array $attributes=[]): array
     {
-        // Si on cherche un message en particulier, mais j'en doute
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-
-        // On est sur le Tchat Général par défaut qui a un salonId égal à 1.
-        $salonId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_SALON_ID] ?? 1;
-
-        // Pas de traitement spécifique pour le moment
-        $playerId = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_TO_PID] ?? 0;
-
-        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
-        $orderBy = $attributes[self::SQL_ORDER_BY] ?? self::FIELD_LAST_REFRESHED;
-        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_DESC;
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
-            $id,
-            $salonId,
-            $playerId,
-            $orderBy,
-            $order,
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_SALON_ID] ?? 1,
+            $attributes[self::FIELD_TO_PID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::SQL_ORDER_BY] ?? self::FIELD_LAST_REFRESHED,
+            $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_DESC,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
         return $this->objDao->getTchatStatuss($prepAttributes);
-
     }
 
     /**
@@ -161,6 +141,5 @@ class CopsTchatServices extends LocalServices
      */
     public function updateTchatStatus(CopsTchatStatusClass &$obj): void
     { $this->objDao->updateTchatStatus($obj); }
-
 
 }

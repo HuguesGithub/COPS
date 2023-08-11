@@ -10,25 +10,32 @@ use core\domain\CopsSkillSpecClass;
  * Classe CopsSkillDaoImpl
  * @author Hugues
  * @since 1.22.06.13
- * @version v1.23.06.25
+ * @version v1.23.08.12
  */
 class CopsSkillDaoImpl extends LocalDaoImpl
 {
+    private $dbTable;
+    private $dbFields;
+    private $dbTableCss;
+    private $dbFieldsCss;
+    private $dbTableCps;
+    private $dbFieldsCps;
+
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
     /**
      * Class constructor
      * @since v1.23.06.23
-     * @version v1.23.06.25
+     * @version v1.23.08.12
      */
     public function __construct()
     {
         ////////////////////////////////////
         // Définition des variables spécifiques
         $this->dbTable      = "wp_7_cops_skill";
-        $this->dbTable_css  = "wp_7_cops_skill_spec";
-        $this->dbTable_csj  = "wp_7_cops_player_skill_joint";
+        $this->dbTableCss  = "wp_7_cops_skill_spec";
+        $this->dbTableCps  = "wp_7_cops_player_skill";
         ////////////////////////////////////
 
         ////////////////////////////////////
@@ -39,16 +46,16 @@ class CopsSkillDaoImpl extends LocalDaoImpl
             self::FIELD_SKILL_DESC,
             self::FIELD_SKILL_USES,
             self::FIELD_SPEC_LEVEL,
-            self::FIELD_PAN_USABLE,
+            self::FIELD_PAD_USABLE,
             self::FIELD_REFERENCE,
             self::FIELD_DEFAULT_ABILITY
         ];
-        $this->dbFields_css  = [
+        $this->dbFieldsCss  = [
             self::FIELD_ID,
             self::FIELD_SPEC_NAME,
             self::FIELD_SKILL_ID
         ];
-        $this->dbFields_csj  = [
+        $this->dbFieldsCps  = [
             self::FIELD_ID,
             self::FIELD_COPS_ID,
             self::FIELD_SKILL_ID,
@@ -62,11 +69,11 @@ class CopsSkillDaoImpl extends LocalDaoImpl
     }
 
     //////////////////////////////////////////////////
-    // METHODS
+    // METHODES
     //////////////////////////////////////////////////
     
     //////////////////////////////////////////////////
-    // WP_7_COPS_PLAYER_SKILL
+    // wp_7_cops_skill
     //////////////////////////////////////////////////
     /**
      * @since v1.23.06.25
@@ -80,22 +87,22 @@ class CopsSkillDaoImpl extends LocalDaoImpl
             AND skillName LIKE '%s'
             AND skillDescription LIKE '%s' ;
             AND specLevel LIKE '%s'
-            AND panUsable LIKE '%s' ;
+            AND padUsable LIKE '%s' ;
         */
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsSkillClass(), $request, $attributes);
     }
     
     //////////////////////////////////////////////////
-    // WP_7_COPS_PLAYER_SKILL_JOINT
+    // wp_7_cops_player_skill
     //////////////////////////////////////////////////
     /**
      * @since v1.23.06.23
-     * @version v1.23.06.25
+     * @version v1.23.08.12
      */
-    public function getCopsSkillJoints(array $attributes): array
+    public function getCopsSkills(array $attributes): array
     {
-        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_csj), $this->dbTable_csj);
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCps), $this->dbTableCps);
         $request .= " WHERE copsId LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsSkillJointClass(), $request, $attributes);
@@ -106,45 +113,14 @@ class CopsSkillDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     /**
      * @since v1.23.06.25
-     * @version v1.23.06.25
+     * @version v1.23.08.12
      */
     public function getSpecSkills(array $attributes): array
     {
-        $request  = $this->getSelectRequest(implode(', ', $this->dbFields_css), $this->dbTable_css);
-        $request .= " WHERE id LIKE '%s' ";
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCss), $this->dbTableCss);
+        $request .= " WHERE id LIKE '%s' AND skillId LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsSkillSpecClass(), $request, $attributes);
     }
-
-    
-
-
-    //////////////////////////////////////////////////
-    // WP_7_COPS_SKILL_SPEC
-    //////////////////////////////////////////////////
-
-
-  public function getCopsSkillSpecs($attributes)
-  {
-    $strSql = "SELECT id, specName, skillId FROM wp_7_cops_skill_spec WHERE skillId = '%s' ";
-    $request  = vsprintf($strSql, $attributes[self::SQL_WHERE_FILTERS]);
-    $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
-
-    //////////////////////////////
-    // Exécution de la requête
-    $rows = MySQLClass::wpdbSelect($request);
-    //////////////////////////////
-
-    //////////////////////////////
-    // Construction du résultat
-    $objsItem = [];
-    if (!empty($rows)) {
-      foreach ($rows as $row) {
-        $objsItem[] = CopsSkillSpecClass::convertElement($row);
-      }
-    }
-    return $objsItem;
-    //////////////////////////////
-  }
 
 }

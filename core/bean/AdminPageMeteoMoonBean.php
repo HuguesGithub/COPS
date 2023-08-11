@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoMoonBean
  * @author Hugues
  * @since 1.23.04.27
- * @version v1.23.07.22
+ * @version v1.23.08.12
  */
 class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 {
@@ -58,7 +58,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.06.18
-     * @version v1.23.06.18
+     * @version v1.23.08.12
      */
     public function getListContent(): string
     {
@@ -73,8 +73,8 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
         // On récupère en base la newmoon précédente
         $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS][self::CST_ENDDATE] = $strDate;
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_TYPE_LUNE] = 'newmoon';
+        $attributes[self::CST_ENDDATE] = $strDate;
+        $attributes[self::FIELD_TYPE_LUNE] = 'newmoon';
         $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
         $attributes[self::SQL_LIMIT] = 1;
         $objsCopsLune = $objCopsLuneServices->getLunes($attributes);
@@ -83,7 +83,7 @@ class AdminPageMeteoMoonBean extends AdminPageMeteoBean
 
         // On récupère les 3 dates suivantes
         $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS][self::CST_STARTDATE] = $prevDate;
+        $attributes[self::CST_STARTDATE] = $prevDate;
         // La lune précédente
         // 4 entrées par cycle
         // 5 cycles

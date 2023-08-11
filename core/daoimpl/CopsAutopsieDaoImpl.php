@@ -3,17 +3,17 @@ namespace core\domain;
 
 use core\domain\CopsAutopsieClass;
 
-if (!defined('ABSPATH')) {
-    die('Forbidden');
-}
 /**
  * Classe CopsAutopsieDaoImpl
  * @author Hugues
  * @since 1.22.10.09
- * @version 1.23.03.15
+ * @version v1.23.08.12
  */
 class CopsAutopsieDaoImpl extends LocalDaoImpl
 {
+    private $dbTable;
+    private $dbFields;
+
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
@@ -44,13 +44,25 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     // WP_7_COPS_AUTOPSIE
     //////////////////////////////////////////////////
+
+    /**
+     * @since 1.22.10.09
+     * @version v1.23.08.12
+     */
+    public function getAutopsies(array $attributes=[]): array
+    {
+        $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
+        $request .= " WHERE id LIKE '%s' AND idxEnquete LIKE '%s' ";
+        $request .= $this->defaultOrderByAndLimit;
+//        $request .= " ORDER BY dStart DESC;";
+        return $this->selectListDaoImpl(new CopsAutopsieClass(), $request, $attributes);
+    }
     
     /**
-     * @param CopsAutopsieClass [E|S]
      * @since 1.22.10.10
-     * @version 1.23.03.16
+     * @version v1.23.08.12
      */
-    public function insertAutopsie(&$objAutopsie)
+    public function insertAutopsie(CopsAutopsieClass &$obj): void
     {
         // On récupère les champs
         $fields = $this->dbFields;
@@ -58,52 +70,22 @@ class CopsAutopsieDaoImpl extends LocalDaoImpl
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($fields, $this->dbTable);
         // On insère
-        $this->insertDaoImpl($objAutopsie, $fields, $request, self::FIELD_ID);
+        $this->insertDaoImpl($obj, $fields, $request, self::FIELD_ID);
     }
     
     /**
-     * @param CopsAutopsieClass
      * @since 1.22.10.10
-     * @version 1.22.10.10
+     * @version v1.23.08.12
      */
-    public function updateAutopsie($objAutopsie)
+    public function updateAutopsie(CopsAutopsieClass $obj): void
     {
         // On récupère les champs
         $dbFields = $this->dbFields;
-        $fieldId = array_pop($dbFields);
+        $fieldId = array_shift($dbFields);
         // On défini la requête de mise à jour
         $request = $this->getUpdateRequest($dbFields, $this->dbTable, $fieldId);
         // On met à jour
-        $this->updateDaoImpl($objAutopsie, $request, $fieldId);
-    }
-
-    /**
-     * @param array
-     * @since 1.22.10.09
-     * @version 1.23.03.15
-     */
-    public function getAutopsie($prepObject)
-    {
-        // On récupère les champs
-        $fields = implode(', ', array_shift($this->dbFields));
-        // On défini la requête de sélection
-        $request  = $this->getSelectRequest($fields, $this->dbTable, self::FIELD_ID);
-        return $this->selectDaoImpl($request, $prepObject);
-    }
-    
-    /**
-     * @since 1.22.10.09
-     * @version 1.22.10.09
-     */
-    public function getAutopsies($attributes)
-    {
-        // On récupère les champs
-        $fields = implode(', ', $this->dbFields);
-        // On défini la requête de sélection
-        $request  = $this->getSelectRequest($fields, $this->dbTable);
-        $request .= " WHERE idxEnquete LIKE '%s'";
-        $request .= " ORDER BY dStart DESC;";
-        return $this->selectListDaoImpl(new CopsAutopsieClass(), $request, $attributes[self::SQL_WHERE_FILTERS]);
+        $this->updateDaoImpl($obj, $request, $fieldId);
     }
     
 }

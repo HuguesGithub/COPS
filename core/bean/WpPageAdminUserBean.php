@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminUserBean
  * @author Hugues
  * @since v1.23.06.26
- * @version v1.23.07.09
+ * @version v1.23.08.12
  */
 class WpPageAdminUserBean extends WpPageAdminBean
 {
@@ -48,7 +48,7 @@ class WpPageAdminUserBean extends WpPageAdminBean
 
     /**
      * @since v1.23.06.26
-     * @version v1.23.07.02
+     * @version v1.23.08.12
      */
     public function getOngletContent(): string
     {
@@ -62,10 +62,8 @@ class WpPageAdminUserBean extends WpPageAdminBean
 
         // Récupération des données
         $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_GRADE => $filterGrade,
-                self::FIELD_SECTION => $filterSection,
-            ],
+            self::FIELD_GRADE => $filterGrade,
+            self::FIELD_SECTION => $filterSection,
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ];

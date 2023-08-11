@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * Classe CopsEnqueteDaoImpl
  * @author Hugues
  * @since 1.22.09.16
- * @version 1.22.09.23
+ * @version v1.23.08.12
  */
 class CopsEnqueteDaoImpl extends LocalDaoImpl
 {
@@ -54,17 +54,15 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     }
   
     /**
-     * @param array $attributes
-     * @return array [CopsEnquete]
      * @since 1.22.09.20
-     * @version 1.22.09.20
+     * @version v1.23.08.12
      */
-    public function getEnquetes($attributes)
+    public function getEnquetes(array $attributes): array
     {
         $request  = $this->select;
         $request .= "WHERE statutEnquete LIKE '%s' ";
         $request .= "ORDER BY ".$attributes[self::SQL_ORDER_BY]." ".$attributes[self::SQL_ORDER].";";
-        $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
+        $prepRequest = vsprintf($request, $attributes);
         
         //////////////////////////////
         // Exécution de la requête
@@ -127,12 +125,12 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     /**
      * @since 1.22.09.23
-     * @version 1.22.09.23
+     * @version v1.23.08.12
      */
     public function getEnqueteChronologies($attributes)
     {
         $request = $this->buildSelectRequest($this->dbTable_cec);
-        $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
+        $prepRequest = vsprintf($request, $attributes);
         
         //////////////////////////////
         // Exécution de la requête
@@ -155,12 +153,12 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     /**
      * @since 1.22.09.23
-     * @version 1.22.09.23
+     * @version v1.23.08.12
      */
     public function getEnquetePersonnalites($attributes)
     {
         $request = $this->buildSelectRequest($this->dbTable_cep);
-        $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
+        $prepRequest = vsprintf($request, $attributes);
         
         //////////////////////////////
         // Exécution de la requête
@@ -183,12 +181,12 @@ class CopsEnqueteDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     /**
      * @since 1.22.09.23
-     * @version 1.22.09.23
+     * @version v1.23.08.12
      */
     public function getEnqueteTemoignages($attributes)
     {
         $request = $this->buildSelectRequest($this->dbTable_cet);
-        $prepRequest = vsprintf($request, $attributes[self::SQL_WHERE_FILTERS]);
+        $prepRequest = vsprintf($request, $attributes);
         
         //////////////////////////////
         // Exécution de la requête

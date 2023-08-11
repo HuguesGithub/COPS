@@ -7,10 +7,13 @@ use core\domain\CopsSoleilClass;
  * Classe CopsSoleilDaoImpl
  * @author Hugues
  * @since v1.23.04.26
- * @version v1.23.04.30
+ * @version v1.23.08.12
  */
 class CopsSoleilDaoImpl extends LocalDaoImpl
 {
+    private $dbTable;
+    private $dbFields;
+
     //////////////////////////////////////////////////
     // CONSTRUCT
     //////////////////////////////////////////////////
@@ -53,38 +56,28 @@ class CopsSoleilDaoImpl extends LocalDaoImpl
     //////////////////////////////////////////////////
     // WP_7_COPS_SOLEIL
     //////////////////////////////////////////////////
-    /**
-     * @since v1.23.04.26
-     * @version v1.23.04.30
-     */
-    public function getSoleil(array $prepObject): array
-    {
-        $fields = implode(', ', $this->dbFields_sol);
-        $request  = $this->getSelectRequest($fields, $this->dbTable, self::FIELD_DATE_SOLEIL);
-        return $this->selectDaoImpl($request, $prepObject);
-    }
 
     /**
      * @since v1.23.04.28
-     * @version v1.23.04.30
+     * @version v1.23.08.12
      */
     public function getSoleils(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
         $request .= " WHERE dateSoleil LIKE '%s'";
-        $request .= " ORDER BY %s %s LIMIT %s";
+        $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsSoleilClass(), $request, $attributes);
     }
 
     /**
      * @since v1.23.04.26
-     * @version v1.23.04.30
+     * @version v1.23.08.12
      */
     public function getSoleilsIntervalle(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
         $request .= " WHERE dateSoleil BETWEEN '%s' AND '%s'";
-        $request .= " ORDER BY %s %s LIMIT %s";
+        $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsSoleilClass(), $request, $attributes);
     }
 }

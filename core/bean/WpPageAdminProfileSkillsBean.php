@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminProfileSkillsBean
  * @author Hugues
  * @since v1.23.06.23
- * @version v1.23.07.02
+ * @version v1.23.08.12
  */
 class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
 {
@@ -35,7 +35,7 @@ class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
 
     /**
      * @since v1.23.07.02
-     * @version v1.23.07.02
+     * @version v1.23.08.12
      */
     public function getOngletContent(): string
     {
@@ -43,21 +43,14 @@ class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
         $colSkill2 = '';
         $colSkill3 = '';
 
-        $objCopsPlayerServices = new CopsPlayerServices();
-        $attributes[self::SQL_WHERE_FILTERS] = [
-            self::FIELD_MATRICULE => $_SESSION[self::FIELD_MATRICULE],
-        ];
-        $objsCopsPlayer = $objCopsPlayerServices->getCopsPlayers($attributes);
-        if (!empty($objsCopsPlayer)) {
-            $this->objCopsPlayer = array_shift(($objsCopsPlayer));
-        } else {
-            $this->objCopsPlayer = new CopsPlayerClass();
-        }
-        $objsSkillJoint = $this->objCopsPlayer->getCopsSkillJoints();
+        $objsSkillJoint = $this->objCopsPlayer->getCopsSkills();
 
         $arrSkillJointWithName = [];
         while (!empty($objsSkillJoint)) {
             $objSkillJoint = array_shift($objsSkillJoint);
+            if ($objSkillJoint->getField(self::FIELD_SKILL_ID)==34) {
+                continue;
+            }
             $strSkillName = $objSkillJoint->getSkill()->getField(self::FIELD_SKILL_NAME);
             $strSkillName = str_replace('É', 'E', $strSkillName);
             $arrSkillJointWithName[] = [
@@ -80,7 +73,8 @@ class WpPageAdminProfileSkillsBean extends WpPageAdminProfileBean
             if ($newSkillName==$prevSkillName && $prevColId!=$colId) {
                 --$colId;
             }
-            ${'colSkill'.$colId} .= $objSkillJoint->getBean()->getCartouche();
+            // Si on est en status 32, on envoie false
+            ${'colSkill'.$colId} .= $objSkillJoint->getBean()->getCartouche(!$this->isCreate2ndStep);
             ++$cpt;
             $prevSkillName = $newSkillName;
             $prevColId = $colId;

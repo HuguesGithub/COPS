@@ -8,14 +8,14 @@ use core\domain\CopsEquipmentWeaponClass;
  * Classe CopsEquipmentDaoImpl
  * @author Hugues
  * @since v1.23.07.12
- * @version v1.23.07.29
+ * @version v1.23.08.12
  */
 class CopsEquipmentDaoImpl extends LocalDaoImpl
 {
-    public $dbTableWpn;
-    public $dbTableCar;
-    public $dbFieldsWpn;
-    public $dbFieldsCar;
+    private $dbTableWpn;
+    private $dbTableCar;
+    private $dbFieldsWpn;
+    private $dbFieldsCar;
 
     /**
      * Class constructor

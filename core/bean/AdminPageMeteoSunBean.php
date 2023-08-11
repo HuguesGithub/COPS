@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageMeteoSunBean
  * @author Hugues
  * @since 1.23.04.26
- * @version v1.23.07.22
+ * @version v1.23.08.12
  */
 class AdminPageMeteoSunBean extends AdminPageMeteoBean
 {
@@ -57,7 +57,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
 
     /**
      * @since v1.23.06.18
-     * @version v1.23.06.18
+     * @version v1.23.08.12
      */
     public function getListContent(): string
     {
@@ -76,8 +76,7 @@ class AdminPageMeteoSunBean extends AdminPageMeteoBean
         // sur l'intervalle défini juste au-dessus.
         $objCopsSoleilServices = new CopsSoleilServices();
 
-        $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS] = [
+        $attributes = [
             self::CST_STARTDATE => $strDateStartWeek,
             self::CST_ENDDATE   => $strDateEndWeek
         ];

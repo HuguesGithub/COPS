@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 interface UrlsInterface
 {
@@ -64,6 +64,7 @@ interface UrlsInterface
     public const WEB_PPFD_DOT_EVENT         = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-dot-event.tpl';
     public const WEB_PPFD_INSET_EVENT       = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-inset-event.tpl';
     public const WEB_PPFD_PFL_ABILITY       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-ability.tpl';
+    public const WEB_PPFD_PFL_LANGUAGE      = self::WEB_PPF_DIV     .'publique-fragments-div-profile-language.tpl';
     public const WEB_PPFD_PFL_SKILL         = self::WEB_PPF_DIV     .'publique-fragments-div-profile-skill.tpl';
     public const WEB_PPFD_PFL_ID_GRADE      = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-grade.tpl';
     public const WEB_PPFD_PFL_ID_NAME       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-name.tpl';
@@ -73,6 +74,7 @@ interface UrlsInterface
     public const WEB_PPFS_CAL_DAY           = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-day.tpl';
     public const WEB_PPFS_CAL_MONTH         = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-month.tpl';
     public const WEB_PPFS_CAL_WEEK          = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-week.tpl';
+    public const WEB_PPFS_CONFIG            = self::WEB_PPF_SECTION .'publique-fragments-section-config.tpl';
     public const WEB_PPFS_CONNEX_PANEL      = self::WEB_PPF_SECTION .'publique-fragments-section-connexion-panel.tpl';
     public const WEB_PPFS_CONTENT_FOOTER    = self::WEB_PPF_SECTION .'publique-fragments-section-content-footer.tpl';
     public const WEB_PPFS_CONTENT_HEADER    = self::WEB_PPF_SECTION .'publique-fragments-section-content-header.tpl';

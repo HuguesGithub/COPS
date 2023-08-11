@@ -8,7 +8,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminCalendarWeekBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
 {
@@ -151,7 +151,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
     
     /**
      * @since v1.22.11.21
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getRowAllDay($strClass, $tsDisplay)
     {
@@ -159,11 +159,9 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////
         // On récupère tous les events du jour
         $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ID => self::SQL_JOKER_SEARCH,
-                self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
-                self::FIELD_DEND => date(self::FORMAT_DATE_YMD, $tsDisplay)
-            ],
+            self::FIELD_ID => self::SQL_JOKER_SEARCH,
+            self::FIELD_DSTART => date(self::FORMAT_DATE_YMD, $tsDisplay),
+            self::FIELD_DEND => date(self::FORMAT_DATE_YMD, $tsDisplay),
             self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
             self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]
         ];

@@ -12,7 +12,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarEventBean
  * @author Hugues
  * @since v1.23.05.15
- * @version v1.23.07.22
+ * @version v1.23.08.12
  */
 class AdminPageCalendarEventBean extends AdminPageCalendarBean
 {
@@ -174,7 +174,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
     /**
      * @since v1.23.05.15
-     * @version v1.23.06.18
+     * @version v1.23.08.12
      */
     public function getListContent(): string
     {
@@ -189,7 +189,7 @@ class AdminPageCalendarEventBean extends AdminPageCalendarBean
 
         // Récupération des données
         $attributes = [
-            self::SQL_WHERE_FILTERS => [self::FIELD_CATEG_ID => $filterCateg],
+            self::FIELD_CATEG_ID => $filterCateg,
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ];

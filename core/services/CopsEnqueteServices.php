@@ -7,7 +7,7 @@ use core\daoimpl\CopsEnqueteDaoImpl;
  * Classe CopsEnqueteServices
  * @author Hugues
  * @since 1.22.09.16
- * @version v1.23.07.29
+ * @version v1.23.08.12
  */
 class CopsEnqueteServices extends LocalServices
 {
@@ -37,15 +37,12 @@ class CopsEnqueteServices extends LocalServices
     /**
      * @param array $attributes [E|S]
      * @since 1.22.09.20
-     * @version 1.22.09.24
+     * @version v1.23.08.12
      */
     public function initFilters(&$attributes=[])
     {
-        if (!isset($attributes[self::SQL_WHERE_FILTERS])) {
-            $attributes[self::SQL_WHERE_FILTERS] = [];
-        }
-        if (!isset($attributes[self::SQL_WHERE_FILTERS][self::FIELD_STATUT_ENQUETE])) {
-            $attributes[self::SQL_WHERE_FILTERS][self::FIELD_STATUT_ENQUETE] = self::SQL_JOKER_SEARCH;
+        if (!isset($attributes[self::FIELD_STATUT_ENQUETE])) {
+            $attributes[self::FIELD_STATUT_ENQUETE] = self::SQL_JOKER_SEARCH;
         }
         if (!isset($attributes[self::SQL_ORDER_BY])) {
             $attributes[self::SQL_ORDER_BY] = self::FIELD_DSTART;

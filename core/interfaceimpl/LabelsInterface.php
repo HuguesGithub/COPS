@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.24
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 interface LabelsInterface
 {
@@ -27,6 +27,7 @@ interface LabelsInterface
     public const LABEL_CODE           = 'Code';
     public const LABEL_SKILLS         = 'Compétences';
     public const LABEL_CONDITIONS     = 'Conditions';
+    public const LABEL_CONFIG         = 'Configuration';
     public const LABEL_CONFORT        = 'Confort';
     public const LABEL_CONTACTS       = 'Contacts';
     public const LABEL_COORDINATION   = 'Coordination';

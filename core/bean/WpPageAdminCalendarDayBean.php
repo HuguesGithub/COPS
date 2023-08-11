@@ -8,7 +8,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminCalendarDayBean
  * @author Hugues
  * @since 1.22.11.21
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
 {
@@ -32,7 +32,7 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
     
     /**
      * @since 1.22.11.21
-     * @version v1.23.05.28
+     * @version v1.23.08.12
      */
     public function getOngletContent()
     {
@@ -48,11 +48,9 @@ class WpPageAdminCalendarDayBean extends WpPageAdminCalendarBean
         /////////////////////////////////////////
         // On récupère tous les events
         $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ID => self::SQL_JOKER_SEARCH,
-                self::FIELD_DSTART => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
-                self::FIELD_DEND => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
-            ],
+            self::FIELD_ID => self::SQL_JOKER_SEARCH,
+            self::FIELD_DSTART => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
+            self::FIELD_DEND => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay),
             self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
             self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]];
         $objsCopsEventDate = $this->objCopsEventServices->getEventDates($attributes);

@@ -13,7 +13,7 @@ use core\utils\UrlUtils;
  * AdminPageEquipmentWeaponBean
  * @author Hugues
  * @since v1.23.07.09
- * @version v1.23.07.29
+ * @version v1.23.08.12
  */
 class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 {
@@ -79,14 +79,13 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 
     /**
      * @since v1.23.07.09
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
     public function getListContent(): string
     {
         // Définition du service
         $objCopsEquipmentServices = new CopsEquipmentServices();
         // On récupère les données éventuelles sur les filtres et les tris
-        // $filterCateg = $this->initVar('filterCateg', self::SQL_JOKER_SEARCH);
         $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_NOM_ARME);
         $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
 
@@ -94,7 +93,6 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 
         // Récupération des données
         $attributes = [
-        //*             self::SQL_WHERE_FILTERS => [self::FIELD_CATEG_ID => $filterCateg],
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ];
@@ -108,7 +106,6 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
             self::CST_SUBONGLET => self::CST_EQPT_WEAPON,
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
-            //'filterCateg' => $filterCateg,
         ];
         $objPagination->setData([
             self::CST_CURPAGE => $this->curPage,
@@ -155,7 +152,7 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
 
     /**
      * @since v1.23.07.13
-     * @version v1.23.07.15
+     * @version v1.23.08.12
      */
     public function dealWithWriteAction(): void
     {
@@ -170,9 +167,7 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
         $objCopsWeapon->setField(self::FIELD_NOM_ARME, $nomArme);
         $abbrTome = SessionUtils::fromPost(self::FIELD_TOME_IDX_ID);
         $attributes = [
-            self::SQL_WHERE_FILTERS => [
-                self::FIELD_ABR_IDX_TOME => $abbrTome
-            ],
+            self::FIELD_ABR_IDX_TOME => $abbrTome
         ];
         $objsIndexTome = $objIndexServices->getIndexTomes($attributes);
         if (empty($objsIndexTome)) {

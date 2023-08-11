@@ -8,7 +8,7 @@ use core\services\CopsStageServices;
  * Classe CopsStageCategorieClass
  * @author Hugues
  * @since 1.22.06.02
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 class CopsStageCategorieClass extends LocalDomainClass
 {
@@ -68,13 +68,12 @@ class CopsStageCategorieClass extends LocalDomainClass
     //////////////////////////////////////////////////
 
     /*
-     * @version 1.22.06.03
      * @since 1.22.06.03
+     * @version v1.23.08.12
      */
     public function getStages()
     {
-        $attributes = [];
-        $attributes[self::SQL_WHERE_FILTERS] = [
+        $attributes = [
             self::FIELD_ID           => self::SQL_JOKER_SEARCH,
             self::FIELD_STAGE_CAT_ID => $this->id,
             self::FIELD_STAGE_LEVEL  => self::SQL_JOKER_SEARCH

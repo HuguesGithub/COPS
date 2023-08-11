@@ -9,7 +9,7 @@ use core\utils\SessionUtils;
  * Classe CopsPlayerServices
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.08.05
+ * @version v1.23.08.12
  */
 class CopsPlayerServices extends LocalServices
 {
@@ -33,11 +33,12 @@ class CopsPlayerServices extends LocalServices
 
     /**
      * @since v1.23.08.05
+     * @version v1.23.08.12
      */
     public static function getCurrentPlayer(): CopsPlayerClass
     {
         $objServices = new CopsPlayerServices();
-        $attributes[self::SQL_WHERE_FILTERS] = [
+        $attributes = [
             self::FIELD_MATRICULE => SessionUtils::fromSession(self::FIELD_MATRICULE)
         ];
         $objsCopsPlayer = $objServices->getCopsPlayers($attributes);
@@ -46,27 +47,26 @@ class CopsPlayerServices extends LocalServices
 
     /**
      * @since v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getPlayer(int $id): CopsPlayerClass
     {
-        $attributes[self::SQL_WHERE_FILTERS] = [
-            self::FIELD_ID => $id
-        ];
+        $attributes = [self::FIELD_ID => $id];
         $objsCopsPlayer = $this->getCopsPlayers($attributes);
         return !empty($objsCopsPlayer) ? array_shift(($objsCopsPlayer)) : new CopsPlayerClass();
     }
     
     /**
      * @since v1.23.06.19
-     * @version v1.23.07.29
+     * @version v1.23.08.12
      */
     public function getCopsPlayers(array $attributes=[]): array
     {
-        $id = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
-        $matricule = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH;
-        $password = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_PASSWORD] ?? self::SQL_JOKER_SEARCH;
-        $grade = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_GRADE] ?? self::SQL_JOKER_SEARCH;
-        $section = $attributes[self::SQL_WHERE_FILTERS][self::FIELD_SECTION] ?? self::SQL_JOKER_SEARCH;
+        $id = $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH;
+        $matricule = $attributes[self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH;
+        $password = $attributes[self::FIELD_PASSWORD] ?? self::SQL_JOKER_SEARCH;
+        $grade = $attributes[self::FIELD_GRADE] ?? self::SQL_JOKER_SEARCH;
+        $section = $attributes[self::FIELD_SECTION] ?? self::SQL_JOKER_SEARCH;
 
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
         $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
@@ -97,7 +97,7 @@ class CopsPlayerServices extends LocalServices
             $order,
             $attributes[self::SQL_LIMIT] ?? 9999,
         ];
-        return $this->objDao->getCopsPlayers($prepAttributes);
+        return $this->objDao->getPlayers($prepAttributes);
     }
 
     /**

@@ -8,15 +8,16 @@ use core\domain\CopsTchatStatusClass;
  * Classe CopsTchatDaoImpl
  * @author Hugues
  * @since v1.23.08.05
+ * @version v1.23.08.12
  */
 class CopsTchatDaoImpl extends LocalDaoImpl
 {
-    public $dbTable;
-    public $dbTableSln;
-    public $dbTableStt;
-    public $dbFields;
-    public $dbFieldsSln;
-    public $dbFieldsStt;
+    private $dbTable;
+    private $dbFields;
+    private $dbTableSln;
+    private $dbFieldsSln;
+    private $dbTableStt;
+    private $dbFieldsStt;
 
     /**
      * Class constructor

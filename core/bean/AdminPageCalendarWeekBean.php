@@ -11,7 +11,7 @@ use core\utils\UrlUtils;
  * Classe AdminPageCalendarWeekBean
  * @author Hugues
  * @since v1.23.05.04
- * @version v1.23.07.22
+ * @version v1.23.08.12
  */
 class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 {
@@ -152,7 +152,7 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
     
     /**
      * @since v1.23.05.04
-     * @version v1.23.07.22
+     * @version v1.23.08.12
      */
     public function getRowAllDay(string $firstWeekDay): string
     {
@@ -167,7 +167,8 @@ class AdminPageCalendarWeekBean extends AdminPageCalendarBean
 
             // On récupère tous les eventDates du jour
             $attributes = [
-                self::SQL_WHERE_FILTERS => [self::FIELD_DSTART => $curDay, self::FIELD_DEND => $curDay],
+                self::FIELD_DSTART => $curDay,
+                self::FIELD_DEND => $curDay,
                 self::SQL_ORDER_BY => [self::FIELD_DSTART, self::FIELD_DEND],
                 self::SQL_ORDER => [self::SQL_ORDER_ASC, self::SQL_ORDER_DESC]
             ];

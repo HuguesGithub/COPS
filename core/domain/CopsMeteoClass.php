@@ -11,7 +11,7 @@ use core\bean\CopsMeteoBean;
  * Classe CopsMeteoClass
  * @author Hugues
  * @since v1.23.04.30
- * @version v1.23.05.07
+ * @version v1.23.08.12
  */
 class CopsMeteoClass extends LocalDomainClass
 {
@@ -78,7 +78,7 @@ class CopsMeteoClass extends LocalDomainClass
 
     /**
      * @since 1.23.4.20
-     * @version 1.23.4.20
+     * @version v1.23.08.12
      */
     public function init(): void
     {
@@ -90,7 +90,7 @@ class CopsMeteoClass extends LocalDomainClass
         $objCopsMeteoServices = new CopsMeteoServices();
         //$this->objCopsSoleil = $objCopsMeteoServices->getSoleil($strJour);
         // TODO : supprimer le -8.
-        $attributes[self::SQL_WHERE_FILTERS][self::FIELD_DATE_METEO] = ($Y-8).$m.$d;
+        $attributes[self::FIELD_DATE_METEO] = ($Y-8).$m.$d;
         $attributes[self::SQL_ORDER_BY] = self::FIELD_HEURE_METEO;
         $attributes[self::SQL_ORDER] = self::SQL_ORDER_DESC;
         $objsCopsMeteo = $objCopsMeteoServices->getMeteos($attributes);

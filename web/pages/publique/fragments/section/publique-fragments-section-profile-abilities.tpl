@@ -10,6 +10,16 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="card card-outline card-info col">
+                    <div class="card-body row">
+                        <div class="col-12 col-md-4">%5$s</div>
+                        <div class="col-12 col-md-4">%6$s</div>
+                        <div class="col-12 col-md-4">%7$s</div>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
     <!--/. container-fluid -->

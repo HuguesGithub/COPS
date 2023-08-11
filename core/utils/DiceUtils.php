@@ -6,7 +6,7 @@ use core\interfaceimpl\ConstantsInterface;
 /**
  * DiceUtils
  * @author Hugues
- * @since v1.23.08.05
+ * @since v1.23.08.12
  */
 class DiceUtils implements ConstantsInterface
 {
@@ -55,5 +55,27 @@ class DiceUtils implements ConstantsInterface
             $strResultat .= '<span class="dice failRoll">'.$score.'</span>';
         }
         return $strResultat;
+    }
+
+    /**
+     * @since v1.23.08.12
+     */
+    public static function rollLocalisation(): string
+    {
+        $score = rand(1, 10);
+        // 1-2 : Jambes
+        // 3-4 : Abdomen
+        // 5-7 : Torse
+        // 8-9 : Bras
+        // 10 : Tête
+        return match ($score) {
+            1 => 'Jambe droite (-)',
+            2 => 'Jambe gauche (-)',
+            3, 4 => 'Abdomen (1)',
+            5, 6, 7 => 'Torse (2)',
+            8 => 'Bras gauche (-)',
+            9 => 'Bras droit (-)',
+            10 => 'Tête (3)',
+        };
     }
 }

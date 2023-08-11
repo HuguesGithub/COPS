@@ -10,9 +10,12 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminTchatBean
  * @author Hugues
  * @since v1.23.08.05
+ * @version v1.23.08.12
  */
 class WpPageAdminTchatBean extends WpPageAdminBean
 {
+    private $objTchatServices;
+
     public function __construct()
     {
         parent::__construct();
@@ -28,41 +31,74 @@ class WpPageAdminTchatBean extends WpPageAdminBean
             [self::ATTR_CLASS=>' '.self::BTS_BTN_DARK_DISABLED]
         );
         /////////////////////////////////////////
+
+        $this->init();
+    }
+
+    /**
+     * @since v1.23.08.12
+     */
+    private function init(): void
+    {
+        $this->objTchatServices = new CopsTchatServices();
     }
     
     /**
      * @since v1.23.08.05
+     * @version v1.23.08.12
      */
     public function getOngletContent(): string
     {
-        // On récupère les données à afficher dans le tchat
-        $objTchatServices = new CopsTchatServices();
-        $objs = $objTchatServices->getTchats();
+        // On enrichi et retourne le template
+        $urlTemplate = self::WEB_PPFS_TCHAT;
+        $attributes = [
+            // Liste des messages à afficher dans le Tchat
+            $this->buildTchatContent([], 'oneWeekAgo'),
+            // Liste des contacts participants au salon
+            $this->buildTchatContacts(),
+        ];
 
+        ///////////////////////////////////////////////////////////
         // On met à jour le statut de lastRefreshed
-        $objTchatStatut = $objTchatServices->getTchatStatus(1, $this->objCopsPlayer->getField(self::FIELD_ID));
-
+        $objTchatStatut = $this->objTchatServices->getTchatStatus(1, $this->objCopsPlayer->getField(self::FIELD_ID));
         $objTchatStatut->setField(self::FIELD_LAST_REFRESHED, DateUtils::getStrDate('Y-m-d H:i:s', time()));
         if ($objTchatStatut->getField(self::FIELD_ID)=='') {
-            $objTchatServices->insertTchatStatus($objTchatStatut);
+            $this->objTchatServices->insertTchatStatus($objTchatStatut);
         } else {
-            $objTchatServices->updateTchatStatus($objTchatStatut);
+            $this->objTchatServices->updateTchatStatus($objTchatStatut);
         }
+        ///////////////////////////////////////////////////////////
 
-        // On construit la liste des éléments à afficher
+        return $this->getRender($urlTemplate, $attributes);
+    }
+
+    /**
+     * @since v1.23.08.12
+     */
+    public function buildTchatContent(array $attributes=[], string $flag=''): string
+    {
+        $objs = $this->objTchatServices->getTchats($attributes, $flag);
         $strTchats = '';
         while (!empty($objs)) {
             $obj = array_shift($objs);
             $strTchats .= $obj->getBean()->getTchatRow();
         }
-
-        // On enrichi et retourne le template
-        $urlTemplate = self::WEB_PPFS_TCHAT;
-        $attributes = [
-            // Liste des messages à afficher dans le Tchat
-            $strTchats,
-        ];
-        return $this->getRender($urlTemplate, $attributes);
+        return $strTchats;
     }
 
+    /**
+     * @since v1.23.08.12
+     * TODO : Faire en sorte que le salon soit dynamique.
+     */
+    public function buildTchatContacts(): string
+    {
+        $sqlAttributes = [self::FIELD_SALON_ID => 1];
+        $objs = $this->objTchatServices->getTchatStatuss($sqlAttributes);
+        $strContacts = '';
+        while (!empty($objs)) {
+            $obj = array_shift($objs);
+            $strContacts .= $obj->getBean()->getContactRow();
+        }
+        return $strContacts;
+    }
 }

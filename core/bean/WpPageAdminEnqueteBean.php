@@ -8,7 +8,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminEnqueteBean
  * @author Hugues
  * @since 1.22.09.20
- * @version v1.23.05.28
+ * @version v1.23.08.12
  */
 class WpPageAdminEnqueteBean extends WpPageAdminBean
 {
@@ -126,19 +126,15 @@ class WpPageAdminEnqueteBean extends WpPageAdminBean
 
     /**
      * @since 1.22.09.20
-     * @version 1.22.10.19
+     * @version v1.23.08.12
      */
     public function getFolderEnquetesList()
     {
         $urlTemplate = 'web/pages/public/fragments/public-fragments-section-enquetes-list.php';
         $attributes = match ($this->slugSubOnglet) {
-            self::CST_FILE_CLOSED => [
-                self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CLOSED]
-            ],
-            self::CST_FILE_COLDED => [
-                self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED]
-            ],
-            default => [self::SQL_WHERE_FILTERS => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_OPENED]],
+            self::CST_FILE_CLOSED => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_CLOSED],
+            self::CST_FILE_COLDED => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_COLDED],
+            default => [self::FIELD_STATUT_ENQUETE => self::CST_ENQUETE_OPENED],
         };
 
         $objsCopsEnquete = $this->CopsEnqueteServices->getEnquetes($attributes);
