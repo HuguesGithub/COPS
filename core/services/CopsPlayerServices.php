@@ -62,25 +62,10 @@ class CopsPlayerServices extends LocalServices
      */
     public function getCopsPlayers(array $attributes=[]): array
     {
-        // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
-        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
-
-        // Traitement spécifique pour gérer le tri multi-colonnes
-        if (!isset($attributes[self::SQL_ORDER_BY])) {
-            $orderBy = self::FIELD_MATRICULE;
-        } elseif (is_array($attributes[self::SQL_ORDER_BY])) {
-            $orderBy = '';
-            while (!empty($attributes[self::SQL_ORDER_BY])) {
-                $orderBy .= array_shift($attributes[self::SQL_ORDER_BY]).' ';
-                $orderBy .= array_shift($attributes[self::SQL_ORDER]).', ';
-            }
-            $orderBy = substr($orderBy, 0, -2);
-            $order = '';
-        } else {
-            $orderBy = $attributes[self::SQL_ORDER_BY];
-        }
+        $orderBy = '';
+        $order = '';
+        $this->buildOrderByAndOrderMultiple($attributes, self::FIELD_MATRICULE, self::SQL_ORDER_ASC, $orderBy, $order);
         ///////////////////////////////////////////////////////////
-
         $prepAttributes = [
             $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::FIELD_MATRICULE] ?? self::SQL_JOKER_SEARCH,
