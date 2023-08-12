@@ -201,7 +201,8 @@ class CopsPlayerClass extends LocalDomainClass
                 }
                 if ($somme!=21 || $nb5>=2) {
                     $blnOk = false;
-                    $status = "La somme des caractéristiques ne fait pas 21 ($somme) ou plus d'une caractéristique ($nb5) est à 5.";
+                    $status  = "La somme des caractéristiques ne fait pas 21 ($somme) ";
+                    $status .= "ou plus d'une caractéristique ($nb5) est à 5.";
                 }
             }
         }

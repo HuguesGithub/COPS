@@ -26,7 +26,7 @@ class LocalServices extends GlobalServices
     ): void
     {
         // On récupère le sens du tri, mais pourrait évoluer plus bas, si multi-colonnes
-        $order = $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC;
+        $order = $attributes[self::SQL_ORDER] ?? $defaultWay;
 
         // Traitement spécifique pour gérer le tri multi-colonnes
         if (!isset($attributes[self::SQL_ORDER_BY])) {
