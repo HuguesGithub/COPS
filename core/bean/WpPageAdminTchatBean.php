@@ -49,15 +49,7 @@ class WpPageAdminTchatBean extends WpPageAdminBean
      */
     public function getOngletContent(): string
     {
-        // On enrichi et retourne le template
-        $urlTemplate = self::WEB_PPFS_TCHAT;
-        $attributes = [
-            // Liste des messages à afficher dans le Tchat
-            $this->buildTchatContent([], 'oneWeekAgo'),
-            // Liste des contacts participants au salon
-            $this->buildTchatContacts(),
-        ];
-
+        $strTchatContent = $this->buildTchatContent([], 'oneWeekAgo');
         ///////////////////////////////////////////////////////////
         // On met à jour le statut de lastRefreshed
         $objTchatStatut = $this->objTchatServices->getTchatStatus(1, $this->objCopsPlayer->getField(self::FIELD_ID));
@@ -68,7 +60,16 @@ class WpPageAdminTchatBean extends WpPageAdminBean
             $this->objTchatServices->updateTchatStatus($objTchatStatut);
         }
         ///////////////////////////////////////////////////////////
+        $strTchatStatus  = $this->buildTchatContacts();
 
+        // On enrichi et retourne le template
+        $urlTemplate = self::WEB_PPFS_TCHAT;
+        $attributes = [
+            // Liste des messages à afficher dans le Tchat
+            $strTchatContent,
+            // Liste des contacts participants au salon
+            $strTchatStatus,
+        ];
         return $this->getRender($urlTemplate, $attributes);
     }
 

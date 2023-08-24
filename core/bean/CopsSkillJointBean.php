@@ -2,6 +2,7 @@
 namespace core\bean;
 
 use core\services\CopsSkillServices;
+use core\utils\HtmlUtils;
 
 /**
  * CopsSkillJointBean
@@ -59,12 +60,23 @@ class CopsSkillJointBean extends UtilitiesBean
             $objSpecSkill = $this->objCopsSkillJoint->getSpecSkill();
             $strSpecialisation = '('.$objSpecSkill->getField(self::FIELD_SPEC_NAME).')';
         } else {
-            $strSpecialisation = '<select class="form-select p-0 border-0" id="">';
-            $strSpecialisation .= '<option>Langues...</option>';
+            $selAttributes = [
+                self::FIELD_ID => 'skill_langue',
+                self::ATTR_NAME => 'skill_langue',
+                self::ATTR_CLASS => 'form-select p-0 border-0 ajaxAction',
+                self::ATTR_DATA => [
+                    'objid' => $this->objCopsSkillJoint->getField(self::FIELD_ID),
+                    'trigger' => 'change',
+                    'ajax' => 'saveData',
+                ]
+            ];
+            $strContentSpecialisation = '<option>Langues...</option>';
             foreach ($this->objSkillLangues as $objSkillSpec) {
-                $strSpecialisation .= '<option value="'.$objSkillSpec->getField(self::FIELD_ID).'">'.$objSkillSpec->getField(self::FIELD_SPEC_NAME).'</option>';
+                $label = $objSkillSpec->getField(self::FIELD_SPEC_NAME);
+                $value = $objSkillSpec->getField(self::FIELD_ID);
+                $strContentSpecialisation .= HtmlUtils::getOption($label, $value);
             }
-            $strSpecialisation .= '</select>';
+            $strSpecialisation = HtmlUtils::getBalise(self::TAG_SELECT, $strContentSpecialisation, $selAttributes);
         }
 
         $urlTemplate = self::WEB_PPFD_PFL_SKILL;

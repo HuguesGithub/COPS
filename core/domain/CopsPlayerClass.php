@@ -214,6 +214,8 @@ class CopsPlayerClass extends LocalDomainClass
      */
     public function validFirstCreationStep(): void
     {
+        $objSkillServices = new CopsSkillServices();
+
         $this->pvMax = 20 + 3*$this->caracCarrure;
         $this->pvCur = 20 + 3*$this->caracCarrure;
         $this->grade = 'Détective';
@@ -225,50 +227,74 @@ class CopsPlayerClass extends LocalDomainClass
 
         // Possibilités de langues :
         // Autant que max(Education, Charme)
-        // La première est forcément l'anglais
-        $attributes = ['copsPlayerId' => $this->id, 'copsLangueId' => 1];
-        // TODO : implémenter ces création en base
+        $nbLangues = max($this->caracEducation, $this->caracCharme);
+        switch ($nbLangues) {
+            case 5 :
+                // Si 5 langues, on a 2, 4, 5, 6 et 7
+                $arrScores = [2, 4, 5, 6, 7];
+                break;
+            case 4 :
+                // Si 4 langues, on a 3, 4, 5 et 7
+                $arrScores = [3, 4, 5, 7];
+                break;
+            case 3 :
+                // Si 3 langues, on a 4, 5 et 7
+                $arrScores = [4, 5, 7];
+                break;
+            case 2 :
+            default :
+                // Si 2 langues, on a 5 et 7
+                $arrScores = [5, 7];
+                break;
+        }
+        foreach ($arrScores as $score) {
+            $attributes = [self::FIELD_COPS_ID => $this->id, self::FIELD_SKILL_ID => 34, self::FIELD_SCORE => $score];
+            $obj = new CopsSkillJointClass($attributes);
+            $objSkillServices->insertPlayerSkill($obj);
+        }
 
-        // Ajout de compétences de base.
         // Arme d'épaule 8+
-        $attributes = ['copsId' => $this->id, 'skillId' => 1, 'score' => 8];
         // Arme de contact 8+
-        $attributes = ['copsId' => $this->id, 'skillId' => 2, 'score' => 8];
         // Arme de poing 7+
-        $attributes = ['copsId' => $this->id, 'skillId' => 3, 'score' => 7];
         // Athlétisme 7+
-        $attributes = ['copsId' => $this->id, 'skillId' => 5, 'score' => 7];
         // Bureaucratie 8+
-        $attributes = ['copsId' => $this->id, 'skillId' => 6, 'score' => 8];
         // Conduite[Voiture] 7+
-        $attributes = ['copsId' => $this->id, 'skillId' => 7, 'score' => 9];
-        $attributes = ['copsId' => $this->id, 'skillId' => 7, 'speckSkillId' => 17,'score' => 7];
         // Corps à corps [coups, projection ou immobilisation] 7+
-        $attributes = ['copsId' => $this->id, 'skillId' => 9, 'score' => 8];
         // Une seule doit être conservée parmi les trois suivantes
-        $attributes = ['copsId' => $this->id, 'skillId' => 9, 'speckSkillId' => 22,'score' => 7];
-        $attributes = ['copsId' => $this->id, 'skillId' => 9, 'speckSkillId' => 23,'score' => 7];
-        $attributes = ['copsId' => $this->id, 'skillId' => 9, 'speckSkillId' => 24,'score' => 7];
         // Discrétion 7+
-        $attributes = ['copsId' => $this->id, 'skillId' => 11, 'score' => 7];
         // Informatique 7+
-        $attributes = ['copsId' => $this->id, 'skillId' => 16, 'score' => 7];
         // Instinct de flic 9+
-        $attributes = ['copsId' => $this->id, 'skillId' => 17, 'score' => 9];
         // Premiers secours 8+
-        $attributes = ['copsId' => $this->id, 'skillId' => 26, 'score' => 8];
         // Scène de crime 7+
-        $attributes = ['copsId' => $this->id, 'skillId' => 31, 'score' => 7];
         // Eloquence, Intimidation ou Rhétorique 7+
         // Une seule doit être conservée parmi les trois suivantes
-        $attributes = ['copsId' => $this->id, 'skillId' => 13, 'score' => 7];
-        $attributes = ['copsId' => $this->id, 'skillId' => 18, 'score' => 7];
-        $attributes = ['copsId' => $this->id, 'skillId' => 30, 'score' => 7];
-        
+        $baseSkills = [
+            [1, 8], [2, 8], [3, 7], [5, 7], [6, 8], [7, 9], [7, 7, 17], [9, 8], [9, 7, 22], [9, 7, 23], [9, 7, 24],
+            [11, 7], [16, 7], [17, 9], [26, 8], [31, 7], [13, 7], [18, 7], [30, 7],
+        ];
+        // Ajout de compétences de base.
+        foreach ($baseSkills as $statSkill) {
+            [$skillId, $score, $specSkillId] = $statSkill;
+            if ($specSkillId!=null) {
+                $attributes = [
+                    self::FIELD_COPS_ID => $this->id,
+                    self::FIELD_SKILL_ID => $skillId,
+                    self::FIELD_SPEC_SKILL_ID => $specSkillId,
+                    self::FIELD_SCORE => $score
+                ];
+            } else {
+                $attributes = [
+                    self::FIELD_COPS_ID => $this->id,
+                    self::FIELD_SKILL_ID => $skillId,
+                    self::FIELD_SCORE => $score
+                ];
+            }
+            $obj = new CopsSkillJointClass($attributes);
+            $objSkillServices->insertPlayerSkill($obj);
+        }
         // 10 points de compétence à répartir
         // Diminuer une compétence initiale de 1 ou 2 (1 ou 2 points), 5 max
         // Acquérir de nouvelles compétences à 9+ ou 8+ (1 ou 2 points)
-
     }
 
 

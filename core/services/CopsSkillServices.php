@@ -2,6 +2,7 @@
 namespace core\services;
 
 use core\daoimpl\CopsSkillDaoImpl;
+use core\domain\CopsSkillJointClass;
 
 /**
  * Classe CopsSkillServices
@@ -45,6 +46,12 @@ class CopsSkillServices extends LocalServices
         return $this->objDao->getSkills($prepAttributes);
     }
 
+    public function getPlayerSkill(int $id): CopsSkillJointClass
+    {
+        $objs = $this->getCopsSkills([self::FIELD_ID=>$id]);
+        return empty($objs) ? new CopsSkillJointClass() : array_shift($objs);
+    }
+
     /**
      * @since v1.23.06.23
      * @version v1.23.08.12
@@ -53,6 +60,7 @@ class CopsSkillServices extends LocalServices
     {
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
+            $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::FIELD_COPS_ID] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::SQL_ORDER_BY] ?? self::FIELD_ID,
             $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
@@ -60,6 +68,18 @@ class CopsSkillServices extends LocalServices
         ];
         return $this->objDao->getCopsSkills($prepAttributes);
     }
+
+    /**
+     * @since v1.23.08.19
+     */
+    public function insertPlayerSkill(CopsSkillJointClass &$obj): void
+    { $this->objDao->insertPlayerSkill($obj); }
+
+    /**
+     * @since v1.23.08.19
+     */
+    public function updatePlayerSkill(CopsSkillJointClass $obj): void
+    { $this->objDao->updatePlayerSkill($obj); }
 
     /**
      * @since v1.23.06.25

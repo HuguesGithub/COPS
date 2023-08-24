@@ -4,6 +4,7 @@ namespace core\domain;
 use core\bean\CopsSkillJointBean;
 use core\domain\CopsSkillClass;
 use core\domain\CopsSkillSpecClass;
+use core\services\CopsPlayerServices;
 use core\services\CopsSkillServices;
 
 /**
@@ -57,6 +58,15 @@ class CopsSkillJointClass extends LocalDomainClass
     //////////////////////////////////////////////////
     // METHODES
     //////////////////////////////////////////////////
+
+    /**
+     * version @v1.23.08.19
+     */
+    public function getPlayer(): CopsPlayerClass
+    {
+        $objServices = new CopsPlayerServices();
+        return $objServices->getPlayer($this->copsId);
+    }
 
     /**
      * version @v1.23.08.12

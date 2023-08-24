@@ -36,6 +36,8 @@ class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
      */
     public function getOngletContent(): string
     {
+        $isFirstCreationStep = $this->objCopsPlayer->getField(self::FIELD_STATUS)==self::PS_CREATE_1ST_STEP;
+
         // Première colonne.
         $colCarac1  = $this->objCopsPlayer->getBean()->getProfileAbility(
             self::FIELD_CARAC_CARRURE,
@@ -68,7 +70,7 @@ class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
         $inputAttributes = [
             self::ATTR_TYPE => 'text',
             self::ATTR_CLASS => 'form-control text-center col-3',
-            self::ATTR_VALUE => $this->objCopsPlayer->getInitMin(),
+            self::ATTR_VALUE => $isFirstCreationStep ? '' : $this->objCopsPlayer->getInitMin(),
             self::CST_READONLY => self::CST_READONLY,
         ];
         $strInput = HtmlUtils::getBalise(self::TAG_INPUT, '', $inputAttributes);
@@ -78,25 +80,32 @@ class WpPageAdminProfileAbilityBean extends WpPageAdminProfileBean
             !$this->isCreate1stStep
         );
 
-        // Troisième colonne
-        $colCarac3  = $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PV_MAX, true);
-        $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAD_MAX, true);
-        $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAN_MAX, true);
-        $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PX_CUMUL, true);
+        $colCarac3 = '';
 
         // Colonnes de langues :
         $colLng1 = '';
         $colLng2 = '';
         $colLng3 = '';
-        $cpt = 1;
-        $objsSkillJoint = $this->objCopsPlayer->getCopsSkills();
-        while (!empty($objsSkillJoint)) {
-            $objSkillJoint = array_shift($objsSkillJoint);
-            if ($objSkillJoint->getField(self::FIELD_SKILL_ID)!=34) {
-                continue;
+
+        if ($isFirstCreationStep) {
+            $colLng2 = "Terminez la première étape de création d'abord.";
+        } else {
+            // Troisième colonne
+            $colCarac3  = $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PV_MAX, true);
+            $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAD_MAX, true);
+            $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PAN_MAX, true);
+            $colCarac3 .= $this->objCopsPlayer->getBean()->getProfileAbility(self::FIELD_PX_CUMUL, true);
+
+            $cpt = 1;
+            $objsSkillJoint = $this->objCopsPlayer->getCopsSkills();
+            while (!empty($objsSkillJoint)) {
+                $objSkillJoint = array_shift($objsSkillJoint);
+                if ($objSkillJoint->getField(self::FIELD_SKILL_ID)!=34) {
+                    continue;
+                }
+                ${'colLng'.$cpt} .= $objSkillJoint->getBean()->getCartoucheLangue();
+                $cpt = $cpt==3 ? 1 : $cpt+1;
             }
-            ${'colLng'.$cpt} .= $objSkillJoint->getBean()->getCartoucheLangue();
-            $cpt = $cpt==3 ? 1 : $cpt+1;
         }
 
         $urlTemplate = self::WEB_PPFS_PFL_ABILITIES;

@@ -103,9 +103,37 @@ class CopsSkillDaoImpl extends LocalDaoImpl
     public function getCopsSkills(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsCps), $this->dbTableCps);
-        $request .= " WHERE copsId LIKE '%s' ";
+        $request .= " WHERE id LIKE '%s' AND copsId LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsSkillJointClass(), $request, $attributes);
+    }
+
+    /**
+     * @since v1.23.08.05
+     */
+    public function insertPlayerSkill(CopsSkillJointClass &$obj): void
+    {
+        // On récupère les champs
+        $dbFields = $this->dbFieldsCps;
+        array_shift($dbFields);
+        // On défini la requête d'insertion
+        $request = $this->getInsertRequest($dbFields, $this->dbTableCps);
+        // On insère
+        $this->insertDaoImpl($obj, $dbFields, $request, self::FIELD_ID);
+    }
+
+    /**
+     * @since v1.23.08.05
+     */
+    public function updatePlayerSkill(CopsSkillJointClass &$obj): void
+    {
+        // On récupère les champs
+        $dbFields = $this->dbFieldsCps;
+        $fieldId = array_shift($dbFields);
+        // On défini la requête de mise à jour
+        $request = $this->getUpdateRequest($dbFields, $this->dbTableCps, $fieldId);
+        // On met à jour
+        $this->updateDaoImpl($obj, $request, $fieldId);
     }
     
     //////////////////////////////////////////////////
