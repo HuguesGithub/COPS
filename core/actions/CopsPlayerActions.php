@@ -63,58 +63,13 @@ class CopsPlayerActions extends LocalActions
         if ($this->objCopsPlayer->getField(self::FIELD_ID)=='') {
             $returned = $this->getToastContentJson('danger', self::LABEL_ERREUR, vsprintf(self::DYN_WRONG_ID, [$id]));
         } elseif (in_array($field, $allowedFields)) {
-            if ($this->objCopsPlayer->checkField($field, $value)) {
-                $returned = $this->updateAbility($field, $value);
-            } else {
-                $returned = $this->getToastContentJson(
-                    'warning',
-                    self::LABEL_ERREUR,
-                    vsprintf(self::DYN_WRONG_VALUE, [$value, $field])
-                );
-            }
+            $this->dealWithUpdateAbility($field, $value);
         } elseif (in_array($field, $allowedSkills)) {
-            $objSkillServices = new CopsSkillServices();
-            $objPlayerSkill = $objSkillServices->getPlayerSkill($id);
+            $this->objSkillServices = new CopsSkillServices();
+            $objPlayerSkill = $this->objSkillServices->getPlayerSkill($id);
             $objCopsPlayer = $objPlayerSkill->getPlayer();
             if ($field=='langue') {
-                $objsPlayerSkill = $objCopsPlayer->getCopsSkills();
-                $areAllLanguesOk = true;
-                $areLanguesUniques = true;
-                $arrLangues = [];
-                while (!empty($objsPlayerSkill)) {
-                    $objPlayerSkill = array_shift($objsPlayerSkill);
-                    if ($objPlayerSkill->getField(self::FIELD_SKILL_ID)==34) {
-                        continue;
-                    }
-
-                    if ($objPlayerSkill->getField(self::FIELD_SPEC_SKILL_ID)==0 &&
-                        $objPlayerSkill->getField(self::FIELD_ID)!=$id) {
-                        $areAllLanguesOk = false;
-                    }
-                    if (!isset($arrLangues[$objPlayerSkill->getField(self::FIELD_SPEC_SKILL_ID)])) {
-                        array_push($arrLangues, $objPlayerSkill->getField(self::FIELD_SPEC_SKILL_ID));
-                    } else {
-                        $areLanguesUniques = false;
-                    }
-                }
-
-                if ($areLanguesUniques && $areAllLanguesOk) {
-                    $objPlayerSkill = $objSkillServices->getPlayerSkill($id);
-                    $objPlayerSkill->setField(self::FIELD_SPEC_SKILL_ID, $value);
-                    $objSkillServices->updatePlayerSkill($objPlayerSkill);
-                    $returned = $this->getToastContentJson(
-                        'success',
-                        self::LABEL_SUCCES,
-                        'Compétence mise à jour.'
-                    );
-                } else {
-                    $returned = $this->getToastContentJson(
-                        'warning',
-                        self::LABEL_ERREUR,
-                        'Langue en double ou langue non sélectionnée.',
-                    );
-                        // TODO : gestion de l'erreur.
-                }
+                $this->dealWithLangue($objCopsPlayer, $id);
             }
             // On aura ensuite les différentes compétences qui peuvent être mises à jour.
             // Durant le processus de création (2è étape), on ne peut pas les mettre à jour
@@ -171,5 +126,62 @@ class CopsPlayerActions extends LocalActions
         );
         array_push($arrToast, $strUpdate);
         return '{"toastContent": '.json_encode($arrToast).'}';
+    }
+
+    private function dealWithUpdateAbility(string $field, mixed $value): string
+    {
+        if ($this->objCopsPlayer->checkField($field, $value)) {
+            $returned = $this->updateAbility($field, $value);
+        } else {
+            $returned = $this->getToastContentJson(
+                'warning',
+                self::LABEL_ERREUR,
+                vsprintf(self::DYN_WRONG_VALUE, [$value, $field])
+            );
+        }
+        return $returned;
+    }
+
+    private function dealWithLangue(CopsPlayerClass $objCopsPlayer, int $id): string
+    {
+        $objsPlayerSkill = $objCopsPlayer->getCopsSkills();
+        $areAllLanguesOk = true;
+        $areLanguesUniques = true;
+        $arrLangues = [];
+        while (!empty($objsPlayerSkill)) {
+            $objPlayerSkill = array_shift($objsPlayerSkill);
+            if ($objPlayerSkill->getField(self::FIELD_SKILL_ID)==34) {
+                continue;
+            }
+
+            if ($objPlayerSkill->getField(self::FIELD_SPEC_SKILL_ID)==0 &&
+                $objPlayerSkill->getField(self::FIELD_ID)!=$id) {
+                $areAllLanguesOk = false;
+            }
+            if (!isset($arrLangues[$objPlayerSkill->getField(self::FIELD_SPEC_SKILL_ID)])) {
+                array_push($arrLangues, $objPlayerSkill->getField(self::FIELD_SPEC_SKILL_ID));
+            } else {
+                $areLanguesUniques = false;
+            }
+        }
+
+        if ($areLanguesUniques && $areAllLanguesOk) {
+            $objPlayerSkill = $this->objSkillServices->getPlayerSkill($id);
+            $objPlayerSkill->setField(self::FIELD_SPEC_SKILL_ID, $value);
+            $this->objSkillServices->updatePlayerSkill($objPlayerSkill);
+            $returned = $this->getToastContentJson(
+                'success',
+                self::LABEL_SUCCES,
+                'Compétence mise à jour.'
+            );
+        } else {
+            $returned = $this->getToastContentJson(
+                'warning',
+                self::LABEL_ERREUR,
+                'Langue en double ou langue non sélectionnée.',
+            );
+                // TODO : gestion de l'erreur.
+        }
+        return $returned;
     }
 }
