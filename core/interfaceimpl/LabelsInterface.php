@@ -25,11 +25,13 @@ interface LabelsInterface
     public const LABEL_CARRURE        = 'Carrure';
     public const LABEL_CHARME         = 'Charme';
     public const LABEL_CODE           = 'Code';
+    public const LABEL_ZIPCODE        = 'Code Postal';
     public const LABEL_SKILLS         = 'Compétences';
     public const LABEL_CONDITIONS     = 'Conditions';
     public const LABEL_CONFIG         = 'Configuration';
     public const LABEL_CONFORT        = 'Confort';
     public const LABEL_CONTACTS       = 'Contacts';
+    public const LABEL_CONTROL        = 'Controle';
     public const LABEL_COORDINATION   = 'Coordination';
     public const LABEL_TRASH          = 'Corbeille';
     public const LABEL_CREER_ENTREE   = 'Créer une entrée';
@@ -79,6 +81,7 @@ interface LabelsInterface
     public const LABEL_TABLE_WEATHER  = 'Table Météo';
     public const LABEL_TABLE_SOLEIL   = 'Table Soleil';
     public const LABEL_TCHAT          = 'Tchat';
+    public const LABEL_PHONE          = 'Téléphone';
     public const LABEL_TEMP           = 'Temp.';
     public const LABEL_WIND           = 'Vent';
     public const LABEL_CARS           = 'Véhicules';

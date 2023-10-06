@@ -75,12 +75,13 @@ function cops_menu()
     add_menu_page($pluginName, $pluginName, $uploadFiles, $urlRoot, '', $urlFavicon);
     if (function_exists('add_submenu_page')) {
       $arrUrlSubMenu = [
-        'index'     => 'Index',
-        'library'   => 'Bibliothèque',
-        'calendar'  => 'Calendrier',
-        'equipment' => 'Équipement',
-        'meteo'     => 'Météo',
-        '-'         => '-----------------'
+        'index'      => 'Index',
+        'library'    => 'Bibliothèque',
+        'calendar'   => 'Calendrier',
+        'equipment'  => 'Équipement',
+        'meteo'      => 'Météo',
+        'random-guy' => 'Random Guy',
+        '-'          => '-----------------'
     ];
       foreach ($arrUrlSubMenu as $key => $value) {
         $urlSubMenu = $urlRoot.'&amp;onglet='.$key;

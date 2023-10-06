@@ -40,6 +40,7 @@ class AdminPageBean extends UtilitiesBean
                 self::ONGLET_CALENDAR => AdminPageCalendarBean::getStaticContentPage(),
                 self::ONGLET_EQUIPMENT => AdminPageEquipmentBean::getStaticContentPage(),
                 self::ONGLET_LIBRARY => AdminPageLibraryBean::getStaticContentPage(),
+                self::ONGLET_RND_GUY => AdminPageRandomGuyBean::getStaticContentPage(),
                 default => 'Error. Unexpected Onglet Term [<strong>'.$this->slugOnglet.'</strong>].',
             };
         }

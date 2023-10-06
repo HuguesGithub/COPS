@@ -120,6 +120,7 @@ interface ConstantsInterface
     public const CST_CHANGE_DATE        = 'changeDate';
     public const CST_CHILDREN           = 'children';
     public const CST_COLSPAN            = 'colspan';
+    public const CST_CONTROL            = 'control';
     public const CST_DATE               = 'date';
     public const CST_DELETE             = 'delete';
     public const CST_DISABLED           = 'disabled';
@@ -130,6 +131,7 @@ interface ConstantsInterface
     public const CST_LAST_DATE          = '2036-12-31';
     public const CST_LIST               = 'list';
     public const CST_ONGLET             = 'onglet';
+    public const CST_PHONE              = 'phone';
     public const CST_QUANTITY           = 'quantite';
     public const CST_READONLY           = 'readonly';
     public const CST_REQUIRED           = 'required';
@@ -143,6 +145,7 @@ interface ConstantsInterface
     public const CST_WICON              = 'wicon';
     public const CST_WRITE              = 'write';
     public const CST_WRITE_ACTION       = 'writeAction';
+    public const CST_ZIPCODE            = 'zipcode';
     public const CST_CUSHION            = '-cushion';
     public const CST_FRAME              = '-frame';
 
@@ -271,6 +274,7 @@ interface ConstantsInterface
     public const ONGLET_LIBRARY         = 'library';
     public const ONGLET_METEO           = 'meteo';
     public const ONGLET_PROFILE         = 'profile';
+    public const ONGLET_RND_GUY         = 'random-guy';
     public const ONGLET_TCHAT           = 'tchat';
     public const ONGLET_USERS           = 'users';
 

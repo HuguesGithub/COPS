@@ -290,6 +290,33 @@ interface FieldsInterface
     public const FIELD_PLAYER_ID          = 'playerId';
     public const FIELD_LAST_REFRESHED     = 'lastRefreshed';
 
+    // TABLE wp_7_cops_cal_random_guy
+    public const FIELD_GENDER      = 'gender';
+    public const FIELD_NAMESET     = 'nameSet';
+    public const FIELD_TITLE       = 'title';
+    public const FIELD_FIRSTNAME   = 'firstName';
+    public const FIELD_LASTNAME    = 'lastName';
+    public const FIELD_NBADRESS    = 'numberAdress';
+    public const FIELD_STADRESS    = 'streetAdress';
+    public const FIELD_CITY        = 'city';
+    public const FIELD_ZIPCODE     = 'zipCode';
+    public const FIELD_EMAILADRESS = 'emailAdress';
+    public const FIELD_PHONENUMBER = 'telephoneNumber';
+    public const FIELD_BIRTHDAY    = 'birthday';
+    public const FIELD_OCCUPATION  = 'occupation';
+    public const FIELD_COMPANY     = 'company';
+    public const FIELD_VEHICLE     = 'vehicle';
+    public const FIELD_COLOR       = 'color';
+    public const FIELD_KILOGRAMS   = 'kilograms';
+    public const FIELD_CENTIMETERS = 'centimeters';
+
+    public const FIELD_ZIP         = 'zip';
+    public const FIELD_PRIMARY_CITY= 'primary_city';
+
+    public const FIELD_PHONE_ID    = 'phoneId';
+    public const FIELD_CITY_NAME   = 'cityName';
+
+
     // Provenance ?
     public const FIELD_ICON             = 'icon';
     public const FIELD_FOLDER_ID        = 'folderId';
