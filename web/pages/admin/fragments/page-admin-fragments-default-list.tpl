@@ -13,8 +13,8 @@
     <!-- Card-body end -->
 
     <div class="card-footer clearfix">
-        <a href="%3$s" class="btn btn-sm btn-info float-start">%4$s</a>
-        %5$s
+        %3$s
+        %4$s
     </div>
 
 </div>

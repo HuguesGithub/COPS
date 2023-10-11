@@ -311,7 +311,7 @@ interface FieldsInterface
     public const FIELD_CENTIMETERS = 'centimeters';
 
     public const FIELD_ZIP         = 'zip';
-    public const FIELD_PRIMARY_CITY= 'primary_city';
+    public const FIELD_PRIMARY_CITY= 'primaryCity';
 
     public const FIELD_PHONE_ID    = 'phoneId';
     public const FIELD_CITY_NAME   = 'cityName';

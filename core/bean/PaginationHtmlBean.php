@@ -62,13 +62,16 @@ class PaginationHtmlBean extends UtilitiesBean
      * @since v1.23.06.10
      * @version v1.23.06.11
      */
-    public function getDisplayedRows(TableauBodyHtmlBean &$objBody): void
+    public function getDisplayedRows(TableauBodyHtmlBean &$objBody, TableauRowHtmlBean $objRow): void
     {
         $objs = array_slice($this->objs, ($this->curPage-1)*$this->nbPerPage, $this->nbPerPage);
-
-        while (!empty($objs)) {
-            $obj = array_shift($objs);
-            $objBody->addRow($obj->getBean()->getTableRow());
+        if (empty($this->objs) || empty($objs)) {
+            $objBody->addRow($objRow);
+        } else {
+            while (!empty($objs)) {
+                $obj = array_shift($objs);
+                $objBody->addRow($obj->getBean()->getTableRow());
+            }
         }
     }
 
@@ -134,7 +137,7 @@ class PaginationHtmlBean extends UtilitiesBean
             $ulContent = $strToFirst.$ulContent.$strToLast;
         }
 
-        $strClass = 'pagination pagination-sm justify-content-end mb-O';
+        $strClass = 'pagination pagination-sm justify-content-end mb-0';
         $navContent = HtmlUtils::getBalise(self::TAG_UL, $ulContent, [self::ATTR_CLASS => $strClass]);
         $navAttributes = [self::ATTR_ARIA => [self::TAG_LABEL => 'Pagination liste']];
         return HtmlUtils::getBalise(self::TAG_NAV, $navContent, $navAttributes);
@@ -165,6 +168,11 @@ class PaginationHtmlBean extends UtilitiesBean
      */
     public function getQueryArg(): string
     {
+        foreach ($this->queryArg as $key=>$value) {
+            if ($value=='%') {
+                unset($this->queryArg[$key]);
+            }
+        }
         return add_query_arg($this->queryArg, $this->url);
         /**
          * TODO

@@ -102,6 +102,8 @@ class AdminPageLibrarySkillBean extends AdminPageLibraryBean
             self::CST_SUBONGLET => self::CST_LIB_SKILL,
             self::CST_ACTION => self::CST_WRITE,
         ];
+        $href = UrlUtils::getAdminUrl($urlElements);
+        $btnLink = HtmlUtils::getLink('Nouvelle compétence', $href, 'btn btn-sm btn-info float-start');
 
         $urlTemplate = self::WEB_PAF_DEFAULT_LIST;
         $attributes = [
@@ -109,10 +111,8 @@ class AdminPageLibrarySkillBean extends AdminPageLibraryBean
             'Liste des compétences',
             // La liste des éléments
             $objTable->getBean(),
-            // Le lien pour créer un nouvel événement.
-            UrlUtils::getAdminUrl($urlElements),
-            // Libellé bouton
-            'Nouvelle compétence',
+            // L'éventuel bouton de création d'un nouvel élément
+            $btnLink,
             // La pagination éventuelle
             $objPagination->getPaginationBlock(),
         ];

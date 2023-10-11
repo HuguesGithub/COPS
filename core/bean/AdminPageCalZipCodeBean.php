@@ -8,15 +8,15 @@ use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
- * AdminPageRandomGuyControlBean
+ * AdminPageCalZipCodeBean
  * @author Hugues
- * @since 1.23.09.16
+ * @since 1.23.10.14
  */
-class AdminPageRandomGuyControlBean extends AdminPageRandomGuyBean
+class AdminPageCalZipCodeBean extends AdminPageCalBean
 {
 
     /**
-     * @since 1.23.09.16
+     * @since 1.23.10.14
      */
     public function getContentOnglet(): string
     {
@@ -47,13 +47,13 @@ class AdminPageRandomGuyControlBean extends AdminPageRandomGuyBean
     }
 
     /**
-     * @since 1.23.09.16
+     * @since 1.23.10.14
      */
     public function buildBreadCrumbs(): void
     {
         parent::buildBreadCrumbs();
 
-        $strLink = HtmlUtils::getLink(self::LABEL_HOME, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $strLink = HtmlUtils::getLink(self::LABEL_ZIPCODE, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= HtmlUtils::getBalise(
             self::TAG_LI,
             $strLink,
@@ -62,34 +62,34 @@ class AdminPageRandomGuyControlBean extends AdminPageRandomGuyBean
     }
 
     /**
-     * @since 1.23.09.16
+     * @since 1.23.10.14
      */
     public function getListContent(): string
     {
         // Définition du service
         $objServices = new CopsRandomGuyServices();
         // On récupère les données éventuelles sur les filtres et les tris
-        $filterZipCode = $this->initVar('filterZipCode', self::SQL_JOKER_SEARCH);
-        $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_ID);
+        $filters = [
+            self::FIELD_PRIMARY_CITY => $this->initVar(self::FIELD_PRIMARY_CITY, self::SQL_JOKER_SEARCH),
+        ];
+        $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_ZIP);
         $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
 
         // Récupération des données
-        $attributes = [
-            self::FIELD_ZIPCODE => $filterZipCode,
+        $attributes = array_merge($filters, [
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
-        ];
-        $objs = $objServices->getGuys($attributes, true);
+        ]);
+        $objs = $objServices->getZipCodes($attributes);
 
         //////////////////////////////////////////////////////
         // Définition de l'objet Pagination
         $objPagination = new PaginationHtmlBean();
-        $queryArg = [
+        $queryArg = array_merge($attributes, [
             self::CST_ONGLET => self::ONGLET_RND_GUY,
-            self::CST_SUBONGLET => self::CST_CONTROL,
-            self::SQL_ORDER_BY => $orderby,
-            self::SQL_ORDER => $order,
-        ];
+            self::CST_SUBONGLET => self::CST_ZIPCODE,
+        ]);
+
         $objPagination->setData([
             self::CST_CURPAGE => $this->curPage,
             self::CST_URL => UrlUtils::getAdminUrl(),
@@ -97,39 +97,32 @@ class AdminPageRandomGuyControlBean extends AdminPageRandomGuyBean
             self::PAGE_OBJS => $objs,
         ]);
 
+        $objBean = new CopsCalZipCodeBean();
         //////////////////////////////////////////////////////
         // Définition du Header du tableau
-        $objHeader = CopsRandomGuyCtrlBean::getTableHeader($queryArg, true);
+        $objHeader = $objBean->getTableHeader($queryArg);
 
         //////////////////////////////////////////////////////
         // Définition du Body du tableau
         $objBody = new TableauBodyHtmlBean();
         // On ajoute les lignes du tableau ici.
-        $objPagination->getDisplayedRows($objBody);
+        $objPagination->getDisplayedRows($objBody, $objBean->getEmptyRow());
         //////////////////////////////////////////////////////
         // Définition du Footer du tableau
-        $objFooter = CopsRandomGuyCtrlBean::getTableFooter($attributes);
+        $objFooter = $objBean->getTableFooter($filters);
         
         //////////////////////////////////////////////////////
         $objTable = new TableauHtmlBean();
-        $objTable->defaultInit($objHeader, $objBody, $objFooter, 'Liste des anonymes');
-
-        $urlElements = [
-            self::CST_ONGLET => self::ONGLET_RND_GUY,
-            self::CST_SUBONGLET => self::CST_HOME,
-            self::CST_ACTION => self::CST_WRITE,
-        ];
+        $objTable->defaultInit($objHeader, $objBody, $objFooter, 'Liste des codes postaux');
 
         $urlTemplate = self::WEB_PAF_DEFAULT_LIST;
         $attributes = [
             // Titre du card
-            'Liste des anonymes',
+            'Liste des codes postaux',
             // La liste des éléments
             $objTable->getBean(),
-            // Le lien pour créer un nouvel événement.
-            UrlUtils::getAdminUrl($urlElements),
-            // Libellé bouton
-            'Nouvelle entrée',
+            // L'éventuel bouton de création d'un nouvel élément
+            '',
             // La pagination éventuelle
             $objPagination->getPaginationBlock(),
         ];

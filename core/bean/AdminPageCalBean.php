@@ -7,11 +7,11 @@ use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
- * AdminPageRandomGuyBean
+ * AdminPageCalBean
  * @author Hugues
  * @since 1.23.09.16
  */
-class AdminPageRandomGuyBean extends AdminPageBean
+class AdminPageCalBean extends AdminPageBean
 {
     public $curPage;
 
@@ -30,10 +30,9 @@ class AdminPageRandomGuyBean extends AdminPageBean
     public static function getStaticContentPage(): string
     {
         $objBean = match (SessionUtils::fromGet(self::CST_SUBONGLET)) {
-            self::CST_CONTROL => new AdminPageRandomGuyControlBean(),
-            self::CST_ZIPCODE => new AdminPageRandomGuyZipcodeBean(),
-            self::CST_PHONE => new AdminPageRandomGuyPhoneBean(),
-            default => new AdminPageRandomGuyHomeBean(),
+            self::CST_ZIPCODE => new AdminPageCalZipCodeBean(),
+            self::CST_PHONE => new AdminPageCalPhoneBean(),
+            default => new AdminPageCalRandomGuyBean(),
         };
         ///////////////////////////////////////////:
         return $objBean->getContentOnglet();
@@ -48,7 +47,6 @@ class AdminPageRandomGuyBean extends AdminPageBean
         // Construction du menu
         $this->arrSubOnglets = [
             self::CST_HOME    => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_HOME],
-            self::CST_CONTROL => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_CONTROL],
             self::CST_PHONE   => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_PHONE],
             self::CST_ZIPCODE => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_ZIPCODE],
         ];

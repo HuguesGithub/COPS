@@ -37,17 +37,19 @@ class CopsRandomGuyServices extends LocalServices
     /**
      * @since v1.23.09.16
      */
-    public function getGuys(array $attributes, bool $blnCtrl=false): array
+    public function getGuys(array $attributes): array
     {
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
             $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_NAMESET] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_PRIMARY_CITY] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::FIELD_ZIPCODE] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::SQL_ORDER_BY] ?? self::FIELD_ID,
             $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
             $attributes[self::SQL_LIMIT] ?? 99999,
         ];
-        return $this->objDao->getGuys($prepAttributes, $blnCtrl);
+        return $this->objDao->getGuys($prepAttributes);
     }
 
     ////////////////////////////////////

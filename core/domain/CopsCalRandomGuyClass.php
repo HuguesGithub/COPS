@@ -1,16 +1,16 @@
 <?php
 namespace core\domain;
 
-use core\bean\CopsRandomGuyBean;
+use core\bean\CopsCalRandomGuyBean;
 use core\domain\CopsCalPhoneClass;
 use core\services\CopsRandomGuyServices;
 
 /**
- * Classe CopsRandomGuyClass
+ * Classe CopsCalRandomGuyClass
  * @author Hugues
  * @since v1.23.09.16
  */
-class CopsRandomGuyClass extends LocalDomainClass
+class CopsCalRandomGuyClass extends LocalDomainClass
 {
     //////////////////////////////////////////////////
     // ATTRIBUTES
@@ -48,20 +48,20 @@ class CopsRandomGuyClass extends LocalDomainClass
     public function __construct(array $attributes=[])
     {
         parent::__construct($attributes);
-        $this->stringClass = 'core\domain\CopsRandomGuyClass';
+        $this->stringClass = 'core\domain\CopsCalRandomGuyClass';
     }
 
     /**
      * @since v1.23.09.16
      */
-    public static function convertElement($row): CopsRandomGuyClass
-    { return parent::convertRootElement(new CopsRandomGuyClass(), $row); }
+    public static function convertElement($row): CopsCalRandomGuyClass
+    { return parent::convertRootElement(new CopsCalRandomGuyClass(), $row); }
 
     /**
      * @since v1.23.09.16
      */
-    public function getBean(): CopsRandomGuyBean
-    { return new CopsRandomGuyBean($this); }
+    public function getBean(): CopsCalRandomGuyBean
+    { return new CopsCalRandomGuyBean($this); }
 
     //////////////////////////////////////////////////
     // METHODES

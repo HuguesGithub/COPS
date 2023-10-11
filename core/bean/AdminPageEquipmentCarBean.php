@@ -134,6 +134,8 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
             self::CST_SUBONGLET => self::CST_EQPT_CAR,
             self::CST_ACTION => self::CST_WRITE,
         ];
+        $href = UrlUtils::getAdminUrl($urlElements);
+        $btnLink = HtmlUtils::getLink('Nouveau véhicule', $href, 'btn btn-sm btn-info float-start');
 
         $urlTemplate = self::WEB_PAF_DEFAULT_LIST;
         $attributes = [
@@ -141,10 +143,8 @@ class AdminPageEquipmentCarBean extends AdminPageEquipmentBean
             'Liste des véhicules',
             // La liste des éléments
             $objTable->getBean(),
-            // Le lien pour créer un nouvel événement.
-            UrlUtils::getAdminUrl($urlElements),
-            // Libellé bouton
-            'Nouveau véhicule',
+            // L'éventuel bouton de création d'un nouvel élément
+            $btnLink,
             // La pagination éventuelle
             $objPagination->getPaginationBlock(),
         ];

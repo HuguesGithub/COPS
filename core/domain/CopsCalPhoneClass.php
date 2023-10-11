@@ -1,6 +1,7 @@
 <?php
 namespace core\domain;
 
+use core\bean\CopsCalPhoneBean;
 
 /**
  * Classe CopsCalPhoneClass
@@ -37,6 +38,12 @@ class CopsCalPhoneClass extends LocalDomainClass
      */
     public static function convertElement($row): CopsCalPhoneClass
     { return parent::convertRootElement(new CopsCalPhoneClass(), $row); }
+
+    /**
+     * @since v1.23.10.14
+     */
+    public function getBean(): CopsCalPhoneBean
+    { return new CopsCalPhoneBean($this); }
 
     //////////////////////////////////////////////////
     // METHODES

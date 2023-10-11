@@ -121,6 +121,8 @@ class AdminPageLibraryCourseBean extends AdminPageLibraryBean
             self::CST_SUBONGLET => self::CST_LIB_STAGE,
             self::CST_ACTION => self::CST_WRITE,
         ];
+        $href = UrlUtils::getAdminUrl($urlElements);
+        $btnLink = HtmlUtils::getLink('Nouveau stage', $href, 'btn btn-sm btn-info float-start');
 
         $urlTemplate = self::WEB_PAF_DEFAULT_LIST;
         $attributes = [
@@ -128,10 +130,8 @@ class AdminPageLibraryCourseBean extends AdminPageLibraryBean
             'Liste des stages',
             // La liste des éléments
             $objTable->getBean(),
-            // Le lien pour créer un nouvel événement.
-            UrlUtils::getAdminUrl($urlElements),
-            // Libellé bouton
-            'Nouveau stage',
+            // L'éventuel bouton de création d'un nouvel élément
+            $btnLink,
             // La pagination éventuelle
             $objPagination->getPaginationBlock(),
         ];

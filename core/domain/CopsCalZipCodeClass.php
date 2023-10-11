@@ -1,6 +1,7 @@
 <?php
 namespace core\domain;
 
+use core\bean\CopsCalZipCodeBean;
 
 /**
  * Classe CopsCalZipCodeClass
@@ -15,7 +16,7 @@ class CopsCalZipCodeClass extends LocalDomainClass
     protected $zip;
     protected $type;
     protected $decommissioned;
-    protected $primary_city;
+    protected $primaryCity;
     
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -38,6 +39,12 @@ class CopsCalZipCodeClass extends LocalDomainClass
      */
     public static function convertElement($row): CopsCalZipCodeClass
     { return parent::convertRootElement(new CopsCalZipCodeClass(), $row); }
+
+    /**
+     * @since v1.23.10.14
+     */
+    public function getBean(): CopsCalZipCodeBean
+    { return new CopsCalZipCodeBean($this); }
 
     //////////////////////////////////////////////////
     // METHODES

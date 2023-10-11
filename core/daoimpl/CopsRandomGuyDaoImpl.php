@@ -1,8 +1,7 @@
 <?php
 namespace core\daoimpl;
 
-use core\domain\CopsRandomGuyClass;
-use core\domain\CopsRandomGuyCtrlClass;
+use core\domain\CopsCalRandomGuyClass;
 use core\domain\CopsCalPhoneClass;
 use core\domain\CopsCalZipCodeClass;
 
@@ -83,13 +82,12 @@ class CopsRandomGuyDaoImpl extends LocalDaoImpl
     /**
      * @since v1.23.09.16
      */
-    public function getGuys(array $attributes, bool $blnCtrl): array
+    public function getGuys(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
-        $request .= " WHERE id LIKE '%s' AND zipCode LIKE '%s'  ";
+        $request .= " WHERE id LIKE '%s' AND nameSet LIKE '%s' AND city LIKE '%s' AND zipCode LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
-        $obj = $blnCtrl ? new CopsRandomGuyCtrlClass() : new CopsRandomGuyClass();
-        return $this->selectListDaoImpl($obj, $request, $attributes);
+        return $this->selectListDaoImpl(new CopsCalRandomGuyClass(), $request, $attributes);
     }
 
     ////////////////////////////////////
@@ -101,7 +99,7 @@ class CopsRandomGuyDaoImpl extends LocalDaoImpl
     public function getZipCodes(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFieldsZc), $this->dbTableZc);
-        $request .= " WHERE zip LIKE '%s' AND primary_city LIKE '%s'";
+        $request .= " WHERE zip LIKE '%s' AND primaryCity LIKE '%s'";
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsCalZipCodeClass(), $request, $attributes);
     }

@@ -133,6 +133,8 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
             self::CST_SUBONGLET => self::CST_EQPT_WEAPON,
             self::CST_ACTION => self::CST_WRITE,
         ];
+        $href = UrlUtils::getAdminUrl($urlElements);
+        $btnLink = HtmlUtils::getLink('Nouvelle arme', $href, 'btn btn-sm btn-info float-start');
 
         $urlTemplate = self::WEB_PAF_DEFAULT_LIST;
         $attributes = [
@@ -140,10 +142,8 @@ class AdminPageEquipmentWeaponBean extends AdminPageEquipmentBean
             'Liste des armes',
             // La liste des éléments
             $objTable->getBean(),
-            // Le lien pour créer un nouvel événement.
-            UrlUtils::getAdminUrl($urlElements),
-            // Libellé bouton
-            'Nouvelle arme',
+            // L'éventuel bouton de création d'un nouvel élément
+            $btnLink,
             // La pagination éventuelle
             $objPagination->getPaginationBlock(),
         ];

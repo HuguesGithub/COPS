@@ -8,11 +8,11 @@ use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
- * AdminPageRandomGuyHomeBean
+ * AdminPageCalRandomGuyBean
  * @author Hugues
  * @since 1.23.09.16
  */
-class AdminPageRandomGuyHomeBean extends AdminPageRandomGuyBean
+class AdminPageCalRandomGuyBean extends AdminPageCalBean
 {
 
     /**
@@ -70,29 +70,30 @@ class AdminPageRandomGuyHomeBean extends AdminPageRandomGuyBean
         $objServices = new CopsRandomGuyServices();
         // On récupère les données éventuelles sur les filtres et les tris
         $filters = [
-            'filterLastname' => $this->initVar('filterLastname', self::SQL_JOKER_SEARCH)
+            'filterGenre' => $this->initVar('filterGenre', self::SQL_JOKER_SEARCH),
+            'filterName' => $this->initVar('filterName', self::SQL_JOKER_SEARCH),
+            self::FIELD_NAMESET => $this->initVar(self::FIELD_NAMESET, self::SQL_JOKER_SEARCH),
+            self::FIELD_ZIPCODE => $this->initVar(self::FIELD_ZIP, self::SQL_JOKER_SEARCH),
+            self::FIELD_PRIMARY_CITY => $this->initVar(self::FIELD_PRIMARY_CITY, self::SQL_JOKER_SEARCH),
         ];
         $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_ID);
         $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
 
-        // TODO : gestion des filtres
-
         // Récupération des données
-        $attributes = [
+        $attributes = array_merge($filters, [
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
-        ];
+        ]);
         $objs = $objServices->getGuys($attributes);
 
         //////////////////////////////////////////////////////
         // Définition de l'objet Pagination
         $objPagination = new PaginationHtmlBean();
-        $queryArg = [
+        $queryArg = array_merge($attributes, [
             self::CST_ONGLET => self::ONGLET_RND_GUY,
             self::CST_SUBONGLET => self::CST_HOME,
-            self::SQL_ORDER_BY => $orderby,
-            self::SQL_ORDER => $order,
-        ];
+        ]);
+
         $objPagination->setData([
             self::CST_CURPAGE => $this->curPage,
             self::CST_URL => UrlUtils::getAdminUrl(),
@@ -100,18 +101,19 @@ class AdminPageRandomGuyHomeBean extends AdminPageRandomGuyBean
             self::PAGE_OBJS => $objs,
         ]);
 
+        $objBean = new CopsCalRandomGuyBean();
         //////////////////////////////////////////////////////
         // Définition du Header du tableau
-        $objHeader = CopsRandomGuyBean::getTableHeader($queryArg);
+        $objHeader = $objBean->getTableHeader($queryArg);
 
         //////////////////////////////////////////////////////
         // Définition du Body du tableau
         $objBody = new TableauBodyHtmlBean();
         // On ajoute les lignes du tableau ici.
-        $objPagination->getDisplayedRows($objBody);
+        $objPagination->getDisplayedRows($objBody, $objBean->getEmptyRow());
         //////////////////////////////////////////////////////
         // Définition du Footer du tableau
-        $objFooter = CopsRandomGuyBean::getTableFooter($filters);
+        $objFooter = $objBean->getTableFooter($filters);
         
         //////////////////////////////////////////////////////
         $objTable = new TableauHtmlBean();
@@ -129,10 +131,8 @@ class AdminPageRandomGuyHomeBean extends AdminPageRandomGuyBean
             'Liste des anonymes',
             // La liste des éléments
             $objTable->getBean(),
-            // Le lien pour créer un nouvel événement.
-            UrlUtils::getAdminUrl($urlElements),
-            // Libellé bouton
-            'Nouvelle entrée',
+            // L'éventuel bouton de création d'un nouvel élément
+            '',
             // La pagination éventuelle
             $objPagination->getPaginationBlock(),
         ];
