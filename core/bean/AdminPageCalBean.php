@@ -98,7 +98,7 @@ class AdminPageCalBean extends AdminPageBean
 
     /**
      * @since 1.23.09.16
-     */
+     *
     public function getCard(string $strCompteRendu=''): string
     {
         $titre='';
@@ -115,4 +115,5 @@ class AdminPageCalBean extends AdminPageBean
 
         return HtmlUtils::getDiv($strCardHeader.$strCardBody, [self::ATTR_CLASS=>'card col mx-1 p-0 mb-1']);
     }
+    */
 }

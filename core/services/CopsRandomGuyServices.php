@@ -3,6 +3,7 @@ namespace core\services;
 
 use core\daoimpl\CopsRandomGuyDaoImpl;
 use core\domain\CopsCalPhoneClass;
+use core\domain\CopsCalRandomGuyClass;
 use core\domain\CopsCalZipCodeClass;
 
 /**
@@ -30,14 +31,25 @@ class CopsRandomGuyServices extends LocalServices
         }
     }
 
+    public function getTripletAdresse(array $attributes): array
+    {
+        return $this->objDao->getTripletAdresse($attributes);
+    }
+
     ////////////////////////////////////
     // wp_7_cops_cal_random_guy
     ////////////////////////////////////
 
+    public function getGuy(int $id): CopsCalRandomGuyClass
+    {
+        $objs = $this->getGuys([self::FIELD_ID=>$id]);
+        return empty($objs) ? new CopsCalRandomGuyClass() : array_shift($objs);
+    }
+
     /**
      * @since v1.23.09.16
      */
-    public function getGuys(array $attributes): array
+    public function getGuys(array $attributes=[]): array
     {
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
@@ -50,6 +62,23 @@ class CopsRandomGuyServices extends LocalServices
             $attributes[self::SQL_LIMIT] ?? 99999,
         ];
         return $this->objDao->getGuys($prepAttributes);
+    }
+
+    /**
+     * @since v1.23.10.14
+     */
+    public function insertCalGuy(CopsCalRandomGuyClass &$obj): void
+    { $this->objDao->insertCalGuy($obj); }
+
+    /**
+     * @since v1.23.10.14
+     */
+    public function updateCalGuy(CopsCalRandomGuyClass $obj): void
+    { $this->objDao->updateCalGuy($obj); }
+
+    public function getDistinctGuyField(string $field): array
+    {
+        return $this->objDao->getDistinctGuyField([$field, $field]);
     }
 
     ////////////////////////////////////

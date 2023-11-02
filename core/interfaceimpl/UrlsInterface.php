@@ -25,6 +25,7 @@ interface UrlsInterface
     
     // Files
     public const WEB_PA_INDEX               = self::WEB_PAGES_ADMIN.'page-admin-index.tpl';
+    public const WEB_PA_CAL_RND_GUY_EDIT    = self::WEB_PAGES_ADMIN.'page-admin-cal-random-guy-edit.tpl';
     public const WEB_PA_DEFAULT             = self::WEB_PAGES_ADMIN.'page-admin-default.tpl';
     public const WEB_PA_METEO_HOME          = self::WEB_PAGES_ADMIN.'page-admin-meteo-home.tpl';
     public const WEB_PA_METEO_METEO         = self::WEB_PAGES_ADMIN.'page-admin-meteo-meteo.tpl';

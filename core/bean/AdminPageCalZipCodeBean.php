@@ -62,6 +62,18 @@ class AdminPageCalZipCodeBean extends AdminPageCalBean
     }
 
     /**
+     * @since v1.23.10.14
+     */
+    public function getCard(): string
+    {
+        if ($this->action==self::CST_WRITE) {
+            return $this->getEditContent();
+        } else {
+            return $this->getListContent();
+        }
+    }
+
+    /**
      * @since 1.23.10.14
      */
     public function getListContent(): string

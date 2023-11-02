@@ -25,6 +25,10 @@ $(document).ready(function() {
             $('button[data-target="#'+$(this).prop('id')+'"]').trigger('click');
         }
     });
+    // Sur les data-trigger="keyup"
+    $('.ajaxAction[data-trigger="keyup"]').on('keyup', function(){
+        ajaxActionKeyUp($(this));
+    });
     ////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////
@@ -123,6 +127,77 @@ function ajaxActionClick(obj) {
 	}
 }
 ////////////////////////////////////////////////
+
+////////////////////////////////////////////////
+// Gestion des events keyUp
+function ajaxActionKeyUp(obj) {
+    let actions = obj.data('ajax').split(',');
+    if (!obj.hasClass('disabled')) {
+        for (let oneAction of actions) {
+            switch (oneAction) {
+                // Poster un message dans le tchat
+                case 'findAddress' :
+                    let phoneNumber = $('#telephoneNumber').val();
+                    let zipCode = $('#zipCode').val();
+                    let city = $('#city').val();
+                    findAddress(obj, phoneNumber, zipCode, city);
+                break;
+                default :
+                    console.log(oneAction+" n'est pas une action définie pour ajaxActionKeyUp.");
+                    break;
+            }
+        }
+    }
+}
+////////////////////////////////////////////////
+
+///////////////////////////////////////////////////
+// FONCTIONS RELATIVES AUX ADRESSES
+///////////////////////////////////////////////////
+function findAddress(obj, phoneNumber, zipCode, city) {
+    let objReturned = null;
+    let data = {
+        'action': 'dealWithAjax',
+        'ajaxAction': 'findAddress',
+        'phoneNumber': phoneNumber,
+        'zipCode': zipCode,
+        'city': city
+    };
+    $('.zoomTitresCol').remove();
+    $('.zoomContentCol').remove();
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {}
+    ).done(function(response) {
+        try {
+            objReturned = JSON.parse(response);
+            obj.after(objReturned.refresh.content);
+            switch (obj.prop('id')) {
+                case 'telephoneNumber' :
+                    $('#telephoneNumber + ul').attr('style', $('#telephoneNumber + ul').attr('style')+'left: 8.3333333%');
+                    $('#telephoneNumber + ul + ul').attr('style', $('#telephoneNumber + ul + ul').attr('style')+'left: 8.3333333%');
+                    break;
+                case 'zipCode' :
+                    $('#zipCode + ul').attr('style', $('#zipCode + ul').attr('style')+'left: 41.6666666%');
+                    $('#zipCode + ul + ul').attr('style', $('#zipCode + ul + ul').attr('style')+'left: 41.6666666%');
+                    break;
+                case 'city' :
+                    $('#city + ul').attr('style', $('#city + ul').attr('style')+'left: 75%');
+                    $('#city + ul + ul').attr('style', $('#city + ul + ul').attr('style')+'left: 75%');
+                    break;
+            }
+            $('.zoomContentCol a').on('click', function(){
+                $(this).find('span').each(function(){
+                    $('#'+$(this).data('target')).val($(this).html());
+                });
+                $('.zoomTitresCol').remove();
+                $('.zoomContentCol').remove();
+            });
+        } catch(e) {
+        }
+    });
+}
 
 ///////////////////////////////////////////////////
 // FONCTIONS RELATIVES AUX NOTIFICATIONS

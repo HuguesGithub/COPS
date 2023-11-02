@@ -82,4 +82,13 @@ class CopsCalRandomGuyClass extends LocalDomainClass
         $baseNumber = substr($this->telephoneNumber, 0, 7);
         return $objServices->getPhone($baseNumber);
     }
+
+    public function checkFields()
+    {
+        $blnOk = true;
+        if ($this->firstName=='' || $this->lastName=='') {
+            $blnOk = false;
+        }
+        return $blnOk;
+    }
 }

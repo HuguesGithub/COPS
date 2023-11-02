@@ -23,6 +23,9 @@ class AjaxActions extends LocalActions
             case 'saveData' :
                 $returned = CopsPlayerActions::dealWithStatic();
             break;
+            case 'findAddress' :
+                $returned = CopsCalActions::dealWithStatic();
+            break;
             case 'csvExport':
                 // TODO : $returned = CopsIndexActions::dealWithStatic($_POST);
             break;

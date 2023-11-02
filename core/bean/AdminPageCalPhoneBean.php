@@ -62,6 +62,18 @@ class AdminPageCalPhoneBean extends AdminPageCalBean
     }
 
     /**
+     * @since v1.23.10.14
+     */
+    public function getCard(): string
+    {
+        if ($this->action==self::CST_WRITE) {
+            return $this->getEditContent();
+        } else {
+            return $this->getListContent();
+        }
+    }
+
+    /**
      * @since 1.23.10.14
      */
     public function getListContent(): string
@@ -114,12 +126,6 @@ class AdminPageCalPhoneBean extends AdminPageCalBean
         //////////////////////////////////////////////////////
         $objTable = new TableauHtmlBean();
         $objTable->defaultInit($objHeader, $objBody, $objFooter, 'Liste des téléphones');
-
-        $urlElements = [
-            self::CST_ONGLET => self::ONGLET_RND_GUY,
-            self::CST_SUBONGLET => self::CST_PHONE,
-            self::CST_ACTION => self::CST_WRITE,
-        ];
 
         $urlTemplate = self::WEB_PAF_DEFAULT_LIST;
         $attributes = [

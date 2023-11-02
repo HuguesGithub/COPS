@@ -142,6 +142,36 @@ border-color: #4b545c;
 }
 /* ----------------------------------------------------- */
 
+ul.zoomTitresCol {
+    border: 1px solid #80bdff;
+    background-color: #cce5ff;
+    top: 40px;
+    height: 20px;
+    border-bottom: 0 none;
+}
+ul.zoomTitresCol li.zoomTitreCol {
+    padding: 1px 0 0 4px;
+    float: left;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.zoomContentCol {
+    max-height: 190px;
+    top: 60px;
+    border: 1px solid #80bdff;
+    background-color: #cce5ff;
+    overflow: auto;
+}
+
+.zoomContentCol a {
+    display: flex;
+}
+
+.zoomCellule {
+    color: #000080;
+    font-size: 12px;
+}
 
 /* Calendrier */
 .fc-not-allowed,

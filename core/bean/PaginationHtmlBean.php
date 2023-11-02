@@ -62,7 +62,7 @@ class PaginationHtmlBean extends UtilitiesBean
      * @since v1.23.06.10
      * @version v1.23.06.11
      */
-    public function getDisplayedRows(TableauBodyHtmlBean &$objBody, TableauRowHtmlBean $objRow): void
+    public function getDisplayedRows(TableauBodyHtmlBean &$objBody, TableauRowHtmlBean $objRow=null): void
     {
         $objs = array_slice($this->objs, ($this->curPage-1)*$this->nbPerPage, $this->nbPerPage);
         if (empty($this->objs) || empty($objs)) {

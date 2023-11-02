@@ -3,6 +3,7 @@ namespace core\bean;
 
 use core\services\CopsRandomGuyServices;
 use core\utils\HtmlUtils;
+use core\utils\SessionUtils;
 use core\utils\UrlUtils;
 
 /**
@@ -35,8 +36,20 @@ class CopsCalRandomGuyBean extends CopsBean
     public function getTableRow(): TableauRowHtmlBean
     {
         $objRow = new TableauRowHtmlBean();
-        $objRow->addCell(new TableauCellHtmlBean($this->obj->getFullName(), self::TAG_TD, 'text-start'));
-        $objRow->addCell(new TableauCellHtmlBean($this->obj->getField(self::FIELD_NAMESET), self::TAG_TD, 'text-start'));
+        $urlElements = [
+            self::CST_ONGLET => self::ONGLET_RND_GUY,
+            self::CST_SUBONGLET => self::CST_HOME,
+            self::FIELD_ID => $this->obj->getField(self::FIELD_ID),
+            self::CST_ACTION => self::CST_WRITE,
+        ];
+        $strLink = HtmlUtils::getLink(
+            $this->obj->getFullName(),
+            UrlUtils::getAdminUrl($urlElements),
+        );
+
+        $objRow->addCell(new TableauCellHtmlBean($strLink, self::TAG_TD, 'text-start'));
+        $value = $this->obj->getField(self::FIELD_NAMESET);
+        $objRow->addCell(new TableauCellHtmlBean($value, self::TAG_TD, 'text-start'));
         $objRow->addCell(new TableauCellHtmlBean($this->obj->getField(self::FIELD_PHONENUMBER)));
         $adress = $this->obj->getField(self::FIELD_NBADRESS).' '.$this->obj->getField(self::FIELD_STADRESS);
         $objRow->addCell(new TableauCellHtmlBean($adress, self::TAG_TD, 'text-end'));
@@ -139,6 +152,97 @@ class CopsCalRandomGuyBean extends CopsBean
         $filter = self::FIELD_NAMESET;
 
         return $this->getMutualFilter($urlElements, $selectedValue, $strLabel, $objs, $field, $filter);
+    }
+
+    /**
+     * @since v1.23.07.21
+     * @version v1.23.07.22
+     */
+    public function getEditInterfaceAttributes(): array
+    {
+        $objServices = new CopsRandomGuyServices();
+
+        if ($this->obj->getField(self::FIELD_ID)=='') {
+            $this->obj->setField(self::FIELD_NAMESET, SessionUtils::fromGet(self::FIELD_NAMESET));
+        }
+
+        ///////////////////////////////////////////////////
+        // Gestion de la liste déroulante du Titre
+        $selValueTitle = $this->obj->getField(self::FIELD_TITLE);
+        $strContentSel = HtmlUtils::getOption('', 0);
+        $objs = $objServices->getDistinctGuyField(self::FIELD_TITLE);
+        while (!empty($objs)) {
+            $obj = array_shift($objs);
+            $value = $obj->getField(self::FIELD_TITLE);
+            $strContentSel .= HtmlUtils::getOption($value, $value, $value==$selValueTitle);
+        }
+        $attributes = [
+            self::ATTR_CLASS => 'custom-select col-2',
+            self::ATTR_NAME  => self::FIELD_TITLE,
+            self::FIELD_ID   => self::FIELD_TITLE,
+        ];
+        $selTitle = HtmlUtils::getBalise(self::TAG_SELECT, $strContentSel, $attributes);
+        ///////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////
+        // Gestion de la liste déroulante du Genre
+        $selValueGenre = $this->obj->getField(self::FIELD_GENDER);
+        $strContentSel = HtmlUtils::getOption('', 0);
+        $objs = $objServices->getDistinctGuyField(self::FIELD_GENDER);
+        while (!empty($objs)) {
+            $obj = array_shift($objs);
+            $value = $obj->getField(self::FIELD_GENDER);
+            $strContentSel .= HtmlUtils::getOption($value, $value, $value==$selValueGenre);
+        }
+        $attributes = [
+            self::ATTR_CLASS => 'custom-select col-2',
+            self::ATTR_NAME  => self::FIELD_GENDER,
+            self::FIELD_ID   => self::FIELD_GENDER,
+        ];
+        $selGenre = HtmlUtils::getBalise(self::TAG_SELECT, $strContentSel, $attributes);
+        ///////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////
+        // Gestion de la liste déroulante de l'Ethnie
+        $selValueEthnie = $this->obj->getField(self::FIELD_NAMESET);
+        $strContentSel = HtmlUtils::getOption('', 0);
+        $objs = $objServices->getDistinctGuyField(self::FIELD_NAMESET);
+        while (!empty($objs)) {
+            $obj = array_shift($objs);
+            $value = $obj->getField(self::FIELD_NAMESET);
+            $strContentSel .= HtmlUtils::getOption($value, $value, $value==$selValueEthnie);
+        }
+        $attributes = [
+            self::ATTR_CLASS => 'custom-select col-2',
+            self::ATTR_NAME  => self::FIELD_NAMESET,
+            self::FIELD_ID   => self::FIELD_NAMESET,
+        ];
+        $selEthnie = HtmlUtils::getBalise(self::TAG_SELECT, $strContentSel, $attributes);
+        ///////////////////////////////////////////////////
+
+        return [
+            // Identifiant
+            $this->obj->getField(self::FIELD_ID),
+            // Liste déroulante pour le titre
+            $selTitle,
+            // Le Prénom
+            $this->obj->getField(self::FIELD_FIRSTNAME),
+            // Le Nom
+            $this->obj->getField(self::FIELD_LASTNAME),
+            // Liste déroulante pour le genre
+            $selGenre,
+            // Liste déroulante pour l'ethnie
+            $selEthnie,
+            //
+            '',
+            //
+            '',
+            //
+            '',
+            //
+            '',
+            '','','','','',
+        ];
     }
 
 }

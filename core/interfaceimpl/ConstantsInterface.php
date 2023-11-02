@@ -32,6 +32,7 @@ interface ConstantsInterface
     public const ATTR_DATA_AJAX         = 'ajax';
     public const ATTR_DATA_DATE         = 'data-date';
     public const ATTR_DATA_ICON         = 'data-icon';
+    public const ATTR_DATA_TARGET       = 'target';
     public const ATTR_DATA_TRIGGER      = 'trigger';
     public const ATTR_DESCRIBEDBY       = 'describedby';
 
