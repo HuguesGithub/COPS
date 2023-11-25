@@ -133,7 +133,7 @@ class CopsCalGuyBean extends CopsBean
     /**
      * @since v1.23.11.25
      */
-    public function getTableFooter(array $attributes): TableauTFootHtmlBean
+    public function getTableFooter(array $attributes=[]): TableauTFootHtmlBean
     {
         $objRow = new TableauRowHtmlBean();
         $objRow->addStyle(self::CSS_LINE_HEIGHT_30PX);
@@ -145,12 +145,6 @@ class CopsCalGuyBean extends CopsBean
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
         // Pas de filtre
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
-        // Filtre sur le Nameset
-        /*
-        $filterNameSet = $attributes[self::FIELD_NAMESET] ?? '';
-        $rowContent = $this->getNameSetFilter($filterNameSet);
-        $objRow->addCell(new TableauCellHtmlBean($rowContent, self::TAG_TH));
-        */
         // On ajoute le footer
         $objFooter = new TableauTFootHtmlBean();
         $objFooter->addRow($objRow);
