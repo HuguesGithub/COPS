@@ -4,19 +4,22 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.24
- * @version v1.23.08.12
+ * @version v1.23.11.25
  */
 interface LabelsInterface
 {
     public const LABEL_HOME           = 'Accueil';
     public const LABEL_ACTUELLE       = 'Actuelle';
+    public const LABEL_POINTSADRE     = 'Adrénaline';
+    public const LABEL_POINTSANC      = 'Ancienneté';
     public const LABEL_YEARLY         = 'Annuel';
     public const LABEL_WEAPONS        = 'Armes';
     public const LABEL_NO_RESULT      = 'Aucun résultat';
+    public const LABEL_SEARCH_NO_DATA = 'Aucune donnée ne correspond aux critères de recherche.';
     public const LABEL_OTHERS         = 'Autres';
-    public const LABEL_DATABASES      = 'Bases de données';
     public const LABEL_BACKGROUND     = 'Background';
     public const LABEL_BAROMETER      = 'Baromètre';
+    public const LABEL_DATABASES      = 'Bases de données';
     public const LABEL_LIBRARY        = 'Bibliothèque';
     public const LABEL_BUREAU         = 'Bureau';
     public const LABEL_CALENDAR       = 'Calendrier';
@@ -24,6 +27,7 @@ interface LabelsInterface
     public const LABEL_ABILITIES      = 'Caractéristiques';
     public const LABEL_CARRURE        = 'Carrure';
     public const LABEL_CHARME         = 'Charme';
+    public const LABEL_CIVILITE       = 'Civilité';
     public const LABEL_CODE           = 'Code';
     public const LABEL_ZIPCODE        = 'Code Postal';
     public const LABEL_SKILLS         = 'Compétences';
@@ -35,14 +39,18 @@ interface LabelsInterface
     public const LABEL_COORDINATION   = 'Coordination';
     public const LABEL_TRASH          = 'Corbeille';
     public const LABEL_CREER_ENTREE   = 'Créer une entrée';
+    public const LABEL_BIRTHDAY       = 'Date de naissance';
     public const LABEL_DESCRIPTION    = 'Description';
     public const LABEL_DESCRIPTION_MJ = 'Description MJ';
     public const LABEL_DESCRIPTION_PJ = 'Description PJ';
     public const LABEL_EDUCATION      = 'Éducation';
     public const LABEL_EQUIPMENT      = 'Équipement';
     public const LABEL_ERREUR         = 'Erreur';
+    public const LABEL_ETHNIE         = 'Ethnie';
     public const LABEL_EVENTS         = 'Événements';
+    public const LABEL_POINTSEXPE     = 'Expérience';
     public const LABEL_EXPORT_LIST    = 'Exporter la liste';
+    public const LABEL_GENDER         = 'Genre';
     public const LABEL_WEEKLY         = 'Hebdomadaire';
     public const LABEL_HEURE          = 'Heure';
     public const LABEL_HUMIDITY       = 'Humidité';
@@ -57,18 +65,19 @@ interface LabelsInterface
     public const LABEL_NOM            = 'Nom';
     public const LABEL_PARENTS        = 'Parents';
     public const LABEL_PERCEPTION     = 'Perception';
+    public const LABEL_WEIGHT         = 'Poids';
     public const LABEL_POINTSDEVIE    = 'Points de vie';
-    public const LABEL_POINTSADRE     = 'Adrénaline';
-    public const LABEL_POINTSANC      = 'Ancienneté';
-    public const LABEL_POINTSEXPE     = 'Expérience';
     public const LABEL_PRECEDENTE     = 'Précédente';
+    public const LABEL_FIRST_NAME     = 'Prénom';
     public const LABEL_PROFILE        = 'Profil';
     public const LABEL_DAILY          = 'Quotidien';
     public const LABEL_REFRESH_LIST   = 'Rafraîchir la liste';
     public const LABEL_INBOX          = 'Réception';
+    public const LABEL_SEARCH         = 'Recherche';
     public const LABEL_WRITE_MAIL     = 'Rédiger un message';
     public const LABEL_REFERENCE      = 'Référence';
     public const LABEL_REFLEXES       = 'Réflexes';
+    public const LABEL_RESULTS        = 'Résultats';
     public const LABEL_RETOUR         = 'Retour';
     public const LABEL_SANGFROID      = 'Sang-froid';
     public const LABEL_SUN            = 'Soleil';
@@ -80,9 +89,11 @@ interface LabelsInterface
     public const LABEL_TABLE_LUNE     = 'Table Lune';
     public const LABEL_TABLE_WEATHER  = 'Table Météo';
     public const LABEL_TABLE_SOLEIL   = 'Table Soleil';
+    public const LABEL_HEIGHT         = 'Taille';
     public const LABEL_TCHAT          = 'Tchat';
     public const LABEL_PHONE          = 'Téléphone';
     public const LABEL_TEMP           = 'Temp.';
+    public const LABEL_SEARCH_TOO_MUCH_DATA = 'Trop de résultats, affinez votre recherche.';
     public const LABEL_WIND           = 'Vent';
     public const LABEL_CARS           = 'Véhicules';
     public const LABEL_VISIBILITY     = 'Visibilité';

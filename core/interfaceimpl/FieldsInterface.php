@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.08.12
+ * @version v1.23.11.25
  */
 interface FieldsInterface
 {
@@ -309,12 +309,26 @@ interface FieldsInterface
     public const FIELD_COLOR       = 'color';
     public const FIELD_KILOGRAMS   = 'kilograms';
     public const FIELD_CENTIMETERS = 'centimeters';
+    public const FIELD_GENKEY      = 'genkey';
 
     public const FIELD_ZIP         = 'zip';
+    public const FIELD_TYPE        = 'type';
+    public const FIELD_DECOMMISSIONED = 'decommissioned';
     public const FIELD_PRIMARY_CITY= 'primaryCity';
 
     public const FIELD_PHONE_ID    = 'phoneId';
     public const FIELD_CITY_NAME   = 'cityName';
+
+    // cal_guy_address
+    public const FIELD_GUY_ID      = 'guyId';
+    public const FIELD_ADDRESS_ID  = 'addressId';
+    public const FIELD_NUMBER      = 'number';
+    // cal_address
+    public const FIELD_HOUSE_NUMBER = 'houseNumber';
+    public const FIELD_ST_DIRECTION = 'streetDirection';
+    public const FIELD_ST_NAME      = 'streetName';
+    public const FIELD_ST_SUFFIX    = 'streetSuffix';
+    public const FIELD_ST_SUF_DIRECTION = 'streetSuffixDirection';
 
 
     // Provenance ?

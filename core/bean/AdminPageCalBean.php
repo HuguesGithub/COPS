@@ -25,14 +25,15 @@ class AdminPageCalBean extends AdminPageBean
     }
 
     /**
-     * @since 1.23.09.16
+     * @since v1.23.09.16
+     * @version v1.23.11.25
      */
     public static function getStaticContentPage(): string
     {
         $objBean = match (SessionUtils::fromGet(self::CST_SUBONGLET)) {
             self::CST_ZIPCODE => new AdminPageCalZipCodeBean(),
             self::CST_PHONE => new AdminPageCalPhoneBean(),
-            default => new AdminPageCalRandomGuyBean(),
+            default => new AdminPageCalGuyBean(),
         };
         ///////////////////////////////////////////:
         return $objBean->getContentOnglet();

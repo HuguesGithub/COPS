@@ -1,23 +1,23 @@
 <?php
 namespace core\domain;
 
-use core\bean\CopsCalZipcodeBean;
+use core\bean\CopsCalGuyAddressBean;
+use core\services\CopsCalGuyAddressServices;
 
 /**
- * Classe CopsCalZipcodeClass
+ * Classe CopsCalGuyAddressClass
  * @author Hugues
- * @since v1.23.09.16
- * @version v1.23.11.25
+ * @since v1.23.11.25
  */
-class CopsCalZipcodeClass extends LocalDomainClass
+class CopsCalGuyAddressClass extends LocalDomainClass
 {
     //////////////////////////////////////////////////
     // ATTRIBUTES
     //////////////////////////////////////////////////
-    protected $zip;
-    protected $type;
-    protected $decommissioned;
-    protected $primaryCity;
+    protected $id;
+    protected $guyId;
+    protected $addressId;
+    protected $number;
     
     //////////////////////////////////////////////////
     // GETTERS & SETTERS
@@ -27,28 +27,25 @@ class CopsCalZipcodeClass extends LocalDomainClass
     // CONSTRUCT - CLASSVARS - CONVERT - BEAN
     //////////////////////////////////////////////////
     /**
-     * @since v1.23.09.16
-     * @version v1.23.11.25
+     * @since v1.23.11.25
      */
     public function __construct(array $attributes=[])
     {
         parent::__construct($attributes);
-        $this->stringClass = 'core\domain\CopsCalZipcodeClass';
+        $this->stringClass = 'core\domain\CopsCalGuyAddressClass';
     }
 
     /**
-     * @since v1.23.09.16
-     * @version v1.23.11.25
+     * @since v1.23.11.25
      */
-    public static function convertElement($row): CopsCalZipcodeClass
-    { return parent::convertRootElement(new CopsCalZipcodeClass(), $row); }
+    public static function convertElement($row): CopsCalGuyAddressClass
+    { return parent::convertRootElement(new CopsCalGuyAddressClass(), $row); }
 
     /**
-     * @since v1.23.10.14
-     * @version v1.23.11.25
+     * @since v1.23.11.25
      */
-    public function getBean(): CopsCalZipcodeBean
-    { return new CopsCalZipcodeBean($this); }
+    public function getBean(): CopsCalGuyAddressBean
+    { return new CopsCalGuyAddressBean($this); }
 
     //////////////////////////////////////////////////
     // METHODES

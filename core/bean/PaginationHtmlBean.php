@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * Classe PaginationHtmlBean
  * @author Hugues
  * @since v1.23.06.10
- * @version v1.23.07.29
+ * @version v1.23.11.25
  */
 class PaginationHtmlBean extends UtilitiesBean
 {
@@ -22,10 +22,11 @@ class PaginationHtmlBean extends UtilitiesBean
     private $objs;
     private $url;
     private $pageWidth;
+    private $cssPageLink;
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.29
+     * @version v1.23.11.25
      */
     public function setData(array $arrData): void
     {
@@ -37,6 +38,8 @@ class PaginationHtmlBean extends UtilitiesBean
         $this->option = $arrData[self::PAGE_OPTION] ?? self::PAGE_OPT_FULL_NMB;
         // Le nombre de pages autour de la page courante
         $this->pageWidth = $arrData['pageWidth'] ?? 2;
+        // Visuel du lien de pagination
+        $this->cssPageLink = ' page-link '.$arrData[self::CSS_PAGE_LINK] ?? '';
         /////////////////////////////////////////////////
 
         /////////////////////////////////////////////////
@@ -60,9 +63,13 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.06.11
+     * @version v1.23.11.25
      */
-    public function getDisplayedRows(TableauBodyHtmlBean &$objBody, TableauRowHtmlBean $objRow=null): void
+    public function getDisplayedRows(
+        TableauBodyHtmlBean &$objBody,
+        TableauRowHtmlBean $objRow=null,
+        bool $adminView=false
+    ): void
     {
         $objs = array_slice($this->objs, ($this->curPage-1)*$this->nbPerPage, $this->nbPerPage);
         if (empty($this->objs) || empty($objs)) {
@@ -70,7 +77,7 @@ class PaginationHtmlBean extends UtilitiesBean
         } else {
             while (!empty($objs)) {
                 $obj = array_shift($objs);
-                $objBody->addRow($obj->getBean()->getTableRow());
+                $objBody->addRow($obj->getBean()->getTableRow($adminView));
             }
         }
     }
@@ -145,20 +152,23 @@ class PaginationHtmlBean extends UtilitiesBean
 
     /**
      * @since v1.23.06.10
-     * @version v1.23.07.22
+     * @version v1.23.11.25
      */
     private function getPaginationLink(bool $isDisabled, int $curpage, string $label): string
     {
         if ($isDisabled) {
-            $href = '#';
-            $addClass = ' '.self::CST_DISABLED;
+            $strLink = HtmlUtils::getLink($label, '#', self::CST_DISABLED.$this->cssPageLink);
         } else {
+            $href = '';
+            if (isset($this->queryArg[self::WP_PAGE])) {
+                $href .= $this->queryArg[self::WP_PAGE].'/?';
+            }
             $this->queryArg[self::CST_CURPAGE] = $curpage;
-            $href = $this->getQueryArg();
+            $href .= $this->getQueryArg();
             $addClass = '';
+            $strLink = HtmlUtils::getLink($label, $href, $this->cssPageLink);
         }
 
-        $strLink = HtmlUtils::getLink($label, $href, 'page-link');
         return HtmlUtils::getBalise(self::TAG_LI, $strLink, [self::ATTR_CLASS=>'page-item'.$addClass]);
     }
 

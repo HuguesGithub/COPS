@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.08.12
+ * @version v1.23.11.25
  */
 interface ConstantsInterface
 {
@@ -50,10 +50,16 @@ interface ConstantsInterface
     public const CSS_FLOAT_LEFT         = 'float-start';
     public const CSS_FLOAT_RIGHT        = 'float-end';
     public const CSS_TEXT_END           = 'text-end';
+    public const CSS_TEXT_START         = 'text-start';
     public const CSS_DISPLAY_NONE       = 'display:none;';
     public const CSS_COL                = ' col';
     public const CSS_COL_1              = ' col-1';
     public const CSS_COL_2              = ' col-2';
+    public const CSS_COL_3              = ' col-3';
+    public const CSS_CUSTOM_SELECT      = 'custom-select';
+    public const CSS_LINE_HEIGHT_30PX   = 'line-height:30px;';
+    public const CSS_PAGE_LINK          = 'css-page-link';
+    public const CSS_BG_WHITE           = 'bg-white';
 
     /////////////////////////////////////////////////
     // Constantes
@@ -114,6 +120,9 @@ interface ConstantsInterface
     public const CST_EQPT_WEAPON        = 'weapon';
     public const CST_EQPT_CAR           = 'car';
     public const CST_EQPT_OTHER         = 'autres';
+    // Subonglet Base de données
+    public const CST_BDD_SEARCH         = 'bdd-search';
+    public const CST_BDD_RESULT         = 'bdd-result';
 
     public const CST_ACTION             = 'action';
     public const CST_ADD                = 'add';
@@ -143,6 +152,7 @@ interface ConstantsInterface
     public const CST_TEXT_WHITE         = 'text-white';
     public const CST_UNITE              = 'unite';
     public const CST_URL                = 'url';
+    public const CST_URL_ROOT           = 'urlRoot';
     public const CST_WICON              = 'wicon';
     public const CST_WRITE              = 'write';
     public const CST_WRITE_ACTION       = 'writeAction';
@@ -226,13 +236,13 @@ interface ConstantsInterface
     public const I_ANGLES_LEFT           = 'angles-left';
     public const I_ARROWS_ROTATE         = 'arrows-rotate';
     public const I_BACKWARD              = 'backward';
-    public const I_CARET_LEFT           = 'caret-left';
-    public const I_CARET_RIGHT          = 'caret-right';
+    public const I_CARET_LEFT            = 'caret-left';
+    public const I_CARET_RIGHT           = 'caret-right';
     public const I_CIRCLE                = 'circle';
     public const I_DATABASE              = 'database';
-    public const I_DELETE               = 'trash-can';
-    public const I_DESKTOP              = 'desktop';
-    public const I_DOWNLOAD             = 'download';
+    public const I_DELETE                = 'trash-can';
+    public const I_DESKTOP               = 'desktop';
+    public const I_DOWNLOAD              = 'download';
     public const I_EDIT                  = 'edit';
     public const I_FILE_CATEGORY         = 'folder-tree';
     public const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
@@ -257,14 +267,17 @@ interface ConstantsInterface
     // NAVigation
     public const NAV                    = 'nav';
     public const NAV_FILL               = 'nav-fill';
+    public const NAV_ICON               = 'nav-icon';
     public const NAV_ITEM               = 'nav-item';
     public const NAV_LINK               = 'nav-link';
     public const NAV_PILLS              = 'nav-pills';
+    public const NAV_TREEVIEW           = 'nav-treeview';
 
     /////////////////////////////////////////////////
     // Onglets
     public const ONGLET_ARCHIVE         = 'archive';
     public const ONGLET_AUTOPSIE        = 'autopsie';
+    public const ONGLET_BDD             = 'base-de-donnees';
     public const ONGLET_CALENDAR        = 'calendar';
     public const ONGLET_CONFIG          = 'config';
     public const ONGLET_DESK            = 'desk';
@@ -327,6 +340,7 @@ interface ConstantsInterface
     /////////////////////////////////////////////////
     // Tags
     public const TAG_BUTTON             = 'button';
+    public const TAG_FORM               = 'form';
     public const TAG_IMG                = 'img';
     public const TAG_INPUT              = 'input';
     public const TAG_LABEL              = 'label';

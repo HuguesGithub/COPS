@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.21
- * @version v1.23.08.12
+ * @version v1.23.11.25
  */
 interface UrlsInterface
 {
@@ -25,6 +25,7 @@ interface UrlsInterface
     
     // Files
     public const WEB_PA_INDEX               = self::WEB_PAGES_ADMIN.'page-admin-index.tpl';
+    public const WEB_PA_CONFIRM             = self::WEB_PA_FRAGMENTS.'page-admin-div-confirm.tpl';
     public const WEB_PA_CAL_RND_GUY_EDIT    = self::WEB_PAGES_ADMIN.'page-admin-cal-random-guy-edit.tpl';
     public const WEB_PA_DEFAULT             = self::WEB_PAGES_ADMIN.'page-admin-default.tpl';
     public const WEB_PA_METEO_HOME          = self::WEB_PAGES_ADMIN.'page-admin-meteo-home.tpl';
@@ -54,39 +55,46 @@ interface UrlsInterface
     public const WEB_PP_BOARD               = self::WEB_PAGES_PUBLIC.'publique-board.tpl';
     public const WEB_PP_HOME_CONTENT        = self::WEB_PAGES_PUBLIC.'publique-home-content.tpl';
     public const WEB_PP_MAIN_FOOTER         = self::WEB_PAGES_PUBLIC.'publique-main-footer.tpl';
-    public const WEB_PPF_SIDEBAR            = self::WEB_PP_FRAGMENTS.'publique-fragments-sidebar.tpl';
-    public const WEB_PPFS_ONGLET_MENU_PANEL = self::WEB_PPF_ARTICLE .'publique-fragments-article-onglet-menu-panel.tpl';
-    public const WEB_PPFS_BDD_ENTETE        = self::WEB_PPF_ARTICLE .'publique-fragments-article-bdd-entete.tpl';
-    public const WEB_PPFA_BDD               = self::WEB_PPF_ARTICLE .'publique-fragments-article-library-bdd.tpl';
-    public const WEB_PPFA_LIB_COURSE        = self::WEB_PPF_ARTICLE .'publique-fragments-article-library-stage.tpl';
-    public const WEB_PPFA_LIB_COURSE_CATEG  = self::WEB_PPF_ARTICLE .'publique-fragments-article-library-stage-categorie.tpl';
-    public const WEB_PPFA_LIB_SKILL         = self::WEB_PPF_ARTICLE .'publique-fragments-article-library-skill.tpl';
-    public const WEB_PPFD_ALLDAY_EVENT      = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-allday-event.tpl';
-    public const WEB_PPFD_DOT_EVENT         = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-dot-event.tpl';
-    public const WEB_PPFD_INSET_EVENT       = self::WEB_PPF_DIV     .'publique-fragments-div-calendar-inset-event.tpl';
-    public const WEB_PPFD_PFL_ABILITY       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-ability.tpl';
-    public const WEB_PPFD_PFL_LANGUAGE      = self::WEB_PPF_DIV     .'publique-fragments-div-profile-language.tpl';
-    public const WEB_PPFD_PFL_SKILL         = self::WEB_PPF_DIV     .'publique-fragments-div-profile-skill.tpl';
-    public const WEB_PPFD_PFL_ID_GRADE      = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-grade.tpl';
-    public const WEB_PPFD_PFL_ID_NAME       = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-name.tpl';
-    public const WEB_PPFD_PFL_ID_PHYSIQUE   = self::WEB_PPF_DIV     .'publique-fragments-div-profile-identity-physique.tpl';
-    public const WEB_PPFF_LIBRARY_INDEX     = self::WEB_PPF_FORM    .'publique-fragments-form-library-index.tpl';
-    public const WEB_PPFS_CALENDAR          = self::WEB_PPF_SECTION .'publique-fragments-section-calendar.tpl';
-    public const WEB_PPFS_CAL_DAY           = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-day.tpl';
-    public const WEB_PPFS_CAL_MONTH         = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-month.tpl';
-    public const WEB_PPFS_CAL_WEEK          = self::WEB_PPF_SECTION .'publique-fragments-section-calendar-week.tpl';
-    public const WEB_PPFS_CONFIG            = self::WEB_PPF_SECTION .'publique-fragments-section-config.tpl';
-    public const WEB_PPFS_CONNEX_PANEL      = self::WEB_PPF_SECTION .'publique-fragments-section-connexion-panel.tpl';
-    public const WEB_PPFS_CONTENT_FOOTER    = self::WEB_PPF_SECTION .'publique-fragments-section-content-footer.tpl';
-    public const WEB_PPFS_CONTENT_HEADER    = self::WEB_PPF_SECTION .'publique-fragments-section-content-header.tpl';
-    public const WEB_PPFS_CONTENT_NAVBAR    = self::WEB_PPF_SECTION .'publique-fragments-section-content-navigation-bar.tpl';
-    public const WEB_PPFS_LIB_COURSES       = self::WEB_PPF_SECTION .'publique-fragments-section-library-courses.tpl';
-    public const WEB_PPFS_LIB_SKILLS        = self::WEB_PPF_SECTION .'publique-fragments-section-library-skills.tpl';
-    public const WEB_PPFS_ONGLET            = self::WEB_PPF_SECTION .'publique-fragments-section-onglet.tpl';
-    public const WEB_PPFS_ONGLET_LIST       = self::WEB_PPF_SECTION .'publique-fragments-section-onglet-list.tpl';
-    public const WEB_PPFS_PFL_ABILITIES     = self::WEB_PPF_SECTION .'publique-fragments-section-profile-abilities.tpl';
-    public const WEB_PPFS_PFL_IDENTITY      = self::WEB_PPF_SECTION .'publique-fragments-section-profile-identity.tpl';
-    public const WEB_PPFS_PFL_SKILLS        = self::WEB_PPF_SECTION .'publique-fragments-section-profile-skills.tpl';
-    public const WEB_PPFS_TCHAT             = self::WEB_PPF_SECTION .'publique-fragments-section-tchat.tpl';
+
+    public const PF                         = 'publique-fragments-';
+    public const WEB_PPF_SIDEBAR            = self::WEB_PP_FRAGMENTS.self::PF.'sidebar.tpl';
+    public const WEB_PPFS_ONGLET_MENU_PANEL = self::WEB_PPF_ARTICLE .self::PF.'article-onglet-menu-panel.tpl';
+    public const WEB_PPFS_BDD_ENTETE        = self::WEB_PPF_ARTICLE .self::PF.'article-bdd-entete.tpl';
+    public const WEB_PPFA_BDD               = self::WEB_PPF_ARTICLE .self::PF.'article-library-bdd.tpl';
+    public const WEB_PPFA_LIB_COURSE        = self::WEB_PPF_ARTICLE .self::PF.'article-library-stage.tpl';
+    public const WEB_PPFA_LIB_COURSE_CATEG  = self::WEB_PPF_ARTICLE .self::PF.'article-library-stage-categorie.tpl';
+    public const WEB_PPFA_LIB_SKILL         = self::WEB_PPF_ARTICLE .self::PF.'article-library-skill.tpl';
+    public const WEB_PPFD_ALLDAY_EVENT      = self::WEB_PPF_DIV     .self::PF.'div-calendar-allday-event.tpl';
+    public const WEB_PPFD_BDD_CAL_DETAIL    = self::WEB_PPF_DIV     .self::PF.'div-bdd-cal-detail.tpl';
+    public const WEB_PPFD_BDD_CAL_GUY       = self::WEB_PPF_DIV     .self::PF.'div-bdd-cal-guy.tpl';
+    public const WEB_PPFD_BDD_CAL_LIST      = self::WEB_PPF_DIV     .self::PF.'div-bdd-cal-list.tpl';
+    public const WEB_PPFD_DOT_EVENT         = self::WEB_PPF_DIV     .self::PF.'div-calendar-dot-event.tpl';
+    public const WEB_PPFD_INSET_EVENT       = self::WEB_PPF_DIV     .self::PF.'div-calendar-inset-event.tpl';
+    public const WEB_PPFD_PFL_ABILITY       = self::WEB_PPF_DIV     .self::PF.'div-profile-ability.tpl';
+    public const WEB_PPFD_PFL_LANGUAGE      = self::WEB_PPF_DIV     .self::PF.'div-profile-language.tpl';
+    public const WEB_PPFD_PFL_SKILL         = self::WEB_PPF_DIV     .self::PF.'div-profile-skill.tpl';
+    public const WEB_PPFD_PFL_ID_GRADE      = self::WEB_PPF_DIV     .self::PF.'div-profile-identity-grade.tpl';
+    public const WEB_PPFD_PFL_ID_NAME       = self::WEB_PPF_DIV     .self::PF.'div-profile-identity-name.tpl';
+    public const WEB_PPFD_PFL_ID_PHYSIQUE   = self::WEB_PPF_DIV     .self::PF.'div-profile-identity-physique.tpl';
+    public const WEB_PPFF_BDD_SEARCH        = self::WEB_PPF_FORM    .self::PF.'form-bdd-search.tpl';
+    public const WEB_PPFF_LIBRARY_INDEX     = self::WEB_PPF_FORM    .self::PF.'form-library-index.tpl';
+    public const WEB_PPFS_BDD_RESULT        = self::WEB_PPF_SECTION .self::PF.'section-bdd-result.tpl';
+    public const WEB_PPFS_CALENDAR          = self::WEB_PPF_SECTION .self::PF.'section-calendar.tpl';
+    public const WEB_PPFS_CAL_DAY           = self::WEB_PPF_SECTION .self::PF.'section-calendar-day.tpl';
+    public const WEB_PPFS_CAL_MONTH         = self::WEB_PPF_SECTION .self::PF.'section-calendar-month.tpl';
+    public const WEB_PPFS_CAL_WEEK          = self::WEB_PPF_SECTION .self::PF.'section-calendar-week.tpl';
+    public const WEB_PPFS_CONFIG            = self::WEB_PPF_SECTION .self::PF.'section-config.tpl';
+    public const WEB_PPFS_CONNEX_PANEL      = self::WEB_PPF_SECTION .self::PF.'section-connexion-panel.tpl';
+    public const WEB_PPFS_CONTENT_FOOTER    = self::WEB_PPF_SECTION .self::PF.'section-content-footer.tpl';
+    public const WEB_PPFS_CONTENT_HEADER    = self::WEB_PPF_SECTION .self::PF.'section-content-header.tpl';
+    public const WEB_PPFS_CONTENT_NAVBAR    = self::WEB_PPF_SECTION .self::PF.'section-content-navigation-bar.tpl';
+    public const WEB_PPFS_LIB_COURSES       = self::WEB_PPF_SECTION .self::PF.'section-library-courses.tpl';
+    public const WEB_PPFS_LIB_SKILLS        = self::WEB_PPF_SECTION .self::PF.'section-library-skills.tpl';
+    public const WEB_PPFS_ONGLET            = self::WEB_PPF_SECTION .self::PF.'section-onglet.tpl';
+    public const WEB_PPFS_ONGLET_LIST       = self::WEB_PPF_SECTION .self::PF.'section-onglet-list.tpl';
+    public const WEB_PPFS_PFL_ABILITIES     = self::WEB_PPF_SECTION .self::PF.'section-profile-abilities.tpl';
+    public const WEB_PPFS_PFL_IDENTITY      = self::WEB_PPF_SECTION .self::PF.'section-profile-identity.tpl';
+    public const WEB_PPFS_PFL_SKILLS        = self::WEB_PPF_SECTION .self::PF.'section-profile-skills.tpl';
+    public const WEB_PPFS_TCHAT             = self::WEB_PPF_SECTION .self::PF.'section-tchat.tpl';
     
 }

@@ -16,7 +16,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version v1.23.08.12
+ * @version v1.23.11.25
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -32,7 +32,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * Class Constructor
-     * @since 1.22.10.18
+     * @since v1.22.10.18
      * @version v1.23.06.25
      */
     public function __construct()
@@ -62,7 +62,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since v1.23.06.19
-     * @version v1.23.07.02
+     * @version v1.23.11.25
      */
     public function initSidebar(): void
     {
@@ -71,47 +71,17 @@ class WpPageAdminBean extends WpPageBean
                 self::FIELD_ICON  => self::I_DESKTOP,
                 self::FIELD_LABEL => self::LABEL_BUREAU,
             ],
-//            self::ONGLET_LIBRARY => [self::FIELD_ICON  => 'book', self::FIELD_LABEL => self::LABEL_LIBRARY]
         ];
-/*
-            self::ONGLET_USERS => [
-                self::FIELD_ICON  => self::I_USERS,
-                self::FIELD_LABEL => 'COPS',
-            ],
-    if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
+
+        if (isset($_SESSION[self::FIELD_MATRICULE]) && $_SESSION[self::FIELD_MATRICULE]!='Guest') {
             $this->arrSidebarContentNonGuest = [
-                self::ONGLET_INBOX => [self::FIELD_ICON  => 'envelope', self::FIELD_LABEL => self::LABEL_MESSAGERIE],
-                self::ONGLET_CALENDAR => [self::FIELD_ICON   => 'calendar-days', self::FIELD_LABEL  => 'Calendrier']
+                self::ONGLET_BDD => [
+                    self::FIELD_ICON  => self::I_DATABASE,
+                    self::FIELD_LABEL => self::LABEL_DATABASES,
+                ],
             ];
             $this->arrSidebarContent = array_merge($this->arrSidebarContent, $this->arrSidebarContentNonGuest);
-            /*
-            $this->arrSidebarContent = array(
-                self::ONGLET_AUTOPSIE => array(
-                    self::FIELD_ICON  => 'box-archive',
-                    self::FIELD_LABEL => 'Autopsies',
-                ),
-                self::ONGLET_ENQUETE => array(
-                    self::FIELD_ICON  => self::I_FILE_CATEGORY,
-                    self::FIELD_LABEL => 'Enquêtes',
-                ),
-
-                self::ONGLET_ARCHIVE => array(
-                    self::FIELD_ICON  => 'box-archive',
-                    self::FIELD_LABEL => 'Archives',
-                ),
-                'player' => array(
-                    self::FIELD_ICON   => 'user',
-                    self::FIELD_LABEL  => 'Personnage',
-                    self::CST_CHILDREN => array(
-                        'player-carac'  => self::LABEL_ABILITIES,
-                        'player-comps'  => self::LABEL_SKILLS,
-                        'player-story'  => self::LABEL_BACKGROUND,
-                    ),
-                ),
-            );
-            * /
         }
-*/
     }
 
     /**
@@ -193,9 +163,9 @@ class WpPageAdminBean extends WpPageBean
             $pContent .= ($hasChildren ? HtmlUtils::getIcon(self::I_ANGLE_LEFT, 'right') : '');
         
             // Construction du lien
-            $aContent  = HtmlUtils::getIcon($arrOnglet[self::FIELD_ICON], 'nav-icon');
+            $aContent  = HtmlUtils::getIcon($arrOnglet[self::FIELD_ICON], self::NAV_ICON);
             $aContent .= $this->getBalise(self::TAG_P, $pContent);
-            $strClasse = 'nav-link'.($curOnglet ? ' '.self::CST_ACTIVE : '');
+            $strClasse = self::NAV_LINK.($curOnglet ? ' '.self::CST_ACTIVE : '');
             unset($this->urlAttributes[self::CST_SUBONGLET]);
             $urlAttributes = array_merge($this->urlAttributes, [self::CST_ONGLET => $strOnglet]);
             $superLiContent = HtmlUtils::getLink($aContent, UrlUtils::getPublicUrl($urlAttributes), $strClasse);
@@ -203,12 +173,12 @@ class WpPageAdminBean extends WpPageBean
             // S'il a des enfants, on enrichit
             if ($hasChildren) {
                 $ulContent = $this->getSideBarChildren($arrOnglet, $strOnglet);
-                $liAttributes = [self::ATTR_CLASS=>'nav nav-treeview'];
+                $liAttributes = [self::ATTR_CLASS=>self::NAV.' '.self::NAV_TREEVIEW];
                 $superLiContent .= $this->getBalise(self::TAG_UL, $ulContent, $liAttributes);
             }
         
             // Construction de l'élément de la liste
-            $liAttributes = [self::ATTR_CLASS=>'nav-item'.($curOnglet ? ' menu-open' : '')];
+            $liAttributes = [self::ATTR_CLASS=>self::NAV_ITEM.($curOnglet ? ' menu-open' : '')];
             $sidebarContent .= $this->getBalise(self::TAG_LI, $superLiContent, $liAttributes);
         }
         
@@ -265,66 +235,11 @@ class WpPageAdminBean extends WpPageBean
 
         $attributes = [$strLis];
         return $this->getRender($urlTemplate, $attributes);
-
-        /*
-        // On détermine le nombre de messages non lus dans la boite de réception
-        $nbMailsNonLus = 0;
-//        $nbMailsNonLus = $this->CopsMailServices->getNombreMailsNonLus();
-
-        $attributes = [
-            // Nom Prénom de la personne logguée
-            '',
-            //$this->CopsPlayer->getFullName(),
-            // Si présence de notifications, le badge
-            // <span class="badge badge-warning navbar-badge">0</span>
-            '',
-            // La liste des notifications
-            // Ou un message adapté s'il n'y en a pas.
-            '<span class="dropdown-item dropdown-header">Aucune nouvelle Notification</span>',
-            // Si présence d'un nouveau mail, le badge
-            ($nbMailsNonLus!=0 ? '<span class="badge badge-success navbar-badge">'.$nbMailsNonLus.'</span>' : ''),
-            // Si Guest, on cache des trucs.
-            ($_SESSION[self::FIELD_MATRICULE]=='Guest' ? ' style="display:none !important;"' : ''),
-        ];
-
-      <li class="nav-item d-none d-sm-inline-block"%5$s>
-        <a class="nav-link" href="/admin?onglet=inbox"><i class="fa-solid fa-envelope"></i>%4$s</a>
-      </li>
-      <!-- /.nav-item -->
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item"%5$s>
-        <a class="nav-link" data-toggle="dropdown" href="#"><i class="fa-solid fa-bell"></i>%2$s</a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          %3$s
-          <div class="dropdown-divider"></div>
-          <a href="/admin?onglet=inbox&subOnglet=alert" class="dropdown-item dropdown-footer">Toutes les Notifications</a>
-        </div>
-      </li>
-      <!-- /.nav-item -->
-
-        */
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * @since 1.22.10.18
-     * @version v1.23.08.12
+     * @version v1.23.11.25
      */
     public function getContentPage(): string
     {
@@ -353,8 +268,9 @@ class WpPageAdminBean extends WpPageBean
             $strOnglet = SessionUtils::fromGet(self::CST_ONGLET);
             $objBean = match ($strOnglet) {
                 self::ONGLET_PROFILE => WpPageAdminProfileBean::getStaticWpPageBean($this->slugSubOnglet),
-                self::ONGLET_TCHAT => new WpPageAdminTchatBean(),
-                self::ONGLET_CONFIG => new WpPageAdminConfigBean(),
+                self::ONGLET_TCHAT   => new WpPageAdminTchatBean(),
+                self::ONGLET_CONFIG  => new WpPageAdminConfigBean(),
+                self::ONGLET_BDD     => WpPageAdminDatabaseBean::getStaticWpPageBean($this->slugSubOnglet),
 
 
                 self::ONGLET_CALENDAR => WpPageAdminCalendarBean::getStaticWpPageBean($this->slugSubOnglet),
@@ -437,79 +353,10 @@ class WpPageAdminBean extends WpPageBean
      */
     public function getOngletContent(): string
     {
-        /*
-        $nbDes = SessionUtils::fromGet('nbDes');
-        $seuil = SessionUtils::fromGet('seuil');
-        $nbBlueDice = SessionUtils::fromGet('nbBlue');
-        if ($nbBlueDice=='') {
-            $nbBlueDice = 0;
-        }
-        $nbBlackDice = SessionUtils::fromGet('nbBlack');
-        if ($nbBlackDice=='') {
-            $nbBlackDice = 0;
-        }
-        $diceType = SessionUtils::fromGet('diceType', '');
-        $blnExplosion = $seuil!=10;
-        $nbSucces = 0;
-        $nbCritics = 0;
-
-        $strResultat = '';
-        for ($i=1; $i<=$nbDes; $i++) {
-            if ($i<=$nbBlueDice) {
-                $color = 'b';
-            } elseif ($i>$nbDes-$nbBlackDice) {
-                $color = 'n';
-            } else {
-                $color = '';
-            }
-            $strResultat .= DiceUtils::rollSkill($seuil, $nbSucces, $nbCritics, $seuil!=10, $color);
-            if ($i<$nbDes) {
-                $strResultat .= ', ';
-            }
-        }
-
-        $strNbSucces = '<span class="'.($nbSucces>0 ? 'deRed' : '').'">'.$nbSucces.'</span> succès';
-        $strNbEchecs = '<span class="'.($nbCritics>0 ? '' : '').'">'.$nbCritics.'</span> échecs critiques';
-        $attributes = [
-            '<span class="jetDeDes">Guillermo a lancé ['.$nbDes.'D'.$seuil.'+] et a obtenu '.$strNbSucces.' et '.$strNbEchecs.' ('.$strResultat.')</span>',
-        ];
-        */
         return 'WIP';
     }
      
   
-    /**
-     * @since 1.22.10.18
-     * @version 1.22.10.18
-     *
-    public function getFolderBlock()
-    {
-        $urlTemplate = 'web/pages/public/fragments/public-fragments-li-menu-folder.php';
-        /////////////////////////////////////////
-        // Construction du panneau de gauche
-        $strLeftPanel = '';
-        foreach ($this->arrSubOnglets as $slug => $subOnglet) {
-            // On exclu les sous onglets sans icones
-            if (!isset($subOnglet[self::FIELD_ICON])) {
-                continue;
-            }
-            // On construit l'entrée de l'onglet/
-            $attributes = array(
-                // Menu sélectionné ou pas ?
-                ($slug==$this->slugSubOnglet ? ' '.self::CST_ACTIVE : ''),
-                // L'url du folder
-                $this->getSubOngletUrl($slug),
-                // L'icône
-                $subOnglet[self::FIELD_ICON],
-                // Le libellé
-                $subOnglet[self::FIELD_LABEL],
-            );
-            $strLeftPanel .= $this->getRender($urlTemplate, $attributes);
-        }
-        /////////////////////////////////////////
-        return $strLeftPanel;
-    }
-        
     /**
      * @return string
      * @since 1.22.10.28

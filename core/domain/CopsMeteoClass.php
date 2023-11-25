@@ -11,7 +11,7 @@ use core\bean\CopsMeteoBean;
  * Classe CopsMeteoClass
  * @author Hugues
  * @since v1.23.04.30
- * @version v1.23.08.12
+ * @version v1.23.11.25
  */
 class CopsMeteoClass extends LocalDomainClass
 {
@@ -44,8 +44,8 @@ class CopsMeteoClass extends LocalDomainClass
   //////////////////////////////////////////////////
   /**
    * @param array $attributes
-   * @version 1.22.09.05
    * @since 1.22.09.05
+   * @version v1.23.11.25
    */
     public function __construct($attributes=[])
     {
@@ -53,7 +53,7 @@ class CopsMeteoClass extends LocalDomainClass
         $this->stringClass = 'core\domain\CopsMeteoClass';
 
         // Pattern des données issues du site web extérieur
-        $this->pattern = "/th>([0-9:]*).*title=\"([a-zA-Z\. ]*).*wt-([0-9]*).*>([0-9]*)&nbsp;°.*>(N\/A|No wind|[0-9]* km\/h)<.*comp sa([0-9]*)\".*>([0-9]*)%.*>(N\/A|([0-9]*) mbar).*>(N\/A|([0-9]*)&nbsp;km).*</";
+        $this->pattern = "/th>([0-9:]*).*title=\"([a-zA-Z\. ]*).*wt-([0-9]*).*>([0-9]*)&nbsp;°.*>(N\/A|No wind|[0-9]* km\/h)<.*comp sa([0-9]*)\".*>(N\/A|([0-9]*)%).*>(N\/A|([0-9]*) mbar).*>(N\/A|([0-9]*)&nbsp;km).*</";
     }
 
   /**

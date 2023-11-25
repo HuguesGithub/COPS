@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * CopsBean
  * @author Hugues
  * @since 1.22.09.23
- * @version v1.23.07.29
+ * @version v1.23.11.25
  */
 class CopsBean extends UtilitiesBean
 {
@@ -20,7 +20,7 @@ class CopsBean extends UtilitiesBean
 
     /**
      * @since v1.23.07.29
-     * @version v1.23.07.29
+     * @version v1.23.11.25
      */
     public static function getBuiltTableHeader(array $headerElement, array &$queryArg=[]): TableauTHeadHtmlBean
     {
@@ -28,7 +28,7 @@ class CopsBean extends UtilitiesBean
         // Définition du Header du tableau
         $objRow = new TableauRowHtmlBean();
         foreach ($headerElement as $element) {
-            $classe = $element['classe'] ?? self::CSS_COL;
+            $classe = $element[self::ATTR_CLASS] ?? self::CSS_COL;
             if (isset($element['abbr'])) {
                 $tag = HtmlUtils::getBalise('abbr', $element['label'], [self::ATTR_TITLE=>$element['abbr']]);
             } else {
