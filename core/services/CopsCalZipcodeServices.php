@@ -44,12 +44,14 @@ class CopsCalZipcodeServices extends LocalServices
 
     /**
      * @since v1.23.11.25
+     * @version v1.23.12.02
      */
     public function getCalZipcodes(array $attributes=[]): array
     {
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
             $attributes[self::FIELD_ZIP] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_PRIMARY_CITY] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::SQL_ORDER_BY] ?? self::FIELD_ZIP,
             $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
             $attributes[self::SQL_LIMIT] ?? 99999,
@@ -69,4 +71,9 @@ class CopsCalZipcodeServices extends LocalServices
     public function updateCalZipcode(CopsCalZipcodeClass $obj): void
     { $this->objDao->updateCalZipcode($obj); }
 
+    /**
+     * @since v1.23.12.02
+     */
+    public function getDistinctFieldValues(string $field): array
+    { return $this->objDao->getDistinctFieldValues(new CopsCalZipcodeClass(), [$field]); }
 }

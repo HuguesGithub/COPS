@@ -43,5 +43,4 @@ class LocalServices extends GlobalServices
             $orderBy = $attributes[self::SQL_ORDER_BY];
         }
     }
-
 }

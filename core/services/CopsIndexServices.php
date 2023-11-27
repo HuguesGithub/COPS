@@ -11,7 +11,7 @@ use core\domain\CopsIndexTomeClass;
  * Classe CopsIndexServices
  * @author Hugues
  * @since 1.22.10.21
- * @version v1.23.08.12
+ * @version v1.23.12.02
  */
 class CopsIndexServices extends LocalServices
 {
@@ -45,14 +45,12 @@ class CopsIndexServices extends LocalServices
     /**
      * @param array $attributes [E|S]
      * @since 1.22.10.21
-     * @version v1.23.08.12
+     * @version v1.23.12.02
      */
     public function initFilters(&$attributes=[])
     {
         if (!isset($attributes[self::FIELD_NATURE_IDX_ID])) {
             $attributes[self::FIELD_NATURE_IDX_ID] = self::SQL_JOKER_SEARCH;
-        } else {
-            // TODO
         }
         if (!isset($attributes[self::SQL_ORDER_BY])) {
             $attributes[self::SQL_ORDER_BY] = self::FIELD_NOM_IDX;

@@ -12,6 +12,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminDatabaseResultBean
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class WpPageAdminDatabaseResultBean extends WpPageAdminDatabaseBean
 {
@@ -63,7 +64,7 @@ class WpPageAdminDatabaseResultBean extends WpPageAdminDatabaseBean
             $phoneBlock = '';
         } else {
             $detailBlock = $this->getDetailBlock();
-            $addressBlock = $this->getAddressBlock();
+            $addressBlock = $this->obj->getBean()->getAddressBlock();
             $phoneBlock = 'TODO';
         }
 
@@ -77,25 +78,6 @@ class WpPageAdminDatabaseResultBean extends WpPageAdminDatabaseBean
             $phoneBlock,
         ];
         return $this->getRender($urlTemplate, $attributes);
-    }
-
-    /**
-     * @since v1.23.11.25
-     */
-    public function getAddressBlock(): string
-    {
-        $objs = $this->obj->getCalGuyAddresses();
-        if (empty($objs)) {
-            $str = '<ul><li>Aucune adresse recensée.</li></ul>';
-        } else {
-            $str  = '<ul>';
-            foreach ($objs as $obj) {
-                $str .= $obj->getBean()->getListAddress();
-            }
-            $str .= '</ul>';
-
-        }
-        return $str;
     }
 
     /**

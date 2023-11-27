@@ -1,37 +1,35 @@
 <?php
 namespace core\daoimpl;
 
-use core\domain\CopsCalZipcodeClass;
+use core\domain\CopsCalPhoneClass;
 
 /**
- * Classe CopsCalZipcodeDaoImpl
+ * Classe CopsCalPhoneDaoImpl
  * @author Hugues
- * @since v1.23.11.25
- * @version v1.23.12.02
+ * @since v1.23.12.02
  */
-class CopsCalZipcodeDaoImpl extends LocalDaoImpl
+class CopsCalPhoneDaoImpl extends LocalDaoImpl
 {
     private $dbTable;
     private $dbFields;
 
     /**
      * Class constructor
-     * @since v1.23.11.25
+     * @since v1.23.12.02
      */
     public function __construct()
     {
         ////////////////////////////////////
         // Définition des variables spécifiques
-        $this->dbTable   = "wp_7_cops_cal_zipcode";
+        $this->dbTable   = "wp_7_cops_cal_phone";
         ////////////////////////////////////
 
         ////////////////////////////////////
         // Définition des champs spécifiques
         $this->dbFields = [
-            self::FIELD_ZIP,
-            self::FIELD_TYPE,
-            self::FIELD_DECOMMISSIONED,
-            self::FIELD_PRIMARY_CITY,
+            self::FIELD_ID,
+            self::FIELD_PHONE_ID,
+            self::FIELD_CITY_NAME,
         ];
         ////////////////////////////////////
 
@@ -43,25 +41,24 @@ class CopsCalZipcodeDaoImpl extends LocalDaoImpl
     ////////////////////////////////////
 
     ////////////////////////////////////
-    // wp_7_cops_cal_zipcode
+    // wp_7_cops_cal_phone
     ////////////////////////////////////
 
     /**
-     * @since v1.23.11.25
-     * @version v1.23.12.02
+     * @since v1.23.12.02
      */
-    public function getCalZipcodes(array $attributes): array
+    public function getCalPhones(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
-        $request .= " WHERE zip LIKE '%s' AND primaryCity LIKE '%s' ";
+        $request .= " WHERE id LIKE '%s' AND cityName LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
-        return $this->selectListDaoImpl(new CopsCalZipcodeClass(), $request, $attributes);
+        return $this->selectListDaoImpl(new CopsCalPhoneClass(), $request, $attributes);
     }
 
     /**
-     * @since v1.23.11.25
+     * @since v1.23.12.02
      */
-    public function insertCalZipcode(CopsCalZipcodeClass &$obj): void
+    public function insertCalPhone(CopsCalPhoneClass &$obj): void
     {
         // On récupère les champs
         $dbFields = $this->dbFields;
@@ -69,13 +66,13 @@ class CopsCalZipcodeDaoImpl extends LocalDaoImpl
         // On défini la requête d'insertion
         $request = $this->getInsertRequest($dbFields, $this->dbTable);
         // On insère
-        $this->insertDaoImpl($obj, $dbFields, $request, self::FIELD_ZIP);
+        $this->insertDaoImpl($obj, $dbFields, $request, self::FIELD_ID);
     }
 
     /**
-     * @since v1.23.11.25
+     * @since v1.23.12.02
      */
-    public function updateCalZipcode(CopsCalZipcodeClass $obj)
+    public function updateCalPhone(CopsCalPhoneClass $obj)
     {
         // On récupère les champs
         $dbFields = $this->dbFields;

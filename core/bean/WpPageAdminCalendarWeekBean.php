@@ -144,7 +144,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $tdAttributes = [
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-timegrid-col fc-day '.$strClass,
-            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
@@ -204,7 +204,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $tdAttributes = [
             'role' => 'gridcell',
             self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
-            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $tdContent, $tdAttributes);
     }
@@ -241,7 +241,7 @@ class WpPageAdminCalendarWeekBean extends WpPageAdminCalendarBean
         $thAttributes = [
             'role' => 'columnheader',
             self::ATTR_CLASS => 'fc-col-header-cell fc-day '.$strClass,
-            'data-date' => date(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => date(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return HtmlUtils::getTh($thContent, $thAttributes);
     }

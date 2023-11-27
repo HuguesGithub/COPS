@@ -58,9 +58,7 @@ class CopsTchatBean extends CopsBean
         $strMsg .= ' : '.$this->obj->getField(self::FIELD_TEXTE);
         //////////////////////////////////////////////////////
 
-        $attributes = [
-            'data-refreshed' => $this->obj->getField(self::FIELD_TIMESTAMP)
-        ];
+        $attributes = ['data-refreshed' => $this->obj->getField(self::FIELD_TIMESTAMP)];
         return HtmlUtils::getDiv($strMsg, $attributes);
     }
 

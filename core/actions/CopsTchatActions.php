@@ -14,7 +14,7 @@ use core\utils\SessionUtils;
  * CopsTchatActions
  * @author Hugues
  * @since v1.23.08.05
- * @version v1.23.08.12
+ * @version v1.23.12.02
  */
 class CopsTchatActions extends LocalActions
 {
@@ -29,20 +29,20 @@ class CopsTchatActions extends LocalActions
         $ajaxAction = SessionUtils::fromPost(self::AJAX_ACTION);
         $obj = new CopsTchatActions();
         switch ($ajaxAction) {
-            case 'tchat' :
+            case self::AJAX_TCHAT :
                 $arrReturned = [
                     $obj->sendTchat()
                 ];
                 $returned = '{"refresh": '.json_encode($arrReturned, JSON_THROW_ON_ERROR).'}';
                 break;
-            case 'refresh' :
+            case self::AJAX_REFRESH :
                 $arrReturned = [
                     $obj->refreshTchatContent(),
                     $obj->refreshTchatContact()
                 ];
                 $returned = '{"refresh": '.json_encode($arrReturned, JSON_THROW_ON_ERROR).'}';
                 break;
-            case 'checkNotif' :
+            case self::AJAX_CHECK_NOTIF :
                 $returned = $obj->checkNotif();
                 break;
             default :
@@ -113,7 +113,7 @@ class CopsTchatActions extends LocalActions
         if ($strContent=='') {
             return [
                 "target" => "toastContent",
-                "content" => $this->getToastContent('info', 'Information', 'Aucun nouveau message à afficher')
+                "content" => $this->getToastContent(self::NOTIF_INFO, 'Information', 'Aucun nouveau message à afficher')
             ];
         } else {
             return [
@@ -199,7 +199,7 @@ class CopsTchatActions extends LocalActions
 
     /**
      * @since v1.23.08.05
-     * @version v1.23.08.12
+     * @version v1.23.12.02
      */
     private function dealWithSkillRoll(array $arrCmd): array
     {
@@ -254,7 +254,8 @@ class CopsTchatActions extends LocalActions
                 self::FIELD_TEXTE => $msg,
             ];
         } else {
-            $msg = '<span class="badge badge-danger">Erreur dans la saisie de test de compétences. Format attendu : /roll xCy [-b] [-n].</span>';
+            $sAttributes = [self::ATTR_CLASS=>'badge badge-danger'];
+            $msg = HtmlUtils::getBalise(self::TAG_SPAN, self::LABEL_ERR_SAISIE_SKILL, $sAttributes);
             $attributes = [
                 self::FIELD_SALON_ID => 1,
                 self::FIELD_TO_PID => $objPlayer->getField(),

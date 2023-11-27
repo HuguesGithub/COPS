@@ -9,7 +9,7 @@ use core\utils\HtmlUtils;
  * CopsIndexReferenceBean
  * @author Hugues
  * @since 1.23.02.18
- * @version v1.23.04.28
+ * @version v1.23.12.02
  */
 class CopsIndexReferenceBean extends CopsBean
 {
@@ -28,7 +28,7 @@ class CopsIndexReferenceBean extends CopsBean
 
     /**
      * @since 1.22.10.21
-     * @version v1.23.05.28
+     * @version v1.23.12.02
      */
     public function getCopsIndexReferenceRow(string $url, bool $blnShowColNature, bool $hasCopsEditor=false): string
     {
@@ -79,7 +79,7 @@ class CopsIndexReferenceBean extends CopsBean
         
         // Lien d'édition
         if ($hasCopsEditor) {
-            $aContent = HtmlUtils::getIcon('square-pen');
+            $aContent = HtmlUtils::getIcon(self::I_SQUARE_PEN);
             $buttonContent = HtmlUtils::getLink($aContent, $url, self::CST_TEXT_WHITE);
             $buttonAttributes = [
                 self::ATTR_TITLE => self::LABEL_EDIT_ENTRY
@@ -102,7 +102,7 @@ class CopsIndexReferenceBean extends CopsBean
     {
         // \p{Lu} correspond à A-Z
         $strPattern = '/([\p{Lu}]*)([0-9\.\/]*)/';
-        $label = $this->obj->getField('reference');
+        $label = $this->obj->getField(self::FIELD_REFERENCE);
         if (empty($label)) {
             // Soit, le champ est vide parce qu'il n'y aucune référence.
             // Soit il faut récupérer les informations dans cops_index.

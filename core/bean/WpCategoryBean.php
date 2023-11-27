@@ -6,7 +6,7 @@ use core\utils\HtmlUtils;
 /**
  * WpCategoryBean
  * @since 1.22.10.20
- * @version v1.23.05.28
+ * @version v1.23.12.02
  */
 class WpCategoryBean extends UtilitiesBean
 {
@@ -26,15 +26,15 @@ class WpCategoryBean extends UtilitiesBean
     
     /**
      * @since 1.22.10.20
-     * @version v1.23.05.28
+     * @version v1.23.12.02
      */
     public function getCategoryNavItem(string $url, string $icon, bool $blnSelected=false): string
     {
         $strIcon = HtmlUtils::getIcon($icon);
-        $label   = $this->wpCategory->getField('name');
+        $label   = $this->wpCategory->getField(self::FIELD_NAME);
         $aContent = $strIcon.self::CST_NBSP.$label;
         
-        $url    .= '&amp;'.self::CST_CAT_SLUG.'='.$this->wpCategory->getField('slug');
+        $url    .= '&amp;'.self::CST_CAT_SLUG.'='.$this->wpCategory->getField(self::FIELD_SLUG);
         $lien    = HtmlUtils::getLink($aContent, $url, 'nav-link text-white');
         
         $liAttributes = [self::ATTR_CLASS => 'nav-item'.($blnSelected ? ' '.self::CST_ACTIVE : '')];

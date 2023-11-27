@@ -7,7 +7,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminAutopsieBean
  * @author Hugues
  * @since 1.22.10.08
- * @version v1.23.05.28
+ * @version v1.23.12.02
  */
 class WpPageAdminAutopsieBean extends WpPageAdminBean
 {
@@ -19,7 +19,7 @@ class WpPageAdminAutopsieBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Construction du menu
         $this->arrSubOnglets = [
-            self::CST_AUTOPSIE_ARCHIVE => [self::FIELD_ICON => 'box-archive', self::FIELD_LABEL => 'Archive'],
+            self::CST_AUTOPSIE_ARCHIVE => [self::FIELD_ICON => self::I_BOX_ARCHIVE, self::FIELD_LABEL => 'Archive'],
             self::CST_ENQUETE_READ => [self::FIELD_LABEL => 'Lire'],
             self::CST_ENQUETE_WRITE => [self::FIELD_LABEL => 'Rédiger']
         ];

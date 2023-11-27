@@ -13,7 +13,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminLibraryBean
  * @author Hugues
  * @since 1.22.05.30
- * @version v1.23.05.28
+ * @version v1.23.12.02
  */
 class WpPageAdminLibraryBean extends WpPageAdminBean
 {
@@ -40,18 +40,18 @@ class WpPageAdminLibraryBean extends WpPageAdminBean
             $this->objWpCategory = new WpCategoryClass();
             $this->objCopsIndexNature = new CopsIndexNatureClass();
         } else {
-            $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
-            $name = $this->objWpCategory->getField('name');
+            $this->objWpCategory = $this->wpCategoryServices->getCategoryByField(self::FIELD_SLUG, $this->catSlug);
+            $name = $this->objWpCategory->getField(self::FIELD_NAME);
             $this->objCopsIndexNature = $this->objCopsIndexServices->getCopsIndexNatureByName($name);
         }
         
         /////////////////////////////////////////
         // Construction du menu
         $this->arrSubOnglets = [
-            self::CST_LIB_INDEX => [self::FIELD_ICON => 'book', self::FIELD_LABEL => self::LABEL_INDEX],
+            self::CST_LIB_INDEX => [self::FIELD_ICON => self::I_BOOK, self::FIELD_LABEL => self::LABEL_INDEX],
             self::CST_LIB_BDD   => [self::FIELD_ICON => self::I_DATABASE, self::FIELD_LABEL => self::LABEL_DATABASES],
-            self::CST_LIB_SKILL => [self::FIELD_ICON => 'toolbox', self::FIELD_LABEL => self::LABEL_SKILLS],
-            self::CST_LIB_STAGE => [self::FIELD_ICON => 'file-lines', self::FIELD_LABEL => self::LABEL_COURSES],
+            self::CST_LIB_SKILL => [self::FIELD_ICON => self::I_TOOLBOX, self::FIELD_LABEL => self::LABEL_SKILLS],
+            self::CST_LIB_STAGE => [self::FIELD_ICON => self::I_FILE_LINES, self::FIELD_LABEL => self::LABEL_COURSES],
             self::CST_LIB_COPS  => [self::FIELD_ICON => self::I_USERS, self::FIELD_LABEL => 'COPS']
         ];
         /////////////////////////////////////////

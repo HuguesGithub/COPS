@@ -18,8 +18,8 @@ class WpPageAdminProfileIdentityBean extends WpPageAdminProfileBean
         self::ATTR_TYPE  => 'text',
         self::ATTR_CLASS => 'form-control col-9 ajaxAction',
         self::ATTR_DATA  => [
-            self::ATTR_DATA_TRIGGER => 'change',
-            self::ATTR_DATA_AJAX    => 'saveData',
+            self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CHANGE,
+            self::ATTR_DATA_AJAX    => self::AJAX_SAVE_DATA,
         ],
     ];
 

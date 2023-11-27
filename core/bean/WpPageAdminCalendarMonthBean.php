@@ -140,7 +140,7 @@ class WpPageAdminCalendarMonthBean extends WpPageAdminCalendarBean
         
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-daygrid-day fc-day '.$strClass,
-            'data-date' => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
+            self::ATTR_DATA_DATE => DateUtils::getStrDate(self::FORMAT_DATE_YMD, $tsDisplay)
         ];
         return $this->getBalise(self::TAG_TD, $divContent, $tdAttributes);
     }

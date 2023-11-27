@@ -80,4 +80,11 @@ class CopsCalGuyServices extends LocalServices
     public function updateCalGuy(CopsCalGuyClass $obj): void
     { $this->objDao->updateCalGuy($obj); }
 
+
+    // Reprise de CopsRandomGuyServices
+
+    public function getTripletAdresse(array $attributes): array
+    {
+        return $this->objDao->getTripletAdresse($attributes);
+    }
 }

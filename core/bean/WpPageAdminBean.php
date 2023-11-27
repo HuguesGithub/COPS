@@ -16,7 +16,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminBean
  * @author Hugues
  * @since 1.22.10.18
- * @version v1.23.11.25
+ * @version v1.23.12.02
  */
 class WpPageAdminBean extends WpPageBean
 {
@@ -194,7 +194,7 @@ class WpPageAdminBean extends WpPageBean
 
     /**
      * @since 1.22.10.18
-     * @version v1.23.08.12
+     * @version v1.23.12.02
      */
     public function getNavigationBar()
     {
@@ -207,7 +207,7 @@ class WpPageAdminBean extends WpPageBean
             $objsTchat = $objTchatServices->getTchats([], 'now');
 
             // On peut accéder au Tchat et être prévenu s'il y a de nouveaux messages
-            $aContent = HtmlUtils::getIcon('comment');
+            $aContent = HtmlUtils::getIcon(self::I_COMMENT);
             if (!empty($objsTchat)) {
                 $aAttributes = [self::ATTR_CLASS => 'badge badge-warning navbar-badge'];
                 $aContent .= HtmlUtils::getBalise(self::TAG_SPAN, count($objsTchat), $aAttributes);
@@ -223,12 +223,12 @@ class WpPageAdminBean extends WpPageBean
             $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);
 
             // On peut accéder au profil du personnage
-            $aContent = HtmlUtils::getIcon('user');
+            $aContent = HtmlUtils::getIcon(self::I_USER);
             $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, self::CST_ONGLET=>self::ONGLET_PROFILE]);
             $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
             $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);
         }
-        $aContent = HtmlUtils::getIcon('right-from-bracket');
+        $aContent = HtmlUtils::getIcon(self::I_RIGHT_FROM_BRACKET);
         $url = UrlUtils::getPublicUrl([self::WP_PAGE=>self::PAGE_ADMIN, 'logout'=>'logout']);
         $liContent = HtmlUtils::getLink($aContent, $url, self::NAV_LINK);
         $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent, [self::ATTR_CLASS=>self::NAV_ITEM]);

@@ -1,7 +1,6 @@
 <?php
 namespace core\bean;
 
-use core\services\CopsRandomGuyServices;
 use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
@@ -9,6 +8,7 @@ use core\utils\UrlUtils;
  * CopsCalPhoneBean
  * @author Hugues
  * @since v1.23.10.14
+ * @version v1.23.12.02
  */
 class CopsCalPhoneBean extends CopsBean
 {

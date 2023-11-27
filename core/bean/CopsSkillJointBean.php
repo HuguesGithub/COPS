@@ -66,8 +66,8 @@ class CopsSkillJointBean extends UtilitiesBean
                 self::ATTR_CLASS => 'form-select p-0 border-0 ajaxAction',
                 self::ATTR_DATA => [
                     'objid' => $this->objCopsSkillJoint->getField(self::FIELD_ID),
-                    'trigger' => 'change',
-                    'ajax' => 'saveData',
+                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CHANGE,
+                    self::ATTR_DATA_AJAX    => self::AJAX_SAVE_DATA,
                 ]
             ];
             $strContentSpecialisation = '<option>Langues...</option>';

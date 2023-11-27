@@ -8,7 +8,7 @@ use core\utils\LogUtils;
  * Classe LocalDaoImpl
  * @author Hugues
  * @since 1.22.04.28
- * @version v1.23.08.12
+ * @version v1.23.12.02
  */
 class LocalDaoImpl extends GlobalDaoImpl
 {
@@ -56,6 +56,12 @@ class LocalDaoImpl extends GlobalDaoImpl
         $request .= " WHERE $fieldId = '%s';";
         return $request;
     }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function getDeleteRequest(string $tableName, string $fieldId): string
+    { return "DELETE FROM $tableName WHERE $fieldId = '%s';"; }
 
     /**
      * @since v1.23.05.26
@@ -133,6 +139,28 @@ class LocalDaoImpl extends GlobalDaoImpl
             LogUtils::logRequest($sql);
         }
         MySQLClass::wpdbQuery($sql);
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function deleteDaoImpl($objStd, string $fieldId, string $request): void
+    {
+        $prepObject = [$objStd->getField($fieldId)];
+        $sql = MySQLClass::wpdbPrepare($request, $prepObject);
+        if ($this->arrLogs['delete']) {
+            LogUtils::logRequest($sql);
+        }
+        MySQLClass::wpdbQuery($sql);
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function getDistinctFieldValues($objDefault, array $attributes): array
+    {
+        $request = "SELECT DISTINCT %s FROM %s ORDER BY %s ASC;";
+        return $this->selectListDaoImpl($objDefault, $request, $attributes);
     }
 
 }

@@ -7,6 +7,7 @@ use core\domain\CopsCalAddressClass;
  * Classe CopsCalAddressDaoImpl
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class CopsCalAddressDaoImpl extends LocalDaoImpl
 {
@@ -50,11 +51,13 @@ class CopsCalAddressDaoImpl extends LocalDaoImpl
 
     /**
      * @since v1.23.11.25
+     * @version v1.23.12.02
      */
     public function getCalAddresses(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
-        $request .= " WHERE id LIKE '%s' ";
+        $request .= " WHERE id LIKE '%s' AND streetDirection LIKE '%s' AND streetName LIKE '%s' ";
+        $request .= " AND streetSuffix LIKE '%s' AND streetSuffixDirection LIKE '%s' AND zipCode LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
         return $this->selectListDaoImpl(new CopsCalAddressClass(), $request, $attributes);
     }
@@ -85,6 +88,16 @@ class CopsCalAddressDaoImpl extends LocalDaoImpl
         $request = $this->getUpdateRequest($dbFields, $this->dbTable, $fieldId);
         // On met à jour
         $this->updateDaoImpl($obj, $request, $fieldId);
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function getDistinctFieldValues($objDefault, array $attributes): array
+    {
+        $field = array_shift($attributes);
+        $attributes = [$field, $this->dbTable, $field];
+        return parent::getDistinctFieldValues($objDefault, $attributes);
     }
 
 }

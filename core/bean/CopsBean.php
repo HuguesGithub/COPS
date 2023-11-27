@@ -1,7 +1,7 @@
 <?php
 namespace core\bean;
 
-use core\services\CopsRandomGuyServices;
+use core\services\CopsCalPhoneServices;
 use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
@@ -9,7 +9,7 @@ use core\utils\UrlUtils;
  * CopsBean
  * @author Hugues
  * @since 1.22.09.23
- * @version v1.23.11.25
+ * @version v1.23.12.02
  */
 class CopsBean extends UtilitiesBean
 {
@@ -50,6 +50,7 @@ class CopsBean extends UtilitiesBean
 
     /**
      * @since v1.23.10.07
+     * @version v1.23.12.02
      */
     public function getMutualFilter(
         array $urlElements,
@@ -74,7 +75,7 @@ class CopsBean extends UtilitiesBean
                 continue;
             }
             $arrRef[$value] = '';
-            $urlElements[$filter] = $value;
+            $urlElements[$field] = $value;
             $href = UrlUtils::getAdminUrl($urlElements);
             $liContent = HtmlUtils::getLink($value, $href, 'dropdown-item');
             $strLis .= HtmlUtils::getBalise(self::TAG_LI, $liContent);
@@ -91,7 +92,7 @@ class CopsBean extends UtilitiesBean
         $btnAttributes = [
             self::ATTR_CLASS => ' btn_outline btn-sm dropdown-toggle',
             'aria-expanded' => false,
-            'data-bs-toggle' => 'dropdown',
+            self::ATTR_DATA_BS_TOGGLE => 'dropdown',
         ];
         $strButton = HtmlUtils::getButton($strLabel, $btnAttributes);
 
@@ -104,14 +105,15 @@ class CopsBean extends UtilitiesBean
 
     /**
      * @since v1.23.10.07
+     * @version v1.23.12.02
      */
     public function getTownFilter($urlElements, $field, $selectedValue=''): string
     {
-        $objServices = new CopsRandomGuyServices();
+        $objServices = new CopsCalPhoneServices();
         $attributes = [
             self::SQL_ORDER_BY => $field,
         ];
-        $objs = $objServices->getPhones($attributes);
+        $objs = $objServices->getCalPhones($attributes);
         $strLabel = 'Ville';
         $filter = $field;
 

@@ -1,7 +1,7 @@
 <?php
 namespace core\bean;
 
-use core\services\CopsRandomGuyServices;
+use core\services\CopsCalZipcodeServices;
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
 use core\utils\SessionUtils;
@@ -9,8 +9,10 @@ use core\utils\UrlUtils;
 
 /**
  * AdminPageCalZipCodeBean
+ * Gère l'affichage de l'onglet "Code Postal" de l'interface "Random Californian Guy"
  * @author Hugues
  * @since 1.23.10.14
+ * @version v1.23.12.02
  */
 class AdminPageCalZipCodeBean extends AdminPageCalBean
 {
@@ -75,11 +77,12 @@ class AdminPageCalZipCodeBean extends AdminPageCalBean
 
     /**
      * @since 1.23.10.14
+     * @version v1.23.12.02
      */
     public function getListContent(): string
     {
         // Définition du service
-        $objServices = new CopsRandomGuyServices();
+        $objServices = new CopsCalZipcodeServices();
         // On récupère les données éventuelles sur les filtres et les tris
         $filters = [
             self::FIELD_PRIMARY_CITY => $this->initVar(self::FIELD_PRIMARY_CITY, self::SQL_JOKER_SEARCH),
@@ -92,7 +95,7 @@ class AdminPageCalZipCodeBean extends AdminPageCalBean
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ]);
-        $objs = $objServices->getZipCodes($attributes);
+        $objs = $objServices->getCalZipcodes($attributes);
 
         //////////////////////////////////////////////////////
         // Définition de l'objet Pagination

@@ -7,7 +7,7 @@ use core\interfaceimpl\ConstantsInterface;
  * HtmlUtils
  * @author Hugues
  * @since v1.23.05.23
- * @version v1.23.08.05
+ * @version v1.23.12.02
  */
 class HtmlUtils implements ConstantsInterface
 {
@@ -111,7 +111,7 @@ class HtmlUtils implements ConstantsInterface
 
     /**
      * @since v1.23.05.23
-     * @version v1.23.08.05
+     * @version v1.23.12.02
      */
     public static function getIcon(string $tag, string $prefix='', string $label=''): string
     {
@@ -121,6 +121,7 @@ class HtmlUtils implements ConstantsInterface
             self::I_ANGLES_LEFT,
             self::I_ARROWS_ROTATE,
             self::I_BACKWARD,
+            self::I_BOOK,
             self::I_CARET_LEFT,
             self::I_CARET_RIGHT,
             self::I_CIRCLE,
@@ -143,19 +144,17 @@ class HtmlUtils implements ConstantsInterface
             self::I_SQUARE_CHECK,
             self::I_SQUARE_XMARK,
             self::I_USERS,
-            'book',
-            'box-archive',
-            'calendar',
-            'calendar-week',
-            'calendar-days',
-            'comment',
-            'envelope',
-            'inbox',
-            'right-from-bracket',
-            'square-pen',
-            'square-plus',
-            'trash-alt',
-            'user',
+            self::I_BOX_ARCHIVE,
+            self::I_CALENDAR,
+            self::I_CALENDAR_WEEK,
+            self::I_CALENDAR_DAYS,
+            self::I_COMMENT,
+            self::I_INBOX,
+            self::I_PAPER_PLANE,
+            self::I_RIGHT_FROM_BRACKET,
+            self::I_SQUARE_PEN,
+            self::I_SQUARE_PLUS,
+            self::I_USER,
         ];
         if ($prefix!='') {
             $prefix .= ' ';

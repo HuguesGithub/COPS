@@ -1,7 +1,7 @@
 <?php
 namespace core\bean;
 
-use core\services\CopsRandomGuyServices;
+use core\services\CopsCalZipcodeServices;
 use core\utils\HtmlUtils;
 use core\utils\UrlUtils;
 
@@ -9,6 +9,7 @@ use core\utils\UrlUtils;
  * CopsCalZipCodeBean
  * @author Hugues
  * @since v1.23.10.14
+ * @version v1.23.12.02
  */
 class CopsCalZipCodeBean extends CopsBean
 {
@@ -60,20 +61,29 @@ class CopsCalZipCodeBean extends CopsBean
 
     /**
      * @since v1.23.10.14
+     * @version v1.23.12.02
      */
     public function getTableFooter(array $attributes): TableauTFootHtmlBean
     {
+        $objServices = new CopsCalZipcodeServices();
+
         $objRow = new TableauRowHtmlBean();
-        $objRow->addStyle('line-height:30px;');
+        $objRow->addStyle(self::CSS_LINE_HEIGHT_30PX);
         $objRow->addCell(new TableauCellHtmlBean(self::CST_NBSP, self::TAG_TH));
 
         $urlElements = [
             self::CST_ONGLET => self::ONGLET_RND_GUY,
             self::CST_SUBONGLET => self::CST_ZIPCODE,
         ];
+
+        $strLabel = 'Ville';
         $field = self::FIELD_PRIMARY_CITY;
+        $selValue = $this->initVar($field, self::SQL_JOKER_SEARCH);
         $filter = $attributes[$field] ?? '';
-        $rowContent = $this->getTownFilter($urlElements, $field, $filter);
+        $objs = $objServices->getDistinctFieldValues($field);
+
+        $rowContent = $this->getMutualFilter($urlElements, $selValue, $strLabel, $objs, $field, $filter);
+
         $objRow->addCell(new TableauCellHtmlBean($rowContent, self::TAG_TH));
 
         $objFooter = new TableauTFootHtmlBean();

@@ -12,6 +12,7 @@ use core\utils\UrlUtils;
  * CopsCalGuyAddressBean
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class CopsCalGuyAddressBean extends CopsBean
 {
@@ -40,11 +41,25 @@ class CopsCalGuyAddressBean extends CopsBean
 
     /**
      * @since v1.23.11.25
+     * @version v1.23.12.02
      */
-    public function getListAddress(): string
+    public function getListAddress(bool $edition=false): string
     {
         $obj = $this->getCalGuyAddress();
         $str = $this->obj->getField(self::FIELD_NUMBER).' '.$obj->getFullAddress();
+        if ($edition) {
+            $strIcon = HtmlUtils::getIcon(self::I_DELETE);
+            $href = '#';
+            $strClasse = 'btn btn-danger btn-sm ajaxAction';
+            $attributes = [
+                self::FIELD_ID => $this->obj->getField(self::FIELD_ID),
+                self::ATTR_DATA => [
+                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
+                    self::ATTR_DATA_AJAX => self::AJAX_DEL_GUY_ADDRESS
+                ],
+            ];
+            $str .= ' '.HtmlUtils::getLink($strIcon, $href, $strClasse, $attributes);
+        }
         return HtmlUtils::getBalise(self::TAG_LI, $str);
     }
 

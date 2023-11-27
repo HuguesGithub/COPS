@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * CopsMailBean
  * @author Hugues
  * @since 1.22.04.29
- * @version 1.22.04.30
+ * @version v1.23.12.02
  */
 class CopsMailBean extends UtilitiesBean
 {
@@ -17,15 +17,15 @@ class CopsMailBean extends UtilitiesBean
 
   /**
    * @since 1.22.04.29
-   * @version 1.22.04.30
+   * @version v1.23.12.02
    */
   public function getInboxRow()
   {
     $id = $this->CopsMail->getField(self::FIELD_ID);
-    $auteur = $this->CopsMail->getField('user');
-    $sujet = $this->CopsMail->getField('mail_subject');
-    $bln_NonLu = ($this->CopsMail->getField('lu')==0);
-    $bln_HasPjs = ($this->CopsMail->getField('nbPjs')!=0);
+    $auteur = $this->CopsMail->getField(self::FIELD_USER);
+    $sujet = $this->CopsMail->getField(self::FIELD_MAIL_SUBJECT);
+    $bln_NonLu = ($this->CopsMail->getField(self::FIELD_LU)==0);
+    $bln_HasPjs = ($this->CopsMail->getField(self::FIELD_NB_PJS)!=0);
     // TODO
     $strSince = '5 mins ago';
 
@@ -37,7 +37,7 @@ class CopsMailBean extends UtilitiesBean
     $strContent .= '" class="text-white"><strong>'.$auteur.'</strong></a></td>';
     $strContent .= '<td class="mailbox-subject">'.($bln_NonLu ? '<strong>'.$sujet.'</strong>' : $sujet).'</td>';
     $strContent .= '<td class="mailbox-attachment">';
-    $strContent .= ($bln_HasPjs ? '<i class="fa-solid fa-paperclip"></i>' : '&nbsp;').'</td>';
+    $strContent .= ($bln_HasPjs ? '<i class="fa-solid fa-paperclip"></i>' : self::CST_NBSP).'</td>';
     $strContent .= '<td class="mailbox-date">'.$strSince.'</td>';
     $strContent .= '</tr>';
     return $strContent;

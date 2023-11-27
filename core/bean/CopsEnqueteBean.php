@@ -57,7 +57,7 @@ class CopsEnqueteBean extends CopsBean
                     self::I_FILE_CLOSED,
                     $label
                 );
-                $strActionsPossibles .= '&nbsp;'.$this->buildActionLink(
+                $strActionsPossibles .= self::CST_NBSP.$this->buildActionLink(
                     self::CST_FILE_COLDED,
                     self::CST_ENQUETE_COLDED,
                     self::I_FILE_COLDED,

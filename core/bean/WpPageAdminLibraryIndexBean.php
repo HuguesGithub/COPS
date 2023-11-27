@@ -10,7 +10,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminLibraryIndexBean
  * @author Hugues
  * @since 1.22.10.21
- * @version v1.23.08.12
+ * @version v1.23.12.02
  */
 class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
 {
@@ -55,8 +55,8 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         if ($this->catSlug=='') {
             $this->objCopsIndexNature = new CopsIndexNatureClass();
         } else {
-            $this->objWpCategory = $this->wpCategoryServices->getCategoryByField('slug', $this->catSlug);
-            $name = $this->objWpCategory->getField('name');
+            $this->objWpCategory = $this->wpCategoryServices->getCategoryByField(self::FIELD_SLUG, $this->catSlug);
+            $name = $this->objWpCategory->getField(self::FIELD_NAME);
             $this->objCopsIndexNature = $this->objCopsIndexServices->getCopsIndexNatureByName($name);
             
             $urlElements[self::CST_CAT_SLUG] = $this->catSlug;
@@ -103,8 +103,12 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         usort($objsCategoryMenu, [WpCategoryClass::class, 'compCategories']);
         while (!empty($objsCategoryMenu)) {
             $objWpCategory = array_shift($objsCategoryMenu);
-            $blnSelected = ($this->catSlug==$objWpCategory->getField('slug'));
-            $menuContent .= $objWpCategory->getBean()->getCategoryNavItem($this->getUrl(), 'book', $blnSelected);
+            $blnSelected = ($this->catSlug==$objWpCategory->getField(self::FIELD_SLUG));
+            $menuContent .= $objWpCategory->getBean()->getCategoryNavItem(
+                $this->getUrl(),
+                self::I_BOOK,
+                $blnSelected
+            );
         }
         /////////////////////////////////////////
         
@@ -294,7 +298,7 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         // Bouton pour créer une nouvelle entrée, si droits d'édition
         if ($this->hasCopsEditor) {
             $href = $this->getRefreshUrl([self::CST_ACTION=>self::CST_WRITE]);
-            $label = HtmlUtils::getLink(HtmlUtils::getIcon('square-plus'), $href, self::CST_TEXT_WHITE);
+            $label = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_SQUARE_PLUS), $href, self::CST_TEXT_WHITE);
             $btnAttributes = [self::ATTR_TITLE => self::LABEL_CREER_ENTREE];
             $strToolBar .= self::CST_NBSP.HtmlUtils::getButton($label, $btnAttributes);
         }
@@ -302,7 +306,10 @@ class WpPageAdminLibraryIndexBean extends WpPageAdminLibraryBean
         $btnAttributes = [
             self::ATTR_CLASS => self::AJAX_ACTION,
             self::ATTR_TITLE => self::LABEL_EXPORT_LIST,
-            self::ATTR_DATA => [self::ATTR_DATA_TRIGGER => 'click', self::ATTR_DATA_AJAX => 'csvExport']
+            self::ATTR_DATA => [
+                self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
+                self::ATTR_DATA_AJAX => self::AJAX_CSV_EXPORT
+            ]
         ];
         $strToolBar .= self::CST_NBSP.HtmlUtils::getButton(HtmlUtils::getIcon(self::I_DOWNLOAD), $btnAttributes);
         // Ajout de la pagination

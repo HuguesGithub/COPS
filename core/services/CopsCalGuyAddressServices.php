@@ -8,6 +8,7 @@ use core\domain\CopsCalGuyAddressClass;
  * Classe CopsCalGuyAddressServices
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class CopsCalGuyAddressServices extends LocalServices
 {
@@ -52,14 +53,21 @@ class CopsCalGuyAddressServices extends LocalServices
 
     /**
      * @since v1.23.11.25
+     * @version v1.23.12.02
      */
     public function insertCalGuyAddress(CopsCalGuyAddressClass &$obj): void
-    { $this->objDao->insertCalAddressGuy($obj); }
+    { $this->objDao->insertCalGuyAddress($obj); }
 
     /**
      * @since v1.23.11.25
      */
     public function updateCalGuyAddress(CopsCalGuyAddressClass $obj): void
     { $this->objDao->updateCalGuyAddress($obj); }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function deleteCalGuyAddress(CopsCalGuyAddressClass $obj): void
+    { $this->objDao->deleteCalGuyAddress($obj); }
 
 }

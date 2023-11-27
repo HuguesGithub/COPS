@@ -9,7 +9,7 @@ use core\utils\SessionUtils;
  * CopsPlayerActions
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.08.12
+ * @version v1.23.12.02
  */
 class CopsPlayerActions extends LocalActions
 {
@@ -19,21 +19,21 @@ class CopsPlayerActions extends LocalActions
 
     /**
      * @since v1.23.06.21
-     * @version 1.23.06.25
+     * @version v1.23.12.02
      */
     public static function dealWithStatic(): string
     {
         $ajaxAction = SessionUtils::fromPost(self::AJAX_ACTION);
         $objCopsPlayerActions = new CopsPlayerActions();
         return match ($ajaxAction) {
-            'saveData' => $objCopsPlayerActions->updateCopsPlayer(),
+            self::AJAX_SAVE_DATA => $objCopsPlayerActions->updateCopsPlayer(),
             //default => static::getErrorActionContent($ajaxAction),
         };
     }
 
     /**
      * @since vv1.23.06.21
-     * @version v1.23.08.12
+     * @version v1.23.12.02
      */
     public function updateCopsPlayer(): string
     {
@@ -51,8 +51,8 @@ class CopsPlayerActions extends LocalActions
             'langue',
         ];
 
-        $id = SessionUtils::fromPost('id');
-        $value = SessionUtils::fromPost('value');
+        $id = SessionUtils::fromPost(self::FIELD_ID);
+        $value = SessionUtils::fromPost(self::ATTR_VALUE);
         $field = substr(SessionUtils::fromPost('field'), 6);
 
         $attributes = [self::FIELD_ID=>$id];
@@ -61,7 +61,11 @@ class CopsPlayerActions extends LocalActions
         $this->objCopsPlayer = array_shift($objsCopsPlayer);
 
         if ($this->objCopsPlayer->getField(self::FIELD_ID)=='') {
-            $returned = $this->getToastContentJson('danger', self::LABEL_ERREUR, vsprintf(self::DYN_WRONG_ID, [$id]));
+            $returned = $this->getToastContentJson(
+                self::NOTIF_DANGER,
+                self::LABEL_ERREUR,
+                vsprintf(self::DYN_WRONG_ID, [$id])
+            );
         } elseif (in_array($field, $allowedFields)) {
             $this->dealWithUpdateAbility($field, $value);
         } elseif (in_array($field, $allowedSkills)) {
@@ -82,7 +86,7 @@ class CopsPlayerActions extends LocalActions
             // On gère les modifications des compétences.
         } else {
             $returned = $this->getToastContentJson(
-                'warning',
+                self::NOTIF_WARNING,
                 self::LABEL_ERREUR,
                 vsprintf(self::DYN_WRONG_FIELD, [$field])
             );
@@ -93,6 +97,7 @@ class CopsPlayerActions extends LocalActions
 
     /**
      * @since v1.23.08.19
+     * @version v1.23.12.02
      */
     public function updateAbility(string $field, mixed $value): string
     {
@@ -108,19 +113,19 @@ class CopsPlayerActions extends LocalActions
                 // Si les champs attendus sont renseignés, on passe à l'étape suivante
                 $this->objCopsPlayer->validFirstCreationStep();
                 $strInfo = $this->getToastContent(
-                    'info',
+                    self::NOTIF_INFO,
                     'Information',
                     'La première étape de création du personnage est terminée.'
                 );
             } else {
-                $strInfo = $this->getToastContent('info', 'Information', $strStatus);
+                $strInfo = $this->getToastContent(self::NOTIF_INFO, 'Information', $strStatus);
             }
             array_push($arrToast, $strInfo);
         }
         $this->objCopsPlayerServices->updatePlayer($this->objCopsPlayer);
 
         $strUpdate = $this->getToastContent(
-            'success',
+            self::NOTIF_SUCCESS,
             self::LABEL_SUCCES,
             vsprintf(self::DYN_SUCCESS_FIELD_UPDATE, [$field])
         );
@@ -128,13 +133,16 @@ class CopsPlayerActions extends LocalActions
         return '{"toastContent": '.json_encode($arrToast).'}';
     }
 
+    /**
+     * @version v1.23.12.02
+     */
     private function dealWithUpdateAbility(string $field, mixed $value): string
     {
         if ($this->objCopsPlayer->checkField($field, $value)) {
             $returned = $this->updateAbility($field, $value);
         } else {
             $returned = $this->getToastContentJson(
-                'warning',
+                self::NOTIF_WARNING,
                 self::LABEL_ERREUR,
                 vsprintf(self::DYN_WRONG_VALUE, [$value, $field])
             );
@@ -142,6 +150,9 @@ class CopsPlayerActions extends LocalActions
         return $returned;
     }
 
+    /**
+     * @version v1.23.12.02
+     */
     private function dealWithLangue(CopsPlayerClass $objCopsPlayer, int $id): string
     {
         $objsPlayerSkill = $objCopsPlayer->getCopsSkills();
@@ -170,17 +181,16 @@ class CopsPlayerActions extends LocalActions
             $objPlayerSkill->setField(self::FIELD_SPEC_SKILL_ID, $value);
             $this->objSkillServices->updatePlayerSkill($objPlayerSkill);
             $returned = $this->getToastContentJson(
-                'success',
+                self::NOTIF_SUCCESS,
                 self::LABEL_SUCCES,
                 'Compétence mise à jour.'
             );
         } else {
             $returned = $this->getToastContentJson(
-                'warning',
+                self::NOTIF_WARNING,
                 self::LABEL_ERREUR,
                 'Langue en double ou langue non sélectionnée.',
             );
-                // TODO : gestion de l'erreur.
         }
         return $returned;
     }

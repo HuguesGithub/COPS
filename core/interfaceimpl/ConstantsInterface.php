@@ -4,15 +4,27 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.00.00
- * @version v1.23.11.25
+ * @version v1.23.12.02
  */
 interface ConstantsInterface
 {
-    public const VERSION              = 'v1.23.08.12';
+    public const VERSION              = 'v1.23.11.25';
 
     /////////////////////////////////////////////////
     // Ajax Infos
     public const AJAX_ACTION            = 'ajaxAction';
+    public const AJAX_SAVE_DATA         = 'saveData';
+    public const AJAX_FIND_ADDRESS      = 'findAddress';
+    public const AJAX_DEL_GUY_ADDRESS   = 'deleteGuyAddress';
+    public const AJAX_INS_GUY_ADDRESS   = 'insertGuyAddress';
+    public const AJAX_CSV_EXPORT        = 'csvExport';
+    public const AJAX_TCHAT             = 'tchat';
+    public const AJAX_REFRESH           = 'refresh';
+    public const AJAX_CHECK_NOTIF       = 'checkNotif';
+
+    public const AJAX_ACTION_CHANGE     = 'change';
+    public const AJAX_ACTION_CLICK      = 'click';
+    public const AJAX_ACTION_KEYUP      = 'keyup';
 
     /////////////////////////////////////////////////
     // Tag's Attributes
@@ -35,6 +47,8 @@ interface ConstantsInterface
     public const ATTR_DATA_TARGET       = 'target';
     public const ATTR_DATA_TRIGGER      = 'trigger';
     public const ATTR_DESCRIBEDBY       = 'describedby';
+    public const ATTR_DATA_BS_TOGGLE    = 'data-bs-toggle';
+    public const ATTR_DATA_TIME         = 'data-time';
 
     public const ATTR_TIME              = 'time';
 
@@ -236,11 +250,18 @@ interface ConstantsInterface
     public const I_ANGLES_LEFT           = 'angles-left';
     public const I_ARROWS_ROTATE         = 'arrows-rotate';
     public const I_BACKWARD              = 'backward';
+    public const I_BELL                  = 'bell';
+    public const I_BOOK                  = 'book';
+    public const I_BOX_ARCHIVE           = 'box-archive';
+    public const I_CALENDAR              = 'calendar';
+    public const I_CALENDAR_WEEK         = 'calendar-week';
+    public const I_CALENDAR_DAYS         = 'calendar-days';
     public const I_CARET_LEFT            = 'caret-left';
     public const I_CARET_RIGHT           = 'caret-right';
     public const I_CIRCLE                = 'circle';
+    public const I_COMMENT               = 'comment';
     public const I_DATABASE              = 'database';
-    public const I_DELETE                = 'trash-can';
+    public const I_DELETE                = 'trash-alt';
     public const I_DESKTOP               = 'desktop';
     public const I_DOWNLOAD              = 'download';
     public const I_EDIT                  = 'edit';
@@ -248,16 +269,25 @@ interface ConstantsInterface
     public const I_FILE_CIRCLE_PLUS      = 'file-circle-plus';
     public const I_FILE_CIRCLE_CHECK     = 'file-circle-check';
     public const I_FILE_CIRCLE_XMARK     = 'file-circle-xmark';
+    public const I_FILTER                = 'filter';
     public const I_FILE_OPENED           = 'folder-open';
     public const I_FILE_CLOSED           = 'folder-closed';
     public const I_FILE_COLDED           = 'folder';
-    public const I_FILTER_CIRCLE_XMARK  = 'filter-circle-xmark';
-    public const I_GEAR                 = 'gear';
-    public const I_HOUSE                = 'house';
-    public const I_REFRESH              = 'arrows-rotate';
-    public const I_SQUARE_CHECK         = 'square-check';
-    public const I_SQUARE_XMARK         = 'square-xmark';
-    public const I_USERS                = 'users';
+    public const I_FILE_LINES            = 'file-lines';
+    public const I_FILTER_CIRCLE_XMARK   = 'filter-circle-xmark';
+    public const I_GEAR                  = 'gear';
+    public const I_HOUSE                 = 'house';
+    public const I_INBOX                 = 'inbox';
+    public const I_REFRESH               = 'arrows-rotate';
+    public const I_PAPER_PLANE           = 'paper-plane';
+    public const I_RIGHT_FROM_BRACKET    = 'right-from-bracket';
+    public const I_SQUARE_CHECK          = 'square-check';
+    public const I_SQUARE_PEN            = 'square-pen';
+    public const I_SQUARE_PLUS           = 'square-plus';
+    public const I_SQUARE_XMARK          = 'square-xmark';
+    public const I_TOOLBOX               = 'toolbox';
+    public const I_USER                  = 'user';
+    public const I_USERS                 = 'users';
 
     /////////////////////////////////////////////////
     // Page d'administration
@@ -272,6 +302,15 @@ interface ConstantsInterface
     public const NAV_LINK               = 'nav-link';
     public const NAV_PILLS              = 'nav-pills';
     public const NAV_TREEVIEW           = 'nav-treeview';
+
+    /////////////////////////////////////////////////
+    // Notifications
+    public const NOTIF_DANGER           = 'danger';
+    public const NOTIF_INFO             = 'info';
+    public const NOTIF_LIGHT            = 'light';
+    public const NOTIF_PRIMARY          = 'primary';
+    public const NOTIF_SUCCESS          = 'success';
+    public const NOTIF_WARNING          = 'warning';
 
     /////////////////////////////////////////////////
     // Onglets

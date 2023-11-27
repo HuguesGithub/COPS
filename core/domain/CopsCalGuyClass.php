@@ -10,6 +10,7 @@ use core\services\CopsCalGuyAddressServices;
  * Classe CopsCalGuyClass
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class CopsCalGuyClass extends LocalDomainClass
 {
@@ -76,9 +77,20 @@ class CopsCalGuyClass extends LocalDomainClass
 
     /**
      * @since v1.23.11.25
+     * @version v1.23.12.02
      */
     public function checkFields()
     {
+        ////////
+        // On vérifie le format de la date. Notamment, s'il n'y a qu'une année, on défini au hasard un jour et un mois.
+        if (strlen($this->birthday)==4) {
+            $y = $this->birthday;
+            $m = round(rand(1, 12));
+            $jMax = $m==2 ? 28 : 30;
+            $d = round(1, $jMax);
+            $this->birthday = strpad($d, 2, '0', STR_PAD_LEFT).'/'.strpad($m, 2, '0', STR_PAD_LEFT).'/'.$y;
+        }
+        
         $blnOk = true;
         if ($this->firstName=='' || $this->lastName=='') {
             $blnOk = false;

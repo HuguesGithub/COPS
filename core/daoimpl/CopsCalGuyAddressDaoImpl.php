@@ -7,6 +7,7 @@ use core\domain\CopsCalGuyAddressClass;
  * Classe CopsCalGuyAddressDaoImpl
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class CopsCalGuyAddressDaoImpl extends LocalDaoImpl
 {
@@ -82,6 +83,20 @@ class CopsCalGuyAddressDaoImpl extends LocalDaoImpl
         $request = $this->getUpdateRequest($dbFields, $this->dbTable, $fieldId);
         // On met à jour
         $this->updateDaoImpl($obj, $request, $fieldId);
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function deleteCalGuyAddress(CopsCalGuyAddressClass $obj)
+    {
+        // On récupère les champs
+        $dbFields = $this->dbFields;
+        $fieldId = array_shift($dbFields);
+        // On défini la requête de suppression
+        $request = $this->getDeleteRequest($this->dbTable, $fieldId);
+        // On met à jour
+        $this->deleteDaoImpl($obj, $fieldId, $request);
     }
 
 }

@@ -10,7 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageCalendrierBean
  * @author Hugues
  * @since v1.23.05.01
- * @version v1.23.07.22
+ * @version v1.23.12.02
  */
 class AdminPageCalendarBean extends AdminPageBean
 {
@@ -43,7 +43,7 @@ class AdminPageCalendarBean extends AdminPageBean
 
     /**
      * @since v1.23.05.01
-     * @version v1.23.07.22
+     * @version v1.23.12.02
      */
     public function getContentPage(): string
     {
@@ -54,9 +54,9 @@ class AdminPageCalendarBean extends AdminPageBean
         // Construction du menu
         $this->arrSubOnglets = [
             self::CST_HOME      => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_HOME],
-            self::CST_CAL_MONTH => [self::FIELD_ICON => 'calendar', self::FIELD_LABEL => self::LABEL_MONTHLY],
-            self::CST_CAL_WEEK  => [self::FIELD_ICON => 'calendar-week', self::FIELD_LABEL => self::LABEL_WEEKLY],
-            self::CST_CAL_DAY   => [self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => self::LABEL_DAILY],
+            self::CST_CAL_MONTH => [self::FIELD_ICON => self::I_CALENDAR, self::FIELD_LABEL => self::LABEL_MONTHLY],
+            self::CST_CAL_WEEK  => [self::FIELD_ICON => self::I_CALENDAR_WEEK, self::FIELD_LABEL => self::LABEL_WEEKLY],
+            self::CST_CAL_DAY   => [self::FIELD_ICON => self::I_CALENDAR_DAYS, self::FIELD_LABEL => self::LABEL_DAILY],
             self::CST_CAL_EVENT => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_EVENTS]
         ];
         /////////////////////////////////////////

@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
  * CopsMailJointBean
  * @author Hugues
  * @since 1.22.04.29
- * @version 1.22.04.30
+ * @version v1.23.12.02
  */
 class CopsMailJointBean extends UtilitiesBean
 {
@@ -18,20 +18,20 @@ class CopsMailJointBean extends UtilitiesBean
 
   /**
    * @since 1.22.04.29
-   * @version 1.22.04.30
+   * @version v1.23.12.02
    */
   public function getInboxRow()
   {
     $urlTemplate = 'web/pages/public/fragments/public-fragments-tr-inbox-row.php';
 
     $id           = $this->CopsMailJoint->getField(self::FIELD_ID);
-    $CopsMail     = $this->CopsMailServices->getMail($this->CopsMailJoint->getField('mailId'));
-    $CopsMailUser = $this->CopsMailServices->getMailUser($this->CopsMailJoint->getField('fromId'));
-    $auteur       = $CopsMailUser->getField('user');
-    $sujet        = $CopsMail->getField('mail_subject');
-    $bln_NonLu    = ($this->CopsMailJoint->getField('lu')==0);
-    $bln_HasPjs   = ($this->CopsMailJoint->getField('nbPjs')!=0);
-    $since        = $CopsMail->getField('mail_dateEnvoi');
+    $CopsMail     = $this->CopsMailServices->getMail($this->CopsMailJoint->getField(self::FIELD_MAIL_ID));
+    $CopsMailUser = $this->CopsMailServices->getMailUser($this->CopsMailJoint->getField(self::FIELD_FROM_ID));
+    $auteur       = $CopsMailUser->getField(self::FIELD_USER);
+    $sujet        = $CopsMail->getField(self::FIELD_MAIL_SUBJECT);
+    $bln_NonLu    = ($this->CopsMailJoint->getField(self::FIELD_LU)==0);
+    $bln_HasPjs   = ($this->CopsMailJoint->getField(self::FIELD_NB_PJS)!=0);
+    $since        = $CopsMail->getField(self::FIELD_MAIL_DATE_ENVOI);
     // TODO
     $strSince = $since;//'5 mins ago';
 
@@ -41,15 +41,15 @@ class CopsMailJointBean extends UtilitiesBean
         // L'id
         $id,
         // L'auteur
-        ($this->CopsMailJoint->getField('folderId')==2 ? 'Rédaction' : $auteur),
+        ($this->CopsMailJoint->getField(self::FIELD_FOLDER_ID)==2 ? 'Rédaction' : $auteur),
         // Sujet
         ($bln_NonLu ? '<strong>'.$sujet.'</strong>' : $sujet),
         // Pièce jointe ?
-        ($bln_HasPjs ? '<i class="fa-solid fa-paperclip"></i>' : '&nbsp;'),
+        ($bln_HasPjs ? '<i class="fa-solid fa-paperclip"></i>' : self::CST_NBSP),
         // Date envoi
         $strSince,
         // action sur le mail
-        ($this->CopsMailJoint->getField('folderId')==2 ? 'write' : 'read'),
+        ($this->CopsMailJoint->getField(self::FIELD_FOLDER_ID)==2 ? 'write' : 'read'),
     ];
     return $this->getRender($urlTemplate, $attributes);
   }

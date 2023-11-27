@@ -1,6 +1,7 @@
 <?php
 namespace core\bean;
 
+use core\services\CopsCalAddressServices;
 use core\services\CopsCalGuyServices;
 use core\utils\HtmlUtils;
 use core\utils\SessionUtils;
@@ -10,6 +11,7 @@ use core\utils\UrlUtils;
  * CopsCalGuyBean
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class CopsCalGuyBean extends CopsBean
 {
@@ -261,6 +263,158 @@ class CopsCalGuyBean extends CopsBean
             self::ATTR_VALUE => $inpValue,
         ];
         return HtmlUtils::getBalise(self::TAG_INPUT, '', array_merge($attributes, $extraAttributes));
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function getAddressBlock(bool $edition=false): string
+    {
+        $objs = $this->obj->getCalGuyAddresses();
+        $str = '';
+        // Si je ne suis pas en édition, je vais retourner une simple liste
+        // Si je suis en édition, je dois retourner des champs de saisie pour les différents éléments
+        // Et je dois envoyer aussi une ligne libre pour pouvoir ajouter une nouvelle saisie
+        if ($edition) {
+            $str .= '<div class="card card-outline card-info col-12 mt-2 p-0 mx-1">';
+            $str .= '<div class="card-body row"><div class="col-12 input-group mb-3">';
+        }
+        $str .= '<ul>';
+        if (empty($objs)) {
+            $str .= '<li>Aucune adresse recensée.</li>';
+        } else {
+            foreach ($objs as $obj) {
+                $str .= $obj->getBean()->getListAddress($edition);
+            }
+        }
+        $str .= '</ul>';
+        if ($edition) {
+            $strContent = '';
+            // Saisie du numéro de rue.
+            $attributes = [
+                self::ATTR_TYPE => 'text',
+                self::ATTR_CLASS => 'form-control col-1',
+                self::ATTR_VALUE => '',
+                self::FIELD_ID => self::FIELD_NUMBER,
+                self::ATTR_NAME => self::FIELD_NUMBER,
+            ];
+            $strContent .= HtmlUtils::getBalise(self::TAG_INPUT, '', $attributes);
+            // Saisie de streetDirection
+            $strContent .= $this->addDropdown(self::FIELD_ST_DIRECTION);
+            // Saisie de streetName
+            $strContent .= $this->addDropdown(self::FIELD_ST_NAME);
+            // Saisie de streetSuffix
+            $strContent .= $this->addDropdown(self::FIELD_ST_SUFFIX);
+            // Saisie de streetSuffixDirection
+            $strContent .= $this->addDropdown(self::FIELD_ST_SUF_DIRECTION);
+            // Saisie de zipcode
+            $strContent .= $this->addDropdown(self::FIELD_ZIPCODE);
+            // On ajoute un petit vide
+            $strContent .= HtmlUtils::getLink(self::CST_NBSP, '#', 'btn btn-outline btn-sm');
+
+            // Ajout Bouton Annuler
+            // On vide les champs de chaque zone de saisie et on rafraichit la liste des dropdown
+            $strIcon = HtmlUtils::getIcon(self::I_REFRESH);
+            $aAttributes = [
+                self::ATTR_DATA => [
+                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
+                    self::ATTR_DATA_AJAX    => 'cleanGuyAddress',
+                ]
+            ];
+            $strContent .= HtmlUtils::getLink($strIcon, '#', 'btn btn-outline btn-sm ajaxAction', $aAttributes);
+            
+            // Ajout Bouton Envoyer
+            // On envoye les données pour enregistrement (si valides) et on recharge la page.
+            $strIcon = HtmlUtils::getIcon(self::I_PAPER_PLANE);
+            $aAttributes = [
+                self::ATTR_DATA => [
+                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
+                    self::ATTR_DATA_AJAX    => 'insertGuyAddress,cleanGuyAddress',
+                ]
+            ];
+            $strContent .= HtmlUtils::getLink($strIcon, '#', 'btn btn-primary btn-sm ajaxAction', $aAttributes);
+
+            $str .= '<div class="input-group input-group-sm">'.$strContent.'</div>';
+            $str .= '</div></div></div>';
+        }
+        return $str;
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function addDropdown(string $field): string
+    {
+        $strContent = '';
+
+        /////////////////////////////////////////////
+        // Création de l'input
+        $attributes = [
+            self::ATTR_TYPE => 'text',
+            self::ATTR_CLASS => 'form-control col-1',
+            self::FIELD_ID => $field,
+            self::ATTR_NAME => $field,
+            self::ATTR_VALUE => '',
+        ];
+        // NameStreet et Zipcode ne sont pas readonly
+        if ($field!=self::FIELD_ST_NAME && $field!=self::FIELD_ZIPCODE) {
+            $attributes[self::CST_READONLY] = self::CST_READONLY;
+        }
+        // Dans le cas du NameStreet, on doit filtrer le dropdown
+        if ($field==self::FIELD_ST_NAME) {
+            $attributes[self::ATTR_CLASS] .= ' '.self::AJAX_ACTION;
+            $attributes[self::ATTR_DATA] = [
+                self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_KEYUP,
+                self::ATTR_DATA_AJAX    => 'filter',
+                self::ATTR_DATA_TARGET  => '#dropDown'.self::FIELD_ST_NAME
+            ];
+        }
+        // On créé la balise
+        $strContent .= HtmlUtils::getBalise(self::TAG_INPUT, '', $attributes);
+        /////////////////////////////////////////////
+
+        /////////////////////////////////////////////
+        // Création du bouton de dropdown
+        $attributes = [
+            self::ATTR_CLASS => 'btn btn-outline-secondary dropdown-toggle',
+            self::ATTR_DATA_BS_TOGGLE => 'dropdown',
+            'aria-expanded'  => 'false',
+        ];
+        $strContent .= HtmlUtils::getButton('', $attributes);
+        /////////////////////////////////////////////
+        
+        /////////////////////////////////////////////
+        // Création du dropdown à proprement parlé
+        $strUlContent = '';
+        $objServices = new CopsCalAddressServices();
+        $objs = $objServices->getDistinctFieldValues($field);
+        $linkAttributes = [
+            self::ATTR_DATA => [
+                self::ATTR_DATA_TARGET  => '#'.$field,
+                self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
+                self::ATTR_DATA_AJAX    => 'addressDropdown'
+            ]
+        ];
+        foreach ($objs as $obj) {
+            $value = $obj->getField($field);
+            if ($value=='') {
+                $value = self::CST_NBSP;
+            }
+            $href = '#';
+            $strLink = HtmlUtils::getLink($value, $href, 'dropdown-item ajaxAction', $linkAttributes);
+            $liAttributes = ['data-value' => $value];
+            $strUlContent .= HtmlUtils::getBalise(self::TAG_LI, $strLink, $liAttributes);
+        }
+        $ulAttributes = [
+            self::FIELD_ID => 'dropDown'.$field,
+            self::ATTR_CLASS => 'dropdown-menu',
+            self::ATTR_STYLE => 'max-height: 200px; overflow: hidden auto;',
+        ];
+        /////////////////////////////////////////////
+
+        /////////////////////////////////////////////
+        // Retour de l'ensemble
+        return $strContent.HtmlUtils::getBalise(self::TAG_UL, $strUlContent, $ulAttributes);
     }
 
 }

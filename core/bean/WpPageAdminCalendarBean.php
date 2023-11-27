@@ -188,24 +188,24 @@ class WpPageAdminCalendarBean extends WpPageAdminBean
         $shrinkFrame = HtmlUtils::getDiv($shrinkCushion, $frameAttributes);
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-scrollgrid-shrink',
-            'data-time' => $hPadded.':00:00'
+            self::ATTR_DATA_TIME => $hPadded.':00:00'
         ];
         $firstRow = $this->getBalise(self::TAG_TD, $shrinkFrame, $tdAttributes);
         
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane',
-            'data-time' => $hPadded.':00:00'
+            self::ATTR_DATA_TIME => $hPadded.':00:00'
         ];
         $firstRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-label fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00'
+            self::ATTR_DATA_TIME => $hPadded.':30:00'
         ];
         $secondRow = $this->getBalise(self::TAG_TD, '', $tdAttributes);
         $tdAttributes = [
             self::ATTR_CLASS => 'fc-timegrid-slot fc-timegrid-slot-lane fc-timegrid-slot-minor',
-            'data-time' => $hPadded.':30:00'
+            self::ATTR_DATA_TIME => $hPadded.':30:00'
         ];
         $secondRow .= $this->getBalise(self::TAG_TD, '', $tdAttributes);
         

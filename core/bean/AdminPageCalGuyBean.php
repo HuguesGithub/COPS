@@ -1,6 +1,7 @@
 <?php
 namespace core\bean;
 
+use core\domain\CopsCalGuyClass;
 use core\services\CopsCalGuyServices;
 use core\utils\DateUtils;
 use core\utils\HtmlUtils;
@@ -11,6 +12,7 @@ use core\utils\UrlUtils;
  * AdminPageCalGuyBean
  * @author Hugues
  * @since v1.23.11.25
+ * @version v1.23.12.02
  */
 class AdminPageCalGuyBean extends AdminPageCalBean
 {
@@ -85,6 +87,7 @@ class AdminPageCalGuyBean extends AdminPageCalBean
 
     /**
      * @since v1.23.10.14
+     * @version v1.23.12.02
      */
     public function getEditContent(): string
     {
@@ -98,7 +101,12 @@ class AdminPageCalGuyBean extends AdminPageCalBean
         $attributes = $objCalGuy->getBean()->getDetailInterface();
 
         $urlTemplate = self::WEB_PPFD_BDD_CAL_GUY;
-        $strInterfaceEdition = $this->getRender($urlTemplate, $attributes);
+        $strContent = $this->getRender($urlTemplate, $attributes);
+        //////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////
+        // Gestion du bloc d'adresses
+        $strContent .= $objCalGuy->getBean()->getAddressBlock(true);
         //////////////////////////////////////////////////////////
 
         //////////////////////////////////////////////////////////
@@ -111,14 +119,14 @@ class AdminPageCalGuyBean extends AdminPageCalBean
         $urlAnnulation = UrlUtils::getAdminUrl($urlAttributes);
         $attributes = [$this->id, $urlAnnulation];
         $urlTemplate = self::WEB_PA_CONFIRM;
-        $strInterfaceConfirm = $this->getRender($urlTemplate, $attributes);
+        $strContent .= $this->getRender($urlTemplate, $attributes);
         //////////////////////////////////////////////////////////
 
         $attributes = [
             'method'=>'post',
             self::ATTR_CLASS => 'row p-3 col-12',
         ];
-        return HtmlUtils::getBalise(self::TAG_FORM, $strInterfaceEdition.$strInterfaceConfirm, $attributes);
+        return HtmlUtils::getBalise(self::TAG_FORM, $strContent, $attributes);
     }
 
     /**

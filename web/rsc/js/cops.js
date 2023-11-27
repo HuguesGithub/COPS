@@ -119,6 +119,21 @@ function ajaxActionClick(obj) {
                     obj.addClass('disabled').addClass('fa-spin');
                     refreshTchat(obj, false);
                 break;
+                // Suppression d'une adresse d'un individu
+                case 'deleteGuyAddress' :
+                    obj.addClass('disabled');
+                    deleteGuyAddress(obj);
+                break;
+                case 'addressDropdown' :
+                    findAddress(obj);
+                    break;
+                case 'cleanGuyAddress' :
+                    cleanGuyAddress();
+                    break;
+                case 'insertGuyAddress' :
+                    obj.addClass('disabled');
+                    insertGuyAddress();
+                    break;
                 default :
                     console.log(oneAction+" n'est pas une action définie pour ajaxActionClick.");
                     break;
@@ -136,11 +151,8 @@ function ajaxActionKeyUp(obj) {
         for (let oneAction of actions) {
             switch (oneAction) {
                 // Poster un message dans le tchat
-                case 'findAddress' :
-                    let phoneNumber = $('#telephoneNumber').val();
-                    let zipCode = $('#zipCode').val();
-                    let city = $('#city').val();
-                    findAddress(obj, phoneNumber, zipCode, city);
+                case 'filter' :
+                    filterDropdown(obj);
                 break;
                 default :
                     console.log(oneAction+" n'est pas une action définie pour ajaxActionKeyUp.");
@@ -152,19 +164,87 @@ function ajaxActionKeyUp(obj) {
 ////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////
+function filterDropdown(obj) {
+    // obj est un input dont la valeur doit filtrer le contenu d'un dropdown associé.
+    let value = obj.val().toUpperCase();
+    let target = obj.data('target');
+    // On va juste cacher les valeurs qui ne correspondent pas au filtre.
+    // On recherche %valeur%
+    $(target+' li').each(function(){
+        let valElement = $(this).data('value');
+        if (valElement.includes(value)) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+///////////////////////////////////////////////////
+
+///////////////////////////////////////////////////
 // FONCTIONS RELATIVES AUX ADRESSES
 ///////////////////////////////////////////////////
-function findAddress(obj, phoneNumber, zipCode, city) {
+function insertGuyAddress() {
+    let data = {
+        'action': 'dealWithAjax',
+        'ajaxAction': 'insertGuyAddress',
+        'number': $('#number').val(),
+        'streetDirection': $('#streetDirection').val(),
+        'streetName': $('#streetName').val(),
+        'streetSuffix': $('#streetSuffix').val(),
+        'streetSuffixDirection': $('#streetSuffixDirection').val(),
+        'zipCode': $('#zipCode').val(),
+        'guyId': $('input[name="id"]').val(),
+    };
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {}
+    ).done(function(response) {
+        location.reload();
+    });
+}
+
+function cleanGuyAddress() {
+    $('#number').val('');
+    $('#streetDirection').val('');
+    $('#streetName').val('');
+    $('#streetSuffix').val('');
+    $('#streetSuffixDirection').val('');
+    $('#zipCode').val('');
+    filterDropdown($('#streetName'));
+}
+
+function deleteGuyAddress(obj) {
+    let data = {
+        'action': 'dealWithAjax',
+        'ajaxAction': 'deleteGuyAddress',
+        'id': obj.attr('id')
+    };
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {}
+    ).done(function(response) {
+        obj.closest('li').remove();
+    });
+}
+
+function findAddress(obj) {
+    let value = obj.html();
+    let target = obj.data('target');
+    $(target).val(value);
+
     let objReturned = null;
     let data = {
         'action': 'dealWithAjax',
         'ajaxAction': 'findAddress',
-        'phoneNumber': phoneNumber,
-        'zipCode': zipCode,
-        'city': city
+        'streetDirection': $('#streetDirection').val(),
+        'streetName': $('#streetName').val(),
+        'streetSuffix': $('#streetSuffix').val(),
+        'streetSuffixDirection': $('#streetSuffixDirection').val(),
+        'zipCode': $('#zipCode').val(),
     };
-    $('.zoomTitresCol').remove();
-    $('.zoomContentCol').remove();
     $.post(
         ajaxurl,
         data,
@@ -172,27 +252,24 @@ function findAddress(obj, phoneNumber, zipCode, city) {
     ).done(function(response) {
         try {
             objReturned = JSON.parse(response);
-            obj.after(objReturned.refresh.content);
-            switch (obj.prop('id')) {
-                case 'telephoneNumber' :
-                    $('#telephoneNumber + ul').attr('style', $('#telephoneNumber + ul').attr('style')+'left: 8.3333333%');
-                    $('#telephoneNumber + ul + ul').attr('style', $('#telephoneNumber + ul + ul').attr('style')+'left: 8.3333333%');
-                    break;
-                case 'zipCode' :
-                    $('#zipCode + ul').attr('style', $('#zipCode + ul').attr('style')+'left: 41.6666666%');
-                    $('#zipCode + ul + ul').attr('style', $('#zipCode + ul + ul').attr('style')+'left: 41.6666666%');
-                    break;
-                case 'city' :
-                    $('#city + ul').attr('style', $('#city + ul').attr('style')+'left: 75%');
-                    $('#city + ul + ul').attr('style', $('#city + ul + ul').attr('style')+'left: 75%');
-                    break;
-            }
-            $('.zoomContentCol a').on('click', function(){
-                $(this).find('span').each(function(){
-                    $('#'+$(this).data('target')).val($(this).html());
-                });
-                $('.zoomTitresCol').remove();
-                $('.zoomContentCol').remove();
+            // Pour chaque élément de l'objet returned, on va mettre à jour les dropdown correspondantes.
+            $('#dropDownstreetDirection').html(objReturned.dropDownstreetDirection);
+            $('#streetDirection').val($('#dropDownstreetDirection li').length==1 ? $('#dropDownstreetDirection li a').html() : '');
+
+            $('#dropDownstreetName').html(objReturned.dropDownstreetName);
+            $('#streetName').val($('#dropDownstreetName li').length==1 ? $('#dropDownstreetName li a').html() : '');
+
+            $('#dropDownstreetSuffix').html(objReturned.dropDownstreetSuffix);
+            $('#streetSuffix').val($('#dropDownstreetSuffix li').length==1 ? $('#dropDownstreetSuffix li a').html() : '');
+
+            $('#dropDownstreetSuffixDirection').html(objReturned.dropDownstreetSuffixDirection);
+            $('#streetSuffixDirection').val($('#dropDownstreetSuffixDirection li').length==1 ? $('#dropDownstreetSuffixDirection li a').html() : '');
+
+            $('#dropDownzipCode').html(objReturned.dropDownzipCode);
+            $('#zipCode').val($('#dropDownzipCode li').length==1 ? $('#dropDownzipCode li a').html() : '');
+
+            $('.ajaxAction[data-trigger="click"]').unbind().on('click', function(){
+                ajaxActionClick($(this));
             });
         } catch(e) {
         }

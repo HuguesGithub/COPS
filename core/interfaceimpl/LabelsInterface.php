@@ -4,7 +4,7 @@ namespace core\interfaceimpl;
 /**
  * @author Hugues
  * @since v1.22.11.24
- * @version v1.23.11.25
+ * @version v1.23.12.02
  */
 interface LabelsInterface
 {
@@ -46,6 +46,7 @@ interface LabelsInterface
     public const LABEL_EDUCATION      = 'Éducation';
     public const LABEL_EQUIPMENT      = 'Équipement';
     public const LABEL_ERREUR         = 'Erreur';
+    public const LABEL_ERR_SAISIE_SKILL = 'Erreur dans la saisie de test de compétences. Format attendu : /roll xCy [-b] [-n].';
     public const LABEL_ETHNIE         = 'Ethnie';
     public const LABEL_EVENTS         = 'Événements';
     public const LABEL_POINTSEXPE     = 'Expérience';

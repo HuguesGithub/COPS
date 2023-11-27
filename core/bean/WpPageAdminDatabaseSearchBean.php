@@ -11,6 +11,7 @@ use core\utils\UrlUtils;
  * Classe WpPageAdminDatabaseSearchBean
  * @author Hugues
  * @since v1.23.11.23
+ * @version v1.23.12.02
  */
 class WpPageAdminDatabaseSearchBean extends WpPageAdminDatabaseBean
 {
@@ -104,6 +105,7 @@ class WpPageAdminDatabaseSearchBean extends WpPageAdminDatabaseBean
 
     /**
      * @since v1.23.11.25
+     * @version v1.23.12.02
      */
     public function getListBlock(): string
     {
@@ -112,11 +114,22 @@ class WpPageAdminDatabaseSearchBean extends WpPageAdminDatabaseBean
         $orderby = $this->initVar(self::SQL_ORDER_BY, self::FIELD_LASTNAME);
         $order = $this->initVar(self::SQL_ORDER, self::SQL_ORDER_ASC);
 
-        // Récupération des données
+        //////////////////////////////////////////////////////
+        // Définition des paramètres
         $attributes = array_merge($this->filters, [
             self::SQL_ORDER_BY => $orderby,
             self::SQL_ORDER => $order,
         ]);
+        $queryArg = array_merge($attributes, [
+            self::CST_ONGLET => self::ONGLET_BDD,
+            self::CST_SUBONGLET => self::CST_BDD_SEARCH,
+            'searchAction' => 1,
+        ]);
+        // Définition du Header du tableau
+        $objHeader = $objBean->getTableHeader($queryArg);
+        //////////////////////////////////////////////////////
+
+        // Récupération des données
         $objs = $this->objServices->getCalGuys($attributes);
         if (empty($objs)) {
             $strReplaced = $objBean->getEmptyRow();
@@ -130,11 +143,6 @@ class WpPageAdminDatabaseSearchBean extends WpPageAdminDatabaseBean
         //////////////////////////////////////////////////////
         // Définition de l'objet Pagination
         $objPagination = new PaginationHtmlBean();
-        $queryArg = array_merge($attributes, [
-            self::CST_ONGLET => self::ONGLET_BDD,
-            self::CST_SUBONGLET => self::CST_BDD_SEARCH,
-            'searchAction' => 1,
-        ]);
 
         $objPagination->setData([
             self::CST_CURPAGE => $this->curPage,
@@ -143,10 +151,6 @@ class WpPageAdminDatabaseSearchBean extends WpPageAdminDatabaseBean
             self::PAGE_OBJS => $objs,
             self::CSS_PAGE_LINK => self::CSS_BG_WHITE,
         ]);
-
-        //////////////////////////////////////////////////////
-        // Définition du Header du tableau
-        $objHeader = $objBean->getTableHeader($queryArg);
 
         //////////////////////////////////////////////////////
         // Définition du Body du tableau

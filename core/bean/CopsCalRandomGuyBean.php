@@ -10,6 +10,7 @@ use core\utils\UrlUtils;
  * CopsCalRandomGuyBean
  * @author Hugues
  * @since v1.23.09.16
+ * @version v1.23.12.02
  */
 class CopsCalRandomGuyBean extends CopsBean
 {
@@ -135,6 +136,7 @@ class CopsCalRandomGuyBean extends CopsBean
 
     /**
      * @since v1.23.10.07
+     * @version v1.23.12.02
      */
     public function getNameSetFilter($selectedValue=''): string
     {
@@ -147,7 +149,7 @@ class CopsCalRandomGuyBean extends CopsBean
         $attributes = [
             self::SQL_ORDER_BY => $field,
         ];
-        $objs = $objServices->getGuys($attributes);
+        $objs = $objServices->getCalGuys($attributes);
         $strLabel = 'NameSet';
         $filter = self::FIELD_NAMESET;
 

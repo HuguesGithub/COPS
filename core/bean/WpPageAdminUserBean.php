@@ -181,7 +181,7 @@ class WpPageAdminUserBean extends WpPageAdminBean
         $btnAttributes = [
             self::ATTR_CLASS => ' btn_outline btn-sm dropdown-toggle',
             'aria-expanded' => false,
-            'data-bs-toggle' => 'dropdown',
+            self::ATTR_DATA_BS_TOGGLE => 'dropdown',
         ];
         $strButton = HtmlUtils::getButton($strLabel, $btnAttributes);
 
@@ -214,7 +214,7 @@ class WpPageAdminUserBean extends WpPageAdminBean
         $btnAttributes = [
             self::ATTR_CLASS => ' btn_outline btn-sm dropdown-toggle',
             'aria-expanded' => false,
-            'data-bs-toggle' => 'dropdown',
+            self::ATTR_DATA_BS_TOGGLE => 'dropdown',
         ];
         $strButton = HtmlUtils::getButton($strLabel, $btnAttributes);
 

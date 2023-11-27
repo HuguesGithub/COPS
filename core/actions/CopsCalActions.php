@@ -1,14 +1,17 @@
 <?php
 namespace core\actions;
 
-use core\services\CopsRandomGuyServices;
+use core\domain\CopsCalGuyAddressClass;
+use core\services\CopsCalAddressServices;
+use core\services\CopsCalGuyAddressServices;
+use core\services\CopsCalGuyServices;
 use core\utils\HtmlUtils;
 use core\utils\SessionUtils;
 
 /**
  * CopsCalActions
  * @author Hugues
- * @since v1.23.10.12
+ * @since v1.23.12.02
  */
 class CopsCalActions extends LocalActions
 {
@@ -21,7 +24,9 @@ class CopsCalActions extends LocalActions
         $ajaxAction = SessionUtils::fromPost(self::AJAX_ACTION);
         $objCopsCalActions = new CopsCalActions();
         return match ($ajaxAction) {
-            'findAddress' => $objCopsCalActions->findAddress(),
+            self::AJAX_FIND_ADDRESS => $objCopsCalActions->findAddress(),
+            self::AJAX_DEL_GUY_ADDRESS => $objCopsCalActions->deleteGuyAddress(),
+            self::AJAX_INS_GUY_ADDRESS => $objCopsCalActions->insertGuyAddress(),
         };
     }
 
@@ -30,91 +35,122 @@ class CopsCalActions extends LocalActions
      */
     public function findAddress(): string
     {
-        $objServices = new CopsRandomGuyServices();
+        $objServices = new CopsCalAddressServices();
 
-        $phoneNumber = substr(SessionUtils::fromPost('phoneNumber'), 0, 7);
-        $zipCode = SessionUtils::fromPost('zipCode');
-        $city = SessionUtils::fromPost('city', false);
+        $streetDirection = SessionUtils::fromPost(self::FIELD_ST_DIRECTION);
+        $streetName = SessionUtils::fromPost(self::FIELD_ST_NAME, false);
+        $streetSuffix = SessionUtils::fromPost(self::FIELD_ST_SUFFIX);
+        $streetSuffixDir = SessionUtils::fromPost(self::FIELD_ST_SUF_DIRECTION);
+        $zipCode = SessionUtils::fromPost(self::FIELD_ZIPCODE);
 
         ///////////////////////////////////////////////////////
+        if ($streetName == '') {
+            $streetName = self::SQL_JOKER_SEARCH;
+         } else {
+            $streetName = self::SQL_JOKER_SEARCH.$streetName.self::SQL_JOKER_SEARCH;
+         }
+        $zipCode = $zipCode == '' ? self::SQL_JOKER_SEARCH : self::SQL_JOKER_SEARCH.$zipCode.self::SQL_JOKER_SEARCH;
         $sqlAttributes = [
-            self::FIELD_PHONE_ID  => self::SQL_JOKER_SEARCH.$phoneNumber.self::SQL_JOKER_SEARCH,
-            self::FIELD_ZIP       => self::SQL_JOKER_SEARCH.$zipCode.self::SQL_JOKER_SEARCH,
-            self::FIELD_CITY_NAME => self::SQL_JOKER_SEARCH.$city.self::SQL_JOKER_SEARCH,
+            self::FIELD_ST_DIRECTION => $streetDirection == '' ? self::SQL_JOKER_SEARCH : $streetDirection,
+            self::FIELD_ST_NAME => $streetName,
+            self::FIELD_ST_SUFFIX => $streetSuffix == '' ? self::SQL_JOKER_SEARCH : $streetSuffix,
+            self::FIELD_ST_SUF_DIRECTION => $streetSuffixDir == '' ? self::SQL_JOKER_SEARCH : $streetSuffixDir,
+            self::FIELD_ZIPCODE => $zipCode,
         ];
+        $objs = $objServices->getCalAddresses($sqlAttributes);
 
-        $liAttributes = [
-            self::ATTR_CLASS => 'zoomTitreCol',
-            self::ATTR_STYLE => 'width: 80px;',
-        ];
-        $strContentHeader  = HtmlUtils::getBalise(self::TAG_LI, self::LABEL_PHONE, $liAttributes);
-        $strContentHeader .= HtmlUtils::getBalise(self::TAG_LI, self::LABEL_ZIPCODE, $liAttributes);
-        $liAttributes[self::ATTR_STYLE] = 'width: 160px;';
-        $strContentHeader .= HtmlUtils::getBalise(self::TAG_LI, 'Ville', $liAttributes);
-
-        $strHeader = HtmlUtils::getBalise(
-            self::TAG_UL,
-            $strContentHeader,
-            [
-                self::ATTR_CLASS => 'zoomTitresCol ui-menu ui-autocomplete',
-                self::ATTR_STYLE => 'width: 325px;',
-            ]
-        );
-
-        $content = '';
-        $arrs = $objServices->getTripletAdresse($sqlAttributes);
-        if (empty($arrs)) {
-            return '{"refresh": '.json_encode('', JSON_THROW_ON_ERROR).'}';
+        $arrStDir = [];
+        $arrStName = [];
+        $arrStSuf = [];
+        $arrStSufDir = [];
+        $arrZipCode = [];
+        foreach ($objs as $obj) {
+            $value = $obj->getField(self::FIELD_ST_DIRECTION);
+            if (!isset($arrStDir[$value])) {
+                $arrStDir[$value] = $obj->getBean()->getDropDownLi(self::FIELD_ST_DIRECTION);
+            }
+            $value = $obj->getField(self::FIELD_ST_NAME);
+            if (!isset($arrStName[$value])) {
+                $arrStName[$value] = $obj->getBean()->getDropDownLi(self::FIELD_ST_NAME);
+            }
+            $value = $obj->getField(self::FIELD_ST_SUFFIX);
+            if (!isset($arrStSuf[$value])) {
+                $arrStSuf[$value] = $obj->getBean()->getDropDownLi(self::FIELD_ST_SUFFIX);
+            }
+            $value = $obj->getField(self::FIELD_ST_SUF_DIRECTION);
+            if (!isset($arrStSufDir[$value])) {
+                $arrStSufDir[$value] = $obj->getBean()->getDropDownLi(self::FIELD_ST_SUF_DIRECTION);
+            }
+            $value = $obj->getField(self::FIELD_ZIPCODE);
+            if (!isset($arrZipCode[$value])) {
+                $arrZipCode[$value] = $obj->getBean()->getDropDownLi(self::FIELD_ZIPCODE);
+            }
         }
-        if (count($arrs)>100) {
-            $blnTropReponses = true;
-            array_pop($arrs);
+
+        $strJTOE = JSON_THROW_ON_ERROR;
+
+        $strReturned  = '{';
+        $strReturned .= '"dropDownstreetDirection": '.json_encode(implode('', $arrStDir), $strJTOE);
+        $strReturned .= ',"dropDownstreetName": '.json_encode(implode('', $arrStName), $strJTOE);
+        $strReturned .= ',"dropDownstreetSuffix": '.json_encode(implode('', $arrStSuf), $strJTOE);
+        $strReturned .= ',"dropDownstreetSuffixDirection": '.json_encode(implode('', $arrStSufDir), $strJTOE);
+        $strReturned .= ',"dropDownzipCode": '.json_encode(implode('', $arrZipCode), $strJTOE);
+        $strReturned .= '}';
+        return $strReturned;
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function deleteGuyAddress()
+    {
+        $objServices = new CopsCalGuyAddressServices();
+        $id = SessionUtils::fromPost(self::FIELD_ID);
+
+        $objs = $objServices->getCalGuyAddresses([self::FIELD_ID=>$id]);
+        if (count($objs)==1) {
+            $obj = array_shift($objs);
+            $objServices->deleteCalGuyAddress($obj);
+            $msg = "La suppression de l'adresse s'est correctement déroulée.";
         } else {
-            $blnTropReponses = false;
+            $msg = 'Une erreur est survenue lors de la suppression de cette adresse.';
         }
-        while (!empty($arrs)) {
-            $arr = array_shift($arrs);
-            $liAttributes[self::ATTR_STYLE] = 'width: 80px;';
-            $liAttributes[self::ATTR_DATA][self::ATTR_DATA_TARGET] = 'telephoneNumber';
-            $contentLink  = HtmlUtils::getBalise(self::TAG_SPAN, $arr->phoneId, $liAttributes);
-            $liAttributes[self::ATTR_DATA][self::ATTR_DATA_TARGET] = 'zipCode';
-            $contentLink .= HtmlUtils::getBalise(self::TAG_SPAN, $arr->zip, $liAttributes);
-            $liAttributes[self::ATTR_STYLE] = 'width: 160px;';
-            $liAttributes[self::ATTR_DATA][self::ATTR_DATA_TARGET] = 'city';
-            $contentLink .= HtmlUtils::getBalise(self::TAG_SPAN, $arr->cityName, $liAttributes);
+        return $this->getToastContentJson(self::NOTIF_INFO, 'Suppression adresse', $msg);
+    }
 
-            $contentLi = HtmlUtils::getLink($contentLink, '#', 'pb-0 pt-0 ui-menu-item-wrapper');
-            $content .= HtmlUtils::getBalise(
-                self::TAG_LI,
-                $contentLi,
-                [self::ATTR_CLASS=>'list-group-item m-0 p-0 ui-menu-item']
-            );
+    /**
+     * @since v1.23.12.02
+     */
+    public function insertGuyAddress()
+    {
+        $objAddressServices = new CopsCalAddressServices();
+        $objGuyAddressServices = new CopsCalGuyAddressServices();
+
+        $attributes = [
+            self::FIELD_ST_DIRECTION => SessionUtils::fromPost(self::FIELD_ST_DIRECTION),
+            self::FIELD_ST_NAME => SessionUtils::fromPost(self::FIELD_ST_NAME, false),
+            self::FIELD_ST_SUFFIX => SessionUtils::fromPost(self::FIELD_ST_SUFFIX),
+            self::FIELD_ST_SUF_DIRECTION => SessionUtils::fromPost(self::FIELD_ST_SUF_DIRECTION),
+            self::FIELD_ZIPCODE => SessionUtils::fromPost(self::FIELD_ZIPCODE),
+        ];
+        $objs = $objAddressServices->getCalAddresses($attributes);
+        if (!empty($objs)) {
+            // On vérifie que les données saisies correspondent à une entrée existante.
+            // On peut alors sauvegarder dans CalGuyAddress
+            $obj = array_shift($objs);
+
+            $attributes = [
+                self::FIELD_NUMBER => SessionUtils::fromPost(self::FIELD_NUMBER),
+                self::FIELD_GUY_ID => SessionUtils::fromPost(self::FIELD_GUY_ID),
+                self::FIELD_ADDRESS_ID => $obj->getField(self::FIELD_ID)
+            ];
+            $objCalGuyAddress = new CopsCalGuyAddressClass($attributes);
+            $objGuyAddressServices->insertCalGuyAddress($objCalGuyAddress);
+            $msg = "Création de l'adresse pour cette personne réussie.";
+        } else {
+            $msg = "Création impossible. Problème de données.";
         }
-        if ($blnTropReponses) {
-            $contentLink = HtmlUtils::getBalise(
-                self::TAG_SPAN,
-                'Plus de 100 possibilités.',
-                [self::ATTR_CLASS=>'zoomCellule', self::ATTR_STYLE=>'width: 320px;']
-            );
-            $contentLi = HtmlUtils::getLink($contentLink, '#', 'pb-0 pt-0 ui-menu-item-wrapper');
-            $content .= HtmlUtils::getBalise(
-                self::TAG_LI,
-                $contentLi,
-                [self::ATTR_CLASS=>'list-group-item m-0 p-0 ui-menu-item']
-            );
-        }
-        $strZoom = HtmlUtils::getBalise(
-            self::TAG_UL,
-            $content,
-            [
-                self::ATTR_CLASS => 'zoomContentCol ui-menu ui-autocomplete list-group',
-                self::ATTR_STYLE => 'width: 325px;',
-            ]
-        );
-        ///////////////////////////////////////////////////////
 
-        $arrReturned = ["content" => $strHeader.$strZoom];
-
-        return '{"refresh": '.json_encode($arrReturned, JSON_THROW_ON_ERROR).'}';
+        return $this->getToastContentJson(self::NOTIF_INFO, 'Création adresse', $msg);
     }
 }

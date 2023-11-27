@@ -8,7 +8,7 @@ use core\utils\UrlUtils;
  * CopsPlayerBean
  * @author Hugues
  * @since 1.22.04.27
- * @version v1.23.08.12
+ * @version v1.23.12.02
  */
 class CopsPlayerBean extends UtilitiesBean
 {
@@ -104,19 +104,24 @@ class CopsPlayerBean extends UtilitiesBean
     return '';
   }
 
+  /**
+   * @version v1.23.12.02
+   */
   public function getCopsPlayerCarac($isCreation=false)
   {
     $selectAttributes = [
-        'class'         => 'form-control ajaxAction',
-        'data-trigger'  => 'change',
-        'data-ajax'     => 'saveData,checkLangue'
+        self::ATTR_CLASS         => 'form-control ajaxAction',
+        self::ATTR_DATA   => [
+            self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CHANGE,
+            self::ATTR_DATA_AJAX    => 'saveData,checkLangue'
+        ]
     ];
 
     $urlTemplate  = 'web/pages/public/fragments/public-fragments-section-caracteristiques-panel';
     $urlTemplate .= ($isCreation ? '-edit' : '').'.php';
     $attributes = [
         // Carrure
-        $this->CopsPlayer->getField('carac_carrure'),
+        $this->CopsPlayer->getField(self::FIELD_CARAC_CARRURE),
         // Charme
         2,
         // Coordination
@@ -258,15 +263,15 @@ class CopsPlayerBean extends UtilitiesBean
     ////////////////////////////////////////////////////////////////////
     switch ($this->CopsPlayer->getField(self::FIELD_GRADE)) {
       case 'Capitaine' :
-        $bordure = 'warning';
+        $bordure = self::NOTIF_WARNING;
         $section = 'N/A';
       break;
       case 'Lieutenant' :
-        $bordure = 'primary';
+        $bordure = self::NOTIF_PRIMARY;
         $section = $this->CopsPlayer->getField(self::FIELD_SECTION);
       break;
       case 'Détective' :
-        $bordure = 'light';
+        $bordure = self::NOTIF_LIGHT;
         $section = $this->CopsPlayer->getField(self::FIELD_SECTION);
       break;
       default :
@@ -286,7 +291,7 @@ class CopsPlayerBean extends UtilitiesBean
     ////////////////////////////////////////////////////////////////////
     $surnom = $this->CopsPlayer->getField(self::FIELD_SURNOM);
     if ($surnom=='') {
-      $surnom = '&nbsp;';
+      $surnom = self::CST_NBSP;
     }
     ////////////////////////////////////////////////////////////////////
 

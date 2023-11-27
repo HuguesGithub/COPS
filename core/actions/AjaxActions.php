@@ -7,32 +7,34 @@ use core\utils\SessionUtils;
  * AjaxActions
  * @author Hugues
  * @since v1.23.06.21
- * @version v1.23.08.05
+ * @version v1.23.12.02
  */
 class AjaxActions extends LocalActions
 {
     /**
      * Gère les actions Ajax
      * @since v1.23.06.21
-     * @version v1.23.08.05
+     * @version v1.23.12.02
      */
     public static function dealWithAjax(): string
     {
         $ajaxAction = SessionUtils::fromPost(self::AJAX_ACTION);
         switch ($ajaxAction) {
-            case 'saveData' :
+            case self::AJAX_SAVE_DATA :
                 $returned = CopsPlayerActions::dealWithStatic();
             break;
-            case 'findAddress' :
-                $returned = CopsCalActions::dealWithStatic();
+            case self::AJAX_FIND_ADDRESS :
+            case self::AJAX_DEL_GUY_ADDRESS :
+            case self::AJAX_INS_GUY_ADDRESS :
+                    $returned = CopsCalActions::dealWithStatic();
             break;
-            case 'csvExport':
-                // TODO : $returned = CopsIndexActions::dealWithStatic($_POST);
+            case self::AJAX_CSV_EXPORT :
+                $returned = static::todoActions($ajaxAction, 'CopsIndexActions');
             break;
-            case 'tchat':
-            case 'refresh':
-            case 'checkNotif':
-                    $returned = CopsTchatActions::dealWithStatic();
+            case self::AJAX_TCHAT :
+            case self::AJAX_REFRESH :
+            case self::AJAX_CHECK_NOTIF :
+                $returned = CopsTchatActions::dealWithStatic();
             break;
             default :
                 $returned  = 'Erreur dans AjaxActions le $_POST['.self::AJAX_ACTION.'] : '.$ajaxAction.'<br>';
@@ -41,4 +43,13 @@ class AjaxActions extends LocalActions
         return $returned;
     }
 
+    /**
+     * @since v1.23.12.02
+     */
+    public static function todoActions(string $ajaxAction, string $classAction): string
+    {
+        $returned  = 'WIP dans AjaxActions le $_POST['.self::AJAX_ACTION.'] : '.$ajaxAction;
+        $returned .= ' est en attente de développement dans '.$classAction.'.<br>';
+        return $returned;
+    }
 }

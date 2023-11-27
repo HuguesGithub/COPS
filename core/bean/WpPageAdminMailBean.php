@@ -8,7 +8,7 @@ use core\utils\HtmlUtils;
  * Classe WpPageAdminMailBean
  * @author Hugues
  * @since 1.22.04.29
- * @version v1.23.05.28
+ * @version v1.23.12.02
  */
 class WpPageAdminMailBean extends WpPageAdminBean
 {
@@ -28,14 +28,14 @@ class WpPageAdminMailBean extends WpPageAdminBean
         /////////////////////////////////////////
         // Construction du menu
         $this->arrMenu = [
-            self::CST_MAIL_INBOX  => [self::FIELD_ICON => 'inbox', self::FIELD_LABEL => self::LABEL_INBOX],
-            self::CST_MAIL_TRASH  => [self::FIELD_ICON => 'trash-alt', self::FIELD_LABEL => self::LABEL_TRASH],
+            self::CST_MAIL_INBOX  => [self::FIELD_ICON => self::I_INBOX, self::FIELD_LABEL => self::LABEL_INBOX],
+            self::CST_MAIL_TRASH  => [self::FIELD_ICON => self::I_DELETE, self::FIELD_LABEL => self::LABEL_TRASH],
             /*
-            self::CST_FOLDER_DRAFT  => array(self::FIELD_ICON => 'file-lines',    self::FIELD_LABEL => 'Brouillons'),
-            self::CST_FOLDER_SENT   => array(self::FIELD_ICON => 'paper-plane',   self::FIELD_LABEL => 'Envoyés'),
-            self::CST_FOLDER_EVENTS => [self::FIELD_ICON => 'calendar-days', self::FIELD_LABEL => self::LABEL_EVENTS],
-            self::CST_FOLDER_ALERT  => array(self::FIELD_ICON => 'bell',         self::FIELD_LABEL => 'Notifications'),
-            self::CST_FOLDER_SPAM   => array(self::FIELD_ICON => 'filter',        self::FIELD_LABEL => 'Indésirables'),
+            self::CST_FOLDER_DRAFT  => array(self::FIELD_ICON => self::I_FILE_LINES, self::FIELD_LABEL => 'Brouillons'),
+            self::CST_FOLDER_SENT   => array(self::FIELD_ICON => self::I_PAPER_PLANE, self::FIELD_LABEL => 'Envoyés'),
+            self::CST_FOLDER_EVENTS => [self::FIELD_ICON => self::I_CALENDAR_DAYS, self::FIELD_LABEL => self::LABEL_EVENTS],
+            self::CST_FOLDER_ALERT  => array(self::FIELD_ICON => self::I_BELL, self::FIELD_LABEL => 'Notifications'),
+            self::CST_FOLDER_SPAM   => array(self::FIELD_ICON => self::I_FILTER, self::FIELD_LABEL => 'Indésirables'),
             */
             self::CST_MAIL_READ => [self::FIELD_LABEL => 'Lire'],
             self::CST_MAIL_WRITE => [self::FIELD_LABEL => 'Rédiger'],
@@ -310,7 +310,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
             // Si on est sur read et que key vaut le folder du message affiché
             $objMailFolder = $this->objCopsMailJoint->getMailFolder();
             if ($objMailFolder!=null) {
-                $slugFolder = $objMailFolder->getField('slug');
+                $slugFolder = $objMailFolder->getField(self::FIELD_SLUG);
                 if ($this->slugSubOnglet==self::CST_MAIL_READ && $slugFolder==$key) {
                     $blnActive = true;
                 }
@@ -465,7 +465,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
              $strExpediteurOptions .= '<option value="1">Ressources Humaines</option>';
              $strExpediteurOptions .= '<option value="2">COPS 101</option>';
          }
-         $label = $objMailUser->getField('user');
+         $label = $objMailUser->getField(self::FIELD_USER);
          $strExpediteurOptions .= HtmlUtils::getOption($label, $objMailUser->getField(self::FIELD_ID));
          return $strExpediteurOptions;
      }
@@ -510,7 +510,7 @@ class WpPageAdminMailBean extends WpPageAdminBean
         $urlRemove = $this->getOngletUrl($urlElements);
         
         // Les boutons centraux en haut :
-        $buttonContent = HtmlUtils::getLink(HtmlUtils::getIcon('trash-alt'), $urlRemove, self::CST_TEXT_WHITE);
+        $buttonContent = HtmlUtils::getLink(HtmlUtils::getIcon(self::I_DELETE), $urlRemove, self::CST_TEXT_WHITE);
         $strButton = HtmlUtils::getButton($buttonContent, [self::ATTR_TITLE=>self::LABEL_DELETE]);
         $strButtonCentral = HtmlUtils::getDiv($strButton, [self::ATTR_CLASS=>'btn-group']);
         

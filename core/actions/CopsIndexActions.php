@@ -28,7 +28,7 @@ class CopsIndexActions extends LocalActions
     {
         $objCopsIndexServices = new CopsIndexServices();
         $objCopsIndexActions = new CopsIndexActions($objCopsIndexServices);
-        if ($params[self::AJAX_ACTION]=='csvExport') {
+        if ($params[self::AJAX_ACTION]==self::AJAX_CSV_EXPORT) {
             $returned = $objCopsIndexActions->csvExport($params);
         } else {
             $returned = static::getErrorActionContent($params[self::AJAX_ACTION]);
@@ -104,7 +104,7 @@ class CopsIndexActions extends LocalActions
         
         $url = '/wp-content/plugins/hj-cops/web/rsc/files/'.$strFileName;
         $strMessage = 'Le fichier CSV peut être téléchargé <a href="'.$url.'" class="text-white">ici</a>.';
-        return $this->getToastContentJson('success', 'Download', $strMessage);
+        return $this->getToastContentJson(self::NOTIF_SUCCESS, 'Download', $strMessage);
     }
 
 }
