@@ -2,8 +2,11 @@
 namespace core\actions;
 
 use core\domain\CopsCalGuyAddressClass;
+use core\domain\CopsCalGuyPhoneClass;
 use core\services\CopsCalAddressServices;
+use core\services\CopsCalPhoneServices;
 use core\services\CopsCalGuyAddressServices;
+use core\services\CopsCalGuyPhoneServices;
 use core\services\CopsCalGuyServices;
 use core\utils\HtmlUtils;
 use core\utils\SessionUtils;
@@ -24,9 +27,12 @@ class CopsCalActions extends LocalActions
         $ajaxAction = SessionUtils::fromPost(self::AJAX_ACTION);
         $objCopsCalActions = new CopsCalActions();
         return match ($ajaxAction) {
-            self::AJAX_FIND_ADDRESS => $objCopsCalActions->findAddress(),
+            self::AJAX_FIND_ADDRESS    => $objCopsCalActions->findAddress(),
+            self::AJAX_FIND_PHONE      => $objCopsCalActions->findPhone(),
             self::AJAX_DEL_GUY_ADDRESS => $objCopsCalActions->deleteGuyAddress(),
+            self::AJAX_DEL_GUY_PHONE   => $objCopsCalActions->deleteGuyPhone(),
             self::AJAX_INS_GUY_ADDRESS => $objCopsCalActions->insertGuyAddress(),
+            self::AJAX_INS_GUY_PHONE   => $objCopsCalActions->insertGuyPhone(),
         };
     }
 
@@ -152,5 +158,192 @@ class CopsCalActions extends LocalActions
         }
 
         return $this->getToastContentJson(self::NOTIF_INFO, 'Création adresse', $msg);
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function findPhone(): string
+    {
+        $objServices = new CopsCalPhoneServices();
+
+        $cityName = SessionUtils::fromPost(self::FIELD_CITY_NAME, false);
+        $phoneNumberFirst = SessionUtils::fromPost(self::CST_PN_FIRST);
+        $phoneNumberSecond = SessionUtils::fromPost(self::CST_PN_SECOND);
+
+        ///////////////////////////////////////////////////////
+        if ($cityName == '') {
+            $cityName = self::SQL_JOKER_SEARCH;
+        } else {
+            $cityName = self::SQL_JOKER_SEARCH.$cityName.self::SQL_JOKER_SEARCH;
+        }
+        $phoneNumberFirst .= self::SQL_JOKER_SEARCH;
+        $phoneNumberSecond .= self::SQL_JOKER_SEARCH;
+        $phoneNumber = $phoneNumberFirst.'-'.$phoneNumberSecond;
+
+        $sqlAttributes = [
+            self::FIELD_PHONE_ID => $phoneNumber,
+            self::FIELD_CITY_NAME => $cityName,
+        ];
+        $objs = $objServices->getCalPhones($sqlAttributes);
+
+        $arrCityName = [];
+        $arrPnFirst = [];
+        $arrPnSecond = [];
+        foreach ($objs as $obj) {
+            $value = $obj->getField(self::FIELD_CITY_NAME);
+            if (!isset($arrCityName[$value])) {
+                $arrCityName[$value] = $obj->getBean()->getDropDownLi(self::FIELD_CITY_NAME);
+            }
+            $value = $obj->getField(self::FIELD_PHONE_ID);
+            list($first, $second) = explode('-', $value);
+            if (!isset($arrPnFirst[$first])) {
+                $arrPnFirst[$first] = $obj->getBean()->getDropDownLi(self::CST_PN_FIRST);
+            }
+            if (!isset($arrPnSecond[$second])) {
+                $arrPnSecond[$second] = $obj->getBean()->getDropDownLi(self::CST_PN_SECOND);
+            }
+        }
+
+        $strJTOE = JSON_THROW_ON_ERROR;
+
+        $strReturned  = '{';
+        $strReturned .= '"dropDowncityName": '.json_encode(implode('', $arrCityName), $strJTOE);
+        $strReturned .= ',"dropDownphoneNumberFirst": '.json_encode(implode('', $arrPnFirst), $strJTOE);
+        $strReturned .= ',"dropDownphoneNumberSecond": '.json_encode(implode('', $arrPnSecond), $strJTOE);
+        $strReturned .= '}';
+        return $strReturned;
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function deleteGuyPhone()
+    {
+        $objServices = new CopsCalGuyPhoneServices();
+        $id = SessionUtils::fromPost(self::FIELD_ID);
+
+        $objs = $objServices->getCalGuyPhones([self::FIELD_ID=>$id]);
+        if (count($objs)==1) {
+            $obj = array_shift($objs);
+            $objServices->deleteCalGuyPhone($obj);
+            $msg = "La suppression du téléphone s'est correctement déroulée.";
+        } else {
+            $msg = 'Une erreur est survenue lors de la suppression de ce téléphone.';
+        }
+        return $this->getToastContentJson(self::NOTIF_INFO, 'Suppression téléphone', $msg);
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function insertGuyPhone()
+    {
+        $objPhoneServices = new CopsCalPhoneServices();
+        $objGuyPhoneServices = new CopsCalGuyPhoneServices();
+
+        $cityName = SessionUtils::fromPost(self::FIELD_CITY_NAME, false);
+        $phoneNumberFirst = SessionUtils::fromPost(self::CST_PN_FIRST);
+        $phoneNumberSecond = SessionUtils::fromPost(self::CST_PN_SECOND);
+        $phoneNumberThird = SessionUtils::fromPost(self::CST_PN_THIRD);
+        $guyId = SessionUtils::fromPost(self::FIELD_GUY_ID);
+
+        $attributes = [];
+        $msgErr = '';
+        if ($this->checkRequired($phoneNumberFirst, $phoneNumberSecond, $cityName, $attributes, $msgErr)) {
+            $phoneRacine = $phoneNumberFirst.'-'.$phoneNumberSecond;
+            // On a des critères de recherche valables. On va trouver un élément qui y correspond.
+            $objs = $objPhoneServices->getCalPhones($attributes);
+            if (empty($objs)) {
+                // On n'a pas trouvé d'équivalence. Les données ne sont pas bonnes
+                $msgErr = "Erreur lors de la vérification des données.";
+                $blnOk = false;
+            } else {
+                // Sinon, on a 1 ou plusieurs possibilités.
+                if (count($objs)==1) {
+                    $obj = array_shift($objs);
+                } else {
+                    // S'il y en a plusieurs, on en prend une au hasard
+                    $obj = array_slice($objs, rand(1, count($objs))-1, 1);
+                }
+
+                // Si celle sélectionné a des • dans le phoneId, on les remplace par des chiffres aléatoires.
+                $pos = strpos($phoneRacine, '•');
+                switch ($pos) {
+                    case '6' :
+                        $phoneRacine = substr($phoneRacine, 0, 5).rand(0, 9);
+                    break;
+                    case '5' :
+                        $phoneRacine = substr($phoneRacine, 0, 4).str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
+                    break;
+                    case '4' :
+                        $phoneRacine = substr($phoneRacine, 0, 3).str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+                    break;
+                    default :
+                    break;
+                }
+
+                // En théorie, à ce stade, on a un xxx-xxx valide.
+                // On va donc ajouter le troisième terme. Vérifier qu'il n'est pas déjà présent et l'enregistrer
+                if ($phoneNumberThird=='') {
+                    $phoneNumberThird = str_pad(rand(0, 999), 4, '0', STR_PAD_LEFT);
+                }
+                $tries = 0;
+                do {
+                    $attributes = [
+                        self::FIELD_GUY_ID => $guyId,
+                        self::FIELD_PHONENUMBER => $phoneRacine.'-'.$phoneNumberThird
+                    ];
+                    $objs = $objGuyPhoneServices->getCalGuyPhones($attributes);
+                    $phoneNumberThird = str_pad(rand(0, 999), 4, '0', STR_PAD_LEFT);
+                    $tries++;
+                } while (!empty($objs) && $tries<50);
+
+                if ($tries>=50) {
+                    $msgErr = 'Trop de tentatives pour trouver un numéro valide.';
+                } else {
+                    $objCalGuyPhone = new CopsCalGuyPhoneClass($attributes);
+                    $objGuyPhoneServices->insertCalGuyPhone($objCalGuyPhone);
+                }
+            }
+        }
+        if ($msgErr!='') {
+            return $this->getToastContentJson(self::NOTIF_WARNING, 'Création téléphone', 'Erreur : '.$msgErr);
+        } else {
+            return $this->getToastContentJson(self::NOTIF_INFO, 'Création téléphone', 'Création réussie');
+        }
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    private function checkRequired(
+        string $phoneNumberFirst,
+        string $phoneNumberSecond,
+        string $cityName,
+        array &$attributes,
+        string &$msgErr
+    ): bool
+    {
+        $blnOk = true;
+        if ($phoneNumberFirst=='') {
+            if ($cityName=='') {
+                $blnOk = false;
+                $msgErr = "Erreur si le premier indicatif n'est pas renseigné, le nom de la ville doit l'être.";
+            } else {
+                $attributes = [self::FIELD_CITY_NAME=>$cityName];
+            }
+        } else {
+            if ($phoneNumberSecond!='') {
+                $attributes = [self::FIELD_PHONE_ID=>$phoneNumberFirst.'-'.$phoneNumberSecond];
+            } elseif ($cityName!='') {
+                $attributes = [self::FIELD_PHONE_ID=>$phoneNumberFirst, self::FIELD_CITY_NAME=>$cityName];
+            } else {
+                $blnOk = false;
+                $msgErr  = "Erreur si le premier indicatif est renseigné, ";
+                $msgErr .= "le deuxième indicatif ou le nom de la ville doivent l'être également.";
+            }
+        }
+        return $blnOk;
     }
 }

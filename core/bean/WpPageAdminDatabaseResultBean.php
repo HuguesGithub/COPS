@@ -53,6 +53,7 @@ class WpPageAdminDatabaseResultBean extends WpPageAdminDatabaseBean
 
     /**
      * @since v1.23.11.25
+     * @version v1.23.12.02
      */
     public function getOngletContent(): string
     {
@@ -65,7 +66,7 @@ class WpPageAdminDatabaseResultBean extends WpPageAdminDatabaseBean
         } else {
             $detailBlock = $this->getDetailBlock();
             $addressBlock = $this->obj->getBean()->getAddressBlock();
-            $phoneBlock = 'TODO';
+            $phoneBlock = $this->obj->getBean()->getPhoneBlock();
         }
 
         $urlTemplate = self::WEB_PPFS_BDD_RESULT;

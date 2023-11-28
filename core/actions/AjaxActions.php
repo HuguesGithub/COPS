@@ -26,7 +26,10 @@ class AjaxActions extends LocalActions
             case self::AJAX_FIND_ADDRESS :
             case self::AJAX_DEL_GUY_ADDRESS :
             case self::AJAX_INS_GUY_ADDRESS :
-                    $returned = CopsCalActions::dealWithStatic();
+            case self::AJAX_FIND_PHONE :
+            case self::AJAX_DEL_GUY_PHONE :
+            case self::AJAX_INS_GUY_PHONE :
+                $returned = CopsCalActions::dealWithStatic();
             break;
             case self::AJAX_CSV_EXPORT :
                 $returned = static::todoActions($ajaxAction, 'CopsIndexActions');

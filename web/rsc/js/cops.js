@@ -126,17 +126,31 @@ function ajaxActionClick(obj) {
                 break;
                 case 'addressDropdown' :
                     findAddress(obj);
-                    break;
+                break;
                 case 'cleanGuyAddress' :
                     cleanGuyAddress();
-                    break;
+                break;
                 case 'insertGuyAddress' :
                     obj.addClass('disabled');
                     insertGuyAddress();
-                    break;
+                break;
+                case 'deleteGuyPhone' :
+                    obj.addClass('disabled');
+                    deleteGuyPhone(obj);
+                break;
+                case 'phoneDropdown' :
+                    findPhone(obj);
+                break;
+                case 'cleanGuyPhone' :
+                    cleanGuyPhone();
+                break;
+                case 'insertGuyPhone' :
+                    obj.addClass('disabled');
+                    insertGuyPhone();
+                break;
                 default :
                     console.log(oneAction+" n'est pas une action définie pour ajaxActionClick.");
-                    break;
+                break;
     		}
         }
 	}
@@ -166,12 +180,12 @@ function ajaxActionKeyUp(obj) {
 ///////////////////////////////////////////////////
 function filterDropdown(obj) {
     // obj est un input dont la valeur doit filtrer le contenu d'un dropdown associé.
-    let value = obj.val().toUpperCase();
+    let value = obj.val().toString().toUpperCase();
     let target = obj.data('target');
     // On va juste cacher les valeurs qui ne correspondent pas au filtre.
     // On recherche %valeur%
     $(target+' li').each(function(){
-        let valElement = $(this).data('value');
+        let valElement = $(this).data('value')+'';
         if (valElement.includes(value)) {
             $(this).show();
         } else {
@@ -180,6 +194,89 @@ function filterDropdown(obj) {
     });
 }
 ///////////////////////////////////////////////////
+
+///////////////////////////////////////////////////
+// FONCTIONS RELATIVES AUX TELEPHONES
+///////////////////////////////////////////////////
+function insertGuyPhone() {
+    let data = {
+        'action': 'dealWithAjax',
+        'ajaxAction': 'insertGuyPhone',
+        'cityName': $('#cityName').val(),
+        'phoneNumberFirst': $('#phoneNumberFirst').val(),
+        'phoneNumberSecond': $('#phoneNumberSecond').val(),
+        'phoneNumberThird': $('#phoneNumberThird').val(),
+        'guyId': $('input[name="id"]').val(),
+    };
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {}
+    ).done(function(response) {
+        location.reload();
+    });
+}
+function cleanGuyPhone() {
+    $('#cityName').val('');
+    $('#phoneNumberFirst').val('');
+    $('#phoneNumberSecond').val('');
+    $('#phoneNumberThird').val('');
+    filterDropdown($('#cityName'));
+    filterDropdown($('#phoneNumberFirst'));
+    filterDropdown($('#phoneNumberSecond'));
+    filterDropdown($('#phoneNumberThird'));
+}
+function deleteGuyPhone(obj) {
+    let data = {
+        'action': 'dealWithAjax',
+        'ajaxAction': 'deleteGuyPhone',
+        'id': obj.attr('id')
+    };
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {}
+    ).done(function(response) {
+        obj.closest('li').remove();
+    });
+}
+function findPhone(obj) {
+    let value = obj.html();
+    let target = obj.data('target');
+    $(target).val(value);
+
+    let objReturned = null;
+    let data = {
+        'action': 'dealWithAjax',
+        'ajaxAction': 'findPhone',
+        'cityName': $('#cityName').val(),
+        'phoneNumberFirst': $('#phoneNumberFirst').val(),
+        'phoneNumberSecond': $('#phoneNumberSecond').val(),
+    };
+    $.post(
+        ajaxurl,
+        data,
+        function(response) {}
+    ).done(function(response) {
+        try {
+            objReturned = JSON.parse(response);
+            // Pour chaque élément de l'objet returned, on va mettre à jour les dropdown correspondantes.
+            $('#dropDowncityName').html(objReturned.dropDowncityName);
+            $('#cityName').val($('#dropDowncityName li').length==1 ? $('#dropDowncityName li a').html() : '');
+
+            $('#dropDownphoneNumberFirst').html(objReturned.dropDownphoneNumberFirst);
+            $('#phoneNumberFirst').val($('#dropDownphoneNumberFirst li').length==1 ? $('#dropDownphoneNumberFirst li a').html() : '');
+
+            $('#dropDownphoneNumberSecond').html(objReturned.dropDownphoneNumberSecond);
+            $('#phoneNumberSecond').val($('#dropDownphoneNumberSecond li').length==1 ? $('#dropDownphoneNumberSecond li a').html() : '');
+
+            $('.ajaxAction[data-trigger="click"]').unbind().on('click', function(){
+                ajaxActionClick($(this));
+            });
+        } catch(e) {
+        }
+    });
+}
 
 ///////////////////////////////////////////////////
 // FONCTIONS RELATIVES AUX ADRESSES

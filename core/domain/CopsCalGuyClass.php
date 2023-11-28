@@ -5,6 +5,7 @@ use core\bean\CopsCalGuyBean;
 use core\domain\CopsCalPhoneClass;
 use core\services\CopsCalGuyServices;
 use core\services\CopsCalGuyAddressServices;
+use core\services\CopsCalGuyPhoneServices;
 
 /**
  * Classe CopsCalGuyClass
@@ -51,6 +52,7 @@ class CopsCalGuyClass extends LocalDomainClass
     public function initServices()
     {
         $this->objCalGuyAddressServices = new CopsCalGuyAddressServices();
+        $this->objCalGuyPhoneServices = new CopsCalGuyPhoneServices();
     }
 
     /**
@@ -107,5 +109,16 @@ class CopsCalGuyClass extends LocalDomainClass
         // les entrées où guyId vaut $this->id
         // Puis on renvoie un tableau des résultats
         return $this->objCalGuyAddressServices->getCalGuyAddresses([self::FIELD_GUY_ID=>$this->id]);
+    }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function getCalGuyPhones(): array
+    {
+        // On va aller chercher dans cal_guy_phone
+        // les entrées où guyId vaut $this->id
+        // Puis on renvoie un tableau des résultats
+        return $this->objCalGuyPhoneServices->getCalGuyPhones([self::FIELD_GUY_ID=>$this->id]);
     }
 }

@@ -43,6 +43,7 @@ interface LabelsInterface
     public const LABEL_DESCRIPTION    = 'Description';
     public const LABEL_DESCRIPTION_MJ = 'Description MJ';
     public const LABEL_DESCRIPTION_PJ = 'Description PJ';
+    public const LABEL_WIP            = 'Développement';
     public const LABEL_EDUCATION      = 'Éducation';
     public const LABEL_EQUIPMENT      = 'Équipement';
     public const LABEL_ERREUR         = 'Erreur';
@@ -57,6 +58,7 @@ interface LabelsInterface
     public const LABEL_HUMIDITY       = 'Humidité';
     public const LABEL_IDENTITY       = 'Identité';
     public const LABEL_INDEX          = 'Index';
+    public const LABEL_GUYS           = 'Individus';
     public const LABEL_MOON           = 'Lune';
     public const LABEL_WEATHER        = 'Météo';
     public const LABEL_MONTHLY        = 'Mensuel';

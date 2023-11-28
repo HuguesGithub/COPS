@@ -15,8 +15,11 @@ interface ConstantsInterface
     public const AJAX_ACTION            = 'ajaxAction';
     public const AJAX_SAVE_DATA         = 'saveData';
     public const AJAX_FIND_ADDRESS      = 'findAddress';
+    public const AJAX_FIND_PHONE        = 'findPhone';
     public const AJAX_DEL_GUY_ADDRESS   = 'deleteGuyAddress';
+    public const AJAX_DEL_GUY_PHONE     = 'deleteGuyPhone';
     public const AJAX_INS_GUY_ADDRESS   = 'insertGuyAddress';
+    public const AJAX_INS_GUY_PHONE     = 'insertGuyPhone';
     public const AJAX_CSV_EXPORT        = 'csvExport';
     public const AJAX_TCHAT             = 'tchat';
     public const AJAX_REFRESH           = 'refresh';
@@ -137,6 +140,10 @@ interface ConstantsInterface
     // Subonglet Base de données
     public const CST_BDD_SEARCH         = 'bdd-search';
     public const CST_BDD_RESULT         = 'bdd-result';
+    // Composants d'un numéro de téléphone
+    public const CST_PN_FIRST           = 'phoneNumberFirst';
+    public const CST_PN_SECOND          = 'phoneNumberSecond';
+    public const CST_PN_THIRD           = 'phoneNumberThird';
 
     public const CST_ACTION             = 'action';
     public const CST_ADD                = 'add';
@@ -432,5 +439,6 @@ interface ConstantsInterface
     public const CST_NBSP         = '&nbsp;';
     public const CSV_EOL          = "\r\n";
     public const CSV_SEP          = ';';
+    public const CST_WIP          = 'wip';
   
 }

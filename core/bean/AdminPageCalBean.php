@@ -10,6 +10,7 @@ use core\utils\UrlUtils;
  * AdminPageCalBean
  * @author Hugues
  * @since 1.23.09.16
+ * @version v1.23.12.02
  */
 class AdminPageCalBean extends AdminPageBean
 {
@@ -26,13 +27,14 @@ class AdminPageCalBean extends AdminPageBean
 
     /**
      * @since v1.23.09.16
-     * @version v1.23.11.25
+     * @version v1.23.12.02
      */
     public static function getStaticContentPage(): string
     {
         $objBean = match (SessionUtils::fromGet(self::CST_SUBONGLET)) {
             self::CST_ZIPCODE => new AdminPageCalZipCodeBean(),
             self::CST_PHONE => new AdminPageCalPhoneBean(),
+            self::CST_WIP => new AdminPageCalWipBean(),
             default => new AdminPageCalGuyBean(),
         };
         ///////////////////////////////////////////:
@@ -41,6 +43,7 @@ class AdminPageCalBean extends AdminPageBean
 
     /**
      * @since 1.23.09.16
+     * @version v1.23.12.02
      */
     public function getContentPage(): string
     {
@@ -50,6 +53,7 @@ class AdminPageCalBean extends AdminPageBean
             self::CST_HOME    => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_HOME],
             self::CST_PHONE   => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_PHONE],
             self::CST_ZIPCODE => [self::FIELD_ICON => '', self::FIELD_LABEL => self::LABEL_ZIPCODE],
+            self::CST_WIP     => [self::FIELD_ICON => self::I_GEAR, self::FIELD_LABEL => self::LABEL_WIP],
         ];
         /////////////////////////////////////////
 
@@ -65,13 +69,14 @@ class AdminPageCalBean extends AdminPageBean
 
     /**
      * @since 1.23.09.16
+     * @version v1.23.12.02
      */
     public function buildBreadCrumbs(): void
     {
         parent::buildBreadCrumbs();
 
         $this->urlAttributes = [self::CST_ONGLET=>self::ONGLET_RND_GUY];
-        $strLink = HtmlUtils::getLink(self::LABEL_WEATHER, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
+        $strLink = HtmlUtils::getLink(self::LABEL_GUYS, UrlUtils::getAdminUrl($this->urlAttributes), 'mx-1');
         $this->strBreadcrumbs .= HtmlUtils::getBalise(
             self::TAG_LI,
             $strLink,

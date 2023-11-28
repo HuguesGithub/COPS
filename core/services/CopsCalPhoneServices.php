@@ -50,6 +50,7 @@ class CopsCalPhoneServices extends LocalServices
         ///////////////////////////////////////////////////////////
         $prepAttributes = [
             $attributes[self::FIELD_ID] ?? self::SQL_JOKER_SEARCH,
+            $attributes[self::FIELD_PHONE_ID] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::FIELD_CITY_NAME] ?? self::SQL_JOKER_SEARCH,
             $attributes[self::SQL_ORDER_BY] ?? self::FIELD_ID,
             $attributes[self::SQL_ORDER] ?? self::SQL_ORDER_ASC,
@@ -75,4 +76,16 @@ class CopsCalPhoneServices extends LocalServices
      */
     public function getDistinctFieldValues(string $field): array
     { return $this->objDao->getDistinctFieldValues(new CopsCalPhoneClass(), [$field]); }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function getDistinctFirstTrigramme(): array
+    { return $this->objDao->getDistinctFirstTrigramme(); }
+
+    /**
+     * @since v1.23.12.02
+     */
+    public function getDistinctSecondTrigramme(): array
+    { return $this->objDao->getDistinctSecondTrigramme(); }
 }

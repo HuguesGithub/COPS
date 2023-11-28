@@ -17,6 +17,7 @@ interface FieldsInterface
     public const FIELD_DATE_DEBUT         = 'dateDebut';
     public const FIELD_DATE_FIN           = 'dateFin';
     public const FIELD_DSTART             = 'dStart';
+    public const FIELD_GUY_ID             = 'guyId';
     public const FIELD_IDX_BDD_DABIS      = 'idxBddDabis';
     public const FIELD_IDX_ENQUETE        = 'idxEnquete';
     public const FIELD_MAIL_ID            = 'mailId';
@@ -77,10 +78,12 @@ interface FieldsInterface
     public const FIELD_GENKEY             = 'genkey';
 
     // TABLE cops_cal_guy_address
-    public const FIELD_GUY_ID             = 'guyId';
     public const FIELD_ADDRESS_ID         = 'addressId';
     public const FIELD_NUMBER             = 'number';
 
+    // TABLE cops_cal_guy_phone
+    public const FIELD_PHONENUMBER        = 'phoneNumber';
+    
     // TABLE cops_cal_phone
     public const FIELD_PHONE_ID           = 'phoneId';
     public const FIELD_CITY_NAME          = 'cityName';
@@ -380,7 +383,6 @@ interface FieldsInterface
     public const FIELD_STADRESS    = 'streetAdress';
     public const FIELD_CITY        = 'city';
     public const FIELD_EMAILADRESS = 'emailAdress';
-    public const FIELD_PHONENUMBER = 'telephoneNumber';
     public const FIELD_OCCUPATION  = 'occupation';
     public const FIELD_COMPANY     = 'company';
     public const FIELD_VEHICLE     = 'vehicle';

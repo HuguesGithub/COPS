@@ -1,14 +1,14 @@
 <?php
 namespace core\daoimpl;
 
-use core\domain\CopsCalPhoneClass;
+use core\domain\CopsCalGuyPhoneClass;
 
 /**
- * Classe CopsCalPhoneDaoImpl
+ * Classe CopsCalGuyPhoneDaoImpl
  * @author Hugues
  * @since v1.23.12.02
  */
-class CopsCalPhoneDaoImpl extends LocalDaoImpl
+class CopsCalGuyPhoneDaoImpl extends LocalDaoImpl
 {
     private $dbTable;
     private $dbFields;
@@ -21,15 +21,15 @@ class CopsCalPhoneDaoImpl extends LocalDaoImpl
     {
         ////////////////////////////////////
         // Définition des variables spécifiques
-        $this->dbTable   = "wp_7_cops_cal_phone";
+        $this->dbTable   = "wp_7_cops_cal_guy_phone";
         ////////////////////////////////////
 
         ////////////////////////////////////
         // Définition des champs spécifiques
         $this->dbFields = [
             self::FIELD_ID,
-            self::FIELD_PHONE_ID,
-            self::FIELD_CITY_NAME,
+            self::FIELD_GUY_ID,
+            self::FIELD_PHONENUMBER,
         ];
         ////////////////////////////////////
 
@@ -41,25 +41,24 @@ class CopsCalPhoneDaoImpl extends LocalDaoImpl
     ////////////////////////////////////
 
     ////////////////////////////////////
-    // wp_7_cops_cal_phone
+    // wp_7_cops_cal_guy_phone
     ////////////////////////////////////
 
     /**
      * @since v1.23.12.02
      */
-    public function getCalPhones(array $attributes): array
+    public function getCalGuyPhones(array $attributes): array
     {
         $request  = $this->getSelectRequest(implode(', ', $this->dbFields), $this->dbTable);
-        $request .= " WHERE id LIKE '%s' AND '%s' LIKE REPLACE(phoneId, '•', '_') AND cityName LIKE '%s' ";
-        //$request .= " WHERE id LIKE '%s' AND REPLACE(phoneId, '•', '_') LIKE '%s' AND cityName LIKE '%s' ";
+        $request .= " WHERE id LIKE '%s' AND guyId LIKE '%s' AND phoneNumber LIKE '%s' ";
         $request .= $this->defaultOrderByAndLimit;
-        return $this->selectListDaoImpl(new CopsCalPhoneClass(), $request, $attributes);
+        return $this->selectListDaoImpl(new CopsCalGuyPhoneClass(), $request, $attributes);
     }
 
     /**
      * @since v1.23.12.02
      */
-    public function insertCalPhone(CopsCalPhoneClass &$obj): void
+    public function insertCalGuyPhone(CopsCalGuyPhoneClass &$obj): void
     {
         // On récupère les champs
         $dbFields = $this->dbFields;
@@ -73,7 +72,7 @@ class CopsCalPhoneDaoImpl extends LocalDaoImpl
     /**
      * @since v1.23.12.02
      */
-    public function updateCalPhone(CopsCalPhoneClass $obj)
+    public function updateCalGuyPhone(CopsCalGuyPhoneClass $obj)
     {
         // On récupère les champs
         $dbFields = $this->dbFields;
@@ -87,32 +86,15 @@ class CopsCalPhoneDaoImpl extends LocalDaoImpl
     /**
      * @since v1.23.12.02
      */
-    public function getDistinctFieldValues($objDefault, array $attributes): array
+    public function deleteCalGuyPhone(CopsCalGuyPhoneClass $obj)
     {
-        $field = array_shift($attributes);
-        $attributes = [$field, $this->dbTable, $field];
-        return parent::getDistinctFieldValues($objDefault, $attributes);
+        // On récupère les champs
+        $dbFields = $this->dbFields;
+        $fieldId = array_shift($dbFields);
+        // On défini la requête de suppression
+        $request = $this->getDeleteRequest($this->dbTable, $fieldId);
+        // On met à jour
+        $this->deleteDaoImpl($obj, $fieldId, $request);
     }
-
-    /**
-     * @since v1.23.12.02
-     */
-    public function getDistinctFirstTrigramme(): array
-    {
-        $request  = "SELECT DISTINCT SUBSTR(phoneId, 1, 3) AS str, id, phoneId, cityName ";
-        $request .= "FROM ".$this->dbTable." GROUP BY str ORDER BY phoneId;";
-        return $this->selectListDaoImpl(new CopsCalPhoneClass(), $request, []);
-    }
-
-    /**
-     * @since v1.23.12.02
-     */
-    public function getDistinctSecondTrigramme(): array
-    {
-        $request  = "SELECT DISTINCT SUBSTR(phoneId, 5, 3) AS str, id, phoneId, cityName ";
-        $request .= "FROM ".$this->dbTable." GROUP BY str ORDER BY phoneId;";
-        return $this->selectListDaoImpl(new CopsCalPhoneClass(), $request, []);
-    }
-
 
 }
