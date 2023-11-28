@@ -310,30 +310,8 @@ class CopsCalGuyBean extends CopsBean
             $strContent .= $this->addDropdown(self::FIELD_ST_SUF_DIRECTION);
             // Saisie de zipcode
             $strContent .= $this->addDropdown(self::FIELD_ZIPCODE);
-            // On ajoute un petit vide
-            $strContent .= HtmlUtils::getLink(self::CST_NBSP, '#', 'btn btn-outline btn-sm');
 
-            // Ajout Bouton Annuler
-            // On vide les champs de chaque zone de saisie et on rafraichit la liste des dropdown
-            $strIcon = HtmlUtils::getIcon(self::I_REFRESH);
-            $aAttributes = [
-                self::ATTR_DATA => [
-                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
-                    self::ATTR_DATA_AJAX    => 'cleanGuyAddress',
-                ]
-            ];
-            $strContent .= HtmlUtils::getLink($strIcon, '#', 'btn btn-outline btn-sm ajaxAction', $aAttributes);
-            
-            // Ajout Bouton Envoyer
-            // On envoye les données pour enregistrement (si valides) et on recharge la page.
-            $strIcon = HtmlUtils::getIcon(self::I_PAPER_PLANE);
-            $aAttributes = [
-                self::ATTR_DATA => [
-                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
-                    self::ATTR_DATA_AJAX    => 'insertGuyAddress,cleanGuyAddress',
-                ]
-            ];
-            $strContent .= HtmlUtils::getLink($strIcon, '#', 'btn btn-primary btn-sm ajaxAction', $aAttributes);
+            $strContent .= $this->addCancelSubmitButtons('cleanGuyAddress', 'insertGuyAddress,cleanGuyAddress');
 
             $str .= '<div class="input-group input-group-sm">'.$strContent.'</div>';
             $str .= '</div></div></div>';
@@ -394,30 +372,7 @@ class CopsCalGuyBean extends CopsBean
             ];
             $strContent .= HtmlUtils::getBalise(self::TAG_INPUT, '', $attributes);
 
-            // On ajoute un petit vide
-            $strContent .= HtmlUtils::getLink(self::CST_NBSP, '#', 'btn btn-outline btn-sm');
-
-            // Ajout Bouton Annuler
-            // On vide les champs de chaque zone de saisie et on rafraichit la liste des dropdown
-            $strIcon = HtmlUtils::getIcon(self::I_REFRESH);
-            $aAttributes = [
-                self::ATTR_DATA => [
-                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
-                    self::ATTR_DATA_AJAX    => 'cleanGuyPhone',
-                ]
-            ];
-            $strContent .= HtmlUtils::getLink($strIcon, '#', 'btn btn-outline btn-sm ajaxAction', $aAttributes);
-            
-            // Ajout Bouton Envoyer
-            // On envoye les données pour enregistrement (si valides) et on recharge la page.
-            $strIcon = HtmlUtils::getIcon(self::I_PAPER_PLANE);
-            $aAttributes = [
-                self::ATTR_DATA => [
-                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
-                    self::ATTR_DATA_AJAX    => 'insertGuyPhone,cleanGuyPhone',
-                ]
-            ];
-            $strContent .= HtmlUtils::getLink($strIcon, '#', 'btn btn-primary btn-sm ajaxAction', $aAttributes);
+            $strContent .= $this->addCancelSubmitButtons('cleanGuyPhone', 'insertGuyPhone,cleanGuyPhone');
 
             $str .= '<div class="input-group input-group-sm">'.$strContent.'</div>';
             $str .= '</div></div></div>';
@@ -517,4 +472,34 @@ class CopsCalGuyBean extends CopsBean
         return $strContent.HtmlUtils::getBalise(self::TAG_UL, $strUlContent, $ulAttributes);
     }
 
+    /**
+     * @since v1.23.12.02
+     */
+    public function addCancelSubmitButton(string $actionCancel, string $actionSubmit): string
+    {
+            // On ajoute un petit vide
+            $strContent = HtmlUtils::getLink(self::CST_NBSP, '#', 'btn btn-outline btn-sm');
+
+            // Ajout Bouton Annuler
+            // On vide les champs de chaque zone de saisie et on rafraichit la liste des dropdown
+            $strIcon = HtmlUtils::getIcon(self::I_REFRESH);
+            $aAttributes = [
+                self::ATTR_DATA => [
+                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
+                    self::ATTR_DATA_AJAX    => $actionCancel,
+                ]
+            ];
+            $strContent .= HtmlUtils::getLink($strIcon, '#', 'btn btn-outline btn-sm ajaxAction', $aAttributes);
+            
+            // Ajout Bouton Envoyer
+            // On envoye les données pour enregistrement (si valides) et on recharge la page.
+            $strIcon = HtmlUtils::getIcon(self::I_PAPER_PLANE);
+            $aAttributes = [
+                self::ATTR_DATA => [
+                    self::ATTR_DATA_TRIGGER => self::AJAX_ACTION_CLICK,
+                    self::ATTR_DATA_AJAX    => $actionSubmit,
+                ]
+            ];
+            return $strContent.HtmlUtils::getLink($strIcon, '#', 'btn btn-primary btn-sm ajaxAction', $aAttributes);
+    }
 }
