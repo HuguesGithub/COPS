@@ -257,16 +257,7 @@ class CopsCalActions extends LocalActions
             if (empty($objs)) {
                 // On n'a pas trouvé d'équivalence. Les données ne sont pas bonnes
                 $msgErr = "Erreur lors de la vérification des données.";
-                $blnOk = false;
             } else {
-                // Sinon, on a 1 ou plusieurs possibilités.
-                if (count($objs)==1) {
-                    $obj = array_shift($objs);
-                } else {
-                    // S'il y en a plusieurs, on en prend une au hasard
-                    $obj = array_slice($objs, rand(1, count($objs))-1, 1);
-                }
-
                 // Si celle sélectionné a des • dans le phoneId, on les remplace par des chiffres aléatoires.
                 $pos = strpos($phoneRacine, '•');
                 switch ($pos) {
